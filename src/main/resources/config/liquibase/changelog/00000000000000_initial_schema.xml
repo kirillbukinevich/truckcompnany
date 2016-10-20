@@ -19,9 +19,151 @@
         The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
     -->
     <changeSet id="00000000000001" author="jhipster">
-        
+
+        <createTable tableName="tc_company">
+            <column name="id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="storage">
+            <column name="id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="truck">
+            <column name="id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="consumption" type="int"/>
+            <column name="reg_number" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="route_list">
+            <column name="id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="truck_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="leaving_date" type="timestamp"/>
+            <column name="arrival_date" type="timestamp"/>
+            <column name="leaving_storage_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="arrival_storage_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="checkpoint">
+            <column name="id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="check_date" type="timestamp"/>
+            <column name="route_list_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="route_list_id"
+                                 baseTableName="checkpoint"
+                                 constraintName="checkpoint_route_list"
+                                 referencedColumnNames="id"
+                                 referencedTableName="route_list"/>
+
+        <createTable tableName="goods">
+            <column name="id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="count" type="varchar(45)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="tc_user_company">
+            <column name="jhi_user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tc_company_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="jhi_user_id, tc_company_id" tableName="tc_user_company"/>
+
+        <createTable tableName="write_off_act">
+            <column name="id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="date" type="datetime"/>
+            <column name="count" type="varchar(45)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="waybill">
+            <column name="id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="driver_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="ENUM('CHECKED', 'CREATED', 'DELIVERED')">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dispatcher_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="route_list_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="write_off_id" type="int"/>
+        </createTable>
+
+        <createTable tableName="waybill_goods">
+            <column name="waybill_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="goods_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="count" type="varchar(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="ENUM('ACCEPTED', 'CHECKED', 'DELIVERED')">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="waybill_id, goods_id" tableName="waybill_goods"/>
+
         <createTable tableName="jhi_user">
-            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+            <column name="id" type="int" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="login" type="varchar(50)">
@@ -34,7 +176,7 @@
                 <constraints unique="true" nullable="true"/>
             </column>
             <column name="activated" type="boolean" valueBoolean="false">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="lang_key" type="varchar(5)"/>
             <column name="activation_key" type="varchar(20)"/>
@@ -50,20 +192,24 @@
             </column>
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
+            <column name="middle_name" type="varchar(50)"/>
+            <column name="birth_date" type="date"/>
+            <column name="city" type="varchar(45)"/>
+            <column name="street" type="varchar(45)"/>
         </createTable>
-        
+
         <createIndex indexName="idx_user_login"
-            tableName="jhi_user"
-            unique="true">
+                     tableName="jhi_user"
+                     unique="true">
             <column name="login" type="varchar(50)"/>
         </createIndex>
 
         <createIndex indexName="idx_user_email"
-            tableName="jhi_user"
-            unique="true">
+                     tableName="jhi_user"
+                     unique="true">
             <column name="email" type="varchar(100)"/>
         </createIndex>
-        
+
         <createTable tableName="jhi_authority">
             <column name="name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -71,7 +217,7 @@
         </createTable>
 
         <createTable tableName="jhi_user_authority">
-            <column name="user_id" type="bigint">
+            <column name="user_id" type="int">
                 <constraints nullable="false"/>
             </column>
             <column name="authority_name" type="varchar(50)">
@@ -86,9 +232,9 @@
             <column name="series" type="varchar(76)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_id" type="bigint"/>
+            <column name="user_id" type="int"/>
             <column name="token_value" type="varchar(76)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="token_date" type="date"/>
             <column name="ip_address" type="varchar(39)"/>
@@ -112,6 +258,7 @@
                                  constraintName="fk_user_persistent_token"
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
+
         <loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
                   separator=";"
@@ -130,13 +277,13 @@
                   file="config/liquibase/users_authorities.csv"
                   separator=";"
                   tableName="jhi_user_authority"/>
-        
+
         <createTable tableName="jhi_persistent_audit_event">
             <column name="event_id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="principal" type="varchar(50)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="event_date" type="timestamp"/>
             <column name="event_type" type="varchar(255)"/>
@@ -152,6 +299,85 @@
             <column name="value" type="varchar(255)"/>
         </createTable>
         <addPrimaryKey columnNames="event_id, name" tableName="jhi_persistent_audit_evt_data"/>
+
+        <addForeignKeyConstraint baseColumnNames="company_id"
+                                 baseTableName="storage"
+                                 constraintName="storage_company"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tc_company"/>
+
+        <addForeignKeyConstraint baseColumnNames="jhi_user_id"
+                                 baseTableName="tc_user_company"
+                                 constraintName="user_company"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="tc_company_id"
+                                 baseTableName="tc_user_company"
+                                 constraintName="company_name"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tc_company"/>
+
+        <addForeignKeyConstraint baseColumnNames="dispatcher_id"
+                                 baseTableName="waybill"
+                                 constraintName="waybill_dispatcher"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="route_list_id"
+                                 baseTableName="waybill"
+                                 constraintName="waybill_route_list"
+                                 referencedColumnNames="id"
+                                 referencedTableName="route_list"/>
+
+        <addForeignKeyConstraint baseColumnNames="driver_id"
+                                 baseTableName="waybill"
+                                 constraintName="waybill_driver"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="write_off_id"
+                                 baseTableName="waybill"
+                                 constraintName="waybill_write_off_act"
+                                 referencedColumnNames="id"
+                                 referencedTableName="write_off_act"/>
+
+
+        <addForeignKeyConstraint baseColumnNames="goods_id"
+                                 baseTableName="waybill_goods"
+                                 constraintName="goods_waybill"
+                                 referencedColumnNames="id"
+                                 referencedTableName="goods"/>
+
+        <addForeignKeyConstraint baseColumnNames="waybill_id"
+                                 baseTableName="waybill_goods"
+                                 constraintName="waybill_goods"
+                                 referencedColumnNames="id"
+                                 referencedTableName="waybill"/>
+
+        <addForeignKeyConstraint baseColumnNames="company_id"
+                                 baseTableName="truck"
+                                 constraintName="truck_company"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tc_company"/>
+
+        <addForeignKeyConstraint baseColumnNames="arrival_storage_id"
+                                 baseTableName="route_list"
+                                 constraintName="route_arrival_storage"
+                                 referencedColumnNames="id"
+                                 referencedTableName="storage"/>
+
+        <addForeignKeyConstraint baseColumnNames="leaving_storage_id"
+                                 baseTableName="route_list"
+                                 constraintName="route_leaving_storage"
+                                 referencedColumnNames="id"
+                                 referencedTableName="storage"/>
+
+        <addForeignKeyConstraint baseColumnNames="truck_id"
+                                 baseTableName="route_list"
+                                 constraintName="route_truck"
+                                 referencedColumnNames="id"
+                                 referencedTableName="truck"/>
 
         <createIndex indexName="idx_persistent_audit_event"
                      tableName="jhi_persistent_audit_event"
@@ -171,7 +397,6 @@
                                  constraintName="fk_evt_pers_audit_evt_data"
                                  referencedColumnNames="event_id"
                                  referencedTableName="jhi_persistent_audit_event"/>
-    
+
     </changeSet>
-    
 </databaseChangeLog>
