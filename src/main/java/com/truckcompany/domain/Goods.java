@@ -1,13 +1,14 @@
 package com.truckcompany.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "goods")
-public class Goods {
+public class Goods implements Serializable{
     @Id
     @GeneratedValue
-    @Column(name = "name")
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "name", length = 45)

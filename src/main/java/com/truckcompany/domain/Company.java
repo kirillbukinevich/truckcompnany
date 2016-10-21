@@ -8,16 +8,16 @@ import java.util.Set;
 public class Company {
     @Id
     @GeneratedValue
-    @Column(name = "id")
+    @Column (name = "id")
     private Integer id;
 
-    @Column(name = "name")
+    @Column (name = "name")
     private String name;
 
     @ManyToMany
-    @JoinTable(name = "tc_user_company",
-        joinColumns = {@JoinColumn(name = "tc_user_id")},
-        inverseJoinColumns = {@JoinColumn(name = "tc_company_id")})
+    @JoinTable (name = "tc_user_company",
+        joinColumns = {@JoinColumn(name = "tc_company_id")},
+        inverseJoinColumns = {@JoinColumn(name = "tc_user_id")})
     private Set<User> users;
 
     public Integer getId() {
