@@ -16,6 +16,7 @@
     <!-- endbuild -->
     <!-- build:css content/css/main.css -->
     <link rel="stylesheet" href="content/css/main.css">
+    <link rel="stylesheet" href="content/css/user_main.css">
     <!-- endbuild -->
 </head>
 <body ng-app="truckCompanyApp" ng-strict-di>
@@ -23,16 +24,35 @@
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <page-ribbon></page-ribbon>
-    <div ui-view="navbar" ng-cloak></div>
-    <div class="container">
-        <div class="well" ui-view="content">
-            <!-- Angular views -->
-        </div>
 
-        <div class="footer" ng-cloak>
-            <p data-translate="footer">This is your footer</p>
+    <div class="container">
+        <div ui-view="navbar" ng-cloak ></div>
+        <div >
+            <div class="well" ui-view="content">
+                <!-- Angular views -->
+            </div>
+
+
+            <footer>
+                <div id="top-footer">
+                    <img src="content/images/logo-footer.png" alt="footer-logo" id="footer-logo"/>
+                    <ul>
+                        <li><a href="">About project</a></li>
+                        <li><a href="">Our contacts</a></li>
+                        <li><a href="">Help</a></li>
+                        <li><a href="">Support</a></li>
+                    </ul>
+                </div>
+                <div id="bottom-footer">
+                    <p>© 2016 ITechArt</p>
+                </div>
+            </footer>
+
         </div>
     </div>
+
+
+
 
     <!-- Google Analytics: uncomment and change UA-XXXXX-X to be your site's ID.
     <script>
