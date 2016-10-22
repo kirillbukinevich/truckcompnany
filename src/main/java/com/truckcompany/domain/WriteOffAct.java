@@ -11,7 +11,7 @@ public class WriteOffAct {
     @Column(name = "id")
     private Integer id;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date")
     private Date date;
 

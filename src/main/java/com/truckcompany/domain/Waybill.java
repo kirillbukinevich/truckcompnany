@@ -96,4 +96,15 @@ public class Waybill {
     public void setWriteOffId(WriteOffAct writeOffId) {
         this.writeOffId = writeOffId;
     }
+
+    @Override
+    public String toString() {
+        return "WayBill {id:" + id + "," +
+                    "date:" + date + "," +
+                    "driver_id:" + driver.getId() + "," +
+                    "state:" + state.name() + "," +
+                    "dispatcher_id:" + dispatcherId.getId() + "," +
+                    "route_list_id:" + routeListId.getId() + "," +
+                    "write_off_id:" + writeOffId.getId() + "}";
+    }
 }

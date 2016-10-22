@@ -18,6 +18,7 @@ public class RouteList {
     private Date leavindDate;
 
     @Column(name = "arrival_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date arrivalDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -13,7 +13,7 @@ public class WaybillGoods {
     private WaybillGoodsId waybillGoodsId;
 
     @Column(name = "count")
-    private String count;
+    private Integer count;
 
     @Column(name = "state")
     @Enumerated(EnumType.STRING)
@@ -26,10 +26,10 @@ public class WaybillGoods {
         this.waybillGoodsId = waybillGoodsId;
     }
 
-    public String getCount() {
+    public Integer getCount() {
         return count;
     }
-    public void setCount(String count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 
