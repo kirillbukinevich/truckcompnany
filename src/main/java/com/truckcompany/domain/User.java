@@ -89,12 +89,22 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column (name = "middle_name")
     private String middleName;
 
-
+    @Column (name = "birth_date")
     private Date birth_date;
+
+    @Column (name = "city")
     private String city;
+
+    @Column (name = "street")
     private String street;
+
+    @Column (name = "house")
     private String house;
+
+    @Column (name = "flat")
     private String flat;
+
+    @Column (name = "passport")
     private String passport;
 
     public Long getId() {
@@ -218,6 +228,56 @@ public class User extends AbstractAuditingEntity implements Serializable {
         }
 
         return true;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public Date getBirth_date() {
+        return birth_date;
+    }
+    public void setBirth_date(Date birth_date) {
+        this.birth_date = birth_date;
+    }
+
+    public String getCity() {
+        return city;
+    }
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getHouse() {
+        return house;
+    }
+    public void setHouse(String house) {
+        this.house = house;
+    }
+
+    public String getFlat() {
+        return flat;
+    }
+    public void setFlat(String flat) {
+        this.flat = flat;
+    }
+
+    public String getPassport() {
+        return passport;
+    }
+
+    public void setPassport(String passport) {
+        this.passport = passport;
     }
 
     @Override
