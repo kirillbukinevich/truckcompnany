@@ -16,15 +16,26 @@
         vm.register = register;
         $scope.$on('authenticationSuccess', function() {
             getAccount();
+
+            if (Principal.hasAnyAuthority(["ROLE_ADMIN"])){
+                console.log("Route to initial page for Admin");
+                $state.go('superadmin.companies');
+            }
+
+
         });
 
         getAccount();
 
         function getAccount() {
             Principal.identity().then(function(account) {
+                console.log('HomeController: getAccount():')
+                console.log(account);
                 vm.account = account;
                 vm.isAuthenticated = Principal.isAuthenticated;
             });
+
+
         }
         function register () {
             $state.go('register');

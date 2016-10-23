@@ -12,6 +12,9 @@
 
         vm.isNavbarCollapsed = true;
         vm.isAuthenticated = Principal.isAuthenticated;
+        vm.isAuthenticatedAndNotHasRole = Principal.isWithoutAuthority;
+
+
 
         ProfileService.getProfileInfo().then(function(response) {
             vm.inProduction = response.inProduction;
@@ -23,6 +26,7 @@
         vm.toggleNavbar = toggleNavbar;
         vm.collapseNavbar = collapseNavbar;
         vm.$state = $state;
+
 
         function login() {
             collapseNavbar();
