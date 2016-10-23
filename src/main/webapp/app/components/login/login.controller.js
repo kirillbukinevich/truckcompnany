@@ -53,6 +53,7 @@
                 if (Auth.getPreviousState()) {
                     var previousState = Auth.getPreviousState();
                     Auth.resetPreviousState();
+
                     $state.go(previousState.name, previousState.params);
                 }
             }).catch(function () {
