@@ -97,9 +97,6 @@
             <column name="name" type="varchar(45)">
                 <constraints nullable="false"/>
             </column>
-            <column name="count" type="varchar(45)">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
 
         <createTable tableName="tc_user_company">
@@ -196,8 +193,8 @@
             <column name="birth_date" type="date"/>
             <column name="city" type="varchar(45)"/>
             <column name="street" type="varchar(45)"/>
-            <column name="house" type="varchar(45)"/>
             <column name="flat" type="varchar(45)"/>
+            <column name="house" type="varchar(45)"/>
             <column name="passport" type="varchar(45)"/>
         </createTable>
 
