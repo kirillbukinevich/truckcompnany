@@ -15,7 +15,6 @@
 
 
 /*HEADER*/
-
 #header .navbar-right{
  margin-right:0;
 }
@@ -31,7 +30,7 @@
     margin-top: 20px;
 }
 
-#header .navbar-nav > li > a, #header .navbar-nav > li > a.btn:visited {
+#header .navbar-nav > li > a.btn, #header .navbar-nav > li > a.btn:visited {
     padding: 10px;
     color: #fff;
 }

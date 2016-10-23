@@ -17,7 +17,8 @@
             hasAuthority: hasAuthority,
             identity: identity,
             isAuthenticated: isAuthenticated,
-            isIdentityResolved: isIdentityResolved
+            isIdentityResolved: isIdentityResolved,
+            isWithoutAuthority: isWithoutAuthority
         };
 
         return service;
@@ -25,6 +26,13 @@
         function authenticate (identity) {
             _identity = identity;
             _authenticated = identity !== null;
+        }
+
+        function isWithoutAuthority(){
+            if (!_identity || !_identity.authorities || (_identity.authorities.length == 0)){
+                return true;
+            }
+            return false;
         }
 
         function hasAnyAuthority (authorities) {
