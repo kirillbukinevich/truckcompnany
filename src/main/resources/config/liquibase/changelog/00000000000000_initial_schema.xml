@@ -97,9 +97,6 @@
             <column name="name" type="varchar(45)">
                 <constraints nullable="false"/>
             </column>
-            <column name="count" type="varchar(45)">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
 
         <createTable tableName="tc_user_company">
