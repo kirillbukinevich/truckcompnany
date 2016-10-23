@@ -196,6 +196,9 @@
             <column name="birth_date" type="date"/>
             <column name="city" type="varchar(45)"/>
             <column name="street" type="varchar(45)"/>
+            <column name="flat" type="varchar(45)"/>
+            <column name="house" type="varchar(45)"/>
+            <column name="passport" type="varchar(45)"/>
         </createTable>
 
         <createIndex indexName="idx_user_login"
