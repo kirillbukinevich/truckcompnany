@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -92,7 +91,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String middleName;
 
     @Column (name = "birth_date")
-    private Date birth_date;
+    private ZonedDateTime birthDate;
 
     @Column (name = "city")
     private String city;
@@ -239,11 +238,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.middleName = middleName;
     }
 
-    public Date getBirth_date() {
-        return birth_date;
+    public ZonedDateTime getBirthDate() {
+        return birthDate;
     }
-    public void setBirth_date(Date birth_date) {
-        this.birth_date = birth_date;
+    public void setBirthDate(ZonedDateTime birthDate) {
+        this.birthDate = birthDate;
     }
 
     public String getCity() {
