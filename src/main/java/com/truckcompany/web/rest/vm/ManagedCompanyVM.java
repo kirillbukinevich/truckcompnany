@@ -8,21 +8,42 @@ import com.truckcompany.service.dto.CompanyDTO;
  */
 public class ManagedCompanyVM extends CompanyDTO {
 
-    private Long id;
+    private String login;
+
+    private String email;
+
+    private String password;
+
 
     public ManagedCompanyVM(){
     }
 
     public ManagedCompanyVM(Company company){
         super(company);
-        this.id = company.getId();
+
     }
 
-    public Long getId() {
-        return id;
+    public String getLogin() {
+        return login;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

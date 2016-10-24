@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,7 +30,7 @@ public class Company implements Serializable{
     @JoinTable (name="tc_user_company",
         joinColumns = @JoinColumn(name = "tc_company_id"),
         inverseJoinColumns = @JoinColumn(name = "jhi_user_id"))
-    Set<User> users;
+    List<User> users = new ArrayList<>();
 
 
 
@@ -47,10 +49,11 @@ public class Company implements Serializable{
         this.name = name;
     }
 
-    public Set<User> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
-    public void setUsers(Set<User> users) {
+
+    public void setUsers(List<User> users) {
         this.users = users;
     }
 
