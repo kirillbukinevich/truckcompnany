@@ -12,7 +12,21 @@
 
     function SuperadminCompaniesController ($stateParams, Company) {
         var vm = this;
+        vm.checkedAll = false;
         vm.companies = Company.query();
         console.log(vm.companies);
+
+        vm.changeStateCheckbox = function(){
+            console.log("changeState")
+        }
+
+        vm.delete = function(id){
+            console.log(id);
+            Company.delete({id: id}, function() {
+                console.log("Delete Company with id: " + id);
+                vm.companies = Company.query();
+            });
+
+        }
     }
 })();

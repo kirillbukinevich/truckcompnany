@@ -16,13 +16,14 @@
         vm.register = register;
         $scope.$on('authenticationSuccess', function() {
             getAccount();
-
-            if (Principal.hasAnyAuthority(["ROLE_ADMIN"])){
-                console.log("Route to initial page for Admin");
+            console.log("authenticationSuccess");
+            if (Principal.hasAnyAuthority(["ROLE_SUPERADMIN"])){
+                console.log("Route to initial page for SuperAdmin");
                 $state.go('superadmin.companies');
+            } else if (Principal.hasAnyAuthority(["ROLE_ADMIN"])) {
+                console.log("Route to initial page for Admin");
+                $state.go('admincompany.initial');
             }
-
-
         });
 
         getAccount();

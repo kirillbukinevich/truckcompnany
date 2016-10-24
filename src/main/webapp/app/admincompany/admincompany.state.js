@@ -11,12 +11,12 @@
     stateConfig.$inject = ['$stateProvider'];
 
     function stateConfig($stateProvider) {
-        $stateProvider.state('superadmin', {
+        $stateProvider.state('admincompany', {
             abstract: true,
             parent: 'app',
             views: {
                 'content@': {
-                    templateUrl: 'app/superadmin/superadmin.html',
+                    templateUrl: 'app/admincompany/admincompany.html',
                 },
             }
         });

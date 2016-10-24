@@ -11,17 +11,17 @@
     stateConfig.$inject = ['$stateProvider'];
 
     function stateConfig($stateProvider) {
-        $stateProvider.state('superadmin.initial', {
-            parent: 'superadmin',
-            url: '/superadmin/initial',/*'/activate?key',*/
+        $stateProvider.state('admincompany.initial', {
+            parent: 'admincompany',
+            url: '/admincompany/initial',/*'/activate?key',*/
 
             data: {
-                authorities: [],
+                authorities: ['ROLE_ADMIN'],
                 pageTitle: 'activate.title'
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/superadmin/initial/superadmin.initial.html'
+                    templateUrl: 'app/admincompany/initial/admincompany.initial.html'
                 },
             },
             resolve: {
