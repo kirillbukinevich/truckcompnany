@@ -9,8 +9,8 @@ import java.util.Optional;
 /**
  * Created by Viktor Dobroselsky.
  */
-public interface WriteOffActRepository extends JpaRepository<WriteOffAct, Integer> {
+public interface WriteOffActRepository extends JpaRepository<WriteOffAct, Long> {
     List<WriteOffAct> findAll ();
 
-    Optional<WriteOffAct> findOneById(Integer id);
+    Optional<WriteOffAct> findOneById(Long id);
 }

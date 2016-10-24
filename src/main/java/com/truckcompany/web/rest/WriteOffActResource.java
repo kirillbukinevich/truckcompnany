@@ -55,7 +55,7 @@ public class WriteOffActResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<WriteOffAct> getWriteOff (@PathVariable Integer id)  throws URISyntaxException {
+    public ResponseEntity<WriteOffAct> getWriteOff (@PathVariable Long id)  throws URISyntaxException {
         log.debug("REST request get WriteOffAct {}" , id);
         ManagedWriteOffVM managedWriteOffVM = new ManagedWriteOffVM(writeOffActRepository.findOne(id));
 
@@ -99,7 +99,7 @@ public class WriteOffActResource {
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity deleteUser(@PathVariable Integer id) {
+    public ResponseEntity deleteUser(@PathVariable Long id) {
         log.debug("REST request to delete WriteOffAct: {}", id);
         writeOffActService.deleteWriteOffAct(id);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert( "writeOffAct.deleted", id.toString())).build();

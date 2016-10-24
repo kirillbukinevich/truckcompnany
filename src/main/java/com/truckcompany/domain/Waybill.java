@@ -4,11 +4,12 @@ package com.truckcompany.domain;
 import com.truckcompany.domain.enums.WaybillState;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "waybill")
-public class Waybill {
+public class Waybill implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -75,14 +76,14 @@ public class Waybill {
     public RouteList getRouteList() {
         return routeList;
     }
-    public void setRouteListId(RouteList routeListId) {
+    public void setRouteList(RouteList routeList) {
         this.routeList = routeList;
     }
 
     public WriteOffAct getWriteOff() {
         return writeOff;
     }
-    public void setWriteOffId(WriteOffAct writeOffId) {
+    public void setWriteOff(WriteOffAct writeOff) {
         this.writeOff = writeOff;
     }
 

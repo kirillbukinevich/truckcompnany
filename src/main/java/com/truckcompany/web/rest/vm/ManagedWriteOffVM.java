@@ -5,7 +5,7 @@ import com.truckcompany.domain.WriteOffAct;
 import java.time.ZonedDateTime;
 
 public class ManagedWriteOffVM {
-    private Integer id;
+    private Long id;
 
     private ZonedDateTime date;
 
@@ -14,7 +14,7 @@ public class ManagedWriteOffVM {
     public ManagedWriteOffVM() {
     }
 
-    public ManagedWriteOffVM(Integer id, ZonedDateTime date, Integer count) {
+    public ManagedWriteOffVM(Long id, ZonedDateTime date, Integer count) {
         this.id = id;
         this.date = date;
         this.count = count;
@@ -26,10 +26,10 @@ public class ManagedWriteOffVM {
         this.count = writeOff.getCount();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

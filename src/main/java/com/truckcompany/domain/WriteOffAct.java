@@ -1,16 +1,17 @@
 package com.truckcompany.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Entity
 @Table(name = "write_off_act")
-public class WriteOffAct {
+public class WriteOffAct implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "date")
     private ZonedDateTime date;
@@ -18,10 +19,10 @@ public class WriteOffAct {
     @Column (name = "count")
     private Integer count;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

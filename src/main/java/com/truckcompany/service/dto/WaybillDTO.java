@@ -12,15 +12,15 @@ public class WaybillDTO {
 
     private Long driverId;
 
-    private Integer routeListId;
+    private Long routeListId;
 
-    private Integer writeOffId;
+    private Long writeOffId;
 
     public WaybillDTO() {
     }
 
     public WaybillDTO(Long dispatcherId,Long driverId,
-                      Integer routeListId,Integer writeOffId) {
+                      Long routeListId,Long writeOffId) {
         this.dispatcherId = dispatcherId;
         this.driverId = driverId;
         this.routeListId = routeListId;
@@ -50,19 +50,19 @@ public class WaybillDTO {
         this.driverId = driverId;
     }
 
-    public Integer getRouteListId() {
+    public Long getRouteListId() {
         return routeListId;
     }
 
-    public void setRouteListId(Integer routeListId) {
+    public void setRouteListId(Long routeListId) {
         this.routeListId = routeListId;
     }
 
-    public Integer getWriteOffId() {
+    public Long getWriteOffId() {
         return writeOffId;
     }
 
-    public void setWriteOffId(Integer writeOffId) {
+    public void setWriteOffId(Long writeOffId) {
         this.writeOffId = writeOffId;
     }
 

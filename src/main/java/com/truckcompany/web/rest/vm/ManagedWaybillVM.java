@@ -16,16 +16,16 @@ public class ManagedWaybillVM {
 
     private Long driverId;
 
-    private Integer routeListId;
+    private Long routeListId;
 
-    private Integer writeOffId;
+    private Long writeOffId;
 
     public ManagedWaybillVM() {
     }
 
     public ManagedWaybillVM(Long id, ZonedDateTime date,
                             WaybillState state, Long dispatcherId, Long driverId,
-                            Integer routeListId, Integer writeOffId) {
+                            Long routeListId, Long writeOffId) {
         this.id = id;
         this.date = date;
         this.state = state.toString();
@@ -85,19 +85,19 @@ public class ManagedWaybillVM {
         this.driverId = driverId;
     }
 
-    public Integer getRouteListId() {
+    public Long getRouteListId() {
         return routeListId;
     }
 
-    public void setRouteListId(Integer routeListId) {
+    public void setRouteListId(Long routeListId) {
         this.routeListId = routeListId;
     }
 
-    public Integer getWriteOffId() {
+    public Long getWriteOffId() {
         return writeOffId;
     }
 
-    public void setWriteOffId(Integer writeOffId) {
+    public void setWriteOffId(Long writeOffId) {
         this.writeOffId = writeOffId;
     }
 

@@ -21,7 +21,7 @@ public class WriteOffActService {
     @Inject
     private WriteOffActRepository writeOffActRepository;
 
-    public WriteOffAct getWriteOffActById (Integer id) {
+    public WriteOffAct getWriteOffActById (Long id) {
         WriteOffAct writeOffAct = writeOffActRepository.getOne(id);
         log.debug("Get Information about WriteOffAct with id: {}", id);
         return writeOffAct;
@@ -47,7 +47,7 @@ public class WriteOffActService {
         });
     }
 
-    public void deleteWriteOffAct (Integer id) {
+    public void deleteWriteOffAct (Long id) {
         WriteOffAct writeOffAct = writeOffActRepository.findOne(id);
         if (writeOffAct != null) {
             writeOffActRepository.delete(writeOffAct);
