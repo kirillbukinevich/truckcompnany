@@ -1,7 +1,9 @@
 package com.truckcompany.service;
 
 import com.truckcompany.domain.Storage;
+import com.truckcompany.repository.CompanyRepository;
 import com.truckcompany.repository.StorageRepository;
+import com.truckcompany.web.rest.vm.StorageVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -18,15 +20,34 @@ public class StorageService {
     @Inject
     private StorageRepository storageRepository;
 
+    @Inject
+    CompanyRepository companyRepository;
+
     @Transactional(readOnly = true)
-    public Storage getStorageByIdAndCompanyId(Long companyId, Long storageId){
+    public Storage getStorageByIdAndCompanyId(Long storageId, Long companyId){
         log.debug("Get Information about Storage with id: {} and company id {}", storageId, companyId);
-        Optional<Storage> storage = storageRepository.findOneByIdAndCompanyIdId(storageId, companyId);
-        if (storage.isPresent()) {
-            return storage.get();
+        Optional<Storage> optionalStorage = storageRepository.findOneByIdAndCompanyIdId(storageId, companyId);
+        Storage storage = null;
+        if (optionalStorage.isPresent()) {
+            storage = optionalStorage.get();
         }
-        else {
-            return null;
-        }
+        return storage;
+    }
+
+    public Storage createStorage(Long companyId, StorageVM storageVM){
+        Storage storage = new Storage();
+        storage.setName(storageVM.getName());
+        storage.setCompanyId(companyRepository.findOne(companyId));
+        storage = storageRepository.save(storage);
+        log.debug("Created Information for Storage: {}", storage);
+        return storage;
+    }
+
+    public Storage updateStorage(StorageVM storageVM){
+        Storage storage = storageRepository.findOne(storageVM.getId());
+        storage.setName(storageVM.getName());
+        storage = storageRepository.save(storage);
+        log.debug("Changed Information for Storage: {}", storage);
+        return storage;
     }
 }

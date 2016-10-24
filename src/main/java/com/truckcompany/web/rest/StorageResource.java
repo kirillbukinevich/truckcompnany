@@ -6,6 +6,7 @@ import com.truckcompany.repository.CompanyRepository;
 import com.truckcompany.repository.StorageRepository;
 import com.truckcompany.service.StorageService;
 import com.truckcompany.web.rest.util.HeaderUtil;
+import com.truckcompany.web.rest.vm.StorageVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -34,44 +35,42 @@ public class StorageResource {
     private StorageService storageService;
 
     @RequestMapping(value = "/{storageId}", method = RequestMethod.GET)
-    ResponseEntity<Storage> getStorage(@PathVariable Long storageId, @PathVariable Long companyId){
+    ResponseEntity<StorageVM> getStorage(@PathVariable Long storageId, @PathVariable Long companyId){
         log.debug("REST request to get Storage : {}, from company with id: {}", storageId, companyId);
         Storage foundStorage = storageService.getStorageByIdAndCompanyId(storageId, companyId);
         if (foundStorage == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(foundStorage, HttpStatus.OK);
+        return new ResponseEntity<>(new StorageVM(foundStorage), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<?> createStorage(@PathVariable Long companyId, @RequestBody Storage storage) throws URISyntaxException {
+    ResponseEntity<?> createStorage(@PathVariable Long companyId, @RequestBody StorageVM storage) throws URISyntaxException {
         log.debug("REST request to save Storage: {} ; company id: {}", storage.getName(), companyId);
         Company company = companyRepository.findOne(companyId);
         if (company == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        storage.setCompanyId(company);
-        Storage result = storageRepository.save(storage);
+        Storage result = storageService.createStorage(companyId, storage);
         return ResponseEntity.created(new URI("/storage/" + result.getId()))
                 .headers(HeaderUtil.createAlert( "storage.created", String.valueOf(storage.getId())))
-                .body(result);
+                .body(new StorageVM(result));
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    ResponseEntity<Storage> updateStorage(@RequestBody Storage storage, @PathVariable Long companyId){
-        log.debug("REST request to update Storage : {}", storage);
+    ResponseEntity<StorageVM> updateStorage(@RequestBody StorageVM storageVM, @PathVariable Long companyId){
+        log.debug("REST request to update Storage : {}", storageVM);
 
-        Optional<Storage> existingStorage = storageRepository.findOneByIdAndCompanyIdId(storage.getId(), companyId);
+        Optional<Storage> existingStorage = storageRepository.findOneByIdAndCompanyIdId(storageVM.getId(), companyId);
         if (!existingStorage.isPresent()){
-            return new ResponseEntity<Storage>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        storage.setCompanyId(existingStorage.get().getCompanyId());
-        storageRepository.save(storage);
+        Storage storage = storageService.updateStorage(storageVM);
 
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createAlert("storage.updated", String.valueOf(storage.getId())))
-                .body(storage);
+                .body(new StorageVM(storage));
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{storageId}")
