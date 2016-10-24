@@ -19,7 +19,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.stream.Collectors;
-
+/**
+ * Created by Viktor Dobroselsky.
+ */
 @RestController
 @RequestMapping (value = "/api")
 public class WaybillResource {
