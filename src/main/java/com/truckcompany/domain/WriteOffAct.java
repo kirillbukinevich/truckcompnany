@@ -1,6 +1,7 @@
 package com.truckcompany.domain;
 
 import javax.persistence.*;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Entity
@@ -11,9 +12,11 @@ public class WriteOffAct {
     @Column(name = "id")
     private Integer id;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date")
-    private Date date;
+    private ZonedDateTime date;
+
+    @Column (name = "count")
+    private Integer count;
 
     public Integer getId() {
         return id;
@@ -22,10 +25,17 @@ public class WriteOffAct {
         this.id = id;
     }
 
-    public Date getDate() {
+    public ZonedDateTime getDate() {
         return date;
     }
-    public void setDate(Date date) {
+    public void setDate(ZonedDateTime date) {
         this.date = date;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+    public void setCount(Integer count) {
+        this.count = count;
     }
 }

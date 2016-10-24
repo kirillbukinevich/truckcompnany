@@ -76,15 +76,6 @@ public class WaybillResource {
             .body(newWaybill);
     }
 
-    @RequestMapping (value = "/waybills/{id}",
-        method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<ManagedWaybillVM> updateWaybill (@RequestBody ManagedWaybillVM managedWaybillVM) {
-        log.debug("REST request to update Waybill : {}", managedWaybillVM);
-        return null;
-    }
-
     @RequestMapping(value = "/waybills/{id}",
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
@@ -99,7 +90,7 @@ public class WaybillResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity updateUser (@RequestBody ManagedWaybillVM managedWaybillVM) {
+    public ResponseEntity updateWaybill (@RequestBody ManagedWaybillVM managedWaybillVM) {
         log.debug("REST request to update Waybill : {}", managedWaybillVM);
         Waybill existingWaybill = waybillRepository.findOne(managedWaybillVM.getId());
 
