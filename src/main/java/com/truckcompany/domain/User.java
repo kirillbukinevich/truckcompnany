@@ -88,6 +88,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private Set<PersistentToken> persistentTokens = new HashSet<>();
 
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "company_id" )
+    private Company company;
+
     @Column (name = "middle_name")
     private String middleName;
 
@@ -280,6 +285,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setPassport(String passport) {
         this.passport = passport;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     @Override

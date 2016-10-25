@@ -1,11 +1,13 @@
 package com.truckcompany.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.truckcompany.domain.enums.CompanyStatus;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,13 +26,16 @@ public class Company implements Serializable{
     @Column (name = "name")
     private String name;
 
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "status")
+    private CompanyStatus status;
 
     @JsonIgnore
     @ManyToMany
     @JoinTable (name="tc_user_company",
         joinColumns = @JoinColumn(name = "tc_company_id"),
         inverseJoinColumns = @JoinColumn(name = "jhi_user_id"))
-    List<User> users = new ArrayList<>();
+    Set<User> users = new HashSet<>();
 
 
 
@@ -49,12 +54,20 @@ public class Company implements Serializable{
         this.name = name;
     }
 
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public CompanyStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(CompanyStatus status) {
+        this.status = status;
     }
 
     @Override

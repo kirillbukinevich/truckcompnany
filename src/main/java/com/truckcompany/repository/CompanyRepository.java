@@ -21,4 +21,5 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
         nativeQuery = true)*/
     @Query(value = "select distinct company from Company company left join fetch company.users")
     List<Company> findAllWithUsers();
+
 }

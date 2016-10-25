@@ -1,5 +1,5 @@
-id;name
-1;NameCompany Example 1
-2;NameCompany Example 2
-3;NameCompany Example 3
-4;NameCompany Example 4
+id;name;status
+1;NameCompany Example 1;ACTIVE
+2;NameCompany Example 2;ACTIVE
+3;NameCompany Example 3;ACTIVE
+4;NameCompany Example 4;ACTIVE

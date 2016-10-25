@@ -3,6 +3,7 @@ package com.truckcompany.service;
 import com.truckcompany.domain.Authority;
 import com.truckcompany.domain.Company;
 import com.truckcompany.domain.User;
+import com.truckcompany.domain.enums.CompanyStatus;
 import com.truckcompany.repository.AuthorityRepository;
 import com.truckcompany.repository.CompanyRepository;
 import com.truckcompany.repository.UserRepository;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vladimir on 21.10.2016.
@@ -40,11 +42,41 @@ public class CompanyService {
     @Inject
     private PasswordEncoder passwordEncoder;
 
-    public Company createCompanyWithAdmin(ManagedCompanyVM managedCompanyVM){
+
+    private Set<User> getAdminForCompany(Company company){
+        return userRepository.findUsersBelongCompanyWithAuthorities(company.getId()).stream()
+            .filter(user -> user.getAuthorities().contains(authorityRepository.findOne(AuthoritiesConstants.ADMIN)))
+            .collect(Collectors.toSet());
+    }
+
+    public List<Company> findCompaniesAndAdmins() {
+        List<Company> companies = companyRepository.findAll();
+        return
+            companies.stream()
+                .map((company) -> {
+                   /* Set<User> admins = userRepository.findUsersBelongCompanyWithAuthorities(company.getId()).stream()
+                        .filter(user -> user.getAuthorities().contains(authorityRepository.findOne(AuthoritiesConstants.ADMIN)))
+                        .collect(Collectors.toSet());*/
+                    company.setUsers(getAdminForCompany(company));
+                    return company;
+                })
+                .collect(Collectors.toList());
+    }
+
+
+    public Company findCompanyWithAdmins(Long id){
+        Company company = companyRepository.getOne(id);
+        company.setUsers(getAdminForCompany(company));
+        return company;
+    }
+
+    public Company createCompanyWithAdmin(ManagedCompanyVM managedCompanyVM) {
         Company company = new Company();
         company.setName(managedCompanyVM.getName());
+        company.setStatus(CompanyStatus.ACTIVE);
 
         User user = new User();
+        user.setCompany(company);
         user.setLogin(managedCompanyVM.getLogin());
         user.setEmail(managedCompanyVM.getEmail());
 
@@ -53,11 +85,12 @@ public class CompanyService {
         user.setLangKey("en");
         user.setActivated(true);
 
+
         Authority authority = authorityRepository.findOne(AuthoritiesConstants.ADMIN);
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);
         user.setAuthorities(authorities);
-        List<User> users = new ArrayList<>();
+        Set<User> users = new HashSet<>();
         users.add(user);
         company.setUsers(users);
 
@@ -77,15 +110,15 @@ public class CompanyService {
 
     public void deleteCompany(Long id) {
         Company company = companyRepository.getOne(id);
-        if (company != null){
+        if (company != null) {
             companyRepository.delete(company);
             log.debug("Deleted Company: {}", company);
         }
     }
 
-    public void updateCompany(ManagedCompanyVM managedCompanyVM){
+    public void updateCompany(ManagedCompanyVM managedCompanyVM) {
         Company company = companyRepository.getOne(managedCompanyVM.getId());
-        if (company != null){
+        if (company != null) {
             company.setName(managedCompanyVM.getName());
             companyRepository.save(company);
             log.debug("Update Company: {}", company);

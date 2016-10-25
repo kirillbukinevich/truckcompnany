@@ -2,7 +2,9 @@ package com.truckcompany.service.dto;
 
 import com.truckcompany.domain.Company;
 import com.truckcompany.domain.User;
+import com.truckcompany.domain.enums.CompanyStatus;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,19 +21,23 @@ public class CompanyDTO {
     private String name;
 
 
-    private List<User> users;
+    private CompanyStatus status;
+
+
+    private Set<User> users;
 
     public CompanyDTO(){
 
     }
 
     public CompanyDTO(Company company){
-        this(company.getId(), company.getName(), company.getUsers());
+        this(company.getId(), company.getName(), company.getStatus(), company.getUsers());
     }
 
-    public CompanyDTO(Long id, String name, List<User> users){
+    public CompanyDTO(Long id, String name, CompanyStatus status, Set<User> users){
         this.id = id;
         this.name = name;
+        this.status = status;
         this.users = users;
     }
 
@@ -72,11 +78,19 @@ public class CompanyDTO {
         this.name = name;
     }
 
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public CompanyStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(CompanyStatus status) {
+        this.status = status;
     }
 }

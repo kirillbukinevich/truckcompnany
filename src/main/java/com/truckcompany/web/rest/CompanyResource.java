@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.Company;
 import com.truckcompany.repository.CompanyRepository;
 import com.truckcompany.security.AuthoritiesConstants;
+import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.CompanyService;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import com.truckcompany.web.rest.vm.ManagedCompanyVM;
@@ -39,17 +40,24 @@ public class CompanyResource {
     private CompanyService companyService;
 
 
-    @RequestMapping( value = "/companies",
+    @RequestMapping(value = "/companies",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
+    @Secured(AuthoritiesConstants.SUPERADMIN)
     @Timed
-    public ResponseEntity<List<ManagedCompanyVM>> getAllTruckingCompanies(){
+    public ResponseEntity<List<ManagedCompanyVM>> getAllTruckingCompanies() {
         log.debug("REST request get all Company");
 
-        List<Company> truckingCompanies = companyRepository.findAllWithUsers();
+        List<Company> truckingCompanies;
+        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERADMIN)){
+            truckingCompanies = companyService.findCompaniesAndAdmins();
+        } else {
+            truckingCompanies = companyRepository.findAll();
+        }
+
         List<ManagedCompanyVM> managedCompanyVMs = new ArrayList<>();
-        if (truckingCompanies != null){
-            for (Company company : truckingCompanies){
+        if (truckingCompanies != null) {
+            for (Company company : truckingCompanies) {
                 managedCompanyVMs.add(new ManagedCompanyVM(company));
             }
         }
@@ -66,11 +74,18 @@ public class CompanyResource {
     public ResponseEntity<ManagedCompanyVM> getUser(@PathVariable Long id) {
         log.debug("REST request to get Company : {}", id);
         Company company = companyService.getUserById(id);
+        if (SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.SUPERADMIN)){
+            company = companyService.findCompanyWithAdmins(id);
+        } else {
+            company = companyService.getUserById(id);
+        }
+
+
         if (company == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<ManagedCompanyVM>(new ManagedCompanyVM(company), HttpStatus.OK);
     }
 
-    @RequestMapping( value = "/companies",
+    @RequestMapping(value = "/companies",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -80,15 +95,15 @@ public class CompanyResource {
 
 
         return ResponseEntity.created(new URI("/api/companies/" + newCompany.getId()))
-                .headers(HeaderUtil.createAlert("truckingCompany.created", newCompany.getId().toString()))
-                .body(newCompany);
+            .headers(HeaderUtil.createAlert("truckingCompany.created", newCompany.getId().toString()))
+            .body(newCompany);
     }
 
     @RequestMapping(value = "/companies",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ManagedCompanyVM> updateUser(@RequestBody ManagedCompanyVM managedCompanyVM) throws URISyntaxException{
+    public ResponseEntity<ManagedCompanyVM> updateUser(@RequestBody ManagedCompanyVM managedCompanyVM) throws URISyntaxException {
         log.debug("REST request to update Company : {}", managedCompanyVM);
         companyService.updateCompany(managedCompanyVM);
 
@@ -106,9 +121,8 @@ public class CompanyResource {
     public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
         log.debug("REST request to delete Company: {}", id);
         companyService.deleteCompany(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createAlert( "truckingCompany.deleted", id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert("truckingCompany.deleted", id.toString())).build();
     }
-
 
 
 }
