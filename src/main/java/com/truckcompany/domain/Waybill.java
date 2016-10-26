@@ -4,19 +4,19 @@ package com.truckcompany.domain;
 import com.truckcompany.domain.enums.WaybillState;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "waybill")
-public class Waybill {
+public class Waybill implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "date")
-    private Date date;
+    private ZonedDateTime date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "driver_id", nullable = false)
@@ -26,32 +26,29 @@ public class Waybill {
     @Column(name = "state")
     private WaybillState state;
 
-    @Column(name = "waybillcol")
-    private String waybillcol;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dispatcher_id", nullable = false)
-    private User dispatcherId;
+    private User dispatcher;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "route_list_id", nullable = false)
-    private RouteList routeListId;
+    private RouteList routeList;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "write_off_id", nullable = false)
-    private WriteOffAct writeOffId;
+    private WriteOffAct writeOff;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Date getDate() {
+    public ZonedDateTime getDate() {
         return date;
     }
-    public void setDate(Date date) {
+    public void setDate(ZonedDateTime date) {
         this.date = date;
     }
 
@@ -62,13 +59,6 @@ public class Waybill {
         this.driver = driver;
     }
 
-    public String getWaybillcol() {
-        return waybillcol;
-    }
-    public void setWaybillcol(String waybillcol) {
-        this.waybillcol = waybillcol;
-    }
-
     public WaybillState getState() {
         return state;
     }
@@ -76,25 +66,25 @@ public class Waybill {
         this.state = state;
     }
 
-    public User getDispatcherId() {
-        return dispatcherId;
+    public User getDispatcher() {
+        return dispatcher;
     }
-    public void setDispatcherId(User dispatcherId) {
-        this.dispatcherId = dispatcherId;
-    }
-
-    public RouteList getRouteListId() {
-        return routeListId;
-    }
-    public void setRouteListId(RouteList routeListId) {
-        this.routeListId = routeListId;
+    public void setDispatcher(User dispatcher) {
+        this.dispatcher = dispatcher;
     }
 
-    public WriteOffAct getWriteOffId() {
-        return writeOffId;
+    public RouteList getRouteList() {
+        return routeList;
     }
-    public void setWriteOffId(WriteOffAct writeOffId) {
-        this.writeOffId = writeOffId;
+    public void setRouteList(RouteList routeList) {
+        this.routeList = routeList;
+    }
+
+    public WriteOffAct getWriteOff() {
+        return writeOff;
+    }
+    public void setWriteOff(WriteOffAct writeOff) {
+        this.writeOff = writeOff;
     }
 
     @Override
@@ -103,8 +93,8 @@ public class Waybill {
                     "date:" + date + "," +
                     "driver_id:" + driver.getId() + "," +
                     "state:" + state.name() + "," +
-                    "dispatcher_id:" + dispatcherId.getId() + "," +
-                    "route_list_id:" + routeListId.getId() + "," +
-                    "write_off_id:" + writeOffId.getId() + "}";
+                    "dispatcher_id:" + dispatcher.getId() + "," +
+                    "route_list_id:" + routeList.getId() + "," +
+                    "write_off_id:" + writeOff.getId() + "}";
     }
 }

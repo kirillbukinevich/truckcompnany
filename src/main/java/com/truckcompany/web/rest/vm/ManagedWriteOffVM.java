@@ -1,23 +1,30 @@
-package com.truckcompany.domain;
+package com.truckcompany.web.rest.vm;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import com.truckcompany.domain.WriteOffAct;
+
 import java.time.ZonedDateTime;
-import java.util.Date;
 
-@Entity
-@Table(name = "write_off_act")
-public class WriteOffAct implements Serializable {
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
+public class ManagedWriteOffVM {
     private Long id;
 
-    @Column(name = "date")
     private ZonedDateTime date;
 
-    @Column (name = "count")
     private Integer count;
+
+    public ManagedWriteOffVM() {
+    }
+
+    public ManagedWriteOffVM(Long id, ZonedDateTime date, Integer count) {
+        this.id = id;
+        this.date = date;
+        this.count = count;
+    }
+
+    public ManagedWriteOffVM (WriteOffAct writeOff) {
+        this.id = writeOff.getId();
+        this.date = writeOff.getDate();
+        this.count = writeOff.getCount();
+    }
 
     public Long getId() {
         return id;

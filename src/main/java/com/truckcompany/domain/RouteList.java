@@ -1,52 +1,53 @@
 package com.truckcompany.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Entity
 @Table(name = "route_list")
-public class RouteList {
+public class RouteList implements Serializable {
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "truck_id", nullable = false)
     private Truck truck;
 
     @Column(name = "leaving_date")
-    private Date leavindDate;
+    private ZonedDateTime leavingDate;
 
     @Column(name = "arrival_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date arrivalDate;
+    private ZonedDateTime arrivalDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leaving_storage_id", nullable = false)
-    private Storage leavingStorageId;
+    private Storage leavingStorage;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "arrival_storage_id", nullable = false)
-    private Storage arrivalStorageId;
+    private Storage arrivalStorage;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Date getLeavindDate() {
-        return leavindDate;
+    public ZonedDateTime getLeavingDate() {
+        return leavingDate;
     }
-    public void setLeavindDate(Date leavindDate) {
-        this.leavindDate = leavindDate;
+    public void setLeavingDate(ZonedDateTime leavingDate) {
+        this.leavingDate = leavingDate;
     }
 
-    public Date getArrivalDate() {
+    public ZonedDateTime getArrivalDate() {
         return arrivalDate;
     }
-    public void setArrivalDate(Date arrivalDate) {
+    public void setArrivalDate(ZonedDateTime arrivalDate) {
         this.arrivalDate = arrivalDate;
     }
 
@@ -57,17 +58,17 @@ public class RouteList {
         this.truck = truck;
     }
 
-    public Storage getLeavingStorageId() {
-        return leavingStorageId;
+    public Storage getLeavingStorage() {
+        return leavingStorage;
     }
-    public void setLeavingStorageId(Storage leavingStorageId) {
-        this.leavingStorageId = leavingStorageId;
+    public void setLeavingStorage(Storage leavingStorage) {
+        this.leavingStorage = leavingStorage;
     }
 
-    public Storage getArrivalStorageId() {
-        return arrivalStorageId;
+    public Storage getArrivalStorage() {
+        return arrivalStorage;
     }
-    public void setArrivalStorageId(Storage arrivalStorageId) {
-        this.arrivalStorageId = arrivalStorageId;
+    public void setArrivalStorage(Storage arrivalStorage) {
+        this.arrivalStorage = arrivalStorage;
     }
 }
