@@ -17,10 +17,17 @@
         var vm = this;
         vm.company = {};
         vm.admin = {};
+        vm.logo = null;
+
+
 
         vm.create = function(){
             console.log("Create new company with name = " + vm.company.name);
             console.log(vm.admin);
+
+
+
+            /*
             Company.save(
                 {
                     name : vm.company.name,
@@ -31,7 +38,7 @@
                 function () {
                     console.log("Create new company");
                     $state.go('superadmin.companies');
-            })
+            })*/
         }
 
 

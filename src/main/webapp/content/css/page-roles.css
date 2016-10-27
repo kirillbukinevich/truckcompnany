@@ -9,7 +9,7 @@
 
 #page-role-content{
     background: #fff;
-    padding: 0 15px;
+    padding: 0 15px 15px 15px;
 }
 
 #page-role-content h1{
@@ -21,9 +21,22 @@
     margin-bottom: 10px;
 }
 
-.table > tbody > tr > td{
+.table > tbody > tr > td, .table > tbody > tr > th{
     vertical-align: middle;
 }
 #action-th{
     width:150px;
+}
+
+
+#logo-company{
+    text-align: center;
+}
+#logo-company img{
+    max-width:210px;
+    width:100%;
+}
+#logo-company .btn{
+    width:100%;
+    margin-top: 10px;
 }

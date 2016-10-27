@@ -3,6 +3,8 @@ package com.truckcompany.web.rest.vm;
 import com.truckcompany.domain.Company;
 import com.truckcompany.service.dto.CompanyDTO;
 
+import javax.servlet.http.Part;
+
 /**
  * Created by Vladimir on 21.10.2016.
  */
@@ -46,4 +48,6 @@ public class ManagedCompanyVM extends CompanyDTO {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
 }

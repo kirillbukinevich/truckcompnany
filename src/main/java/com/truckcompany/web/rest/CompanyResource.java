@@ -18,6 +18,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.servlet.http.Part;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;

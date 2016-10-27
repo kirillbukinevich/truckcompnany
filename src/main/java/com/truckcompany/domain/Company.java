@@ -30,6 +30,9 @@ public class Company implements Serializable{
     @Column(name = "status")
     private CompanyStatus status;
 
+    @Column(name = "logo")
+    private String logo;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable (name="tc_user_company",
@@ -68,6 +71,14 @@ public class Company implements Serializable{
 
     public void setStatus(CompanyStatus status) {
         this.status = status;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     @Override
