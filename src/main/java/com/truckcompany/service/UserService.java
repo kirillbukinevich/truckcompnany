@@ -55,6 +55,19 @@ public class UserService {
             });
     }
 
+    public Optional<User> changeInitialPasswordForAdmin(String key, String password){
+        log.debug("Create new password via link from email for admin according activate key {}", key);
+        return userRepository.findOneByActivationKey(key)
+            .map(user -> {
+                String encryptedPassword = passwordEncoder.encode(password);
+                user.setPassword(encryptedPassword);
+                user.setActivationKey(null);
+                userRepository.save(user);
+                return user;
+            });
+
+    }
+
     public Optional<User> completePasswordReset(String newPassword, String key) {
        log.debug("Reset user password for reset key {}", key);
 

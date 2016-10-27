@@ -23,22 +23,17 @@
 
         vm.create = function(){
             console.log("Create new company with name = " + vm.company.name);
-            console.log(vm.admin);
+            console.log(vm.company);
 
 
 
-            /*
+            vm.company['users'] = [vm.admin];
             Company.save(
-                {
-                    name : vm.company.name,
-                    login: vm.admin.login,
-                    email: vm.admin.email,
-                    password: vm.admin.password
-                },
+                vm.company,
                 function () {
                     console.log("Create new company");
                     $state.go('superadmin.companies');
-            })*/
+            })
         }
 
 

@@ -16,10 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +39,9 @@ public class CompanyService {
 
     @Inject
     private PasswordEncoder passwordEncoder;
+
+    @Inject
+    private MailService mailService;
 
 
     private Set<User> getAdminForCompany(Company company){
@@ -70,21 +71,20 @@ public class CompanyService {
         return company;
     }
 
-    public Company createCompanyWithAdmin(ManagedCompanyVM managedCompanyVM) {
+    public Company createCompanyWithAdmin(ManagedCompanyVM managedCompanyVM, HttpServletRequest request) {
         Company company = new Company();
         company.setName(managedCompanyVM.getName());
         company.setStatus(CompanyStatus.ACTIVE);
 
+        User userFromForm = managedCompanyVM.getUsers().stream().limit(1).collect(Collectors.toList()).get(0);
+
         User user = new User();
         user.setCompany(company);
-        user.setLogin(managedCompanyVM.getLogin());
-        user.setEmail(managedCompanyVM.getEmail());
-
-        String encryptedPassword = passwordEncoder.encode(managedCompanyVM.getPassword());
-        user.setPassword(encryptedPassword);
+        user.setLogin(userFromForm.getLogin());
+        user.setEmail(userFromForm.getEmail());
+        user.setActivationKey(passwordEncoder.encode(new Date().toString()).substring(0, 20));
         user.setLangKey("en");
         user.setActivated(true);
-
 
         Authority authority = authorityRepository.findOne(AuthoritiesConstants.ADMIN);
         Set<Authority> authorities = new HashSet<>();
@@ -98,6 +98,18 @@ public class CompanyService {
 
 
         companyRepository.save(company);
+
+        String baseUrl = request.getScheme() + // "http"
+            "://" +                                // "://"
+            request.getServerName() +              // "myhost"
+            ":" +                                  // ":"
+            request.getServerPort() +              // "80"
+            request.getContextPath();              // "/myContextPath" or "" if deployed in root context
+
+        mailService.sendCreatePasswordForAdminEmail(user, baseUrl);
+
+
+
         log.debug("Created Information for Company: {}", company);
         return company;
     }

@@ -61,7 +61,7 @@ jhipster:
         #allow-credentials: true
         #max-age: 1800
     mail:
-        from: TruckCompany@localhost
+        from: truckcompany.itechart@gmail.com
     swagger:
         title: TruckCompany API
         description: TruckCompany API documentation

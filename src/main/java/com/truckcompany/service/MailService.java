@@ -78,6 +78,18 @@ public class MailService {
     }
 
     @Async
+    public void sendCreatePasswordForAdminEmail(User user, String baseUrl) {
+        log.debug("Sending e-mail to '{}' for admin with link allowing create new password.", user.getEmail());
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(USER, user);
+        context.setVariable(BASE_URL, baseUrl);
+        String content = templateEngine.process("createPasswordForAdmin", context);
+        String subject = messageSource.getMessage("email.activation.title", null, locale);
+        sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    @Async
     public void sendCreationEmail(User user, String baseUrl) {
         log.debug("Sending creation e-mail to '{}'", user.getEmail());
         Locale locale = Locale.forLanguageTag(user.getLangKey());

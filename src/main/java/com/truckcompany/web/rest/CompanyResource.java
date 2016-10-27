@@ -18,6 +18,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -90,9 +91,9 @@ public class CompanyResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<?> createTruckingCompany(@RequestBody ManagedCompanyVM managedCompanyVM) throws URISyntaxException {
+    public ResponseEntity<?> createTruckingCompany(@RequestBody ManagedCompanyVM managedCompanyVM, HttpServletRequest request) throws URISyntaxException {
         log.debug("REST request to save Company: {}", managedCompanyVM.getName());
-        Company newCompany = companyService.createCompanyWithAdmin(managedCompanyVM);
+        Company newCompany = companyService.createCompanyWithAdmin(managedCompanyVM, request);
 
 
         return ResponseEntity.created(new URI("/api/companies/" + newCompany.getId()))
@@ -124,6 +125,9 @@ public class CompanyResource {
         companyService.deleteCompany(id);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("truckingCompany.deleted", id.toString())).build();
     }
+
+
+
 
 
 }
