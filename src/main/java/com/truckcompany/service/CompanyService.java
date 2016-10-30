@@ -128,13 +128,43 @@ public class CompanyService {
         }
     }
 
+    public void deleteCompanies(Long[] idList){
+        Arrays.stream(idList)
+            .forEach(id ->{
+                Company company = companyRepository.getOne(id);
+                companyRepository.delete(company);
+            });
+    }
+
     public void updateCompany(ManagedCompanyVM managedCompanyVM) {
         Company company = companyRepository.getOne(managedCompanyVM.getId());
         if (company != null) {
             company.setName(managedCompanyVM.getName());
+
+            User userFromForm = managedCompanyVM.getUsers().stream().limit(1).collect(Collectors.toList()).get(0);
+
+            User user = userRepository.getOne(userFromForm.getId());
+            user.setLogin(userFromForm.getLogin());
+            user.setEmail(userFromForm.getEmail());
+
+            userRepository.save(user);
             companyRepository.save(company);
             log.debug("Update Company: {}", company);
         }
+    }
+
+    public void changeCompanyStatus(Long id){
+        Company company = companyRepository.getOne(id);
+
+        CompanyStatus status = company.getStatus();
+        if (status == CompanyStatus.ACTIVE){
+            company.setStatus(CompanyStatus.DEACTIVATE);
+        } else{
+            company.setStatus(CompanyStatus.ACTIVE);
+        }
+
+        companyRepository.save(company);
+
     }
 
 

@@ -2,7 +2,9 @@ package com.truckcompany.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.Company;
+import com.truckcompany.domain.User;
 import com.truckcompany.repository.CompanyRepository;
+import com.truckcompany.repository.UserRepository;
 import com.truckcompany.security.AuthoritiesConstants;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.CompanyService;
@@ -24,6 +26,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vladimir on 20.10.2016.
@@ -40,6 +44,9 @@ public class CompanyResource {
 
     @Inject
     private CompanyService companyService;
+
+    @Inject
+    private UserRepository userRepository;
 
 
     @RequestMapping(value = "/companies",
@@ -93,6 +100,19 @@ public class CompanyResource {
     @Timed
     public ResponseEntity<?> createTruckingCompany(@RequestBody ManagedCompanyVM managedCompanyVM, HttpServletRequest request) throws URISyntaxException {
         log.debug("REST request to save Company: {}", managedCompanyVM.getName());
+
+        User user = managedCompanyVM.getUsers().stream().limit(1).collect(Collectors.toList()).get(0);
+
+        Optional<User> existingUser = userRepository.findOneByEmail(user.getEmail());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(user.getId()))) {
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("companyManagement", "emailexists", "E-mail already in use")).body(null);
+        }
+        existingUser = userRepository.findOneByLogin(user.getLogin().toLowerCase());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(user.getId()))) {
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("companyManagement", "userexists", "Login already in use")).body(null);
+        }
+
+
         Company newCompany = companyService.createCompanyWithAdmin(managedCompanyVM, request);
 
 
@@ -107,11 +127,29 @@ public class CompanyResource {
     @Timed
     public ResponseEntity<ManagedCompanyVM> updateUser(@RequestBody ManagedCompanyVM managedCompanyVM) throws URISyntaxException {
         log.debug("REST request to update Company : {}", managedCompanyVM);
+
+        User user = managedCompanyVM.getUsers().stream().limit(1).collect(Collectors.toList()).get(0);
+
+        Optional<User> existingUser = userRepository.findOneByEmail(user.getEmail());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(user.getId()))) {
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("companyManagement", "emailexists", "E-mail already in use")).body(null);
+        }
+        existingUser = userRepository.findOneByLogin(user.getLogin().toLowerCase());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(user.getId()))) {
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("companyManagement", "userexists", "Login already in use")).body(null);
+        }
+
         companyService.updateCompany(managedCompanyVM);
 
         return ResponseEntity.created(new URI("/api/companies/" + managedCompanyVM.getId()))
             .headers(HeaderUtil.createAlert("truckingCompany.update", managedCompanyVM.getId().toString()))
             .body(managedCompanyVM);
+    }
+
+    @RequestMapping(value = "/change_company_status/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public void changeCompanyStatus(@PathVariable Long id){
+        companyService.changeCompanyStatus(id);
     }
 
 
@@ -124,6 +162,14 @@ public class CompanyResource {
         log.debug("REST request to delete Company: {}", id);
         companyService.deleteCompany(id);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("truckingCompany.deleted", id.toString())).build();
+    }
+
+
+    @RequestMapping(value = "/companies/deleteArray", method = RequestMethod.POST)
+    public ResponseEntity<Void> deleteCompanies(@RequestBody Long[] idList){
+        log.debug("REST request to delete list of companies {}" ,idList);
+        companyService.deleteCompanies(idList);
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert("truckingCompany.deleted", "null")).build();
     }
 
 

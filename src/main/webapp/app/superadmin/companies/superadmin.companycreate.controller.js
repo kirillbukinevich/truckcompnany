@@ -18,14 +18,12 @@
         vm.company = {};
         vm.admin = {};
         vm.logo = null;
+        vm.error = false;
 
 
 
         vm.create = function(){
             console.log("Create new company with name = " + vm.company.name);
-            console.log(vm.company);
-
-
 
             vm.company['users'] = [vm.admin];
             Company.save(
@@ -33,7 +31,23 @@
                 function () {
                     console.log("Create new company");
                     $state.go('superadmin.companies');
-            })
+                },
+                function(resp){
+                    vm.error = true;
+                    switch(resp.headers('X-truckCompanyApp-error')){
+                        case 'error.userexists': {
+                            vm.messageError = 'Login already in use';
+                            break;
+                        }
+                        case 'error.emailexists':{
+                            vm.messageError = 'Email already in use.';
+                            break;
+                        }
+                        default: {
+                            vm.messageError = 'You don\'t fill all fields.';
+                        }
+                    }
+                });
         }
 
 
