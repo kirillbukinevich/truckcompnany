@@ -17,6 +17,8 @@
             views: {
                 'content@': {
                     templateUrl: 'app/superadmin/superadmin.html',
+                    controller: 'SuperadminController',
+                    controllerAs: 'vm'
                 },
             }
         });

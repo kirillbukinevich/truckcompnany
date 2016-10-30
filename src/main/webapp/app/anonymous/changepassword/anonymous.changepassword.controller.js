@@ -15,8 +15,19 @@
         vm.changePassword = changePassword;
         vm.key = $stateParams.key;
 
-        function changePassword(){
+        $http({
+            method: 'GET',
+            url: '/api/isvalidkey/' + vm.key,
+        }).then(function successCallback(response) {
+            vm.isValidKey = true;
+            console.log(vm.isValidKey)
+        }, function errorCallback(response) {
+            vm.isValidKey = false;
+            console.log(vm.isValidKey)
+        });
 
+
+        function changePassword(){
             $http({
                 method: 'POST',
                 url: '/api/change_inital_password',

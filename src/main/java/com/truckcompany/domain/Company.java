@@ -34,7 +34,7 @@ public class Company implements Serializable{
     private String logo;
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable (name="tc_user_company",
         joinColumns = @JoinColumn(name = "tc_company_id"),
         inverseJoinColumns = @JoinColumn(name = "jhi_user_id"))

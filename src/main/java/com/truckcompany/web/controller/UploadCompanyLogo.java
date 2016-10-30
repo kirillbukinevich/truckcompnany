@@ -1,15 +1,14 @@
 package com.truckcompany.web.controller;
 
 import com.truckcompany.config.ApplicationProperties;
-import com.truckcompany.config.JHipsterProperties;
 import com.truckcompany.domain.Company;
 import com.truckcompany.repository.CompanyRepository;
-import com.truckcompany.web.rest.UserResource;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,10 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
-import javax.websocket.server.PathParam;
 import java.io.*;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -53,28 +50,14 @@ public class UploadCompanyLogo {
     private CompanyRepository companyRepository;
 
 
-    @RequestMapping(value = "/showlogo/{company_id}", method = RequestMethod.GET)
-    @ResponseBody
-    public byte[] downloadLogo(@PathVariable Long company_id, HttpServletRequest req) throws IOException {
 
-        Company company = companyRepository.getOne(company_id);
-
-        File file = new File(applicationProperties.getRootFolderForUpload() + "logocompany" + File.separator + company.getLogo());
-        InputStream in = null;
-        try{
-            in = new FileInputStream(file);
-            byte[] image = IOUtils.toByteArray(in);
-            return image;
-        } finally {
-            in.close();
-        }
-    }
 
     @RequestMapping(value = "/deletelogo/{company_id}", method = RequestMethod.GET)
     @ResponseBody
-    public void deleteLogo(@PathVariable Long company_id, HttpServletRequest req) throws IOException {
+    public void deleteLogo(@PathVariable Long company_id, HttpServletRequest request) throws IOException {
         Company company = companyRepository.getOne(company_id);
-        deleteFile(applicationProperties.getRootFolderForUpload() + "logocompany" + File.separator + company.getLogo());
+        String uploadFolder = request.getServletContext().getRealPath("content/upload/logocompany");
+        deleteFile(uploadFolder + File.separator + company.getLogo());
         company.setLogo(null);
         companyRepository.save(company);
     }
@@ -84,7 +67,8 @@ public class UploadCompanyLogo {
     @ResponseBody
     public ResponseEntity<?> uploadFile(@RequestParam(value = "file", required = false) Part file,
                                      @RequestParam(value = "file_name") String fileName,
-                                     @RequestParam(value = "company_id") Long company_id) throws IOException {
+                                     @RequestParam(value = "company_id") Long company_id,
+                                     HttpServletRequest request) throws IOException {
 
         String ext = getExtensionFile(fileName).toUpperCase();
         if (!accessExt.contains(ext)){
@@ -98,10 +82,11 @@ public class UploadCompanyLogo {
             byte[] filecontent = null;
             String deleteLogo = null;
             try{
-                createFolderForUpload();
+                String uploadFolder = request.getServletContext().getRealPath("content/upload/logocompany");
+                createFolderForUpload(uploadFolder);
 
                 String nameFileLogo = getUniqueFileName(fileName);
-                File logo = new File(applicationProperties.getRootFolderForUpload() + "logocompany" + File.separator + nameFileLogo);
+                File logo = new File(uploadFolder + File.separator + nameFileLogo);
                 fileOutputStream = new FileOutputStream(logo);
 
                 InputStream inputStream = file.getInputStream();
@@ -113,7 +98,7 @@ public class UploadCompanyLogo {
                 deleteLogo = company.getLogo();
                 company.setLogo(nameFileLogo);
                 companyRepository.save(company);
-                return ResponseEntity.ok(null);
+                return new ResponseEntity<>(HeaderUtil.createEntityCreationAlert("image",nameFileLogo),HttpStatus.OK);
             } catch (IOException ex){
                 log.debug("Can not upload logo for company", ex);
                 return ResponseEntity.badRequest()
@@ -138,8 +123,9 @@ public class UploadCompanyLogo {
 
     }
 
-    private void createFolderForUpload(){
-        File folder = new File(applicationProperties.getRootFolderForUpload() + "logocompany");
+    private void createFolderForUpload(String rootFolder){
+        /*log.debug("ROOT: {}", rootFolder);*/
+        File folder = new File(rootFolder);
         if (!folder.exists()) {
             boolean mkdir = folder.mkdirs();
         }
