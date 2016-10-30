@@ -1,8 +1,17 @@
+.text-align-center{
+    text-align: center;
+}
+.text-align-right{
+    text-align: right;
+}
+
 body {
     background: #fafafa;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #333;
 }
+
+
 
 /* ==========================================================================
 Hide ng-cloak on page load, https://docs.angularjs.org/api/ng/directive/ngCloak
@@ -75,6 +84,10 @@ Logo styles
 .logo .logo-img {
     height: 45px;
     display: inline-block;
+}
+
+.btn-default:hover{
+    border-color:#0e6ab4;
 }
 
 /* ==========================================================================

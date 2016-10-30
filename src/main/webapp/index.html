@@ -15,8 +15,11 @@
     <!-- endinject -->
     <!-- endbuild -->
     <!-- build:css content/css/main.css -->
+    <link rel="stylesheet" href="content/css/common-style.css">
     <link rel="stylesheet" href="content/css/main.css">
     <link rel="stylesheet" href="content/css/user_main.css">
+
+    <link rel="stylesheet" href="content/css/page-roles.css">
     <!-- endbuild -->
 </head>
 <body ng-app="truckCompanyApp" ng-strict-di>
@@ -196,14 +199,35 @@
     <script src="app/account/account.state.js"></script>
 
 
+    <!-- UI FOR ANONYMOUS USERS-->
+    <script src="app/anonymous/anonymous.state.js"></script>
+    <script src="app/anonymous/changepassword/anonymous.changepassword.state.js"></script>
+    <script src="app/anonymous/changepassword/anonymous.changepassword.controller.js"></script>
 
+
+    <!--UI FOR USER WITH ROLE SUPERADMIN-->
     <script src="app/superadmin/superadmin.state.js"></script>
     <script src="app/superadmin/initial/superadmin.initial.state.js"></script>
     <script src="app/superadmin/companies/superadmin.companies.state.js"></script>
+
+    <script src="app/superadmin/superadmin.controller.js"></script>
     <script src="app/superadmin/companies/superadmin.companies.controller.js"></script>
+    <script src="app/superadmin/companies/superadmin.company.controller.js"></script>
+    <script src="app/superadmin/companies/superadmin.companycreate.controller.js"></script>
 
 
     <script src="app/services/company/company.service.js"></script>
+
+
+    <!--UI FOR USER WITH ROLE ADMIN-->
+    <script src="app/admincompany/admincompany.state.js"></script>
+    <script src="app/admincompany/initial/admincompany.initial.state.js"></script>
+
+
+    <!--DIRECTIVES-->
+    <script src="app/directives/checkimagecompany.directive.js"></script>
+    <script src="app/directives/checkimageuser.directive.js"></script>
+
     <!-- endinject -->
     <!-- endbuild -->
 

@@ -5,8 +5,10 @@ import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.User;
 import com.truckcompany.repository.UserRepository;
 import com.truckcompany.security.AuthoritiesConstants;
+import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.MailService;
 import com.truckcompany.service.UserService;
+import com.truckcompany.web.rest.vm.KeyAndPasswordVM;
 import com.truckcompany.web.rest.vm.ManagedUserVM;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import com.truckcompany.web.rest.util.PaginationUtil;
@@ -30,7 +32,7 @@ import java.util.stream.Collectors;
 
 /**
  * REST controller for managing users.
- *
+ * <p>
  * <p>This class accesses the User entity, and needs to fetch its collection of authorities.</p>
  * <p>
  * For a normal use-case, it would be better to have an eager relationship between User and Authority,
@@ -76,7 +78,7 @@ public class UserResource {
      * </p>
      *
      * @param managedUserVM the user to create
-     * @param request the HTTP request
+     * @param request       the HTTP request
      * @return the ResponseEntity with status 201 (Created) and with body the new user, or with status 400 (Bad Request) if the login or email is already in use
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
@@ -100,14 +102,14 @@ public class UserResource {
         } else {
             User newUser = userService.createUser(managedUserVM);
             String baseUrl = request.getScheme() + // "http"
-            "://" +                                // "://"
-            request.getServerName() +              // "myhost"
-            ":" +                                  // ":"
-            request.getServerPort() +              // "80"
-            request.getContextPath();              // "/myContextPath" or "" if deployed in root context
+                "://" +                                // "://"
+                request.getServerName() +              // "myhost"
+                ":" +                                  // ":"
+                request.getServerPort() +              // "80"
+                request.getContextPath();              // "/myContextPath" or "" if deployed in root context
             mailService.sendCreationEmail(newUser, baseUrl);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-                .headers(HeaderUtil.createAlert( "userManagement.created", newUser.getLogin()))
+                .headers(HeaderUtil.createAlert("userManagement.created", newUser.getLogin()))
                 .body(newUser);
         }
     }
@@ -178,9 +180,9 @@ public class UserResource {
     public ResponseEntity<ManagedUserVM> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
         return userService.getUserWithAuthoritiesByLogin(login)
-                .map(ManagedUserVM::new)
-                .map(managedUserVM -> new ResponseEntity<>(managedUserVM, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+            .map(ManagedUserVM::new)
+            .map(managedUserVM -> new ResponseEntity<>(managedUserVM, HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     /**
@@ -197,6 +199,23 @@ public class UserResource {
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);
         userService.deleteUser(login);
-        return ResponseEntity.ok().headers(HeaderUtil.createAlert( "userManagement.deleted", login)).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert("userManagement.deleted", login)).build();
+    }
+
+
+    @RequestMapping(value = "/change_inital_password", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<?> changeInitialAdminPassword(@RequestBody KeyAndPasswordVM keyAndPasswordVM) {
+        return userService.changeInitialPasswordForAdmin(keyAndPasswordVM.getKey(), keyAndPasswordVM.getNewPassword())
+            .map(user -> new ResponseEntity<>(HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    }
+
+    @RequestMapping(value = "/isvalidkey/{key}", method = RequestMethod.GET)
+    public ResponseEntity<?> isValidKey(@PathVariable String key){
+        log.debug("User is attemping create initial password for Admin profile use key= {}", key);
+        return userRepository.findOneByActivationKey(key)
+            .map(user -> new ResponseEntity<>(HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 }

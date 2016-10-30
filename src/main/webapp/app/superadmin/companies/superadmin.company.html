@@ -1,0 +1,50 @@
+<h1>Company</h1>
+<div class="alert alert-danger" ng-if="vm.error">
+    {{vm.messageError}}
+</div>
+
+
+
+<form>
+    <div class="row row-margin">
+
+        <div class="col-md-3">
+            <div id="logo-company">
+                <img check-image-company ng-src="{{vm.imageSource}}"  alt="No image">
+                <!--
+                <div class="btn btn-default" ngf-select="vm.saveLogo($file)">Update company logo</div>
+                <div class="btn btn-default" ng-click="vm.deleteLogo()">Delete company logo</div>
+                -->
+                <div id="logo-action">
+                    <a href="" ngf-select="vm.saveLogo($file)"><span class="glyphicon glyphicon-upload"></span>Upload logo</a>
+                    <a href="" ng-click="vm.deleteLogo(vm.company.id)"><span class="glyphicon glyphicon-erase"></span>Delete logo</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="form-group">
+                <label for="name">NameCompany</label>
+                <input type="text" ng-model="vm.company.name" class="form-control" id="name" placeholder="Enter company name">
+            </div>
+
+            <div class="form-group">
+                <label for="login">Admin login:</label>
+                <input type="text" ng-model="vm.company.users[0].login" class="form-control" id="login" placeholder="Enter login">
+            </div>
+            <div class="form-group">
+                <label for="email">Admin email:</label>
+                <input type="text" ng-model="vm.company.users[0].email" class="form-control" id="email" placeholder="Enter email">
+            </div>
+            <a href="" class="btn btn-default" ng-click="vm.update(vm.company.id)">Update</a>
+            <a href="#/superadmin/companies" class="btn btn-default">Cancel</a>
+        </div>
+    </div>
+
+
+
+
+
+
+
+</form>

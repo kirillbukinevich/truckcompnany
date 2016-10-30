@@ -2,26 +2,34 @@
 
 
 <div id="control-panel">
-    <a href="">Create new company</a>
-    <a href="">Delete checked company</a>
+    <a href="#/superadmin/company/create" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Create</a>
+    <a href="" ng-click="vm.deleteSelectedCompany()" class="btn btn-admin"><span class="glyphicon glyphicon-remove"></span>Delete</a>
 </div>
-<table class="table">
+
+<table class="table table-hover">
     <thead>
+
         <tr>
+            <th><input type="checkbox" ng-model="vm.checkedAll" ng-change="vm.changeStateCheckbox()"></th>
+            <th>Name company</th>
+            <th>Status</th>
+            <th>Login</th>
+            <th>Email</th>
             <th></th>
-            <th>id</th>
-            <th>name</th>
-            <th>Action</th>
         </tr>
     </thead>
     <tbody>
         <tr ng-repeat="company in vm.companies">
-            <td><input type="checkbox"></td>
-            <td>{{company.id}}</td>
-            <td>{{company.name}}</td>
+            <td><input type="checkbox" ng-init="vm.selected[$index] = false" ng-model="vm.selected[$index]"></td>
+            <td><a href="#/superadmin/companies/{{company.id}}">{{company.name}}</a></td>
+            <td class="text-align-center">
+                <span ng-if = "company.status == 'ACTIVE'" ng-click="vm.toggleStatus(company.id)" class="label label-success" >ACTIVE</span>
+                <span ng-if = "company.status == 'DEACTIVATE'" ng-click="vm.toggleStatus(company.id)" class="label label-warning">NON-ACTIVE</span>
+            </td>
+            <td>{{company.users[0].login}}</td>
+            <td>{{company.users[0].email}}</td>
             <td>
-                <a href="">Delete</a>
-                <a href="">View</a>
+                <span  ng-click="vm.deleteCompany(company.id)" class="glyphicon glyphicon-trash"></span>
             </td>
         </tr>
     </tbody>

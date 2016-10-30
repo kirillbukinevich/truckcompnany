@@ -1,5 +1,6 @@
 package com.truckcompany;
 
+import com.truckcompany.config.ApplicationProperties;
 import com.truckcompany.config.Constants;
 import com.truckcompany.config.DefaultProfileUtil;
 import com.truckcompany.config.JHipsterProperties;
@@ -23,7 +24,7 @@ import java.util.Collection;
 
 @ComponentScan
 @EnableAutoConfiguration(exclude = { MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class })
-@EnableConfigurationProperties({ JHipsterProperties.class, LiquibaseProperties.class })
+@EnableConfigurationProperties({ JHipsterProperties.class, LiquibaseProperties.class, ApplicationProperties.class})
 public class TruckCompanyApp {
 
     private static final Logger log = LoggerFactory.getLogger(TruckCompanyApp.class);

@@ -22,12 +22,7 @@
             views: {
                 'content@': {
                     templateUrl: 'app/superadmin/initial/superadmin.initial.html'
-                    /*controller: 'ActivationController',
-                    controllerAs: 'vm'*/
                 },
-               /* 'sidebar@':{
-                    template: 'TEST',
-                }*/
             },
             resolve: {
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {

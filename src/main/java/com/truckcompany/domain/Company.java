@@ -1,10 +1,14 @@
 package com.truckcompany.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.truckcompany.domain.enums.CompanyStatus;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,13 +26,19 @@ public class Company implements Serializable{
     @Column (name = "name")
     private String name;
 
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "status")
+    private CompanyStatus status;
+
+    @Column(name = "logo")
+    private String logo;
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable (name="tc_user_company",
         joinColumns = @JoinColumn(name = "tc_company_id"),
         inverseJoinColumns = @JoinColumn(name = "jhi_user_id"))
-    Set<User> users;
+    Set<User> users = new HashSet<>();
 
 
 
@@ -50,8 +60,25 @@ public class Company implements Serializable{
     public Set<User> getUsers() {
         return users;
     }
+
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public CompanyStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(CompanyStatus status) {
+        this.status = status;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     @Override

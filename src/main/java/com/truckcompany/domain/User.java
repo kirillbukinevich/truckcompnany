@@ -35,7 +35,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String login;
 
     @JsonIgnore
-    @NotNull
     @Size(min = 60, max = 60)
     @Column(name = "password_hash",length = 60)
     private String password;
@@ -48,12 +47,13 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "last_name", length = 50)
     private String lastName;
 
-
-
     @Email
     @Size(max = 100)
     @Column(length = 100, unique = true)
     private String email;
+
+    @Column(name = "logo")
+    private String logo;
 
     @NotNull
     @Column(nullable = false)
@@ -86,6 +86,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private Set<PersistentToken> persistentTokens = new HashSet<>();
+
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "company_id" )
+    private Company company;
 
     @Column (name = "middle_name")
     private String middleName;
@@ -281,6 +286,22 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.passport = passport;
     }
 
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
     @Override
     public int hashCode() {
         return login.hashCode();
@@ -296,6 +317,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +
             ", activationKey='" + activationKey + '\'' +
+            ", password='" + password + '\'' +
             "}";
     }
 }

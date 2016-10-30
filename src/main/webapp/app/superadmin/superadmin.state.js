@@ -13,8 +13,14 @@
     function stateConfig($stateProvider) {
         $stateProvider.state('superadmin', {
             abstract: true,
-            parent: 'app',/*
-            template: '<ui-view/>'*/
+            parent: 'app',
+            views: {
+                'content@': {
+                    templateUrl: 'app/superadmin/superadmin.html',
+                    controller: 'SuperadminController',
+                    controllerAs: 'vm'
+                },
+            }
         });
     }
 })();

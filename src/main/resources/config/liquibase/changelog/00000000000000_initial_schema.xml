@@ -27,6 +27,11 @@
             <column name="name" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
+            <column name="status" type="ENUM('ACTIVE', 'DEACTIVATE')" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="logo" type="varchar(50)">
+            </column>
         </createTable>
 
         <createTable tableName="storage">
@@ -130,7 +135,7 @@
             <column name="driver_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="state" type="ENUM('CHECKED', 'CREATED', 'DELIVERED')">
+            <column name="status" type="ENUM('CHECKED', 'CREATED', 'DELIVERED')">
                 <constraints nullable="false"/>
             </column>
             <column name="dispatcher_id" type="int">
@@ -172,10 +177,12 @@
             <column name="email" type="varchar(100)">
                 <constraints unique="true" nullable="true"/>
             </column>
+            <column name="logo" type="varchar(50)"/>
             <column name="activated" type="boolean" valueBoolean="false">
                 <constraints nullable="false"/>
             </column>
             <column name="lang_key" type="varchar(5)"/>
+            <column name="company_id" type="int"/>
             <column name="activation_key" type="varchar(20)"/>
             <column name="reset_key" type="varchar(20)"/>
             <column name="created_by" type="varchar(50)">

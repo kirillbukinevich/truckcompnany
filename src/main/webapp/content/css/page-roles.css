@@ -1,0 +1,142 @@
+#page-role{
+    margin-top:20px;
+    margin-bottom: 20px;
+}
+
+.btn-admin{
+    background: #fff;
+    border: 1px solid #dadada;
+    color: #717171;
+}
+.btn-admin > span{
+    margin-right:5px;
+}
+#wrap-sidebar{
+    width:100%;
+    background: #fff;
+    margin-left:15px;
+}
+#wrap-profile{
+    padding: 20px 15px;
+    border-bottom: 1px solid #d3d3d3;
+}
+#logo-image{
+    border-radius: 50%;
+    width: 100%;
+}
+.row-margin{
+    margin:0 0;
+}
+#sidebar-role{
+    background: #fff;
+    width:100%;
+}
+
+
+#data-profile{
+    padding-left:15px;
+}
+#data-profile p{
+    margin:0;
+}
+#firstname{
+    text-transform:uppercase;
+    font-weight: bold;
+}
+#role{
+    color:#d3d3d3;
+}
+
+
+
+#sidebar-role > li > a{
+    color:#d3d3d3;
+    font-weight: 400;
+    position:relative;
+    border-right:5px solid #fff;
+}
+#sidebar-role > li > a:hover{
+    border-right:5px solid #303030;
+    color:#303030;
+}
+.sidebar-icon{
+    margin-right: 10px;
+}
+
+#page-role-content{
+    background: #f1f1f1;
+    padding: 0 15px 15px 15px;
+    margin-right:15px;
+    width:100%;
+}
+
+#page-role-content h1{
+    padding: 10px 0;
+    margin: 0 ;
+}
+
+#control-panel{
+    margin-bottom: 10px;
+}
+
+
+
+.table > tbody > tr > td, .table > tbody > tr > th{
+    vertical-align: middle;
+    text-align:left;
+}
+.table{
+    border: none;
+}
+.table > thead > tr > th{
+    border: none;
+    color: #777;
+}
+.table > tbody > tr{
+    background: #fff;
+}
+#action-th{
+    width:150px;
+}
+
+
+#logo-company{
+    text-align: center;
+    margin-right:15px;
+    position:relative;
+}
+
+#logo-company:hover #logo-action{
+    display:block;
+}
+#logo-action{
+    position: absolute;
+    bottom: 0;
+    left:0;
+    width:100%;
+    display:none;
+}
+#logo-action a{
+    display:block;
+    text-align: center;
+    width:100%;
+    padding:2px;
+    background-color: rgba(0,0,0,.5);
+    color:#efefef;
+}
+#logo-action a > span{
+    margin-right:5px;
+}
+#logo-action a:hover{
+    text-decoration: none;
+    color:#fff;
+}
+
+#logo-company img{
+    max-width:210px;
+    width:100%;
+}
+#logo-company .btn{
+    width:100%;
+    margin-top: 10px;
+}
