@@ -8,11 +8,18 @@
         .module('truckCompanyApp')
         .controller('DispatcherStorageCreateController', DispatcherStorageCreateController);
 
-    DispatcherStorageCreateController.$inject = ['$state', 'Storage'];
+    DispatcherStorageCreateController.$inject = ['$state', 'Storage', 'Principal'];
 
-    function DispatcherStorageCreateController ($state, Storage) {
+    function DispatcherStorageCreateController ($state, Storage, Principal) {
         var vm = this;
         vm.storage = {};
+        getAccount();
+        function getAccount() {
+            Principal.identity().then(function(account) {
+                vm.account = account;
+                console.log(account);
+            });
+        }
 
         vm.create = function(){
             console.log("Create new storage with name = " + vm.storage.name);
@@ -20,7 +27,7 @@
 
             Storage.save({
                 name: vm.storage.name,
-                companyId: '1' //ЗАМЕНИТЬ
+                companyId: vm.account.companyId
             },
             function () {
                 console.log("Create new Storage: " + vm.storage.name);

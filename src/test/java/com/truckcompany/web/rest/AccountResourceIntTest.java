@@ -151,6 +151,7 @@ public class AccountResourceIntTest {
             true,                   // activated
             "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)),
+            null,                   // companyId
             null,                   // createdBy
             null,                   // createdDate
             null,                   // lastModifiedBy
@@ -181,6 +182,7 @@ public class AccountResourceIntTest {
             true,                   // activated
             "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)),
+            null,                   // companyId
             null,                   // createdBy
             null,                   // createdDate
             null,                   // lastModifiedBy
@@ -211,6 +213,7 @@ public class AccountResourceIntTest {
             true,               // activated
             "en",               // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)),
+            null,                   // companyId
             null,               // createdBy
             null,               // createdDate
             null,               // lastModifiedBy
@@ -241,6 +244,7 @@ public class AccountResourceIntTest {
             true,               // activated
             "en",               // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)),
+            null,                   // companyId
             null,               // createdBy
             null,               // createdDate
             null,               // lastModifiedBy
@@ -272,6 +276,7 @@ public class AccountResourceIntTest {
             true,                   // activated
             "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)),
+            null,                   // companyId
             null,                   // createdBy
             null,                   // createdDate
             null,                   // lastModifiedBy
@@ -280,7 +285,7 @@ public class AccountResourceIntTest {
 
         // Duplicate login, different e-mail
         ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), validUser.getLogin(), validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
-            "alicejr@example.com", "logo.png", true, validUser.getLangKey(), validUser.getAuthorities(), validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate());
+            "alicejr@example.com", "logo.png", true, validUser.getLangKey(), validUser.getAuthorities(), validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate(), null);
 
         // Good user
         restMvc.perform(
@@ -315,6 +320,7 @@ public class AccountResourceIntTest {
             true,                   // activated
             "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)),
+            null,                   // companyId
             null,                   // createdBy
             null,                   // createdDate
             null,                   // lastModifiedBy
@@ -323,7 +329,7 @@ public class AccountResourceIntTest {
 
         // Duplicate e-mail, different login
         ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), "johnjr", validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
-            validUser.getEmail(), "logo.png", true, validUser.getLangKey(), validUser.getAuthorities(), validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate());
+            validUser.getEmail(), "logo.png", true, validUser.getLangKey(), validUser.getAuthorities(), validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate(), null);
 
         // Good user
         restMvc.perform(
@@ -357,6 +363,7 @@ public class AccountResourceIntTest {
             true,                   // activated
             "en",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.ADMIN)),
+            null,                   // companyId
             null,                   // createdBy
             null,                   // createdDate
             null,                   // lastModifiedBy
@@ -386,7 +393,8 @@ public class AccountResourceIntTest {
             "logo.png",
             true,                   // activated
             "en",                   // langKey
-            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)),
+            null                   // companyId
         );
 
         restUserMockMvc.perform(

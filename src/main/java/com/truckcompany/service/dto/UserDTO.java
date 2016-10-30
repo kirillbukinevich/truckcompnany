@@ -32,6 +32,8 @@ public class UserDTO {
 
     private String logo;
 
+    private Long companyId;
+
     private boolean activated = false;
 
     @Size(min = 2, max = 5)
@@ -46,11 +48,11 @@ public class UserDTO {
         this(user.getLogin(), user.getFirstName(), user.getLastName(),
             user.getEmail(), user.getLogo(), user.getActivated(), user.getLangKey(),
             user.getAuthorities().stream().map(Authority::getName)
-                .collect(Collectors.toSet()));
+                .collect(Collectors.toSet()), user.getCompany().getId());
     }
 
     public UserDTO(String login, String firstName, String lastName,
-        String email, String logo, boolean activated, String langKey, Set<String> authorities) {
+        String email, String logo, boolean activated, String langKey, Set<String> authorities, Long companyId) {
 
         this.login = login;
         this.firstName = firstName;
@@ -60,6 +62,7 @@ public class UserDTO {
         this.activated = activated;
         this.langKey = langKey;
         this.authorities = authorities;
+        this.companyId = companyId;
     }
 
     public String getLogin() {
@@ -92,6 +95,14 @@ public class UserDTO {
 
     public String getLogo(){
         return  logo;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     @Override
