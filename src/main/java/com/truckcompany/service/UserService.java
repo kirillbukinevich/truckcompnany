@@ -1,8 +1,10 @@
 package com.truckcompany.service;
 
 import com.truckcompany.domain.Authority;
+import com.truckcompany.domain.Company;
 import com.truckcompany.domain.User;
 import com.truckcompany.repository.AuthorityRepository;
+import com.truckcompany.repository.CompanyRepository;
 import com.truckcompany.repository.PersistentTokenRepository;
 import com.truckcompany.repository.UserRepository;
 import com.truckcompany.security.AuthoritiesConstants;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -37,10 +40,16 @@ public class UserService {
     private UserRepository userRepository;
 
     @Inject
+    private CompanyRepository companyRepository;
+
+    @Inject
     private PersistentTokenRepository persistentTokenRepository;
 
     @Inject
     private AuthorityRepository authorityRepository;
+
+    @Inject
+    private MailService mailService;
 
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
@@ -148,6 +157,45 @@ public class UserService {
         return user;
     }
 
+    public User createEmployee(ManagedUserVM managedUserVM, User userAdmin, HttpServletRequest request) {
+        User user = new User();
+        user.setLogin(managedUserVM.getLogin());
+        user.setFirstName(managedUserVM.getFirstName());
+        user.setLastName(managedUserVM.getLastName());
+        user.setEmail(managedUserVM.getEmail());
+        if (managedUserVM.getLangKey() == null) {
+            user.setLangKey("en"); // default language
+        } else {
+            user.setLangKey(managedUserVM.getLangKey());
+        }
+        if (managedUserVM.getAuthorities() != null) {
+            Set<Authority> authorities = new HashSet<>();
+            managedUserVM.getAuthorities().stream().forEach(
+                authority -> authorities.add(authorityRepository.findOne(authority))
+            );
+            user.setAuthorities(authorities);
+        }
+
+        Company company = companyRepository.getOne(userAdmin.getCompany().getId());
+        user.setCompany(company);
+
+        user.setActivationKey(passwordEncoder.encode(new Date().toString()).substring(0, 20));
+        user.setActivated(true);
+        userRepository.save(user);
+        log.debug("Created Information for User: {}", user);
+
+        String baseUrl = request.getScheme() + // "http"
+            "://" +                                // "://"
+            request.getServerName() +              // "myhost"
+            ":" +                                  // ":"
+            request.getServerPort() +              // "80"
+            request.getContextPath();              // "/myContextPath" or "" if deployed in root context
+
+        mailService.sendCreatePasswordForEmployeeEmail(user, baseUrl);
+
+        return user;
+    }
+
     public void updateUser(String firstName, String lastName, String email, String langKey) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u -> {
             u.setFirstName(firstName);
@@ -211,6 +259,7 @@ public class UserService {
         return user;
     }
 
+
     @Transactional(readOnly = true)
     public User getUserWithAuthorities() {
         Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
@@ -255,4 +304,5 @@ public class UserService {
             userRepository.delete(user);
         }
     }
+
 }

@@ -17,6 +17,8 @@
             views: {
                 'content@': {
                     templateUrl: 'app/admincompany/admincompany.html',
+                    controller: 'AdmincompanyController',
+                    controllerAs: 'vm'
                 },
             }
         });

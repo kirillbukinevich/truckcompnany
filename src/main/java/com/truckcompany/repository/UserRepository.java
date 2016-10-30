@@ -38,6 +38,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select distinct user from User user left join fetch user.authorities where user.company.id = ?1")
     List<User> findUsersBelongCompanyWithAuthorities(Long id);
 
+ 
+
 
 
 

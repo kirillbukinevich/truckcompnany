@@ -1,0 +1,37 @@
+<h1>Companies</h1>
+
+
+<div id="control-panel">
+    <a href="#/admincompany/usercreate" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Create</a>
+    <a href="" ng-click="vm.deleteSelectedCompany()" class="btn btn-admin"><span class="glyphicon glyphicon-remove"></span>Delete</a>
+</div>
+
+<table class="table table-hover">
+    <thead>
+
+    <tr>
+        <th><input type="checkbox" ng-model="vm.checkedAll" ng-change="vm.changeStateCheckbox()"></th>
+        <th>Login</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Role</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="user in vm.users">
+        <td><input type="checkbox" ng-init="vm.selected[$index] = false" ng-model="vm.selected[$index]"></td>
+        <td><a href="#/admincompany/users/{{user.id}}">{{user.login}}</a></td>
+        <td>{{user.email}}</td>
+        <td class="text-align-center">
+            <span ng-if = "user.activated" ng-click="vm.toggleStatus(user.id)" class="label label-success" >ACTIVE</span>
+            <span ng-if = "!user.activated" ng-click="vm.toggleStatus(user.id)" class="label label-warning">NON-ACTIVE</span>
+        </td>
+        <td>{{user.authorities[0]}}</td>
+        <td>
+            <span  ng-click="vm.deleteCompany(company.id)" class="glyphicon glyphicon-trash"></span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+

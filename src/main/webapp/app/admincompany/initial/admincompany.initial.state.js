@@ -13,15 +13,17 @@
     function stateConfig($stateProvider) {
         $stateProvider.state('admincompany.initial', {
             parent: 'admincompany',
-            url: '/admincompany/initial',/*'/activate?key',*/
+            url: '/admincompany/initial',
 
             data: {
                 authorities: ['ROLE_ADMIN'],
                 pageTitle: 'activate.title'
             },
             views: {
-                'content@': {
-                    templateUrl: 'app/admincompany/initial/admincompany.initial.html'
+                'page@admincompany': {
+                    templateUrl: 'app/admincompany/initial/admincompany.initial.html',
+                    controller: 'AdmincompanyUsersController',
+                    controllerAs: 'vm'
                 },
             },
             resolve: {
