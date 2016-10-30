@@ -1,0 +1,14 @@
+<h1>Add new Truck</h1>
+
+<form>
+    <div class="form-group">
+        <label for="consumption">Truck consumption</label>
+        <input type="text" ng-model="vm.truck.consumption" class="form-control" id="consumption" placeholder="Enter truck consumption">
+    </div>
+    <div class="form-group">
+        <label for="regNumber">Truck reg number</label>
+        <input type="text" ng-model="vm.truck.regNumber" class="form-control" id="regNumber" placeholder="Enter truck reg number">
+    </div>
+    <a href="" class="btn btn-default" ng-click="vm.create()">Create</a>
+    <a href="#/dispatcher/trucks" class="btn btn-default">Cancel</a>
+</form>

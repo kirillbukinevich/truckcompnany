@@ -1,0 +1,27 @@
+<h1>Storages</h1>
+
+
+<div id="control-panel">
+    <a class="btn btn-primary" href="#/dispatcher/storage/create">Create new Storage</a>
+    <a class="btn btn-danger" href="">Delete storage</a>
+</div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th><input type="checkbox" ng-model="vm.checkedAll" ng-change="vm.changeStateCheckbox()"></th>
+        <th>id:</th>
+        <th>Name:</th>
+        <th>Owner:</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="storage in vm.storages">
+        <td><input type="checkbox"></td>
+        <td>{{storage.id}}</td>
+        <td>{{storage.name}}</td>
+        <td>{{storage.owner}}</td>
+        <td><a ng-click="vm.delete(storage.id)" class="btn btn-danger" href="">Delete</a></td>
+    </tr>
+    </tbody>
+</table>
