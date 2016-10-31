@@ -19,7 +19,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
             "                         left join jhi_user on jhi_user_id = jhi_user.id \n" +
             "                         left join jhi_user_authority on jhi_user.id=user_id",
         nativeQuery = true)*/
-    @Query(value = "select distinct company from Company company left join fetch company.users")
-    List<Company> findAllWithUsers();
+    /*@Query(value = "select distinct company from Company company left join fetch company.users")
+    List<Company> findAllWithUsers();*/
 
 }
