@@ -1,8 +1,11 @@
 package com.truckcompany.service;
 
 import com.truckcompany.domain.Storage;
+import com.truckcompany.domain.User;
 import com.truckcompany.repository.CompanyRepository;
 import com.truckcompany.repository.StorageRepository;
+import com.truckcompany.repository.UserRepository;
+import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.web.rest.vm.ManagedStorageVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +26,9 @@ public class StorageService {
     @Inject
     private CompanyRepository companyRepository;
 
+    @Inject
+    private UserRepository userRepository;
+
     @Transactional(readOnly = true)
     public Storage getStorageByIdAndCompanyId(Long storageId){
         log.debug("Get Information about Storage with id: {} and company id {}", storageId);
@@ -35,12 +41,14 @@ public class StorageService {
     }
 
     public Storage createStorage(ManagedStorageVM managedStorageVM){
-        Storage storage = new Storage();
+        final Storage storage = new Storage();
 
-        storage.setName(managedStorageVM.getName());
-        storage.setCompanyId(companyRepository.findOne(managedStorageVM.getCompanyId()));
-
-        storage = storageRepository.save(storage);
+        userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin())
+        .ifPresent(user->{
+            storage.setName(managedStorageVM.getName());
+            storage.setCompanyId(user.getCompany());
+            storageRepository.save(storage);
+        });
 
         log.debug("Created Information for Storage: {}", storage);
         return storage;

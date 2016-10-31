@@ -13,10 +13,10 @@
     function stateConfig($stateProvider) {
         $stateProvider.state('dispatcher.initial', {
             parent: 'dispatcher',
-            url: '/dispatcher/initial',/*'/activate?key',*/
+            url: '/dispatcher/initial',
 
             data: {
-                authorities: [],
+                authorities: ['ROLE_DISPATCHER'],
                 pageTitle: 'activate.title'
             },
             views: {
