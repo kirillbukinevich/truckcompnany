@@ -244,6 +244,15 @@ public class UserService {
         });
     }
 
+    public void changeStatus(Long id){
+        User user = userRepository.findOne(id);
+        if (user != null){
+            user.setActivated(!user.getActivated());
+            userRepository.save(user);
+            log.debug("Change status for User with login '{}'. Activated status is {}", user.getLogin(), user.getActivated());
+        }
+    }
+
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findOneByLogin(login).map(u -> {
@@ -270,6 +279,8 @@ public class UserService {
         }
         return user;
     }
+
+
 
     /**
      * Persistent Token are used for providing automatic authentication, they should be automatically deleted after

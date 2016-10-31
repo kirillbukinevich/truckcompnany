@@ -218,4 +218,11 @@ public class UserResource {
             .map(user -> new ResponseEntity<>(HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
+
+    @RequestMapping(value = "/user/change_status/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> changeStatusEmployee(@PathVariable Long id){
+        log.debug("Change status for user with id = {}", id);
+        userService.changeStatus(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

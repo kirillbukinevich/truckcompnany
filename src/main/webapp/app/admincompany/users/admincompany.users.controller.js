@@ -15,6 +15,7 @@
         var vm = this;
 
         vm.load = load;
+        vm.toggleStatus = toggleStatus;
         vm.users = [];
         vm.load();
 
@@ -29,7 +30,15 @@
             }, function errorCallback(response) {
 
             });
+        }
 
+        function toggleStatus(user){
+            $http({
+                method: 'GET',
+                url: '/api/user/change_status/' + user.id,
+            }).then(function successCallback(response) {
+                user.activated = !user.activated;
+            });
         }
     }
 })();
