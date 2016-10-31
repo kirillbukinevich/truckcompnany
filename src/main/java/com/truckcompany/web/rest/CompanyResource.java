@@ -1,20 +1,19 @@
 package com.truckcompany.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.truckcompany.domain.Authority;
 import com.truckcompany.domain.Company;
 import com.truckcompany.domain.User;
+import com.truckcompany.service.facade.CompanyFacade;
 import com.truckcompany.repository.CompanyRepository;
 import com.truckcompany.repository.UserRepository;
-import com.truckcompany.security.AuthoritiesConstants;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.CompanyService;
 import com.truckcompany.service.UserService;
+import com.truckcompany.service.dto.CompanyDTO;
+import com.truckcompany.service.dto.UserDTO;
 import com.truckcompany.web.rest.util.HeaderUtil;
-import com.truckcompany.web.rest.util.PaginationUtil;
 import com.truckcompany.web.rest.vm.ManagedCompanyVM;
 import com.truckcompany.web.rest.vm.ManagedUserVM;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -26,14 +25,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.truckcompany.security.AuthoritiesConstants.*;
@@ -62,6 +57,9 @@ public class CompanyResource {
     @Inject
     private UserRepository userRepository;
 
+    @Inject
+    private CompanyFacade companyFacade;
+
 
     @RequestMapping(value = "/companies",
         method = RequestMethod.GET,
@@ -71,19 +69,8 @@ public class CompanyResource {
     public ResponseEntity<List<ManagedCompanyVM>> getAllTruckingCompanies() {
         log.debug("REST request get all Company");
 
-        List<Company> truckingCompanies;
-        if (SecurityUtils.isCurrentUserInRole(SUPERADMIN)){
-            truckingCompanies = companyService.findCompaniesAndAdmins();
-        } else {
-            truckingCompanies = companyRepository.findAll();
-        }
-
-        List<ManagedCompanyVM> managedCompanyVMs = new ArrayList<>();
-        if (truckingCompanies != null) {
-            for (Company company : truckingCompanies) {
-                managedCompanyVMs.add(new ManagedCompanyVM(company));
-            }
-        }
+        List<CompanyDTO> truckingCompanies = companyFacade.findCompanies();
+        List<ManagedCompanyVM> managedCompanyVMs = truckingCompanies.stream().map(c -> new ManagedCompanyVM(c)).collect(toList());
 
         HttpHeaders headers = HeaderUtil.createAlert("company.getAll", null);
         return new ResponseEntity<>(managedCompanyVMs, headers, OK);
@@ -115,7 +102,7 @@ public class CompanyResource {
     public ResponseEntity<?> createTruckingCompany(@RequestBody ManagedCompanyVM managedCompanyVM, HttpServletRequest request) throws URISyntaxException {
         log.debug("REST request to save Company: {}", managedCompanyVM.getName());
 
-        User user = managedCompanyVM.getUsers().stream().limit(1).collect(toList()).get(0);
+        UserDTO user = managedCompanyVM.getUsers().stream().limit(1).collect(toList()).get(0);
 
         Optional<User> existingUser = userRepository.findOneByEmail(user.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(user.getId()))) {
@@ -142,7 +129,7 @@ public class CompanyResource {
     public ResponseEntity<ManagedCompanyVM> updateUser(@RequestBody ManagedCompanyVM managedCompanyVM) throws URISyntaxException {
         log.debug("REST request to update Company : {}", managedCompanyVM);
 
-        User user = managedCompanyVM.getUsers().stream().limit(1).collect(toList()).get(0);
+        UserDTO user = managedCompanyVM.getUsers().stream().limit(1).collect(toList()).get(0);
 
         Optional<User> existingUser = userRepository.findOneByEmail(user.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(user.getId()))) {
@@ -189,6 +176,8 @@ public class CompanyResource {
     @RequestMapping(value = "/company/employee", method = RequestMethod.GET)
     @Secured(value = {ADMIN, SUPERADMIN})
     public ResponseEntity<?> getCompanyEmployee(){
+
+
         return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin())
             .map(user -> {
                 log.debug("REST request to get users (without admin) for company '{}'", user.getCompany().getName());

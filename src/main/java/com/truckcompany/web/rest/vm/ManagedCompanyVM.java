@@ -24,7 +24,10 @@ public class ManagedCompanyVM extends CompanyDTO {
 
     public ManagedCompanyVM(Company company){
         super(company);
+    }
 
+    public ManagedCompanyVM(CompanyDTO company){
+        super(company);
     }
 
     public String getLogin() {

@@ -21,6 +21,8 @@ public class UserDTO {
     @Size(min = 1, max = 50)
     private String login;
 
+    private Long id;
+
     @Size(max = 50)
     private String firstName;
 
@@ -46,15 +48,15 @@ public class UserDTO {
     }
 
     public UserDTO(User user) {
-        this(user.getLogin(), user.getFirstName(), user.getLastName(),
+        this(user.getId(), user.getLogin(), user.getFirstName(), user.getLastName(),
             user.getEmail(), user.getLogo(), user.getActivated(), user.getLangKey(),
             user.getAuthorities().stream().map(Authority::getName)
                 .collect(Collectors.toSet()), user.getCompany());
     }
 
-    public UserDTO(String login, String firstName, String lastName,
+    public UserDTO(Long id, String login, String firstName, String lastName,
         String email, String logo, boolean activated, String langKey, Set<String> authorities, Company company) {
-
+        this.id = id;
         this.login = login;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -112,5 +114,13 @@ public class UserDTO {
             ", langKey='" + langKey + '\'' +
             ", authorities=" + authorities +
             "}";
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

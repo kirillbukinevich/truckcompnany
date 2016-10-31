@@ -8,13 +8,12 @@ import com.truckcompany.repository.AuthorityRepository;
 import com.truckcompany.repository.CompanyRepository;
 import com.truckcompany.repository.UserRepository;
 import com.truckcompany.security.AuthoritiesConstants;
-import com.truckcompany.security.SecurityUtils;
+import com.truckcompany.service.dto.CompanyDTO;
+import com.truckcompany.service.dto.UserDTO;
 import com.truckcompany.web.rest.vm.ManagedCompanyVM;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Created by Vladimir on 21.10.2016.
@@ -49,14 +51,14 @@ public class CompanyService {
     private MailService mailService;
 
 
-    private Set<User> getAdminForCompany(Company company) {
+    public Set<User> getAdminForCompany(Company company) {
         return userRepository.findUsersBelongCompanyWithAuthorities(company.getId()).stream()
             .filter(user -> user.getAuthorities().contains(authorityRepository.findOne(AuthoritiesConstants.ADMIN)))
-            .collect(Collectors.toSet());
+            .collect(toSet());
     }
 
     public List<Company> findCompaniesAndAdmins() {
-        List<Company> companies = companyRepository.findAll();
+        List<Company> companies = getCompanies();
         return
             companies.stream()
                 .map((company) -> {
@@ -66,9 +68,12 @@ public class CompanyService {
                     company.setUsers(getAdminForCompany(company));
                     return company;
                 })
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
+    public List<Company> getCompanies() {
+        return companyRepository.findAll();
+    }
 
     public Company findCompanyWithAdmins(Long id) {
         Company company = companyRepository.getOne(id);
@@ -81,7 +86,7 @@ public class CompanyService {
         company.setName(managedCompanyVM.getName());
         company.setStatus(CompanyStatus.ACTIVE);
 
-        User userFromForm = managedCompanyVM.getUsers().stream().limit(1).collect(Collectors.toList()).get(0);
+        UserDTO userFromForm = managedCompanyVM.getUsers().stream().limit(1).collect(toList()).get(0);
 
         User user = new User();
         user.setCompany(company);
@@ -145,13 +150,15 @@ public class CompanyService {
         if (company != null) {
             company.setName(managedCompanyVM.getName());
 
-            User userFromForm = managedCompanyVM.getUsers().stream().limit(1).collect(Collectors.toList()).get(0);
+            UserDTO userFromForm = managedCompanyVM.getUsers().stream().limit(1).collect(toList()).get(0);
 
-            User user = userRepository.getOne(userFromForm.getId());
-            user.setLogin(userFromForm.getLogin());
-            user.setEmail(userFromForm.getEmail());
+            User user = userRepository.findOne(userFromForm.getId());
+            if (user!=null) {
+                user.setLogin(userFromForm.getLogin());
+                user.setEmail(userFromForm.getEmail());
+                userRepository.save(user);
+            }
 
-            userRepository.save(user);
             companyRepository.save(company);
             log.debug("Update Company: {}", company);
         }
@@ -174,7 +181,7 @@ public class CompanyService {
     public List<User> getCompanyUsersWithoutAdmin(User user) {
         return userRepository.findUsersBelongCompanyWithAuthorities(user.getCompany().getId()).stream()
             .filter(hasAuthority(AuthoritiesConstants.ADMIN).negate())
-            .collect(Collectors.toList());
+            .collect(toList());
     }
 
     private Predicate<? super User> hasAuthority(String role) {

@@ -4,11 +4,12 @@ import com.truckcompany.domain.Company;
 import com.truckcompany.domain.User;
 import com.truckcompany.domain.enums.CompanyStatus;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 import java.util.Set;
+
+import static java.util.Collections.emptySet;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Created by Vladimir on 21.10.2016.
@@ -25,7 +26,7 @@ public class CompanyDTO {
 
     private String logo;
 
-    private Set<User> users;
+    private Set<UserDTO> users;
 
     public CompanyDTO(){
 
@@ -35,14 +36,22 @@ public class CompanyDTO {
         this(company.getId(), company.getName(), company.getStatus(), company.getLogo(), company.getUsers());
     }
 
+    public CompanyDTO(CompanyDTO company){
+        this(company.getId(), company.getName(), company.getStatus(), company.getLogo(), emptySet());
+        users = company.getUsers();
+    }
+
     public CompanyDTO(Long id, String name, CompanyStatus status, String logo, Set<User> users){
         this.id = id;
         this.name = name;
         this.status = status;
         this.logo = logo;
-        this.users = users;
+        this.users = users.stream().map(user-> new UserDTO(user)).collect(toSet());
     }
 
+    public CompanyDTO(Company company, Set<User> users) {
+        this(company.getId(), company.getName(), company.getStatus(), company.getLogo(), users);
+    }
 
     @Override
     public String toString(){
@@ -80,11 +89,11 @@ public class CompanyDTO {
         this.name = name;
     }
 
-    public Set<User> getUsers() {
+    public Set<UserDTO> getUsers() {
         return users;
     }
 
-    public void setUsers(Set<User> users) {
+    public void setUsers(Set<UserDTO> users) {
         this.users = users;
     }
 

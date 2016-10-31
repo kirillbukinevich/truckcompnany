@@ -211,7 +211,7 @@ public class UserResource {
             .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
-    @RequestMapping(value = "/isvalidkey/{key}", method = RequestMethod.GET)
+    @RequestMapping(value = "/isvalidkey/{key:.+}", method = RequestMethod.GET)
     public ResponseEntity<?> isValidKey(@PathVariable String key){
         log.debug("User is attemping create initial password for Admin profile use key= {}", key);
         return userRepository.findOneByActivationKey(key)
