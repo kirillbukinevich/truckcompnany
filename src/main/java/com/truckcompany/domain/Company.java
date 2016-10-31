@@ -3,8 +3,10 @@ package com.truckcompany.domain;
 import com.truckcompany.domain.enums.CompanyStatus;
 
 import javax.persistence.*;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "tc_company")
@@ -27,6 +29,10 @@ public class Company implements Serializable{
 
     @Column(name = "logo")
     private String logo;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn (name = "company_id")
+    private Set<User> users;
 
     public Long getId() {
         return id;
@@ -57,6 +63,14 @@ public class Company implements Serializable{
 
     public void setLogo(String logo) {
         this.logo = logo;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
     @Override

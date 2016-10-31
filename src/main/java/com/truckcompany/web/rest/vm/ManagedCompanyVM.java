@@ -1,9 +1,11 @@
 package com.truckcompany.web.rest.vm;
 
 import com.truckcompany.domain.Company;
+import com.truckcompany.domain.User;
 import com.truckcompany.service.dto.CompanyDTO;
 
 import javax.servlet.http.Part;
+import java.util.Set;
 
 /**
  * Created by Vladimir on 21.10.2016.

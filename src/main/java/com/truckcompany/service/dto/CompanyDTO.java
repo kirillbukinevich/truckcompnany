@@ -32,14 +32,15 @@ public class CompanyDTO {
     }
 
     public CompanyDTO(Company company){
-        this(company.getId(), company.getName(), company.getStatus(), company.getLogo());
+        this(company.getId(), company.getName(), company.getStatus(), company.getLogo(), company.getUsers());
     }
 
-    public CompanyDTO(Long id, String name, CompanyStatus status, String logo){
+    public CompanyDTO(Long id, String name, CompanyStatus status, String logo, Set<User> users){
         this.id = id;
         this.name = name;
         this.status = status;
         this.logo = logo;
+        this.users = users;
     }
 
 
