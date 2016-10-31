@@ -104,17 +104,6 @@
             </column>
         </createTable>
 
-        <createTable tableName="tc_user_company">
-            <column name="jhi_user_id" type="int">
-                <constraints nullable="false"/>
-            </column>
-            <column name="tc_company_id" type="int">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addPrimaryKey columnNames="jhi_user_id, tc_company_id" tableName="tc_user_company"/>
-
         <createTable tableName="write_off_act">
             <column name="id" type="int" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
@@ -313,17 +302,6 @@
                                  referencedColumnNames="id"
                                  referencedTableName="tc_company"/>
 
-        <addForeignKeyConstraint baseColumnNames="jhi_user_id"
-                                 baseTableName="tc_user_company"
-                                 constraintName="user_company"
-                                 referencedColumnNames="id"
-                                 referencedTableName="jhi_user"/>
-
-        <addForeignKeyConstraint baseColumnNames="tc_company_id"
-                                 baseTableName="tc_user_company"
-                                 constraintName="company_name"
-                                 referencedColumnNames="id"
-                                 referencedTableName="tc_company"/>
 
         <addForeignKeyConstraint baseColumnNames="dispatcher_id"
                                  baseTableName="waybill"

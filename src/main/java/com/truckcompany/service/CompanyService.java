@@ -63,7 +63,7 @@ public class CompanyService {
                    /* Set<User> admins = userRepository.findUsersBelongCompanyWithAuthorities(company.getId()).stream()
                         .filter(user -> user.getAuthorities().contains(authorityRepository.findOne(AuthoritiesConstants.ADMIN)))
                         .collect(Collectors.toSet());*/
-                    company.setUsers(getAdminForCompany(company));
+                    //company.setUsers(getAdminForCompany(company));
                     return company;
                 })
                 .collect(Collectors.toList());
@@ -72,7 +72,7 @@ public class CompanyService {
 
     public Company findCompanyWithAdmins(Long id) {
         Company company = companyRepository.getOne(id);
-        company.setUsers(getAdminForCompany(company));
+        //company.setUsers(getAdminForCompany(company));
         return company;
     }
 
@@ -97,7 +97,7 @@ public class CompanyService {
         user.setAuthorities(authorities);
         Set<User> users = new HashSet<>();
         users.add(user);
-        company.setUsers(users);
+       // company.setUsers(users);
 
         userRepository.save(user);
 
