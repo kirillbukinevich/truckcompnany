@@ -8,9 +8,13 @@ import com.truckcompany.repository.AuthorityRepository;
 import com.truckcompany.repository.CompanyRepository;
 import com.truckcompany.repository.UserRepository;
 import com.truckcompany.security.AuthoritiesConstants;
+import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.web.rest.vm.ManagedCompanyVM;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -44,7 +49,7 @@ public class CompanyService {
     private MailService mailService;
 
 
-    private Set<User> getAdminForCompany(Company company){
+    private Set<User> getAdminForCompany(Company company) {
         return userRepository.findUsersBelongCompanyWithAuthorities(company.getId()).stream()
             .filter(user -> user.getAuthorities().contains(authorityRepository.findOne(AuthoritiesConstants.ADMIN)))
             .collect(Collectors.toSet());
@@ -65,7 +70,7 @@ public class CompanyService {
     }
 
 
-    public Company findCompanyWithAdmins(Long id){
+    public Company findCompanyWithAdmins(Long id) {
         Company company = companyRepository.getOne(id);
         company.setUsers(getAdminForCompany(company));
         return company;
@@ -109,7 +114,6 @@ public class CompanyService {
         mailService.sendCreatePasswordForAdminEmail(user, baseUrl);
 
 
-
         log.debug("Created Information for Company: {}", company);
         return company;
     }
@@ -128,9 +132,9 @@ public class CompanyService {
         }
     }
 
-    public void deleteCompanies(Long[] idList){
+    public void deleteCompanies(Long[] idList) {
         Arrays.stream(idList)
-            .forEach(id ->{
+            .forEach(id -> {
                 Company company = companyRepository.getOne(id);
                 companyRepository.delete(company);
             });
@@ -153,18 +157,32 @@ public class CompanyService {
         }
     }
 
-    public void changeCompanyStatus(Long id){
+    public void changeCompanyStatus(Long id) {
         Company company = companyRepository.getOne(id);
 
         CompanyStatus status = company.getStatus();
-        if (status == CompanyStatus.ACTIVE){
+        if (status == CompanyStatus.ACTIVE) {
             company.setStatus(CompanyStatus.DEACTIVATE);
-        } else{
+        } else {
             company.setStatus(CompanyStatus.ACTIVE);
         }
 
         companyRepository.save(company);
 
+    }
+
+    public List<User> getCompanyUsersWithoutAdmin(User user) {
+        return userRepository.findUsersBelongCompanyWithAuthorities(user.getCompany().getId()).stream()
+            .filter(hasAuthority(AuthoritiesConstants.ADMIN).negate())
+            .collect(Collectors.toList());
+    }
+
+    private Predicate<? super User> hasAuthority(String role) {
+        return user -> user.getAuthorities().stream()
+            .filter(authority -> StringUtils.equals(authority.getName(), role))
+            .findFirst()
+            .map(authority -> true)
+            .orElse(false);
     }
 
 

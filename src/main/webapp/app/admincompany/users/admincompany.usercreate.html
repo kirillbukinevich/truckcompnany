@@ -1,0 +1,54 @@
+<h1>Create new company employee</h1>
+
+<div class="alert alert-danger" ng-if="vm.error">
+    {{vm.messageError}}
+</div>
+
+<form>
+    <div class="form-group">
+        <label for="firstName">First name:</label>
+        <input type="text" ng-model="vm.user.firstName" class="form-control" id="firstName" placeholder="Enter first name">
+    </div>
+    <div class="form-group">
+        <label for="lastname">Last name:</label>
+        <input type="text" ng-model="vm.user.lastName" class="form-control" id="lastname" placeholder="Enter last name">
+    </div>
+    <div class="form-group">
+        <label for="login">Login:</label>
+        <input type="text" ng-model="vm.user.login" class="form-control" id="login" placeholder="Enter login">
+    </div>
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="text" ng-model="vm.user.email" class="form-control" id="email" placeholder="Enter email">
+    </div>
+    <div class="form-group">
+        <label for="role">Role:</label>
+        <div>
+            <label>
+                <input type="radio" ng-model="vm.user.authorities[0]" id="role" value="ROLE_DISPATCHER">
+                DISPATCHER
+            </label>
+            <label>
+                <input type="radio" ng-model="vm.user.authorities[0]"  value="ROLE_MANAGER">
+                MANAGER
+            </label>
+            <label>
+                <input type="radio" ng-model="vm.user.authorities[0]"  value="ROLE_DRIVER">
+                DRIVER
+            </label>
+            <label>
+                <input type="radio" ng-model="vm.user.authorities[0]"  value="ROLE_COMPANYOWNER">
+                COMPANY OWNER
+            </label>
+        </div>
+    </div>
+
+    <!--
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" ng-model="vm.admin.password" class="form-control" id="password" placeholder="Enter password">
+    </div>
+    -->
+    <a href="" class="btn btn-default" ng-click="vm.create()">Create</a>
+    <a href="#/companyadmin/users" class="btn btn-default">Cancel</a>
+</form>
