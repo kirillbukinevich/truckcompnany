@@ -1,0 +1,21 @@
+<h1>Route lists</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Leaving date</th>
+        <th>Leaving storage id</th>
+        <th>Arrival date</th>
+        <th>Arrival storage id</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="routeList in vm.routeLists">
+        <td><input type="checkbox"></td>
+        <td>{{routeList.leavingDate}}</td>
+        <td>{{routeList.leavingStorageId}}</td>
+        <td>{{routeList.arrivalDate}}</td>
+        <td>{{routeList.arrivalStorageId}}</td>
+    </tr>
+    </tbody>
+</table>

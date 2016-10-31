@@ -1,0 +1,36 @@
+<div id="page-role">
+    <div class="row row-flex row-flex-wrap">
+        <div class="col-md-3">
+            <div id="wrap-sidebar">
+
+                <div id="wrap-profile">
+                    <div class = "row row-margin">
+                        <div class="col-md-3">
+                            <img check-image-user ng-src="/content/upload/logouser/{{vm.account.logo}}" id="logo-image">
+                        </div>
+                        <div class="col-md-9">
+                            <div id="data-profile">
+                                <p id="firstname">{{vm.account.firstName}} {{vm.account.lastName}}</p>
+                                <p id="role">companyowner</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="nav nav-stacked" id="sidebar-role" >
+                    <li><a ui-sref="companyowner.statistics"><span class="glyphicon glyphicon-stats sidebar-icon"></span>Statistics</a></li>
+                    <li><a ui-sref="companyowner.routelists"><span class="glyphicon glyphicon-map-marker"></span>Route lists</a></li>
+                    <li><a ui-sref="companyowner.waybills">Waybills</a></li>
+                    <li><a ui-sref="companyowner.writeoffacts">Write off acts</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-9" >
+            <div ui-view="page" ng-cloak id="page-role-content">
+            </div>
+        </div>
+    </div>
+</div>
+
+

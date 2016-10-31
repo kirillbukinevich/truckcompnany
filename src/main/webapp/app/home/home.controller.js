@@ -26,6 +26,9 @@
             }else if (Principal.hasAnyAuthority(["ROLE_DISPATCHER"])) {
                 console.log("Route to initial page for Dispatcher");
                 $state.go('dispatcher.initial');
+            } else if (Principal.hasAnyAuthority(["ROLE_COMPANYOWNER"])) {
+                console.log("Route to initial page for CompanyOwner");
+                $state.go('companyowner.initial');
             }
         });
 
