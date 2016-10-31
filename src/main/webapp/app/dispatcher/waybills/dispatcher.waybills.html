@@ -1,0 +1,44 @@
+<h1>Waybills</h1>
+
+
+<div id="control-panel">
+    <a class="btn btn-primary" href="">Create new Waybill</a>
+    <a class="btn btn-danger" href="">Delete waybill</a>
+</div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th><input type="checkbox" ng-model="vm.checkedAll" ng-change="vm.changeStateCheckbox()"></th>
+        <th>id</th>
+        <th>Date</th>
+        <th>Driver</th>
+        <th>State</th>
+        <th>Dispatcher</th>
+        <th>route_list_id</th>
+        <th>write_off_id</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="waybill in vm.waybills">
+        <td><input type="checkbox"></td>
+        <td>{{waybill.id}}</td>
+        <td>{{waybill.date}}</td>
+        <td><a href="#" data-toggle="tooltip">{{waybill.driver.firstName}} {{waybill.driver.lastName}}</a></td>
+        <td>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{waybill.state}}
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">CHECKED</a></li>
+                    <li><a href="#">CREATED</a></li>
+                    <li><a href="#">DELIVERED</a></li>
+                </ul>
+            </div>
+        </td>
+        <td>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</td>
+        <td>{{waybill.routeListId}}</td>
+        <td>{{waybill.writeOffId}}</td>
+    </tr>
+    </tbody>
+</table>

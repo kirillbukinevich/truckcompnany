@@ -11,24 +11,24 @@
                         <div class="col-md-9">
                             <div id="data-profile">
                                 <p id="firstname">{{vm.account.firstName}} {{vm.account.lastName}}</p>
-                                <p id="role">superadmin</p>
+                                <p id="role">Dispatcher</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-            <ul class="nav nav-stacked" id="sidebar-role" >
-                <li><a href=""><span class="glyphicon glyphicon-road sidebar-icon"></span>Companies</a></li>
-                <li><a href=""><span class="glyphicon glyphicon-signal sidebar-icon"></span>Statistic</a></li>
-            </ul>
-                </div>
+                <ul class="nav nav-stacked" id="sidebar-role" >
+                    <li><a href="#/dispatcher/storage">Storage</a></li>
+                    <li><a href="">Offers</a></li>
+                    <li><a href="#/dispatcher/trucks">Trucks</a></li>
+                    <li><a href="">Drivers</a></li>
+                    <li><a href="#/dispatcher/waybills">Waybills</a></li>
+                </ul>
+            </div>
         </div>
 
         <div class="col-md-9" >
-            <div ui-view="page" ng-cloak id="page-role-content">
-            </div>
+            <div ui-view="page" ng-cloak id="page-role-content"></div>
         </div>
     </div>
 </div>
-
-

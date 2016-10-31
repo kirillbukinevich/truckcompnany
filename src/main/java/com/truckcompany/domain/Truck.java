@@ -11,7 +11,7 @@ public class Truck {
     private Long id;
 
     @Column(name = "consumption")
-    private Integer consumption;
+    private Long consumption;
 
     @Column(name = "reg_number")
     private String regNumber;
@@ -27,10 +27,10 @@ public class Truck {
         this.id = id;
     }
 
-    public Integer getConsumption() {
+    public Long getConsumption() {
         return consumption;
     }
-    public void setConsumption(Integer consumption) {
+    public void setConsumption(Long consumption) {
         this.consumption = consumption;
     }
 
