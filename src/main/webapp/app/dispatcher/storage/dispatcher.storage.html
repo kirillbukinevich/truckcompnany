@@ -12,16 +12,14 @@
         <th><input type="checkbox" ng-model="vm.checkedAll" ng-change="vm.changeStateCheckbox()"></th>
         <th>id:</th>
         <th>Name:</th>
-        <th>Owner:</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="storage in vm.storages">
         <td><input type="checkbox"></td>
         <td>{{storage.id}}</td>
-        <td>{{storage.name}}</td>
-        <td>{{storage.owner}}</td>
-        <td><a ng-click="vm.delete(storage.id)" class="btn btn-danger" href="">Delete</a></td>
+        <td><a href="#/dispatcher/storage/{{storage.id}}">{{storage.name}}</a></td>
+        <td><span  ng-click="vm.delete(storage.id)" class="glyphicon glyphicon-trash"></span></td>
     </tr>
     </tbody>
 </table>

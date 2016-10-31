@@ -19,7 +19,6 @@ import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,7 +42,7 @@ public class StorageResource {
     @Timed
     public ResponseEntity<ManagedStorageVM> getStorage(@PathVariable Long storageId){
         log.debug("REST request to get Storage : {}", storageId);
-        Storage foundStorage = storageService.getStorageByIdAndCompanyId(storageId);
+        Storage foundStorage = storageService.getStorageById(storageId);
         if (foundStorage == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -56,7 +55,7 @@ public class StorageResource {
     @Timed
     public ResponseEntity<List<ManagedStorageVM>> getAllStorages () throws URISyntaxException {
         log.debug("REST request get all Storages");
-        List<Storage> storages = storageRepository.findAll();
+        List<Storage> storages = storageService.getStorages();
 
         List<ManagedStorageVM> managedStorageVMs = storages.stream()
             .map(ManagedStorageVM::new)

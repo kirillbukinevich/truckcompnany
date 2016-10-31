@@ -2,7 +2,7 @@
 
 
 <div id="control-panel">
-    <a class="btn btn-primary" href="">Create new Waybill</a>
+    <a class="btn btn-primary" href="#/dispatcher/waybills/create">Create new Waybill</a>
     <a class="btn btn-danger" href="">Delete waybill</a>
 </div>
 
@@ -27,8 +27,7 @@
         <td><a href="#" data-toggle="tooltip">{{waybill.driver.firstName}} {{waybill.driver.lastName}}</a></td>
         <td>
             <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{waybill.state}}
-                    <span class="caret"></span></button>
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{waybill.state}}<span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     <li><a href="#">CHECKED</a></li>
                     <li><a href="#">CREATED</a></li>

@@ -23,6 +23,7 @@ import java.time.ZonedDateTime;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing users.
@@ -261,6 +262,23 @@ public class UserService {
         });
     }
 
+    public List<ManagedUserVM> getDrivers () {
+        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+        HashSet set = new HashSet();
+        set.add(authorityRepository.getOne("ROLE_DRIVER"));
+        List<ManagedUserVM> users = userRepository.
+            findByCompanyAndAuthorities(user.get().getCompany(), set)
+            .stream()
+            .map(ManagedUserVM::new)
+            .collect(Collectors.toList());
+
+        return users;
+    }
+/*
+        List<ManagedUserVM> managedUserVMs = page.getContent().stream()
+            .map(ManagedUserVM::new)
+            .collect(Collectors.toList());
+ */
     @Transactional(readOnly = true)
     public User getUserWithAuthorities(Long id) {
         User user = userRepository.findOne(id);

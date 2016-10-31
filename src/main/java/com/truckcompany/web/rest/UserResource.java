@@ -225,4 +225,13 @@ public class UserResource {
         userService.changeStatus(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/drivers", method = RequestMethod.GET)
+    public ResponseEntity<List<ManagedUserVM>> getDrivers () {
+        log.debug("Get drivers for current company.");
+        List<ManagedUserVM> userList = userService.getDrivers();
+
+        return new ResponseEntity<>(userList, HttpStatus.OK);
+    }
+
 }

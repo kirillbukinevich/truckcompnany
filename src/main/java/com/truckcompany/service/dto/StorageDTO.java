@@ -14,7 +14,7 @@ public class StorageDTO {
     public StorageDTO(Storage storage){
         this.id = storage.getId();
         this.name = storage.getName();
-        this.companyId = storage.getCompanyId().getId();
+        this.companyId = storage.getCompany().getId();
     }
 
     public Long getId() {
