@@ -5,6 +5,7 @@
         .module('truckCompanyApp')
         .controller('CompanyownerRouteListsController', CompanyownerRouteListsController);
 
+
     CompanyownerRouteListsController.$inject = ['$stateParams', 'RouteList', 'Storage', 'Truck', 'Waybill'];
 
     function CompanyownerRouteListsController ($stateParams, RouteList, Storage, Truck, Waybill) {
@@ -17,7 +18,6 @@
                 value.waybill = Waybill.get({id: value.waybillId});
             });
         });
-
         console.log(vm.routeLists);
 
     }
