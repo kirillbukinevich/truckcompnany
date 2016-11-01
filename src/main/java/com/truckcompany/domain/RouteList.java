@@ -30,6 +30,9 @@ public class RouteList implements Serializable {
     @JoinColumn(name = "arrival_storage_id", nullable = false)
     private Storage arrivalStorage;
 
+    @OneToOne(mappedBy = "routeList")
+    private Waybill waybill;
+
     public Long getId() {
         return id;
     }
@@ -70,5 +73,13 @@ public class RouteList implements Serializable {
     }
     public void setArrivalStorage(Storage arrivalStorage) {
         this.arrivalStorage = arrivalStorage;
+    }
+
+    public Waybill getWaybill() {
+        return waybill;
+    }
+
+    public void setWaybill(Waybill waybill) {
+        this.waybill = waybill;
     }
 }

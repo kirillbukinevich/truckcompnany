@@ -3,19 +3,22 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Leaving date</th>
-        <th>Leaving storage id</th>
-        <th>Arrival date</th>
-        <th>Arrival storage id</th>
+        <th>Id</th>
+        <th>Leaving storage</th>
+        <th>Arrival storage</th>
+        <th>Truck number</th>
+        <th>Waybill number</th>
+        <th>Date</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="routeList in vm.routeLists">
-        <td><input type="checkbox"></td>
-        <td>{{routeList.leavingDate}}</td>
-        <td>{{routeList.leavingStorageId}}</td>
-        <td>{{routeList.arrivalDate}}</td>
-        <td>{{routeList.arrivalStorageId}}</td>
+        <td>{{routeList.id}}</td>
+        <td>{{routeList.leavingStorage.name}}</td>
+        <td>{{routeList.arrivalStorage.name}}</td>
+        <td>{{routeList.truck.regNumber}}</td>
+        <td>{{routeList.waybill.id}}</td>
+        <td>in developing :( </td>
     </tr>
     </tbody>
 </table>

@@ -1,4 +1,3 @@
-
 (function () {
     'use strict';
 
@@ -10,9 +9,9 @@
 
     function stateConfig($stateProvider) {
         $stateProvider
-            .state('companyowner.routelists', {
+            .state('companyowner.waybills', {
                 parent: 'companyowner',
-                url: '/companyowner/routelists',
+                url: '/companyowner/waybills',
 
                 data: {
                     authorities: ['ROLE_COMPANYOWNER'],
@@ -20,8 +19,8 @@
                 },
                 views: {
                     'page@companyowner': {
-                        templateUrl: 'app/companyowner/routelists/companyowner.routelists.html',
-                        controller: 'CompanyownerRouteListsController',
+                        templateUrl: 'app/companyowner/waybills/companyowner.waybills.html',
+                        controller: 'CompanyownerWaybillsController',
                         controllerAs: 'vm'
                     }
                 },
