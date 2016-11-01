@@ -18,11 +18,11 @@
 
                 data: {
                     authorities: ['ROLE_ADMIN'],
-                    pageTitle: 'activate.title'
+                    pageTitle: 'activate.title',
                 },
                 views: {
-                    'page@admincompany': {
-                        templateUrl: 'app/admincompany/users/admincompany.users.html',
+                    'page@roles': {
+                        templateUrl: 'app/roles/admincompany/users/admincompany.users.html',
                         controller: 'AdmincompanyUsersController',
                         controllerAs: 'vm'
                     },
@@ -43,8 +43,8 @@
                     pageTitle: 'activate.title'
                 },
                 views: {
-                    'page@admincompany': {
-                        templateUrl: 'app/admincompany/users/admincompany.user.html',
+                    'page@roles': {
+                        templateUrl: 'app/roles/admincompany/users/admincompany.user.html',
                         controller: 'AdmincompanyUserController',
                         controllerAs: 'vm'
                     },
@@ -65,8 +65,8 @@
                     pageTitle: 'activate.title'
                 },
                 views: {
-                    'page@admincompany': {
-                        templateUrl: 'app/admincompany/users/admincompany.usercreate.html',
+                    'page@roles': {
+                        templateUrl: 'app/roles/admincompany/users/admincompany.usercreate.html',
                         controller: 'AdmincompanyUserCreateController',
                         controllerAs: 'vm'
                     },

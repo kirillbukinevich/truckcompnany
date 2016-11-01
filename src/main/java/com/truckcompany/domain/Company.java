@@ -1,17 +1,29 @@
 package com.truckcompany.domain;
 
 import com.truckcompany.domain.enums.CompanyStatus;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Set;
 
 @Entity
 @Table(name = "tc_company")
 public class Company implements Serializable{
     private static final long serialVersionUID = 1L;
+
+    public Company(){}
+
+    public Company(Long id, String name, CompanyStatus status){
+        this.id = id;
+        this.name = name;
+        this.status = status;
+        this.users = Collections.emptySet();
+    }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

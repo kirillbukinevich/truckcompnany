@@ -1,0 +1,18 @@
+<roles id="page-role">
+    <div class="row row-flex row-flex-wrap">
+
+        <div class="col-md-3">
+            <div id="wrap-sidebar">
+            <div ui-view="account" ng-cloak >
+            </div>
+            <ul ui-view="sidebar" class="nav nav-stacked" id="sidebar-role" >
+            </ul>
+            </div>
+        </div>
+
+        <div class="col-md-9" >
+            <div ui-view="page" ng-cloak id="page-role-content">
+            </div>
+        </div>
+    </div>
+</roles>

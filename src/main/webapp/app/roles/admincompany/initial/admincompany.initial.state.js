@@ -20,10 +20,8 @@
                 pageTitle: 'activate.title'
             },
             views: {
-                'page@admincompany': {
-                    templateUrl: 'app/admincompany/initial/admincompany.initial.html',
-                    controller: 'AdmincompanyUsersController',
-                    controllerAs: 'vm'
+                'page@roles': {
+                    templateUrl: 'app/roles/admincompany/initial/admincompany.initial.html',
                 },
             },
             resolve: {
