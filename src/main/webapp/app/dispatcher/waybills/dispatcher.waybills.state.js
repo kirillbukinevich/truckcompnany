@@ -34,6 +34,28 @@
                     }]
                 }
             }
+        ).state('dispatcher.waybillCreate', {
+                parent: 'dispatcher',
+                url: '/dispatcher/waybills/create', /*'/activate?key',*/
+
+                data: {
+                    authorities: ["ROLE_DISPATCHER"],
+                    pageTitle: 'activate.title'
+                },
+                views: {
+                    'page@dispatcher': {
+                        templateUrl: 'app/dispatcher/waybills/dispatcher.waybills.create.html',
+                        controller: 'DispatcherWaybillCreateController',
+                        controllerAs: 'vm'
+                    },
+                },
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('activate');
+                        return $translate.refresh();
+                    }]
+                }
+            }
         );
     }
 })();

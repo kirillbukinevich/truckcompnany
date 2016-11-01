@@ -211,7 +211,7 @@ public class UserResource {
             .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
-    @RequestMapping(value = "/isvalidkey/{key}", method = RequestMethod.GET)
+    @RequestMapping(value = "/isvalidkey/{key:.+}", method = RequestMethod.GET)
     public ResponseEntity<?> isValidKey(@PathVariable String key){
         log.debug("User is attemping create initial password for Admin profile use key= {}", key);
         return userRepository.findOneByActivationKey(key)
@@ -225,4 +225,13 @@ public class UserResource {
         userService.changeStatus(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/drivers", method = RequestMethod.GET)
+    public ResponseEntity<List<ManagedUserVM>> getDrivers () {
+        log.debug("Get drivers for current company.");
+        List<ManagedUserVM> userList = userService.getDrivers();
+
+        return new ResponseEntity<>(userList, HttpStatus.OK);
+    }
+
 }

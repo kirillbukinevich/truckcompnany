@@ -17,6 +17,8 @@
             views: {
                 'content@': {
                     templateUrl: 'app/dispatcher/dispatcher.html',
+                    controller: 'DispatcherController',
+                    controllerAs: 'vm'
                 },
             }
         });

@@ -16,7 +16,7 @@ public class Storage implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
-    private Company companyId;
+    private Company company;
 
     public Long getId() {
         return id;
@@ -32,10 +32,10 @@ public class Storage implements Serializable {
         this.name = name;
     }
 
-    public Company getCompanyId() {
-        return companyId;
+    public Company getCompany() {
+        return company;
     }
-    public void setCompanyId(Company companyId) {
-        this.companyId = companyId;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }

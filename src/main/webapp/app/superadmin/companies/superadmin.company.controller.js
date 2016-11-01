@@ -86,6 +86,7 @@
 
         function update(){
             console.log("Update Company: " + vm.company.id);
+            console.log(vm.company);
             Company.update(
                 {
                     id:  vm.company.id,

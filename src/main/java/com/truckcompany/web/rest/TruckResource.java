@@ -52,7 +52,7 @@ public class TruckResource {
     @Timed
     public ResponseEntity<List<Truck>> getAllTrucks ()  throws URISyntaxException {
         log.debug("REST request get all Trucks");
-        List<Truck> trucks = truckRepository.findAll();
+        List<Truck> trucks = truckService.getAllTrucks();
 
         List<ManagedTruckVM> managedTruckVMs = trucks.stream()
             .map(ManagedTruckVM::new)

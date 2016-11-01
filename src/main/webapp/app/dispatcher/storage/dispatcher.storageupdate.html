@@ -1,0 +1,14 @@
+<h1>Storage</h1>
+<div class="alert alert-danger" ng-if="vm.error">
+    {{vm.messageError}}
+</div>
+
+
+<form>
+    <div class="form-group">
+        <label for="name">Storage name</label>
+        <input type="text" ng-model="vm.storage.name" class="form-control" id="name" placeholder="Enter storage name">
+    </div>
+    <a href="" class="btn btn-default" ng-click="vm.update()">Update</a>
+    <a href="#/dispatcher/storage" class="btn btn-default">Cancel</a>
+</form>

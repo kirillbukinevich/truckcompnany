@@ -2,7 +2,6 @@ package com.truckcompany.service;
 
 import com.truckcompany.domain.Storage;
 import com.truckcompany.domain.User;
-import com.truckcompany.repository.CompanyRepository;
 import com.truckcompany.repository.StorageRepository;
 import com.truckcompany.repository.UserRepository;
 import com.truckcompany.security.SecurityUtils;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,15 +24,22 @@ public class StorageService {
     private StorageRepository storageRepository;
 
     @Inject
-    private CompanyRepository companyRepository;
-
-    @Inject
     private UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public Storage getStorageByIdAndCompanyId(Long storageId){
-        log.debug("Get Information about Storage with id: {} and company id {}", storageId);
-        Optional<Storage> optionalStorage = storageRepository.findOneById(storageId);
+    public List<Storage> getStorages () {
+        log.debug("Get all storages.");
+        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+
+        List<Storage> storages = storageRepository.findByCompany(user.get().getCompany());
+
+        return storages;
+    }
+
+    @Transactional(readOnly = true)
+    public Storage getStorageById(Long id){
+        log.debug("Get Information about Storage with id: {} and company id {}", id);
+        Optional<Storage> optionalStorage = storageRepository.findOneById(id);
         Storage storage = null;
         if (optionalStorage.isPresent()) {
             storage = optionalStorage.get();
@@ -40,13 +47,14 @@ public class StorageService {
         return storage;
     }
 
+    @Transactional
     public Storage createStorage(ManagedStorageVM managedStorageVM){
         final Storage storage = new Storage();
 
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin())
         .ifPresent(user->{
             storage.setName(managedStorageVM.getName());
-            storage.setCompanyId(user.getCompany());
+            storage.setCompany(user.getCompany());
             storageRepository.save(storage);
         });
 
