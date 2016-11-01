@@ -1,6 +1,9 @@
 package com.truckcompany.web.rest.vm;
 
 import com.truckcompany.domain.RouteList;
+import com.truckcompany.domain.Storage;
+import com.truckcompany.domain.Truck;
+import com.truckcompany.domain.Waybill;
 
 import java.time.ZonedDateTime;
 
@@ -17,27 +20,31 @@ public class ManagedRouteListVM {
 
     private Long arrivalStorageId;
 
+    private Long waybillId;
+
     public ManagedRouteListVM() {
     }
 
     public ManagedRouteListVM (RouteList routeList) {
-        this.id = routeList.getId();
-        this.truckId = routeList.getTruck().getId();
-        this.leavingDate = routeList.getLeavingDate();
-        this.arrivalDate = routeList.getArrivalDate();
-        this.leavingStorageId = routeList.getLeavingStorage().getId();
-        this.arrivalStorageId = routeList.getArrivalStorage().getId();
+        this(routeList.getId(),
+                routeList.getTruck().getId(),
+                routeList.getLeavingDate(),
+                routeList.getArrivalDate(),
+                routeList.getLeavingStorage().getId(),
+                routeList.getArrivalStorage().getId(),
+                routeList.getWaybill().getId());
     }
 
     public ManagedRouteListVM(Long id, Long truckId, ZonedDateTime leavingDate,
                               ZonedDateTime arrivalDate, Long leavingStorageId,
-                              Long arrivalStorageId) {
+                              Long arrivalStorageId, Long waybillId) {
         this.id = id;
         this.truckId = truckId;
         this.leavingDate = leavingDate;
         this.arrivalDate = arrivalDate;
         this.leavingStorageId = leavingStorageId;
         this.arrivalStorageId = arrivalStorageId;
+        this.waybillId = waybillId;
     }
 
     public Long getId() {
@@ -48,13 +55,7 @@ public class ManagedRouteListVM {
         this.id = id;
     }
 
-    public Long getTruckId() {
-        return truckId;
-    }
 
-    public void setTruckId(Long truckId) {
-        this.truckId = truckId;
-    }
 
     public ZonedDateTime getLeavingDate() {
         return leavingDate;
@@ -72,6 +73,14 @@ public class ManagedRouteListVM {
         this.arrivalDate = arrivalDate;
     }
 
+    public Long getTruckId() {
+        return truckId;
+    }
+
+    public void setTruckId(Long truckId) {
+        this.truckId = truckId;
+    }
+
     public Long getLeavingStorageId() {
         return leavingStorageId;
     }
@@ -86,5 +95,13 @@ public class ManagedRouteListVM {
 
     public void setArrivalStorageId(Long arrivalStorageId) {
         this.arrivalStorageId = arrivalStorageId;
+    }
+
+    public Long getWaybillId() {
+        return waybillId;
+    }
+
+    public void setWaybillId(Long waybillId) {
+        this.waybillId = waybillId;
     }
 }

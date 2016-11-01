@@ -95,6 +95,6 @@ public class Waybill implements Serializable {
                     "state:" + state.name() + "," +
                     "dispatcher_id:" + dispatcher.getId() + "," +
                     "route_list_id:" + routeList.getId() + "," +
-                    "write_off_id:" + writeOff.getId() + "}";
+                    "write_off_id:" + writeOff != null ? writeOff.getId().toString() : "" + "}";
     }
 }
