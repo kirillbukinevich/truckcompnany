@@ -26,6 +26,7 @@
                 vm.error = false;
                 vm.storage = response.data;
                 console.log(vm.storage);
+                $state.go('admincompany.storages')
             }, function errorCallback(response) {
                 vm.error = true;
                 vm.messageError = "Problem with connection."

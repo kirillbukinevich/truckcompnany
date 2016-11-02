@@ -17,5 +17,8 @@ public interface TruckRepository extends JpaRepository<Truck, Long> {
     @Query(value = "select distinct truck from Truck truck left join fetch truck.company where truck.id = ?1")
     Truck getOne(Long id);
 
+    @Query(value = "select distinct truck from Truck truck left join fetch truck.company where truck.company.id =?1")
+    List<Truck> findByCompanyIdWithCompany(Long id);
+
     List<Truck> findByCompany(Company company);
 }

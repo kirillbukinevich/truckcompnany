@@ -1,0 +1,30 @@
+<h1>Storages</h1>
+
+<div ng-if="vm.error" class="alert alert-danger" role="alert">
+    {{vm.messageError}}
+</div>
+
+<div ng-if="!vm.error">
+    <div id="control-panel">
+        <a href="#/admincompany/truckcreate" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Create</a>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+
+        <tr>
+            <th>Register number</th>
+            <th>Consumption</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="truck in vm.trucks">
+            <td><a href="#/admincompany/trucks/{{truck.id}}">{{truck.regNumber}}</a></td>
+            <td>{{truck.consumption}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+
