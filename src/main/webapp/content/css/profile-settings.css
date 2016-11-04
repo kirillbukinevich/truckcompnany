@@ -1,0 +1,44 @@
+#profile-settings{
+    background: #fff;
+}
+#profile-settings .row{
+    margin:0;
+}
+
+#profile-photo{
+    margin:15px auto;
+    max-width: 200px;
+    position: relative;
+    overflow: hidden;
+}
+#profile-photo img{
+    width:100%;
+}
+#photo-action{
+    position:absolute;
+    bottom:-52px;
+    right:0;
+    width:100%;
+    transition-property: bottom;
+    transition-duration: 300ms;
+}
+#profile-photo:hover #photo-action{
+    bottom:0;
+}
+#photo-action a{
+    display:block;
+    text-align:center;
+    background: rgba(0,0,0,0.5);
+    padding:3px;
+    color:#efefef;
+
+}
+#photo-action a:hover{
+    color:#fff;
+    text-decoration: none;
+}
+
+#form-settings .form-group > label{
+    padding-right:15px;
+}
+

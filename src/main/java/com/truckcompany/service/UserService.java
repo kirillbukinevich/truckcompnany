@@ -10,6 +10,8 @@ import com.truckcompany.repository.UserRepository;
 import com.truckcompany.security.AuthoritiesConstants;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.util.RandomUtil;
+import com.truckcompany.service.util.UploadException;
+import com.truckcompany.service.util.UploadUtil;
 import com.truckcompany.web.rest.vm.ManagedUserVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +20,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -65,7 +70,7 @@ public class UserService {
             });
     }
 
-    public Optional<User> getUserByLogin(String login){
+    public Optional<User> getUserByLogin(String login) {
         return userRepository.findOneByLogin(login);
     }
 
@@ -249,9 +254,9 @@ public class UserService {
         });
     }
 
-    public void changeStatus(Long id){
+    public void changeStatus(Long id) {
         User user = userRepository.findOne(id);
-        if (user != null){
+        if (user != null) {
             user.setActivated(!user.getActivated());
             userRepository.save(user);
             log.debug("Change status for User with login '{}'. Activated status is {}", user.getLogin(), user.getActivated());
@@ -266,7 +271,7 @@ public class UserService {
         });
     }
 
-    public List<ManagedUserVM> getDrivers () {
+    public List<ManagedUserVM> getDrivers() {
         Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
         HashSet set = new HashSet();
         set.add(authorityRepository.getOne("ROLE_DRIVER"));
@@ -278,11 +283,12 @@ public class UserService {
 
         return users;
     }
-/*
-        List<ManagedUserVM> managedUserVMs = page.getContent().stream()
-            .map(ManagedUserVM::new)
-            .collect(Collectors.toList());
- */
+
+    /*
+            List<ManagedUserVM> managedUserVMs = page.getContent().stream()
+                .map(ManagedUserVM::new)
+                .collect(Collectors.toList());
+     */
     @Transactional(readOnly = true)
     public User getUserWithAuthorities(Long id) {
         User user = userRepository.findOne(id);
@@ -302,6 +308,33 @@ public class UserService {
         return user;
     }
 
+
+    public String uploadUserLogo(Part file, String fileName, Long user_id, String rootDirectory) throws IOException, UploadException {
+        User user = userRepository.findOne(user_id);
+        if (user != null) {
+            String imageName = UploadUtil.uploadImage(file, fileName, rootDirectory);
+            if (user.getLogo() != null) {
+                UploadUtil.deleteFile(rootDirectory + File.separator + user.getLogo());
+            }
+            user.setLogo(imageName);
+            userRepository.save(user);
+            return imageName;
+
+        } else {
+            return null;
+        }
+    }
+
+    public void deleteUserLogo(Long user_id, String rootDirectory){
+        User user = userRepository.findOne(user_id);
+        if (user != null){
+            if (user.getLogo() != null) {
+                UploadUtil.deleteFile(rootDirectory + File.separator + user.getLogo());
+            }
+            user.setLogo(null);
+            userRepository.save(user);
+        }
+    }
 
 
     /**
