@@ -21,6 +21,7 @@
 
 
         function load () {
+            console.log('LOAD AdmincompanyUsersController')
             $http({
                 method: 'GET',
                 url: '/api/company/employee'

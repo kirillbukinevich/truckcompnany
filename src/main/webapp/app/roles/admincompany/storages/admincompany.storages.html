@@ -1,0 +1,34 @@
+<h1>Storages</h1>
+
+<div ng-if="vm.error" class="alert alert-danger" role="alert">
+    {{vm.messageError}}
+</div>
+
+<div ng-if="!vm.error">
+    <div id="control-panel">
+        <a href="#/admincompany/storagecreate" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Create</a>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+
+        <tr>
+            <th>Name</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="storage in vm.storages">
+            <td><a href="#/admincompany/storages/{{storage.id}}">{{storage.name}}</a></td>
+            <td class="text-align-center">
+                <span ng-if="storage.activated" ng-click="vm.toggleStatus(storage)" class="label label-success">ACTIVE</span>
+                <span ng-if="!storage.activated" ng-click="vm.toggleStatus(storage)"
+                      class="label label-warning">NON-ACTIVE</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+

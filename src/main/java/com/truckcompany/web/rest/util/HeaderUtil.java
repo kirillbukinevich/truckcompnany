@@ -14,6 +14,12 @@ public final class HeaderUtil {
     private HeaderUtil(){
     }
 
+    private static HttpHeaders createHeader(String nameHeader, String valueHeader) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(nameHeader, valueHeader);
+        return headers;
+    }
+
     public static HttpHeaders createAlert(String message, String param) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-truckCompanyApp-alert", message);
