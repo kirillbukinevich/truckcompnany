@@ -11,6 +11,8 @@ import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.web.rest.vm.ManagedTruckVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,10 +50,17 @@ public class TruckService {
         return trucks;
     }
 
-    public List<Truck> getTrucksBelongsCompany(Company company){
+    public List<Truck> getAllTrucksBelongsCompany(Company company){
         log.debug("Get all trucks belongs company {}.", company);
         return truckRepository.findByCompanyIdWithCompany(company.getId());
     }
+
+    public Page<Truck> getTrucksBelongsCompany(Company company, Pageable pageable){
+        log.debug("Get all trucks belongs company {}.", company);
+        return truckRepository.findByCompanyIdWithCompany(company.getId(), pageable);
+    }
+
+
 
     public Truck getTruckByIdWIthCompany(Long id){
         log.debug("Get truck id={} with company.", id);

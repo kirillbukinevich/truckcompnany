@@ -8,9 +8,9 @@
         .module('truckCompanyApp')
         .controller('AdmincompanyTruckController', AdmincompanyTruckController);
 
-    AdmincompanyTruckController.$inject = ['$stateParams', '$state', 'Company', 'Upload', '$http'];
+    AdmincompanyTruckController.$inject = ['$stateParams', '$state', '$http'];
 
-    function AdmincompanyTruckController($stateParams, $state, Company, Upload, $http) {
+    function AdmincompanyTruckController($stateParams, $state, $http) {
         var vm = this;
 
         vm.load = load;

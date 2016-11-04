@@ -5,18 +5,23 @@ import com.truckcompany.domain.Storage;
 import com.truckcompany.domain.Truck;
 import com.truckcompany.repository.TruckRepository;
 import com.truckcompany.service.TruckService;
+import com.truckcompany.service.dto.TruckDTO;
 import com.truckcompany.service.facade.TruckFacade;
 import com.truckcompany.web.rest.util.HeaderUtil;
+import com.truckcompany.web.rest.util.PaginationUtil;
 import com.truckcompany.web.rest.vm.ManagedStorageVM;
 import com.truckcompany.web.rest.vm.ManagedTruckVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -55,14 +60,20 @@ public class TruckResource {
 
     @Timed
     @RequestMapping (value = "/trucks", method = GET, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ManagedTruckVM>> getAllTrucks ()  throws URISyntaxException {
+    public ResponseEntity<List<ManagedTruckVM>> getAllTrucks (Pageable pageable, HttpServletRequest request)  throws URISyntaxException {
         LOG.debug("REST request get all Trucks");
-        List<ManagedTruckVM> managedTruckVMs = truckFacade.findTrucks().stream()
+        LOG.debug(request.getParameter("size"));
+
+        Page<TruckDTO> page = truckFacade.findTrucks(pageable, request);
+
+        List<ManagedTruckVM> managedTruckVMs = page.getContent().stream()
             .map(ManagedTruckVM::new)
             .collect(Collectors.toList());
-        HttpHeaders headers = createAlert("truck.getAll", null);
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/trucks");
         return new ResponseEntity<List<ManagedTruckVM>>(managedTruckVMs, headers, OK);
     }
+
 
     @RequestMapping(value = "/trucks/{id}",
         method = DELETE,
