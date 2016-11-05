@@ -8,3 +8,4 @@ id;login;password_hash;first_name;last_name;email;activated;lang_key;created_by;
 7;testadmin02;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;SuperAdmin;Superadmin;testadmin02@localhost;true;en;system;system;2
 8;testadmin03;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;SuperAdmin;Superadmin;testadmin03@localhost;true;en;system;system;3
 9;dispatcher;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;dispatcher@localhost;true;en;system;system;3
+10;driver1;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Driver;Driver;driver@localhost;true;en;system;system;3

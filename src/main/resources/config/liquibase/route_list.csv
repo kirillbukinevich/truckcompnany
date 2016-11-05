@@ -1,0 +1,2 @@
+id;truck_id; leaving_date; arrival_date; leaving_storage_id; arrival_storage_id
+1;1;2016-11-02 15:04:44;2016-11-03 15:04:46;1;2;

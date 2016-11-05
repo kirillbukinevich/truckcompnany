@@ -24,6 +24,27 @@
                   file="config/liquibase/trucking_company.csv"
                   separator=";"
                   tableName="tc_company"/>
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/truck.csv"
+                  separator=";"
+                  tableName="truck"/>
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/storage.csv"
+                  separator=";"
+                  tableName="storage"/>
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/route_list.csv"
+                  separator=";"
+                  tableName="route_list"/>
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/write_off_act.csv"
+                  separator=";"
+                  tableName="write_off_act"/>
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/waybill.csv"
+                  separator=";"
+                  tableName="waybill"/>
+
 
     </changeSet>
 </databaseChangeLog>
