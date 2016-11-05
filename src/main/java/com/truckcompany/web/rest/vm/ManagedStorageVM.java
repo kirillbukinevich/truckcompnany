@@ -1,49 +1,24 @@
 package com.truckcompany.web.rest.vm;
 
+import com.truckcompany.domain.Company;
 import com.truckcompany.domain.Storage;
+import com.truckcompany.service.dto.StorageDTO;
 
-public class ManagedStorageVM {
-    private Long id;
-
-    private String name;
-
-    private Long companyId;
+public class ManagedStorageVM extends StorageDTO {
 
     public ManagedStorageVM(){
-
     }
 
     public ManagedStorageVM(Storage storage){
-        this.id = storage.getId();
-        this.name = storage.getName();
+        super(storage);
     }
 
-    public ManagedStorageVM(Long id, String name) {
-        this.id = id;
-        this.name = name;
+    public ManagedStorageVM(Storage storage, Company company){
+        super(storage, company);
     }
 
-    public Long getId() {
-        return id;
+    public ManagedStorageVM(StorageDTO storage){
+        super(storage);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
-    }
 }

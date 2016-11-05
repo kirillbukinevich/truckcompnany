@@ -1,16 +1,14 @@
-/**
- * Created by Vladimir on 30.10.2016.
- */
+
 (function() {
     'use strict';
 
     angular
         .module('truckCompanyApp')
-        .controller('AdmincompanyController', AdmincompanyController);
+        .controller('CompanyownerController', CompanyownerController);
 
-    AdmincompanyController.$inject = ['Principal'];
+    CompanyownerController.$inject = ['Principal'];
 
-    function AdmincompanyController (Principal) {
+    function CompanyownerController (Principal) {
         var vm = this;
 
         getAccount();

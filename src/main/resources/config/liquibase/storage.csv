@@ -1,3 +1,9 @@
-id;name;company_id;address
-1;euroopt;2;minsk
-2;euroopt;2;vitebsk
+id;name;company_id
+1;storage01;1
+2;storage02;1
+3;storage03;2
+4;storage04;2
+5;storage05;3
+6;storage06;3
+
+

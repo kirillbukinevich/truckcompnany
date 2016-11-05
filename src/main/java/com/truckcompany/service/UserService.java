@@ -65,6 +65,10 @@ public class UserService {
             });
     }
 
+    public Optional<User> getUserByLogin(String login){
+        return userRepository.findOneByLogin(login);
+    }
+
     public Optional<User> changeInitialPasswordForAdmin(String key, String password) {
         log.debug("Create new password via link from email for admin according activate key {}", key);
         return userRepository.findOneByActivationKey(key)

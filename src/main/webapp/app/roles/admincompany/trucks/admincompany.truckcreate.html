@@ -1,0 +1,22 @@
+<h1>Create new storage</h1>
+<div class="alert alert-danger" ng-if="vm.error">
+    {{vm.messageError}}
+</div>
+
+<form>
+    <div class="form-group">
+        <label for="regNumber">Register number:</label>
+        <input type="text" ng-model="vm.truck.regNumber" class="form-control" id="regNumber"
+               placeholder="Enter register number">
+    </div>
+    <div class="form-group">
+        <label for="consumption">Fuel consumption:</label>
+        <input type="text" ng-model="vm.truck.consumption" class="form-control" id="consumption"
+               placeholder="Enter register number">
+
+    </div>
+
+    <a href="" class="btn btn-default" ng-click="vm.create()">Create</a>
+    <a href="#/admincompany/trucks" class="btn btn-default">Cancel</a>
+</form>
+

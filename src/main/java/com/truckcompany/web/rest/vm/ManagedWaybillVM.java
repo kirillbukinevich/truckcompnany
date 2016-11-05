@@ -1,6 +1,9 @@
 package com.truckcompany.web.rest.vm;
 
+import com.truckcompany.domain.RouteList;
+import com.truckcompany.domain.User;
 import com.truckcompany.domain.Waybill;
+import com.truckcompany.domain.WriteOffAct;
 import com.truckcompany.domain.enums.WaybillState;
 
 import java.time.ZonedDateTime;
@@ -12,9 +15,9 @@ public class ManagedWaybillVM {
 
     private String state;
 
-    private Long dispatcherId;
+    private String dispatcherLogin;
 
-    private Long driverId;
+    private String driverLogin;
 
     private Long routeListId;
 
@@ -24,25 +27,28 @@ public class ManagedWaybillVM {
     }
 
     public ManagedWaybillVM(Long id, ZonedDateTime date,
-                            WaybillState state, Long dispatcherId, Long driverId,
+                            WaybillState state, String dispatcherLogin, String driverLogin,
                             Long routeListId, Long writeOffId) {
         this.id = id;
         this.date = date;
         this.state = state.toString();
-        this.dispatcherId = dispatcherId;
-        this.driverId = driverId;
+        this.dispatcherLogin = dispatcherLogin;
+        this.driverLogin = driverLogin;
         this.routeListId = routeListId;
         this.writeOffId = writeOffId;
     }
 
     public ManagedWaybillVM (Waybill waybill) {
-        this.id = waybill.getId();
-        this.date = waybill.getDate();
-        this.state = waybill.getState().toString();
-        this.dispatcherId = waybill.getDispatcher().getId();
-        this.driverId = waybill.getDriver().getId();
-        this.routeListId = waybill.getRouteList().getId();
-        this.writeOffId = waybill.getWriteOff().getId();
+        this(
+            waybill.getId(),
+            waybill.getDate(),
+            waybill.getState(),
+            waybill.getDispatcher().getLogin(),
+            waybill.getDriver().getLogin(),
+            waybill.getRouteList().getId(),
+            waybill.getWriteOff() != null ? waybill.getWriteOff().getId() : null
+        );
+
     }
 
     public Long getId() {
@@ -69,20 +75,20 @@ public class ManagedWaybillVM {
         this.state = state;
     }
 
-    public Long getDispatcherId() {
-        return dispatcherId;
+    public String getDispatcherLogin() {
+        return dispatcherLogin;
     }
 
-    public void setDispatcherId(Long dispatcherId) {
-        this.dispatcherId = dispatcherId;
+    public void setDispatcherLogin(String dispatcherLogin) {
+        this.dispatcherLogin = dispatcherLogin;
     }
 
-    public Long getDriverId() {
-        return driverId;
+    public String getDriverLogin() {
+        return driverLogin;
     }
 
-    public void setDriverId(Long driverId) {
-        this.driverId = driverId;
+    public void setDriverLogin(String driverLogin) {
+        this.driverLogin = driverLogin;
     }
 
     public Long getRouteListId() {
@@ -107,8 +113,8 @@ public class ManagedWaybillVM {
             "id=" + id +
             ", date=" + date +
             ", state=" + state +
-            ", dispatcherId=" + dispatcherId +
-            ", driverId=" + driverId +
+            ", dispatcherLogin=" + dispatcherLogin +
+            ", driverLogin=" + driverLogin +
             ", routeListId=" + routeListId +
             ", writeOffId=" + writeOffId +
             "} " + super.toString();

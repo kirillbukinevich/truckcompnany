@@ -2,6 +2,10 @@
     margin-top:20px;
     margin-bottom: 20px;
 }
+.well{
+    margin-top:20px;
+    margin-bottom: 20px;
+}
 
 .btn-admin{
     background: #fff;
@@ -59,6 +63,13 @@
     border-right:5px solid #303030;
     color:#303030;
 }
+
+#sidebar-role > li.active > a{
+    border-right:5px solid #303030;
+    color:#303030;
+    background-color: #eee;
+}
+
 .sidebar-icon{
     margin-right: 10px;
 }

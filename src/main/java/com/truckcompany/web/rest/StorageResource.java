@@ -5,13 +5,17 @@ import com.truckcompany.domain.Storage;
 import com.truckcompany.repository.CompanyRepository;
 import com.truckcompany.repository.StorageRepository;
 import com.truckcompany.service.StorageService;
+import com.truckcompany.service.dto.StorageDTO;
+import com.truckcompany.service.facade.StorageFacade;
+import com.truckcompany.service.facade.UpdateStorageException;
 import com.truckcompany.web.rest.util.HeaderUtil;
+import com.truckcompany.web.rest.vm.AdminStorageVM;
 import com.truckcompany.web.rest.vm.ManagedStorageVM;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,93 +25,93 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.truckcompany.web.rest.util.HeaderUtil.createAlert;
+import static java.lang.String.valueOf;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
 @RestController
 @RequestMapping("/api")
 public class StorageResource {
 
-    private final Logger log = LoggerFactory.getLogger(StorageResource.class);
+    private final Logger LOG = LoggerFactory.getLogger(StorageResource.class);
 
     @Inject
     private StorageRepository storageRepository;
-
-    @Inject
-    private CompanyRepository companyRepository;
-
     @Inject
     private StorageService storageService;
+    @Inject
+    private StorageFacade storageFacade;
 
-    @RequestMapping(value = "/storages/{storageId}",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ManagedStorageVM> getStorage(@PathVariable Long storageId){
-        log.debug("REST request to get Storage : {}", storageId);
-        Storage foundStorage = storageService.getStorageById(storageId);
-        if (foundStorage == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(new ManagedStorageVM(foundStorage), HttpStatus.OK);
+    @RequestMapping(value = "/storages/{id}", method = GET, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ManagedStorageVM> getStorage(@PathVariable Long id) {
+        LOG.debug("REST request to get Storage : {}", id);
+        Storage storage = storageService.getStorageByIdWithCompany(id);
+        HttpStatus status = storage == null ? NOT_FOUND : OK;
+        ManagedStorageVM body = storage == null ? null : new ManagedStorageVM(storage, storage.getCompany());
+        return new ResponseEntity<>(body, status);
     }
 
-    @RequestMapping(value = "/storages",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<ManagedStorageVM>> getAllStorages () throws URISyntaxException {
-        log.debug("REST request get all Storages");
-        List<Storage> storages = storageService.getStorages();
-
-        List<ManagedStorageVM> managedStorageVMs = storages.stream()
+    @RequestMapping(value = "/storages", method = GET, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ManagedStorageVM>> getAllStorages() throws URISyntaxException {
+        LOG.debug("REST request get all Storages");
+        List<ManagedStorageVM> managedStorageVMs = storageFacade.findStorages().stream()
             .map(ManagedStorageVM::new)
             .collect(Collectors.toList());
-
-        HttpHeaders headers = HeaderUtil.createAlert("storages.getAll", null);
-
-        return new ResponseEntity(managedStorageVMs, headers, HttpStatus.OK);
+        HttpHeaders headers = createAlert("storages.getAll", null);
+        return new ResponseEntity<>(managedStorageVMs, headers, OK);
     }
 
-    @RequestMapping(value = "/storages",
-        method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/storages", method = POST, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createStorage(@RequestBody ManagedStorageVM storage) throws URISyntaxException {
-        log.debug("REST request to save Storage: {};", storage.getName());
+        LOG.debug("REST request to save Storage: {};", storage.getName());
 
         Storage result = storageService.createStorage(storage);
 
         return ResponseEntity.created(new URI("/storage/" + result.getId()))
-                .headers(HeaderUtil.createAlert( "storage.created", String.valueOf(storage.getId())))
-                .body(new ManagedStorageVM(result));
+            .headers(createAlert("storage.created", valueOf(storage.getId())))
+            .body(new ManagedStorageVM(result));
     }
 
-    @RequestMapping(value = "/storages",
-        method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ManagedStorageVM> updateStorage(@RequestBody ManagedStorageVM managedStorageVM){
-        log.debug("REST request to update Storage : {}", managedStorageVM);
-
-        Storage existingStorage = storageRepository.findOne(managedStorageVM.getId());
-        if (existingStorage == null){
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    @RequestMapping(value = "/storages", method = PUT, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ManagedStorageVM> updateStorage(@RequestBody ManagedStorageVM managedStorageVM) {
+        LOG.debug("REST request to update Storage : {}", managedStorageVM);
+        try {
+            Storage storage = storageFacade.updateStorage(managedStorageVM);
+            return ResponseEntity.ok().headers(createAlert("storage.updated", valueOf(storage.getId()))).body(new ManagedStorageVM(storage));
+        } catch (UpdateStorageException e) {
+            return ResponseEntity.badRequest().headers(createAlert("errorMessage", e.getMessage())).body(null);
         }
-
-        Storage storage = storageService.updateStorage(managedStorageVM);
-
-        return ResponseEntity.ok()
-                .headers(HeaderUtil.createAlert("storage.updated", String.valueOf(storage.getId())))
-                .body(new ManagedStorageVM(storage));
     }
 
-    @RequestMapping(method = RequestMethod.DELETE,
-        value = "storages/{storageId}",
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = DELETE,
+        value = "/storages/{storageId}",
+        produces = APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> deleteStorage(@PathVariable Long storageId){
-        log.debug("REST request to delete Storage: {}", storageId);
+    public ResponseEntity<Void> deleteStorage(@PathVariable Long storageId) {
+        LOG.debug("REST request to delete Storage: {}", storageId);
 
         storageRepository.delete(storageId);
-        return ResponseEntity.ok().headers(HeaderUtil.createAlert( "storage.deleted", String.valueOf(storageId))).build();
+        return ResponseEntity.ok().headers(createAlert("storage.deleted", valueOf(storageId))).build();
     }
 
+
+    @Timed
+    @RequestMapping(value = "/storages/change_status/{storageId}", method = GET, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> changeStorageStatus(@PathVariable Long storageId) {
+        LOG.debug("REST request to change storage status with id: {}", storageId);
+
+        boolean isSuccess = storageService.changeStorageStatus(storageId);
+        HttpStatus status = isSuccess ? OK : BAD_REQUEST;
+        return new ResponseEntity<>(status);
+    }
 
 }

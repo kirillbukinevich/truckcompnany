@@ -11,21 +11,17 @@
                         <div class="col-md-9">
                             <div id="data-profile">
                                 <p id="firstname">{{vm.account.firstName}} {{vm.account.lastName}}</p>
-                                <p id="role">Company admin</p>
+                                <p id="role">companyowner</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-
-
-
-
-
                 <ul class="nav nav-stacked" id="sidebar-role" >
-                    <li><a href="/#/admincompany/users"><span class="glyphicon glyphicon glyphicon-user sidebar-icon"></span>Users</a></li>
-                    <li><a href=""><span class="glyphicon glyphicon-home sidebar-icon"></span>Strorages</a></li>
-                    <li><a href=""><span class="glyphicon glyphicon-bed sidebar-icon"></span>Trucks</a></li>
+                    <li><a ui-sref="companyowner.statistics"><span class="glyphicon glyphicon-stats sidebar-icon"></span>Statistics</a></li>
+                    <li><a ui-sref="companyowner.routelists"><span class="glyphicon glyphicon-map-marker"></span>Route lists</a></li>
+                    <li><a ui-sref="companyowner.waybills">Waybills</a></li>
+                    <li><a ui-sref="companyowner.writeoffacts">Write off acts</a></li>
                 </ul>
             </div>
         </div>
@@ -36,3 +32,5 @@
         </div>
     </div>
 </div>
+
+

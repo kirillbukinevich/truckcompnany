@@ -1,0 +1,30 @@
+<h1>Create new storage</h1>
+<div class="alert alert-danger" ng-if="vm.error">
+    {{vm.messageError}}
+</div>
+
+<form>
+    <div class="form-group">
+        <label for="firstName">Storage name:</label>
+        <input type="text" ng-model="vm.storage.name" class="form-control" id="firstName"
+               placeholder="Enter first name">
+    </div>
+    <div class="form-group">
+        <label for="status">Status:</label>
+        <div>
+            <label>
+                <input type="radio" ng-model="vm.storage.activated" id="status" value="true">
+                ACTIVE
+            </label>
+            <label>
+                <input type="radio" ng-model="vm.storage.activated" value="false">
+                NON-ACTIVE
+            </label>
+        </div>
+    </div>
+
+
+    <a href="" class="btn btn-default" ng-click="vm.create()">Create</a>
+    <a href="#/admincompany/storages" class="btn btn-default">Cancel</a>
+</form>
+

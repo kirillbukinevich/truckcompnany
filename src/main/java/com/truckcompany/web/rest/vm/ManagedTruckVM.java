@@ -1,12 +1,33 @@
 package com.truckcompany.web.rest.vm;
 
+import com.truckcompany.domain.Company;
 import com.truckcompany.domain.Truck;
+import com.truckcompany.service.dto.StorageDTO;
+import com.truckcompany.service.dto.TruckDTO;
 
 /**
  * Created by Viktor Dobroselsky.
  */
 
-public class ManagedTruckVM {
+public class ManagedTruckVM extends TruckDTO{
+
+    public ManagedTruckVM(){}
+
+    public ManagedTruckVM(TruckDTO truck){
+        super(truck);
+    }
+
+    public ManagedTruckVM(Truck truck){
+        super(truck);
+    }
+
+    public ManagedTruckVM(Truck truck, Company company){
+        super(truck,company);
+    }
+
+
+
+/*
     private Long id;
 
     private Long consumption;
@@ -62,5 +83,5 @@ public class ManagedTruckVM {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
-    }
+    }*/
 }

@@ -14,4 +14,9 @@ public interface StorageRepository extends JpaRepository<Storage, Long> {
     List<Storage> findAll();
 
     List<Storage> findByCompany(Company company);
+
+    List<Storage> findByCompanyAndActivated(Company company, boolean activated);
+
+    @Query(value = "select distinct storage from Storage storage left join fetch storage.company where storage.id = ?1")
+    Storage findByIdWithCompany(Long id);
 }
