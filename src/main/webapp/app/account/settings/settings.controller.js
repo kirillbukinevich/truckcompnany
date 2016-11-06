@@ -5,9 +5,9 @@
         .module('truckCompanyApp')
         .controller('SettingsController', SettingsController);
 
-    SettingsController.$inject = ['Principal', 'Auth', 'Upload','JhiLanguageService', '$translate', '$http'];
+    SettingsController.$inject = ['Principal', 'Auth', 'Upload','JhiLanguageService', '$translate', '$http', '$scope', '$uibModal' ];
 
-    function SettingsController (Principal, Auth, Upload, JhiLanguageService, $translate, $http) {
+    function SettingsController (Principal, Auth, Upload, JhiLanguageService, $translate, $http, $scope, $uibModal) {
         var vm = this;
 
         vm.error = null;
@@ -16,6 +16,29 @@
         vm.deleteLogo = deleteLogo;
         vm.settingsAccount = null;
         vm.success = null;
+
+
+        vm.openModalForUploadPhoto = function(){
+            $uibModal.open({
+                templateUrl: 'app/account/settings/settings.upload-photo.dialog.html',
+                controller: 'SettingsUploadPhotoController',
+                controllerAs: 'vm',
+                scope : $scope,
+                bindToController : true,
+                resolve: {
+                    account: function(){
+                        return vm.settingsAccount;
+                    },
+                    parent: function(){
+                        return vm;
+                    }
+                }
+            });
+        }
+
+
+
+
 
         /**
          * Store the "settings account" in a separate variable, and not in the shared "account" variable.

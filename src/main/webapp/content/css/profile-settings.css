@@ -1,44 +1,130 @@
-#profile-settings{
+#profile-settings {
     background: #fff;
 }
-#profile-settings .row{
-    margin:0;
+
+#profile-settings .row {
+    margin: 0;
 }
 
-#profile-photo{
-    margin:15px auto;
+#profile-photo {
+    margin: 15px auto;
     max-width: 200px;
     position: relative;
     overflow: hidden;
 }
-#profile-photo img{
-    width:100%;
-}
-#photo-action{
-    position:absolute;
-    bottom:-52px;
-    right:0;
-    width:100%;
-    transition-property: bottom;
-    transition-duration: 300ms;
-}
-#profile-photo:hover #photo-action{
+
+#profile-photo img {
+    width: 100%;
+    height:auto;
+    position: relative;
     bottom:0;
+    right:0;
 }
-#photo-action a{
-    display:block;
+
+#wrap-photo-action{
+    position:relative;
+    margin-bottom:52px;
+    width:100%;
+    height:52px;
+    bottom:52px;
+    right:0;
+    overflow:hidden;
+}
+#wrap-photo-action #photo-action{
+    opacity: 0;
+}
+
+#photo-action {
+    position: absolute;
+    bottom: -52px;
+    right: 0;
+    width: 100%;
+    transition: all 200ms ease-in-out;
+}
+
+#profile-photo:hover #photo-action {
+    bottom: 0;
+    opacity:1;
+}
+
+#photo-action a {
+    display: block;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 3px;
+    color: #d6d6d6;
+    text-decoration:none;
+}
+
+#photo-action a:hover {
+    color: #fff;
+}
+#photo-action a:visited,#photo-action a:link {
+    border:none;
+    outline: none;
+}
+
+#form-settings .form-group > label {
+    padding-right: 15px;
+}
+
+/*Modal window for upload photo*/
+.cropArea {
+    overflow: hidden;
+    width: 100%;
+    height: 350px;
+    border:2px dashed #efefef;
+}
+
+#modal-upload-profile-photo {
+    margin: 15px;
+}
+
+#upload-photo {
+    padding-right: 20px;
+}
+
+#modal-upload-profile-photo .row {
+    margin: 0;
+}
+
+#cropedImage {
+    border-radius: 50%;
+    width: 100%;
+}
+
+#modal-upload-photo-body{
     text-align:center;
-    background: rgba(0,0,0,0.5);
-    padding:3px;
-    color:#efefef;
+    margin-top:15px;
+}
+.wrap-input-file {
+    position: relative;
+    text-align: center;
+    display: inline-block;
+    background: #286090;
+    border-radius: 4px;
+}
+.wrap-input-file:hover{
+    background: #337ab7;
+}
+
+
+.wrap-input-file p {
+    padding: 6px 10px;
+    color: #fff;
+    margin:0;
+}
+
+
+
+.wrap-input-file input {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
 
 }
-#photo-action a:hover{
-    color:#fff;
-    text-decoration: none;
-}
 
-#form-settings .form-group > label{
-    padding-right:15px;
-}
 

@@ -309,7 +309,7 @@ public class UserService {
     }
 
 
-    public String uploadUserLogo(Part file, String fileName, Long user_id, String rootDirectory) throws IOException, UploadException {
+    public String uploadUserLogo(String file, String fileName, Long user_id, String rootDirectory) throws IOException, UploadException {
         User user = userRepository.findOne(user_id);
         if (user != null) {
             String imageName = UploadUtil.uploadImage(file, fileName, rootDirectory);

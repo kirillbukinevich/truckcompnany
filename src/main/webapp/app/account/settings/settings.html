@@ -4,10 +4,13 @@
         <div class="col-md-3">
             <div id="profile-photo">
                 <img check-image-user ng-src="{{vm.imageSource}}" alt="No image">
-                <div id="photo-action">
-                    <a href="" ngf-select="vm.saveLogo($file)"><span class="glyphicon glyphicon-upload"></span>Upload
-                        logo</a>
-                    <a href="" ng-click="vm.deleteLogo()"><span class="glyphicon glyphicon-erase"></span>Delete logo</a>
+                <div id="wrap-photo-action">
+                    <div id="photo-action">
+                        <a href="" ng-click="vm.openModalForUploadPhoto()"><span
+                            class="glyphicon glyphicon-upload"></span>Upload
+                            logo</a>
+                        <a href="" ng-click="vm.deleteLogo()"><span class="glyphicon glyphicon-erase"></span>Delete logo</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -18,8 +21,8 @@
             <div class="alert alert-success" ng-show="vm.success" data-translate="settings.messages.success">
                 <strong>Settings saved!</strong>
             </div>
-
-            <jhi-alert-error></jhi-alert-error>
+            <!--
+            <jhi-alert-error></jhi-alert-error>-->
 
             <form name="form" role="form" novalidate ng-submit="vm.save()" show-validation class="form-horizontal"
                   id="form-settings">
@@ -122,6 +125,7 @@
                                 ng-options="code as (code | findLanguageFromKey) for code in languageVm.languages"></select>
                     </div>
                 </div>
+
 
                 <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary"
                         data-translate="settings.form.button">Save

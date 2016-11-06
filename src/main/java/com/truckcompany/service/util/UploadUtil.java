@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.xml.bind.DatatypeConverter;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,7 +35,7 @@ public class UploadUtil {
 
     private static Set<String> accessExt = new HashSet<>(Arrays.asList("JPG", "PNG", "BMP", "GIF", "TIF"));
 
-    public static String uploadImage(Part image, String realImageName, String uploadDirectory) throws IOException, UploadException {
+    public static String uploadImage(String image, String realImageName, String uploadDirectory) throws IOException, UploadException {
         if (image == null) {
             throw new UploadException(IMAGE_NOT_EXCITED);
         }
@@ -56,8 +56,7 @@ public class UploadUtil {
             File newImage = new File(uploadDirectory + File.separator + nameImage);
             fileOutputStream = new FileOutputStream(newImage);
 
-            inputStream = image.getInputStream();
-            filecontent = IOUtils.toByteArray(inputStream);
+            filecontent = DatatypeConverter.parseBase64Binary(image.substring(image.indexOf(",") + 1));
             fileOutputStream.write(filecontent);
             return nameImage;
         } catch (IOException ex) {

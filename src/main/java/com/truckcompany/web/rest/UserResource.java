@@ -241,7 +241,7 @@ public class UserResource {
 
     @ResponseBody
     @RequestMapping(value = "/users/uploadlogo", method = RequestMethod.POST)
-    public ResponseEntity<Void> uploadFile(@RequestParam(value = "file", required = false) Part file,
+    public ResponseEntity<Void> uploadFile(@RequestParam(value = "file", required = false) String file,
                                         @RequestParam(value = "file_name") String fileName,
                                         @RequestParam(value = "user_id") Long user_id,
                                         HttpServletRequest request) throws IOException {
