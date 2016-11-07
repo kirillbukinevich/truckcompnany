@@ -3,6 +3,7 @@ package com.truckcompany.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.Company;
 import com.truckcompany.domain.User;
+import com.truckcompany.service.dto.TruckDTO;
 import com.truckcompany.service.facade.CompanyFacade;
 import com.truckcompany.repository.CompanyRepository;
 import com.truckcompany.repository.UserRepository;
@@ -12,10 +13,14 @@ import com.truckcompany.service.UserService;
 import com.truckcompany.service.dto.CompanyDTO;
 import com.truckcompany.service.dto.UserDTO;
 import com.truckcompany.web.rest.util.HeaderUtil;
+import com.truckcompany.web.rest.util.PaginationUtil;
 import com.truckcompany.web.rest.vm.ManagedCompanyVM;
+import com.truckcompany.web.rest.vm.ManagedTruckVM;
 import com.truckcompany.web.rest.vm.ManagedUserVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,6 +39,8 @@ import java.util.stream.Collectors;
 import static com.truckcompany.security.AuthoritiesConstants.*;
 import static java.util.stream.Collectors.*;
 import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
  * Created by Vladimir on 20.10.2016.
@@ -43,7 +50,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping("/api")
 public class CompanyResource {
 
-    private final Logger log = LoggerFactory.getLogger(CompanyResource.class);
+    private final Logger LOG = LoggerFactory.getLogger(CompanyResource.class);
 
     @Inject
     private CompanyRepository companyRepository;
@@ -66,14 +73,17 @@ public class CompanyResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Secured(SUPERADMIN)
     @Timed
-    public ResponseEntity<List<ManagedCompanyVM>> getAllTruckingCompanies() {
-        log.debug("REST request get all Company");
+    public ResponseEntity<List<ManagedCompanyVM>> getAllTruckingCompanies(Pageable pageable, HttpServletRequest request) throws URISyntaxException {
+        LOG.debug("REST request get all Company");
 
-        List<CompanyDTO> truckingCompanies = companyFacade.findCompanies();
-        List<ManagedCompanyVM> managedCompanyVMs = truckingCompanies.stream().map(c -> new ManagedCompanyVM(c)).collect(toList());
+        Page<CompanyDTO> page = companyFacade.findCompanies(pageable, request);
 
-        HttpHeaders headers = HeaderUtil.createAlert("company.getAll", null);
-        return new ResponseEntity<>(managedCompanyVMs, headers, OK);
+        List<ManagedCompanyVM> managedCompanyVMs = page.getContent().stream()
+            .map(c -> new ManagedCompanyVM(c))
+            .collect(toList());
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/companies");
+        return new ResponseEntity<List<ManagedCompanyVM>>(managedCompanyVMs, headers, OK);
     }
 
 
@@ -82,7 +92,7 @@ public class CompanyResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<ManagedCompanyVM> getUser(@PathVariable Long id) {
-        log.debug("REST request to get Company : {}", id);
+        LOG.debug("REST request to get Company : {}", id);
         Company company = companyService.getUserById(id);
         if (SecurityUtils.isCurrentUserInRole(SUPERADMIN)){
             company = companyService.findCompanyWithAdmins(id);
@@ -100,7 +110,7 @@ public class CompanyResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<?> createTruckingCompany(@RequestBody ManagedCompanyVM managedCompanyVM, HttpServletRequest request) throws URISyntaxException {
-        log.debug("REST request to save Company: {}", managedCompanyVM.getName());
+        LOG.debug("REST request to save Company: {}", managedCompanyVM.getName());
 
         UserDTO user = managedCompanyVM.getUsers().stream().limit(1).collect(toList()).get(0);
 
@@ -127,7 +137,7 @@ public class CompanyResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<ManagedCompanyVM> updateUser(@RequestBody ManagedCompanyVM managedCompanyVM) throws URISyntaxException {
-        log.debug("REST request to update Company : {}", managedCompanyVM);
+        LOG.debug("REST request to update Company : {}", managedCompanyVM);
 
         UserDTO user = managedCompanyVM.getUsers().stream().limit(1).collect(toList()).get(0);
 
@@ -160,7 +170,7 @@ public class CompanyResource {
     @Timed
     @Secured(SUPERADMIN)
     public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
-        log.debug("REST request to delete Company: {}", id);
+        LOG.debug("REST request to delete Company: {}", id);
         companyService.deleteCompany(id);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("truckingCompany.deleted", id.toString())).build();
     }
@@ -168,7 +178,7 @@ public class CompanyResource {
 
     @RequestMapping(value = "/companies/deleteArray", method = RequestMethod.POST)
     public ResponseEntity<Void> deleteCompanies(@RequestBody Long[] idList){
-        log.debug("REST request to delete list of companies {}" ,idList);
+        LOG.debug("REST request to delete list of companies {}" ,idList);
         companyService.deleteCompanies(idList);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("truckingCompany.deleted", "null")).build();
     }
@@ -180,7 +190,7 @@ public class CompanyResource {
 
         return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin())
             .map(user -> {
-                log.debug("REST request to get users (without admin) for company '{}'", user.getCompany().getName());
+                LOG.debug("REST request to get users (without admin) for company '{}'", user.getCompany().getName());
                 List<User> users = companyService.getCompanyUsersWithoutAdmin(user);
                 List<ManagedUserVM> managedUserVMs = users.stream()
                     .map(ManagedUserVM::new)
@@ -189,7 +199,7 @@ public class CompanyResource {
                 return new ResponseEntity<>(managedUserVMs, headers, OK);
             })
             .orElseGet(()->{
-                log.debug("REST request to get users for company. Your profile doesn't belong to any company.");
+                LOG.debug("REST request to get users for company. Your profile doesn't belong to any company.");
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             });
     }
@@ -199,7 +209,7 @@ public class CompanyResource {
     public ResponseEntity<?> createNewCompanyEmployee(@RequestBody ManagedUserVM managedUserVM, HttpServletRequest request){
         return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin())
             .map(user ->{
-                log.debug("REST request to create new employee for company '{}'", user.getCompany().getName());
+                LOG.debug("REST request to create new employee for company '{}'", user.getCompany().getName());
                 userService.createEmployee(managedUserVM, user, request);
                 return new ResponseEntity<>(HttpStatus.OK);
             })
@@ -212,7 +222,7 @@ public class CompanyResource {
     @Timed
     @Secured(ADMIN)
     public ResponseEntity<ManagedUserVM> getEmployee(@PathVariable Long id) {
-        log.debug("REST request to get Employee : {}", id);
+        LOG.debug("REST request to get Employee : {}", id);
         User user = userService.getUserWithAuthorities(id);
         if (user !=null){
             return new ResponseEntity<ManagedUserVM>(new ManagedUserVM(user), OK);
@@ -226,7 +236,7 @@ public class CompanyResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<ManagedUserVM> updateEmployee(@RequestBody ManagedUserVM managedUserVM) throws URISyntaxException {
-        log.debug("REST request to update Employee : {}", managedUserVM.getLogin());
+        LOG.debug("REST request to update Employee : {}", managedUserVM.getLogin());
 
         Optional<User> existingUser = userRepository.findOneByEmail(managedUserVM.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(managedUserVM.getId()))) {

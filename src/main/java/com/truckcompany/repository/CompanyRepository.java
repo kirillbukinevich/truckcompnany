@@ -1,6 +1,7 @@
 package com.truckcompany.repository;
 
 import com.truckcompany.domain.Company;
+import com.truckcompany.domain.Truck;
 import com.truckcompany.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,5 +22,11 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
         nativeQuery = true)*/
     /*@Query(value = "select distinct company from Company company left join fetch company.users")
     List<Company> findAllWithUsers();*/
+
+
+    @Query(value = "select distinct company from Company company",
+        countQuery = "select count(company) from Company company")
+    Page<Company> findPageAllCompany(Pageable pageable);
+
 
 }
