@@ -57,17 +57,17 @@
     color:#d3d3d3;
     font-weight: 400;
     position:relative;
-    border-right:5px solid #fff;
+    border-left:5px solid #fff;
 }
 #sidebar-role > li > a:hover{
-    border-right:5px solid #303030;
+    border-left:5px solid #303030;
     color:#303030;
 }
 
 #sidebar-role > li.active > a{
-    border-right:5px solid #303030;
+    border-left:5px solid #303030;
     color:#303030;
-    background-color: #eee;
+    background-color: #f1f1f1;
 }
 
 .sidebar-icon{
