@@ -14,6 +14,8 @@ import com.truckcompany.web.rest.vm.ManagedCompanyVM;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,6 +59,9 @@ public class CompanyService {
             .collect(toSet());
     }
 
+
+
+
     public List<Company> findCompaniesAndAdmins() {
         List<Company> companies = getCompanies();
         return
@@ -73,6 +78,10 @@ public class CompanyService {
 
     public List<Company> getCompanies() {
         return companyRepository.findAll();
+    }
+
+    public Page<Company> getPageAllCompany(Pageable pageable){
+        return companyRepository.findPageAllCompany(pageable);
     }
 
     public Company findCompanyWithAdmins(Long id) {
@@ -123,7 +132,7 @@ public class CompanyService {
         return company;
     }
 
-    public Company getUserById(Long id) {
+    public Company getCompanyById(Long id) {
         Company company = companyRepository.getOne(id);
         log.debug("Get Information about Company with id: {}", id);
         return company;

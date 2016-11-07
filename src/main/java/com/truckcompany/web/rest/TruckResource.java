@@ -62,7 +62,6 @@ public class TruckResource {
     @RequestMapping (value = "/trucks", method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ManagedTruckVM>> getAllTrucks (Pageable pageable, HttpServletRequest request)  throws URISyntaxException {
         LOG.debug("REST request get all Trucks");
-        LOG.debug(request.getParameter("size"));
 
         Page<TruckDTO> page = truckFacade.findTrucks(pageable, request);
 
