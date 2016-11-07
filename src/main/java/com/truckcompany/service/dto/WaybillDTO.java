@@ -8,71 +8,79 @@ import com.truckcompany.domain.Waybill;
  * Created by Viktor Dobroselsky.
  */
 public class WaybillDTO {
-    private Long dispatcherId;
+    private Long id;
 
-    private Long driverId;
+    private UserDTO dispatcher;
 
-    private Long routeListId;
+    private UserDTO driver;
 
-    private Long writeOffId;
+    private RouteListDTO routeList;
+
+    private WriteOffActDTO writeOffAct;
 
     public WaybillDTO() {
     }
 
-    public WaybillDTO(Long dispatcherId,Long driverId,
-                      Long routeListId,Long writeOffId) {
-        this.dispatcherId = dispatcherId;
-        this.driverId = driverId;
-        this.routeListId = routeListId;
-        this.writeOffId = writeOffId;
+    public WaybillDTO(Long id) {
+        this.id = id;
     }
 
-    public WaybillDTO(Waybill waybill) {
-        this(waybill.getDispatcher().getId(),
-            waybill.getDriver().getId(),
-            waybill.getRouteList().getId(),
-            waybill.getWriteOff().getId());
+    public WaybillDTO(Waybill waybill, RouteListDTO routeList) {
+        this(waybill.getId());
+        this.dispatcher = waybill.getDispatcher() != null ? new UserDTO(waybill.getDispatcher()) : null;
+        this.driver = waybill.getDriver() != null ? new UserDTO(waybill.getDispatcher()) : null;
+        this.routeList = routeList;
+        this.writeOffAct = waybill.getWriteOff() != null ? new WriteOffActDTO(waybill.getWriteOff()) : null;
     }
 
-    public Long getDispatcherId() {
-        return dispatcherId;
+    public Long getId() {
+        return id;
     }
 
-    public void setDispatcherId(Long dispatcherId) {
-        this.dispatcherId = dispatcherId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Long getDriverId() {
-        return driverId;
+    public UserDTO getDispatcher() {
+        return dispatcher;
     }
 
-    public void setDriverId(Long driverId) {
-        this.driverId = driverId;
+    public void setDispatcher(UserDTO dispatcher) {
+        this.dispatcher = dispatcher;
     }
 
-    public Long getRouteListId() {
-        return routeListId;
+    public UserDTO getDriver() {
+        return driver;
     }
 
-    public void setRouteListId(Long routeListId) {
-        this.routeListId = routeListId;
+    public void setDriver(UserDTO driver) {
+        this.driver = driver;
     }
 
-    public Long getWriteOffId() {
-        return writeOffId;
+    public RouteListDTO getRouteList() {
+        return routeList;
     }
 
-    public void setWriteOffId(Long writeOffId) {
-        this.writeOffId = writeOffId;
+    public void setRouteList(RouteListDTO routeList) {
+        this.routeList = routeList;
+    }
+
+    public WriteOffActDTO getWriteOffAct() {
+        return writeOffAct;
+    }
+
+    public void setWriteOffAct(WriteOffActDTO writeOffAct) {
+        this.writeOffAct = writeOffAct;
     }
 
     @Override
     public String toString () {
         return "WaybillDTO{" +
-            "dispatcherId=" + dispatcherId +
-            ", driverId=" + driverId +
-            ", routeListId=" + routeListId +
-            ", writeOffId=" + writeOffId +
+            "id=" + id +
+            "dispatcherId=" + dispatcher.getId() +
+            ", driverId=" + driver.getId() +
+            ", routeListId=" + routeList.getId() +
+            ", writeOffId=" + writeOffAct.getId() +
             "}";
     }
 }

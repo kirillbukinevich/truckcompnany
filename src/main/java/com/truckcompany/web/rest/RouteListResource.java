@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.RouteList;
 import com.truckcompany.repository.RouteListRepository;
 import com.truckcompany.service.RouteListService;
+import com.truckcompany.service.facade.RouteListFacade;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import com.truckcompany.web.rest.vm.ManagedRouteListVM;
 import org.slf4j.Logger;
@@ -36,15 +37,15 @@ public class RouteListResource {
     @Inject
     private RouteListService routeListService;
 
+    @Inject
+    private RouteListFacade routeListFacade;
+
     @RequestMapping (value = "/routelists",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<RouteList>> getAllRouteList ()  throws URISyntaxException {
-        log.debug("REST request get all RouteList");
-        List<RouteList> routeLists = routeListRepository.findAll();
-
-        List<ManagedRouteListVM> managedRouteLists = routeLists.stream()
+    public ResponseEntity<List<ManagedRouteListVM>> getAllRouteList ()  throws URISyntaxException {
+        List<ManagedRouteListVM> managedRouteLists = routeListFacade.findRouteLists().stream()
             .map(ManagedRouteListVM::new)
             .collect(Collectors.toList());
 
