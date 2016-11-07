@@ -1,27 +1,27 @@
-package com.truckcompany.domain;
+package com.truckcompany.service.dto;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import com.truckcompany.domain.Checkpoint;
+import com.truckcompany.domain.RouteList;
+
 import java.util.Date;
 
-@Entity
-@Table(name = "checkpoint")
-public class Checkpoint {
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
+public class CheckpointDTO {
     private Long id;
-
-    @Column(name = "name", length = 45, nullable = false)
     private String name;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "check_date")
     private Date checkDate;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "route_list_id", nullable = false)
     private RouteList routeList;
+
+    public CheckpointDTO(Long id, String name, Date checkDate, RouteList routeList) {
+        this.id = id;
+        this.name = name;
+        this.checkDate = checkDate;
+        this.routeList = routeList;
+    }
+
+    public CheckpointDTO(Checkpoint checkpoint) {
+        this(checkpoint.getId(), checkpoint.getName(),
+            checkpoint.getCheckDate(), checkpoint.getRouteList());
+    }
 
     public Long getId() {
         return id;
@@ -34,6 +34,7 @@ public class Checkpoint {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -49,18 +50,8 @@ public class Checkpoint {
     public RouteList getRouteList() {
         return routeList;
     }
+
     public void setRouteList(RouteList routeList) {
         this.routeList = routeList;
     }
-
-    @Override
-    public String toString() {
-        return "Checkpoint{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
-            ", checkDate=" + checkDate +
-            ", routeList=" + routeList +
-            '}';
-    }
-
 }
