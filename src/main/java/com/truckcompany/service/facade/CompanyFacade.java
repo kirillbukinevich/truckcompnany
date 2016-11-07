@@ -12,4 +12,5 @@ import java.util.List;
  */
 public interface CompanyFacade {
     Page<CompanyDTO> findCompanies(Pageable pageable, HttpServletRequest request);
+    CompanyDTO getCompanyWithAdmin(Long id);
 }

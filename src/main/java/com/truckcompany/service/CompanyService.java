@@ -59,6 +59,9 @@ public class CompanyService {
             .collect(toSet());
     }
 
+
+
+
     public List<Company> findCompaniesAndAdmins() {
         List<Company> companies = getCompanies();
         return
@@ -129,7 +132,7 @@ public class CompanyService {
         return company;
     }
 
-    public Company getUserById(Long id) {
+    public Company getCompanyById(Long id) {
         Company company = companyRepository.getOne(id);
         log.debug("Get Information about Company with id: {}", id);
         return company;

@@ -39,7 +39,9 @@ import java.util.stream.Collectors;
 import static com.truckcompany.security.AuthoritiesConstants.*;
 import static java.util.stream.Collectors.*;
 import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.MediaType.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
@@ -68,11 +70,9 @@ public class CompanyResource {
     private CompanyFacade companyFacade;
 
 
-    @RequestMapping(value = "/companies",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Secured(SUPERADMIN)
     @Timed
+    @Secured(SUPERADMIN)
+    @RequestMapping(value = "/companies", method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ManagedCompanyVM>> getAllTruckingCompanies(Pageable pageable, HttpServletRequest request) throws URISyntaxException {
         LOG.debug("REST request get all Company");
 
@@ -87,27 +87,21 @@ public class CompanyResource {
     }
 
 
-    @RequestMapping(value = "/companies/{id}",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ManagedCompanyVM> getUser(@PathVariable Long id) {
+    @Secured(SUPERADMIN)
+    @RequestMapping(value = "/companies/{id}", method = GET, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ManagedCompanyVM> getCompany(@PathVariable Long id) {
         LOG.debug("REST request to get Company : {}", id);
-        Company company = companyService.getUserById(id);
-        if (SecurityUtils.isCurrentUserInRole(SUPERADMIN)){
-            company = companyService.findCompanyWithAdmins(id);
-        } else {
-            company = companyService.getUserById(id);
-        }
 
-
+        CompanyDTO company = companyFacade.getCompanyWithAdmin(id);
+        
         if (company == null) return new ResponseEntity<>(NOT_FOUND);
         return new ResponseEntity<ManagedCompanyVM>(new ManagedCompanyVM(company), OK);
     }
 
     @RequestMapping(value = "/companies",
-        method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        method = POST,
+        produces = APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<?> createTruckingCompany(@RequestBody ManagedCompanyVM managedCompanyVM, HttpServletRequest request) throws URISyntaxException {
         LOG.debug("REST request to save Company: {}", managedCompanyVM.getName());
@@ -133,8 +127,8 @@ public class CompanyResource {
     }
 
     @RequestMapping(value = "/companies",
-        method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        method = PUT,
+        produces = APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<ManagedCompanyVM> updateUser(@RequestBody ManagedCompanyVM managedCompanyVM) throws URISyntaxException {
         LOG.debug("REST request to update Company : {}", managedCompanyVM);
@@ -157,7 +151,7 @@ public class CompanyResource {
             .body(managedCompanyVM);
     }
 
-    @RequestMapping(value = "/change_company_status/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/change_company_status/{id}", method = GET)
     @ResponseBody
     public void changeCompanyStatus(@PathVariable Long id){
         companyService.changeCompanyStatus(id);
@@ -165,8 +159,8 @@ public class CompanyResource {
 
 
     @RequestMapping(value = "/companies/{id}",
-        method = RequestMethod.DELETE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        method = DELETE,
+        produces = APPLICATION_JSON_VALUE)
     @Timed
     @Secured(SUPERADMIN)
     public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
@@ -176,14 +170,14 @@ public class CompanyResource {
     }
 
 
-    @RequestMapping(value = "/companies/deleteArray", method = RequestMethod.POST)
+    @RequestMapping(value = "/companies/deleteArray", method = POST)
     public ResponseEntity<Void> deleteCompanies(@RequestBody Long[] idList){
         LOG.debug("REST request to delete list of companies {}" ,idList);
         companyService.deleteCompanies(idList);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("truckingCompany.deleted", "null")).build();
     }
 
-    @RequestMapping(value = "/company/employee", method = RequestMethod.GET)
+    @RequestMapping(value = "/company/employee", method = GET)
     @Secured(value = {ADMIN, SUPERADMIN})
     public ResponseEntity<?> getCompanyEmployee(){
 
@@ -204,7 +198,7 @@ public class CompanyResource {
             });
     }
 
-    @RequestMapping(value = "/company/employee", method = RequestMethod.POST)
+    @RequestMapping(value = "/company/employee", method = POST)
     @Secured(ADMIN)
     public ResponseEntity<?> createNewCompanyEmployee(@RequestBody ManagedUserVM managedUserVM, HttpServletRequest request){
         return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin())
@@ -217,8 +211,8 @@ public class CompanyResource {
     }
 
     @RequestMapping(value = "/company/employee/{id}",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        method = GET,
+        produces = APPLICATION_JSON_VALUE)
     @Timed
     @Secured(ADMIN)
     public ResponseEntity<ManagedUserVM> getEmployee(@PathVariable Long id) {
@@ -232,8 +226,8 @@ public class CompanyResource {
     }
 
     @RequestMapping(value = "/company/employee",
-        method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        method = PUT,
+        produces = APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<ManagedUserVM> updateEmployee(@RequestBody ManagedUserVM managedUserVM) throws URISyntaxException {
         LOG.debug("REST request to update Employee : {}", managedUserVM.getLogin());

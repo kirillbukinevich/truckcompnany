@@ -3,6 +3,7 @@ package com.truckcompany.service.facade;
 import com.truckcompany.domain.Company;
 import com.truckcompany.domain.Truck;
 import com.truckcompany.domain.User;
+import com.truckcompany.repository.CompanyRepository;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.CompanyService;
 import com.truckcompany.service.dto.CompanyDTO;
@@ -32,6 +33,9 @@ public class DefaultCompanyFacade implements CompanyFacade {
     @Inject
     private CompanyService companyService;
 
+    @Inject
+    private CompanyRepository companyRepository;
+
     @Override
     public Page<CompanyDTO> findCompanies(Pageable pageable, HttpServletRequest request) {
 
@@ -39,6 +43,15 @@ public class DefaultCompanyFacade implements CompanyFacade {
         Page<Company> pageCompanies = new PageImpl<Company>(emptyList());
         pageCompanies = companyService.getPageAllCompany(pageable);
         return new PageImpl<CompanyDTO>(pageCompanies.getContent().stream().map(toDTO).collect(toList()),pageable,pageCompanies.getTotalElements());
+    }
+
+    @Override
+    public CompanyDTO getCompanyWithAdmin(Long id){
+        Company company = companyService.getCompanyById(id);
+        if (company != null){
+            return new CompanyDTO(company, companyService.getAdminForCompany(company));
+        }
+        return null;
     }
 
 
