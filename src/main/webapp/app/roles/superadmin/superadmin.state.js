@@ -13,12 +13,10 @@
     function stateConfig($stateProvider) {
         $stateProvider.state('superadmin', {
             abstract: true,
-            parent: 'app',
+            parent: 'roles',
             views: {
-                'content@': {
-                    templateUrl: 'app/superadmin/superadmin.html',
-                    controller: 'SuperadminController',
-                    controllerAs: 'vm'
+                'sidebar@roles': {
+                    templateUrl: 'app/roles/superadmin/sidebar.html',
                 },
             }
         });

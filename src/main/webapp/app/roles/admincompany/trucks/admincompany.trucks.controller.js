@@ -42,7 +42,6 @@
             vm.error = false;
             vm.trucks = data;
 
-            /*vm.links = ParseLinks.parse(headers('link'));*/
             vm.totalItems = headers('X-Total-Count');
             vm.queryCount = vm.totalItems;
             vm.page = pagingParams.page;
@@ -50,17 +49,14 @@
         }
 
         function onError(error){
-            // AlertService.error(error.data.message);
             vm.error = true;
             vm.messageError = 'Problems with connection.'
         }
 
         function transition () {
-            console.log('trunsient')
             $state.transitionTo($state.$current, {
                 page: vm.page,
                 size:  vm.itemsPerPage,
-                //search: vm.currentSearch
             });
         }
 
@@ -68,7 +64,6 @@
             $state.transitionTo($state.$current, {
                 page: 1,
                 size:  vm.itemsPerPage,
-                //search: vm.currentSearch
             });
         }
 

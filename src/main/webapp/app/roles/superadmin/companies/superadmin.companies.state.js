@@ -14,20 +14,30 @@
         $stateProvider
             .state('superadmin.companies', {
                 parent: 'superadmin',
-                url: '/superadmin/companies',/*'/activate?key',*/
+                url: '/superadmin/companies',
 
                 data: {
                     authorities: ["ROLE_SUPERADMIN"],
                     pageTitle: 'activate.title'
                 },
                 views: {
-                    'page@superadmin': {
-                        templateUrl: 'app/superadmin/companies/superadmin.companies.html',
+                    'page@roles': {
+                        templateUrl: 'app/roles/superadmin/companies/superadmin.companies.html',
                         controller: 'SuperadminCompaniesController',
                         controllerAs: 'vm'
                     },
                 },
+                params: {
+                    page: 1,
+                    size: 5
+                },
                 resolve: {
+                    pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
+                        return {
+                            page: PaginationUtil.parsePage($stateParams.page),
+                            size: PaginationUtil.parsePage($stateParams.size)
+                        };
+                    }],
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('activate');
                         return $translate.refresh();
@@ -44,8 +54,8 @@
                 },
 
                 views: {
-                    'page@superadmin': {
-                        templateUrl: 'app/superadmin/companies/superadmin.company.html',
+                    'page@roles': {
+                        templateUrl: 'app/roles/superadmin/companies/superadmin.company.html',
                         controller: 'SuperadminCompanyController',
                         controllerAs: 'vm'
                     },
@@ -67,8 +77,8 @@
                 },
 
                 views: {
-                    'page@superadmin': {
-                        templateUrl: 'app/superadmin/companies/superadmin.companycreate.html',
+                    'page@roles': {
+                        templateUrl: 'app/roles/superadmin/companies/superadmin.companycreate.html',
                         controller: 'SuperadminCompanyCreateController',
                         controllerAs: 'vm'
                     },
