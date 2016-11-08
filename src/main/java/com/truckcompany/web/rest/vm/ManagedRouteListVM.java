@@ -31,20 +31,18 @@ public class ManagedRouteListVM {
                 routeList.getLeavingDate(),
                 routeList.getArrivalDate(),
                 routeList.getLeavingStorage().getId(),
-                routeList.getArrivalStorage().getId(),
-                routeList.getWaybill().getId());
+                routeList.getArrivalStorage().getId());
     }
 
     public ManagedRouteListVM(Long id, Long truckId, ZonedDateTime leavingDate,
                               ZonedDateTime arrivalDate, Long leavingStorageId,
-                              Long arrivalStorageId, Long waybillId) {
+                              Long arrivalStorageId) {
         this.id = id;
         this.truckId = truckId;
         this.leavingDate = leavingDate;
         this.arrivalDate = arrivalDate;
         this.leavingStorageId = leavingStorageId;
         this.arrivalStorageId = arrivalStorageId;
-        this.waybillId = waybillId;
     }
 
     public Long getId() {
