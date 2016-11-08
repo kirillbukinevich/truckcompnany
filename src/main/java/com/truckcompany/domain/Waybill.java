@@ -18,7 +18,7 @@ public class Waybill implements Serializable {
     @Column(name = "date")
     private ZonedDateTime date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "driver_id", nullable = false)
     private User driver;
 
@@ -89,12 +89,14 @@ public class Waybill implements Serializable {
 
     @Override
     public String toString() {
-        return "WayBill {id:" + id + "," +
-                    "date:" + date + "," +
-                    "driver_id:" + driver.getId() + "," +
-                    "state:" + state.name() + "," +
-                    "dispatcher_id:" + dispatcher.getId() + "," +
-                    "route_list_id:" + routeList.getId() + "," +
-                    "write_off_id:" + writeOff != null ? writeOff.getId().toString() : "" + "}";
+        return "Waybill{" +
+            "id=" + id +
+            ", date=" + date +
+            ", driver=" + driver +
+            ", state=" + state +
+            ", dispatcher=" + dispatcher +
+            ", routeList=" + routeList +
+            ", writeOff=" + writeOff +
+            '}';
     }
 }
