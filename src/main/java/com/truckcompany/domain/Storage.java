@@ -24,6 +24,10 @@ public class Storage implements Serializable {
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
+    @Column(name = "address")
+    private String address;
+
+
     public Long getId() {
         return id;
     }
@@ -54,5 +58,13 @@ public class Storage implements Serializable {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

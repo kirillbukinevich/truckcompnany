@@ -82,10 +82,6 @@ public class RouteList implements Serializable {
         this.arrivalStorage = arrivalStorage;
     }
 
-    public Waybill getWaybill() {
-        return waybill;
-    }
-
     public void setWaybill(Waybill waybill) {
         this.waybill = waybill;
     }
@@ -104,5 +100,9 @@ public class RouteList implements Serializable {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public Waybill getWaybill() {
+        return waybill;
     }
 }
