@@ -5,6 +5,7 @@ import com.truckcompany.domain.User;
 import com.truckcompany.domain.Waybill;
 import com.truckcompany.domain.WriteOffAct;
 import com.truckcompany.domain.enums.WaybillState;
+import com.truckcompany.service.dto.TruckDTO;
 
 import java.time.ZonedDateTime;
 
@@ -23,12 +24,15 @@ public class ManagedWaybillVM {
 
     private Long writeOffId;
 
+    private RouteList routeList;
+
+    private User driver;
     public ManagedWaybillVM() {
     }
 
     public ManagedWaybillVM(Long id, ZonedDateTime date,
                             WaybillState state, String dispatcherLogin, String driverLogin,
-                            Long routeListId, Long writeOffId) {
+                            Long routeListId, Long writeOffId,RouteList routeList,User driver) {
         this.id = id;
         this.date = date;
         this.state = state.toString();
@@ -36,6 +40,9 @@ public class ManagedWaybillVM {
         this.driverLogin = driverLogin;
         this.routeListId = routeListId;
         this.writeOffId = writeOffId;
+        this.routeList = routeList;
+        this.driver = driver;
+
     }
 
     public ManagedWaybillVM (Waybill waybill) {
@@ -47,8 +54,18 @@ public class ManagedWaybillVM {
             waybill.getDriver().getLogin(),
             waybill.getRouteList().getId(),
             waybill.getWriteOff() != null ? waybill.getWriteOff().getId() : null
+            ,waybill.getRouteList(),
+            waybill.getDriver()
         );
 
+    }
+
+    public RouteList getRouteList() {
+        return routeList;
+    }
+
+    public void setRouteList(RouteList routeList) {
+        this.routeList = routeList;
     }
 
     public Long getId() {
@@ -107,16 +124,26 @@ public class ManagedWaybillVM {
         this.writeOffId = writeOffId;
     }
 
+    public User getDriver() {
+        return driver;
+    }
+
+    public void setDriver(User driver) {
+        this.driver = driver;
+    }
+
     @Override
-    public String toString () {
+    public String toString() {
         return "ManagedWaybillVM{" +
             "id=" + id +
             ", date=" + date +
-            ", state=" + state +
-            ", dispatcherLogin=" + dispatcherLogin +
-            ", driverLogin=" + driverLogin +
+            ", state='" + state + '\'' +
+            ", dispatcherLogin='" + dispatcherLogin + '\'' +
+            ", driverLogin='" + driverLogin + '\'' +
             ", routeListId=" + routeListId +
             ", writeOffId=" + writeOffId +
-            "} " + super.toString();
+            ", routeList=" + routeList +
+            ", driver=" + driver +
+            '}';
     }
 }

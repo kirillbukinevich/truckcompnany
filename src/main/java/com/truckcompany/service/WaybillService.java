@@ -1,11 +1,13 @@
 package com.truckcompany.service;
 
+import com.truckcompany.domain.User;
 import com.truckcompany.domain.Waybill;
 import com.truckcompany.domain.enums.WaybillState;
 import com.truckcompany.repository.RouteListRepository;
 import com.truckcompany.repository.UserRepository;
 import com.truckcompany.repository.WaybillRepository;
 import com.truckcompany.repository.WriteOffActRepository;
+import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -41,6 +44,15 @@ public class WaybillService {
         Waybill waybill = waybillRepository.getOne(id);
         log.debug("Get Information about Waybill with id: {}", id);
         return waybill;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Waybill> getWaybillForDriver () {
+        log.debug("Get waybills for drivers");
+        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+
+        List<Waybill> waybills = waybillRepository.findByDriver(user.get());
+        return waybills;
     }
 
     public Waybill createWaybill (ManagedWaybillVM managedWaybillVM) {
