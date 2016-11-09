@@ -82,6 +82,9 @@
             <column name="arrival_storage_id" type="int">
                 <constraints nullable="false"/>
             </column>
+            <column name="state" type="ENUM('TRANSPORTATION', 'DELIVERED')">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <createTable tableName="checkpoint">
