@@ -18,12 +18,12 @@
         JHipster core tables.
         The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
     -->
-    <changeSet id="00000000000002" author="topolev">
+    <changeSet id="00000000000005" author="topolev">
 
         <loadData encoding="UTF-8"
-                  file="config/liquibase/trucking_company.csv"
+                  file="config/liquibase/route_list.csv"
                   separator=";"
-                  tableName="tc_company"/>
+                  tableName="route_list"/>
 
     </changeSet>
 </databaseChangeLog>
