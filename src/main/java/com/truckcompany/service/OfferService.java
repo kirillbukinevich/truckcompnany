@@ -82,4 +82,10 @@ public class OfferService {
 
         return offers;
     }
+
+    public ManagedOfferVM getOfferById (Long id) {
+        ManagedOfferVM offer = new ManagedOfferVM(offerRepository.getOne(id));
+
+        return offer;
+    }
 }

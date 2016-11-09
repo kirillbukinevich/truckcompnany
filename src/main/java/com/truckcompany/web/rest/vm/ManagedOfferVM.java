@@ -18,6 +18,10 @@ public class ManagedOfferVM extends OfferDTO {
 
     private Set<ManagedOfferGoodsVM> offerGoods = Collections.emptySet();
 
+    private ManagedStorageVM leavingStorage;
+
+    private ManagedStorageVM arrivalStorage;
+
     public ManagedOfferVM () {
 
     }
@@ -26,9 +30,15 @@ public class ManagedOfferVM extends OfferDTO {
         super(offer);
 
         this.companyId = offer.getCompany().getId();
-        this.leavingStorageId = offer.getLeavingStorage().getId();
+        /*this.leavingStorageId = offer.getLeavingStorage().getId();
         this.arrivalStorageId = offer.getArrivalStorage().getId();
-        this.offerGoods = offer.getOfferGoods().stream().map(ManagedOfferGoodsVM::new).collect(Collectors.toSet());
+        this.offerGoods = offer.getOfferGoods().stream().map(ManagedOfferGoodsVM::new).collect(Collectors.toSet());*/
+        this.arrivalStorage = new ManagedStorageVM(offer.getArrivalStorage());
+        this.leavingStorage = new ManagedStorageVM(offer.getLeavingStorage());
+        this.offerGoods = offer.getOfferGoods()
+            .stream()
+            .map(ManagedOfferGoodsVM::new)
+            .collect(Collectors.toSet());
     }
 
     public ManagedOfferVM(Long id, ZonedDateTime creationDate, String createdBy,
@@ -71,5 +81,21 @@ public class ManagedOfferVM extends OfferDTO {
 
     public void setOfferGoods(Set<ManagedOfferGoodsVM> offerGoods) {
         this.offerGoods = offerGoods;
+    }
+
+    public ManagedStorageVM getLeavingStorage() {
+        return leavingStorage;
+    }
+
+    public void setLeavingStorage(ManagedStorageVM leavingStorage) {
+        this.leavingStorage = leavingStorage;
+    }
+
+    public ManagedStorageVM getArrivalStorage() {
+        return arrivalStorage;
+    }
+
+    public void setArrivalStorage(ManagedStorageVM arrivalStorage) {
+        this.arrivalStorage = arrivalStorage;
     }
 }

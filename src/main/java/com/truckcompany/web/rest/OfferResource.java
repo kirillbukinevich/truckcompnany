@@ -63,4 +63,18 @@ public class OfferResource {
         return new ResponseEntity(offers, headers, HttpStatus.OK);
     }
 
+    @RequestMapping (value = "/offers/{id}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<ManagedOfferVM> getOffer (@PathVariable Long id) throws URISyntaxException {
+        log.debug("REST request get Offer");
+
+        ManagedOfferVM offer = offerService.getOfferById(id);
+
+        HttpHeaders headers = HeaderUtil.createAlert("offers.getById", null);
+
+        return new ResponseEntity(offer, headers, HttpStatus.OK);
+    }
+
 }
