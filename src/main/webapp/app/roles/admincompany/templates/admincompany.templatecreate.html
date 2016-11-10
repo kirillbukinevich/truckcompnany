@@ -1,0 +1,39 @@
+
+
+<h1>Create template</h1>
+<form>
+    <div class="form-group">
+        <label for="name">Name template:</label>
+        <input ng-model="vm.template.name" type="text"  class="form-control" id="name"
+               placeholder="Name template">
+    </div>
+    <div class="form-group">
+        <label for="birthday">Happy birthday:</label>
+        <input ng-model="vm.template.birthday" type="date"  class="form-control" id="birthday"
+               placeholder="Name template">
+    </div>
+
+    <div class="form-group">
+        <label for="recipient">Recipient:</label>
+        <ui-select ng-model="vm.template.recipient"  title="Choose a person" id="recipient">
+            <ui-select-match placeholder="Select a person in the list or search his name/email...">{{$select.selected.firstName}} {{$select.selected.lastName}}</ui-select-match>
+            <ui-select-choices repeat="user in vm.users| filter: $select.search">
+                <div ng-bind-html="user.firstName + ' ' + user.lastName | highlight: $select.search"></div>
+                <small>
+                    email: {{user.email}}
+                    title: {{vm.getTitle(user)}}
+                </small>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+
+    <div class="form-group">
+        <label for="color">Background color:</label>
+        <input ng-model="vm.template.background" type="color"  class="form-control" id="color"
+               placeholder="Background color">
+    </div>
+
+
+    <div ckeditor="vm.options" ng-model="vm.template.template" ready="vm.onReady()"></div>
+    <a href="" id="save-template" class="btn btn-default" ng-click="vm.createTemplate()">Save template</a>
+</form>

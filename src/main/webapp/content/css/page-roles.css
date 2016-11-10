@@ -151,3 +151,19 @@
     width:100%;
     margin-top: 10px;
 }
+
+
+
+.btn-default{
+    background: #fff;
+    border: 1px solid #ccc;
+    color:#717171;
+}
+.btn-default:hover{
+    color:#333;
+    border: 1px solid #ccc;
+}
+
+#save-template{
+    margin:10px 0;
+}
