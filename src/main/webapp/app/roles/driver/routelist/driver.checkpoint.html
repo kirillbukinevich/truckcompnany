@@ -1,0 +1,20 @@
+<h3 style="text-align:center">Checkpoints</h3>
+    <table class="table table-striped">
+    <thead>
+    <tr>
+        <td>name</td>
+        <td>time</td>
+        <td>status</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="checkpoint in vm.checkpoints">
+        <td><p>{{checkpoint.name}}</p></td>
+        <td><p>{{checkpoint.checkDate}}</p></td>
+        <td class="text-align-center">
+            <span ng-if = "!checkpoint.checkDate" ng-click="vm.markDate(checkpoint.id)" class="label label-warning" >mark</span>
+            <span ng-if = "checkpoint.checkDate" class="label label-success">ok</span>
+        </td>
+    </tr>
+    </tbody>
+</table>

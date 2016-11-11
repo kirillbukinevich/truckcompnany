@@ -1,5 +1,6 @@
 package com.truckcompany.service;
 
+import com.truckcompany.domain.Storage;
 import com.truckcompany.domain.User;
 import com.truckcompany.domain.Waybill;
 import com.truckcompany.domain.enums.WaybillState;
@@ -88,6 +89,16 @@ public class WaybillService {
             waybillRepository.save(w);
             log.debug("Changed fields for Waybill {}", w);
         });
+    }
 
+    public boolean changeStorageStatus(Long id) {
+        Optional<Waybill> findWaybill = waybillRepository.findOneById(id);
+        boolean isPresent = findWaybill.isPresent();
+        if (isPresent) {
+            Waybill waybill = findWaybill.get();
+            waybill.setState(WaybillState.DELIVERED);
+            waybillRepository.save(waybill);
+        }
+        return isPresent;
     }
 }

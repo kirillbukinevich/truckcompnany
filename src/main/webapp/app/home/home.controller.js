@@ -29,6 +29,9 @@
             } else if (Principal.hasAnyAuthority(["ROLE_COMPANYOWNER"])) {
                 console.log("Route to initial page for CompanyOwner");
                 $state.go('companyowner.initial');
+            }else if (Principal.hasAnyAuthority(["ROLE_DRIVER"])) {
+                console.log("Route to initial page for driver");
+                $state.go('driver.routelist');
             }
         });
 
