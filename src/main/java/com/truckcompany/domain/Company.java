@@ -79,5 +79,12 @@ public class Company implements Serializable{
             "name=" + name +
             "}";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Company com = (Company) obj;
+
+        return com.getId().equals(id);
+    }
 }
 

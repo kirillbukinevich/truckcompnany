@@ -2,37 +2,40 @@
 
 <table class="table table-striped table-condensed">
     <thead>
-    <tr>
-        <th>№</th>
-        <th>Date</th>
-        <th>Created by</th>
-        <th>Leaving storage</th>
-        <th>Arrival storage</th>
-        <th>State</th>
-    </tr>
+        <tr>
+            <th>№</th>
+            <th>Date</th>
+            <th>Created by</th>
+            <th>Leaving storage</th>
+            <th>Arrival storage</th>
+            <th>State</th>
+        </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="offer in vm.offers">
-        <td>{{offer.id}}</td>
-        <td>{{offer.creationDate | date:'dd/MM/yy HH:mm'}}</td>
-        <td>{{offer.createdBy}}</td>
-        <td>{{offer.leavingStorage.name}}</td>
-        <td>{{offer.arrivalStorage.name}}</td>
-        <td>
-            <span ng-if = "offer.state == 'NEW'" class="label label-info" >NEW</span>
-            <span ng-if = "offer.state == 'CANCELED'" class="label label-danger">CANCELED</span>
-            <span ng-if = "offer.state == 'ACCEPTED'" class="label label-success">ACCEPTED</span>
-        </td>
-        <td class="text-right">
-            <div class="btn-group flex-btn-group-container">
-                <button type="button" class="btn btn-success btn-xs" ng-if = "offer.state == 'NEW'">
-                    <span class="glyphicon glyphicon-ok"></span>Accept</button>
-                <button type="button" class="btn btn-danger btn-xs" ng-if = "offer.state == 'NEW'">
-                    <span class="glyphicon glyphicon-remove-sign"></span>Cancel</button>
-                <button type="button" class="btn btn-info btn-xs">
-                    <span class="glyphicon glyphicon-info-sign"></span>Details</button>
-            </div>
-        </td>
-    </tr>
+        <tr ng-repeat="offer in vm.offers">
+            <td>{{offer.id}}</td>
+            <td>{{offer.creationDate | date:'dd/MM/yy HH:mm'}}</td>
+            <td>{{offer.createdBy}}</td>
+            <td>{{offer.leavingStorage.name}}</td>
+            <td>{{offer.arrivalStorage.name}}</td>
+
+            <td>
+                <span ng-if = "offer.state == 'NEW'" class="label label-info" >NEW</span>
+                <span ng-if = "offer.state == 'CANCELED'" class="label label-danger">CANCELED</span>
+                <span ng-if = "offer.state == 'ACCEPTED'" class="label label-success">ACCEPTED</span>
+            </td>
+
+            <td class="text-right">
+                <div class="btn-group flex-btn-group-container">
+                    <a href="#/dispatcher/offer/submit/{{offer.id}}" type="button" class="btn btn-success btn-xs" ng-if = "offer.state == 'NEW'">
+                        <span class="glyphicon glyphicon-ok"></span>Accept</a>
+                    <button ng-click="vm.cancelOffer(offer)" type="button" class="btn btn-danger btn-xs" ng-if = "offer.state == 'NEW'">
+                        <span class="glyphicon glyphicon-remove-sign"></span>Cancel</button>
+                    <a href="#/dispatcher/offer/details/{{offer.id}}" type="button" class="btn btn-info btn-xs">
+                        <span class="glyphicon glyphicon-info-sign"></span>Details</a>
+                </div>
+            </td>
+
+        </tr>
     </tbody>
 </table>

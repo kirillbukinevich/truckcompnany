@@ -77,4 +77,19 @@ public class OfferResource {
         return new ResponseEntity(offer, headers, HttpStatus.OK);
     }
 
+    @RequestMapping (value = "/offers",
+        method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity cancelOffer (@RequestBody ManagedOfferVM managedOfferVM) throws URISyntaxException {
+        log.debug("REST request to Cancel offer by id:", managedOfferVM.getId());
+
+        boolean status = offerService.setCancelState(managedOfferVM.getId());
+
+        if (status)
+            return new ResponseEntity(HttpStatus.OK);
+        else
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("offer", "accessDenied", "Access denied!")).body(null);
+    }
+
 }

@@ -1,0 +1,33 @@
+<h1>Submit offer</h1>
+
+<form name="submitOfferForm" role="form">
+    <div class="form-group">
+        <label for="leavingStorage">Leaving storage:</label>
+        <input type="text" id="leavingStorage" class="form-control" name="leavingStorage" ng-model="vm.offer.leavingStorage.name" readonly>
+    </div>
+
+    <div class="form-group">
+        <label for="arrivalStorage">Arrival storage:</label>
+        <input type="text" id="arrivalStorage" class="form-control" name="arrivalStorage" ng-model="vm.offer.arrivalStorage.name" readonly>
+    </div>
+
+    <div class="form-group">
+        <label for="drivers">Driver:</label>
+        <select id = "drivers">
+            <option ng-repeat="driver in vm.drivers">{{driver.firstName}}</option>
+        </select>
+    </div>
+
+    <div class="form-group" ng-controller="DispatcherOfferSubmitController">
+        <h3>Select2 theme</h3>
+        <ui-select ng-model="vm.driver" title="Choose a person">
+            <ui-select-match>
+                <span ng-bind="vm.driver.firstName"></span>
+            </ui-select-match>
+
+            <ui-select-choices repeat="driver in (drivers | filter: driver.search) track by driver.id">
+                <span ng-bind="driver.firstName"></span>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+</form>

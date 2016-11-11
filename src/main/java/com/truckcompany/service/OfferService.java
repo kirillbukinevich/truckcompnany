@@ -88,4 +88,17 @@ public class OfferService {
 
         return offer;
     }
+
+    public boolean setCancelState (Long id) {
+        Offer offer = offerRepository.getOne(id);
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+
+        if (user.getCompany() == offer.getCompany()) {
+            offer.setState(OfferState.CANCELED);
+            offerRepository.save(offer);
+
+            return true;
+        } else
+            return false;
+    }
 }
