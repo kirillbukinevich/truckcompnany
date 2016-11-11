@@ -1,12 +1,10 @@
 package com.truckcompany.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.truckcompany.domain.Storage;
 import com.truckcompany.domain.Waybill;
 import com.truckcompany.repository.WaybillRepository;
 import com.truckcompany.service.WaybillService;
 import com.truckcompany.web.rest.util.HeaderUtil;
-import com.truckcompany.web.rest.vm.ManagedStorageVM;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +19,15 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
 /**
  * Created by Viktor Dobroselsky.
  */
@@ -115,6 +118,16 @@ public class WaybillResource {
         return ResponseEntity.ok()
             .headers(HeaderUtil.createAlert("userManagement.updated", managedWaybillVM.getId().toString()))
             .body(new ManagedWaybillVM(waybillService.getWaybillById(managedWaybillVM.getId())));
+    }
+
+    @Timed
+    @RequestMapping(value = "/waybills/change_status/{waybillID}", method = GET, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> changeWaybillStatus(@PathVariable Long waybillID) {
+        log.debug("REST request to change waybill status with id: {}", waybillID);
+
+        boolean isSuccess = waybillService.changeStorageStatus(waybillID);
+        HttpStatus status = isSuccess ? OK : BAD_REQUEST;
+        return new ResponseEntity<>(status);
     }
 
 

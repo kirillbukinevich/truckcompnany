@@ -30,6 +30,7 @@ public class RouteList implements Serializable {
     @JoinColumn(name = "arrival_storage_id", nullable = false)
     private Storage arrivalStorage;
 
+
     public Long getId() {
         return id;
     }

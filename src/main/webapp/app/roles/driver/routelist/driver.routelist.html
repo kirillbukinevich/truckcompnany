@@ -1,0 +1,14 @@
+<span ng-repeat="waybill in vm.waybills">
+        <h1 style="text-align:center">Route list</h1>
+    <table class="table table-striped">
+        <tbody>
+        <tr><td><h4>Waybill № {{waybill.id}}</h4></td></tr>
+        <tr><td><h4>Truck: {{waybill.routeList.truck.regNumber}}</h4></td></tr>
+        <tr><td><h4>Driver: {{waybill.driver.firstName}} {{waybill.driver.lastName}}</h4></td></tr>
+        <tr><td><h4>route from {{waybill.routeList.leavingStorage.address}} to {{waybill.routeList.arrivalStorage.address}}</h4></td></tr>
+        <tr><td><h4>start date: {{waybill.routeList.leavingDate}}</h4></td></tr>
+        <tr><td><h4>arrival date:  {{waybill.routeList.arrivalDate}}</h4></td></tr>
+        </tbody>
+    </table>
+</span>
+<div ng-include src="'app/roles/driver/routelist/driver.checkpoint.html'"></div>
