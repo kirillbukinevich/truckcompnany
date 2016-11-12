@@ -5,7 +5,7 @@
         <tr>
             <th>№</th>
             <th>Date</th>
-            <th>Created by</th>
+            <!--<th>Created by</th>-->
             <th>Leaving storage</th>
             <th>Arrival storage</th>
             <th>State</th>
@@ -15,7 +15,7 @@
         <tr ng-repeat="offer in vm.offers">
             <td>{{offer.id}}</td>
             <td>{{offer.creationDate | date:'dd/MM/yy HH:mm'}}</td>
-            <td>{{offer.createdBy}}</td>
+            <!--<td>{{offer.createdBy}}</td>-->
             <td>{{offer.leavingStorage.name}}</td>
             <td>{{offer.arrivalStorage.name}}</td>
 
@@ -27,12 +27,12 @@
 
             <td class="text-right">
                 <div class="btn-group flex-btn-group-container">
-                    <a href="#/dispatcher/offer/submit/{{offer.id}}" type="button" class="btn btn-success btn-xs" ng-if = "offer.state == 'NEW'">
-                        <span class="glyphicon glyphicon-ok"></span>Accept</a>
-                    <button ng-click="vm.cancelOffer(offer)" type="button" class="btn btn-danger btn-xs" ng-if = "offer.state == 'NEW'">
-                        <span class="glyphicon glyphicon-remove-sign"></span>Cancel</button>
-                    <a href="#/dispatcher/offer/details/{{offer.id}}" type="button" class="btn btn-info btn-xs">
-                        <span class="glyphicon glyphicon-info-sign"></span>Details</a>
+                    <a href="#/dispatcher/offer/submit/{{offer.id}}" type="button" class="btn btn-success btn-sm" ng-if = "offer.state == 'NEW'">
+                        <span class="glyphicon glyphicon-ok"></span>&nbsp;Accept</a>
+                    <button ng-click="vm.cancelOffer(offer)" type="button" class="btn btn-danger btn-sm" ng-if = "offer.state == 'NEW'">
+                        <span class="glyphicon glyphicon-remove-sign"></span>&nbsp;Cancel</button>
+                    <a href="#/dispatcher/offer/details/{{offer.id}}" type="button" class="btn btn-info btn-sm">
+                        <span class="glyphicon glyphicon glyphicon-eye-open"></span>&nbsp;Details</a>
                 </div>
             </td>
 

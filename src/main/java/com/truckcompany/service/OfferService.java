@@ -1,5 +1,6 @@
 package com.truckcompany.service;
 
+import com.truckcompany.domain.Goods;
 import com.truckcompany.domain.Offer;
 import com.truckcompany.domain.OfferGoods;
 import com.truckcompany.domain.User;
@@ -56,8 +57,10 @@ public class OfferService {
                     .stream()
                     .map( o -> {
                         OfferGoods offerGoods = new OfferGoods();
+                        Goods goods = new Goods();
+                        goods.setName(o.getName());
 
-                        offerGoods.setName(o.getName());
+                        offerGoods.setGoods(goods);
                         offerGoods.setCount(o.getCount());
 
                         return  offerGoods;
