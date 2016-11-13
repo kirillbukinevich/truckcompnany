@@ -1,8 +1,11 @@
 package com.truckcompany.web.rest.vm;
 
 import com.truckcompany.domain.RouteList;
+import com.truckcompany.domain.util.JSR310DateConverters;
 
 import java.time.ZonedDateTime;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ManagedRouteListVM {
     private Long id;
@@ -12,6 +15,10 @@ public class ManagedRouteListVM {
     private ZonedDateTime leavingDate;
 
     private ZonedDateTime arrivalDate;
+
+    private Long arrival;
+
+    private Long leaving;
 
     private Long leavingStorageId;
 
@@ -23,8 +30,8 @@ public class ManagedRouteListVM {
     public ManagedRouteListVM (RouteList routeList) {
         this.id = routeList.getId();
         this.truckId = routeList.getTruck().getId();
-        this.leavingDate = routeList.getLeavingDate();
-        this.arrivalDate = routeList.getArrivalDate();
+        //this.leavingDate = routeList.getLeavingDate();
+        //this.arrivalDate = routeList.getArrivalDate();
         this.leavingStorageId = routeList.getLeavingStorage().getId();
         this.arrivalStorageId = routeList.getArrivalStorage().getId();
     }
@@ -86,5 +93,21 @@ public class ManagedRouteListVM {
 
     public void setArrivalStorageId(Long arrivalStorageId) {
         this.arrivalStorageId = arrivalStorageId;
+    }
+
+    public Long getArrival() {
+        return arrival;
+    }
+
+    public void setArrival(Long arrival) {
+        this.arrival = arrival;
+    }
+
+    public Long getLeaving() {
+        return leaving;
+    }
+
+    public void setLeaving(Long leaving) {
+        this.leaving = leaving;
     }
 }

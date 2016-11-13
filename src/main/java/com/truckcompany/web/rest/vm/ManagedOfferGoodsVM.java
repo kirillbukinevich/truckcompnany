@@ -23,7 +23,7 @@ public class ManagedOfferGoodsVM {
 
     public ManagedOfferGoodsVM (OfferGoods offerGoods) {
         this.id = offerGoods.getId();
-        this.name = offerGoods.getName();
+        this.name = offerGoods.getGoods().getName();
         this.count = offerGoods.getCount();
         this.offerId = offerGoods.getOffer().getId();
     }

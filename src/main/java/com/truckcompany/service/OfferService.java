@@ -92,12 +92,12 @@ public class OfferService {
         return offer;
     }
 
-    public boolean setCancelState (Long id) {
-        Offer offer = offerRepository.getOne(id);
+    public boolean updateOfferState(ManagedOfferVM managedOfferVM) {
+        Offer offer = offerRepository.getOne(managedOfferVM.getId());
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
 
         if (user.getCompany() == offer.getCompany()) {
-            offer.setState(OfferState.CANCELED);
+            offer.setState(OfferState.valueOf(managedOfferVM.getState()));
             offerRepository.save(offer);
 
             return true;

@@ -20,6 +20,10 @@ public class ManagedWaybillVM {
 
     private Long writeOffId;
 
+    private ManagedRouteListVM routeList;
+
+    private ManagedWriteOffVM writeOff;
+
     public ManagedWaybillVM() {
     }
 
@@ -101,16 +105,19 @@ public class ManagedWaybillVM {
         this.writeOffId = writeOffId;
     }
 
-    @Override
-    public String toString () {
-        return "ManagedWaybillVM{" +
-            "id=" + id +
-            ", date=" + date +
-            ", state=" + state +
-            ", dispatcherId=" + dispatcherId +
-            ", driverId=" + driverId +
-            ", routeListId=" + routeListId +
-            ", writeOffId=" + writeOffId +
-            "} " + super.toString();
+    public ManagedRouteListVM getRouteList() {
+        return routeList;
+    }
+
+    public void setRouteList(ManagedRouteListVM routeList) {
+        this.routeList = routeList;
+    }
+
+    public ManagedWriteOffVM getWriteOff() {
+        return writeOff;
+    }
+
+    public void setWriteOff(ManagedWriteOffVM writeOff) {
+        this.writeOff = writeOff;
     }
 }
