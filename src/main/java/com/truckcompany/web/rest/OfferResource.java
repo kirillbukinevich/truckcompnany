@@ -41,8 +41,10 @@ public class OfferResource {
 
         Offer result = offerService.createOffer(managedOfferVM);
 
-        return ResponseEntity.created(new URI("/offer/" + result.getId()))
-            .body(new ManagedOfferVM(result));
+        if (result != null)
+            return ResponseEntity.accepted().headers(HeaderUtil.createAlert("offerCrate", "accepted")).body(null);
+        else
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("offer", "accessDenied", "Access denied!")).body(null);
     }
 
     @RequestMapping (value = "/offers",
