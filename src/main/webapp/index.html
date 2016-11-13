@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="content/css/main.css">
     <link rel="stylesheet" href="content/css/user_main.css">
     <link rel="stylesheet" href="content/css/profile-settings.css">
+    <link rel="stylesheet" href="content/css/template.css">
 
     <link rel="stylesheet" href="content/css/page-roles.css">
     <!-- endbuild -->
@@ -205,6 +206,17 @@
     <link rel="stylesheet" type="text/css" href="bower_components/ngImgCrop/compile/minified/ng-img-crop.css">
     <script src="app/account/settings/settings.upload-photo.controller.js"></script>
 
+    <!--Dependency for ckeditor-->
+    <script src="bower_components/angular-ckeditor/angular-ckeditor.min.js"></script>
+    <script src="content/js/ckeditor/ckeditor.js"></script>
+    <!--PAY ATTENTION IT'S REALLY VERY USEFULL LINK http://2develop.ru/poleznoe/ustanovka-ckeditor-i-zagruzka-faylov-na-server.html-->
+
+    <!--Dependency for ui-select-->
+    <script src="bower_components/angular-ui-select/dist/select.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="bower_components/angular-ui-select/dist/select.min.css">
+
+
+
     <!-- UI FOR ANONYMOUS USERS-->
     <script src="app/anonymous/anonymous.state.js"></script>
     <script src="app/anonymous/changepassword/anonymous.changepassword.state.js"></script>
@@ -215,6 +227,10 @@
 
 
     <script src="app/services/company/company.service.js"></script>
+    <script src="app/services/employee/employee.service.js"></script>
+    <script src="app/services/template/template.service.js"></script>
+    <script src="app/utilservice/util.user.service.js"></script>
+
 
 
 
@@ -250,6 +266,11 @@
     <script src="app/roles/admincompany/trucks/admincompany.trucks.controller.js"></script>
     <script src="app/roles/admincompany/trucks/admincompany.truck.controller.js"></script>
     <script src="app/roles/admincompany/trucks/admincompany.truckcreate.controller.js"></script>
+
+    <script src="app/roles/admincompany/templates/admincompany.templates.state.js"></script>
+    <script src="app/roles/admincompany/templates/admincompany.templates.controller.js"></script>
+    <script src="app/roles/admincompany/templates/admincompany.template.controller.js"></script>
+    <script src="app/roles/admincompany/templates/admincompany.templatecreate.controller.js"></script>
 
 
 

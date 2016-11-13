@@ -1,4 +1,5 @@
 /*default css*/
+/*
 .btn-default{
     color: #fff;
     background: #0e6ab4;
@@ -8,7 +9,7 @@
 .btn-default:hover{
     color: #0e6ab4;
     background: #fff;
-}
+}*/
 .ribbon{
     display: none;
 }
@@ -34,6 +35,7 @@
     padding: 10px;
     color: #fff;
 }
+
 #header .navbar-nav > li > a.btn:hover, #header .navbar-nav > li > a.btn:active, #header .navbar-nav > li > a.btn:focus{
     color: #0e6ab4;
     background: #fff;

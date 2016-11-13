@@ -1,0 +1,72 @@
+<h1>Create template</h1>
+<form name="form" >
+    <div class="form-group" ng-class="{'has-error' : (form.name.$dirty && form.name.$invalid) }">
+        <label for="name" class="control-label">Name template:</label>
+        <input ng-model="vm.template.name" name="name" type="text" class="form-control" id="name"
+               placeholder="Name template" ng-minlength=1 required>
+
+        <div ng-show="form.name.$dirty && form.name.$invalid">
+            <p class="help-block"
+               ng-show="form.name.$error.required" >
+                Name template is required.
+            </p>
+        </div>
+    </div>
+    <div class="form-group" ng-class="{'has-error' : (form.recipient.$dirty && form.recipient.$invalid) }">
+        <label for="recipient" class="control-label">Recipient:</label>
+        <ui-select ng-model="vm.template.recipient" title="Choose a person" id="recipient" name="recipient" required>
+            <ui-select-match placeholder="Select a person in the list or search his name/email...">
+                {{$select.selected.firstName}} {{$select.selected.lastName}}
+            </ui-select-match>
+            <ui-select-choices repeat="user in vm.users| filter: $select.search">
+                <div ng-bind-html="user.firstName + ' ' + user.lastName | highlight: $select.search"></div>
+                <small>
+                    email: {{user.email}}
+                    title: {{vm.getTitle(user)}}
+                </small>
+            </ui-select-choices>
+        </ui-select>
+        <!--
+        <div ng-show="form.recipient.$dirty && form.recipient.$invalid">
+            <p class="help-block"
+               ng-show="form.recipient.$error.required" >
+               You have to choose recipient.
+            </p>
+        </div>-->
+    </div>
+    <div class="form-group" ng-class="{'has-error' : !vm.isValidDate}">
+        <label for="birthday" class="control-label">Birthday:</label>
+        <div>
+            <input type="radio" ng-model="vm.isDefaultBirthday" value="true" id="birthday" ng-click="vm.changeInputDate()"> Default birthday (from personal data) <span class="label label-info">{{vm.defaultBirthday | date:'dd MMMM'}}</span>
+        </div>
+        <div>
+            <input type="radio" ng-model="vm.isDefaultBirthday" value="false"> Assign new birthday
+        </div>
+        <div ng-if="vm.isDefaultBirthday == 'false'">
+            <input type="text" ng-model = "vm.day" class="form-control" id="day" placeholder="Day" ng-blur = "vm.checkDate()"/>
+            <ui-select ng-model="vm.month" title="Choose a month" id="month" on-select = "vm.checkDate()">
+                <ui-select-match placeholder="Month">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="month in vm.monthes | filter: $select.search">
+                    <div ng-bind-html="month.name | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
+            <div class="clear"></div>
+            <div ng-show="!vm.isValidDate">
+                <p class="help-block">
+                    Date is invalid
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group clear">
+        <label for="color">Background color:</label>
+        <input ng-model="vm.template.background" type="color" class="form-control" id="color"
+               placeholder="Background color">
+    </div>
+
+
+    <div ckeditor="vm.options" ng-model="vm.template.template" ready="vm.onReady()"></div>
+    <a href="" id="save-template" class="btn btn-default" ng-click="vm.createTemplate()" ng-disabled="form.$invalid || !vm.isValidDate">Save template</a>
+</form>

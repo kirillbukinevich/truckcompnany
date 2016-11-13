@@ -20,3 +20,6 @@ id;login;password_hash;first_name;last_name;email;activated;lang_key;created_by;
 19;testadmin14;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;SuperAdmin;Superadmin;testadmin14@localhost;true;en;system;system;14
 20;testadmin15;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;SuperAdmin;Superadmin;testadmin15@localhost;true;en;system;system;15
 21;dispatcher;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;dispatcher@localhost;true;en;system;system;3
+22;dispatcher2;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;dispatcher2@localhost;true;en;system;system;3
+23;driver;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;dispatcher3@localhost;true;en;system;system;3
+24;manager;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;dispatcher4@localhost;true;en;system;system;3
