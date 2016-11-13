@@ -3,6 +3,7 @@ package com.truckcompany.domain;
 import com.truckcompany.web.rest.vm.ManagedOfferGoodsVM;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table (name = "offer_goods")
@@ -14,8 +15,9 @@ public class OfferGoods {
     @Column (name = "id")
     private Long id;
 
-    @Column (name = "name")
-    private String name;
+    @OneToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn (name = "goods_id")
+    private Goods goods;
 
     @Column (name = "count")
     private Integer count;
@@ -35,12 +37,13 @@ public class OfferGoods {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+
+    public Goods getGoods() {
+        return goods;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setGoods(Goods goods) {
+        this.goods = goods;
     }
 
     public Integer getCount() {

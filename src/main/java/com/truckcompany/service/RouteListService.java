@@ -3,6 +3,7 @@ package com.truckcompany.service;
 import com.truckcompany.domain.RouteList;
 import com.truckcompany.repository.RouteListRepository;
 import com.truckcompany.repository.StorageRepository;
+import com.truckcompany.repository.TruckRepository;
 import com.truckcompany.web.rest.vm.ManagedRouteListVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,10 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.Date;
 
 /**
  * Created by Viktor Dobroselsky.
- * ДОБАВИТЬ TRUCK REPOSITORY
  */
 @Service
 @Transactional
@@ -25,6 +26,9 @@ public class RouteListService {
 
     @Inject
     private StorageRepository storageRepository;
+
+    @Inject
+    private TruckRepository truckRepository;
 
     public RouteList getRouteListById (Long id) {
         RouteList routeList = routeListRepository.findOne(id);
@@ -42,23 +46,24 @@ public class RouteListService {
 
     public void updateRouteList (ManagedRouteListVM managedRouteListVM) {
         routeListRepository.findOneById(managedRouteListVM.getId()).ifPresent(r -> {
-            r.setArrivalDate(managedRouteListVM.getArrivalDate());
-            r.setLeavingDate(managedRouteListVM.getLeavingDate());
+            //r.setArrivalDate(managedRouteListVM.getArrivalDate());
+            //r.setLeavingDate(managedRouteListVM.getLeavingDate());
             r.setArrivalStorage(storageRepository.getOne(managedRouteListVM.getArrivalStorageId()));
             r.setLeavingStorage(storageRepository.getOne(managedRouteListVM.getLeavingStorageId()));
-            //r.setTruck(truckRepository.getOne(managedRouteListVM.getTruckId()));
+            r.setTruck(truckRepository.getOne(managedRouteListVM.getTruckId()));
         });
     }
 
     public RouteList createRouteList (ManagedRouteListVM managedRouteListVM) {
         RouteList routeList = new RouteList();
-        routeList.setLeavingDate(managedRouteListVM.getLeavingDate());
-        routeList.setArrivalDate(managedRouteListVM.getArrivalDate());
+        //routeList.setLeavingDate(managedRouteListVM.getLeavingDate());
+        routeList.setArrivalDate(new Date(managedRouteListVM.getArrival()));
+        routeList.setLeavingDate(new Date(managedRouteListVM.getLeaving()));
         routeList.setLeavingStorage(storageRepository.findOne(managedRouteListVM.getLeavingStorageId()));
         routeList.setArrivalStorage(storageRepository.findOne(managedRouteListVM.getArrivalStorageId()));
-        //routeList.setTruck(truckRepository.findOne(managedRouteListVM.getTruckId()));
+        routeList.setTruck(truckRepository.findOne(managedRouteListVM.getTruckId()));
 
-        routeListRepository.save(routeList);
+        //routeListRepository.save(routeList);
         log.debug("Created Information for RouteList");
         return routeList;
     }

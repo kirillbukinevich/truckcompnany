@@ -1,5 +1,9 @@
 <h1>Submit offer</h1>
 
+<div class="alert alert-danger" ng-if="vm.error">
+    {{vm.messageError}}
+</div>
+
 <form name="submitOfferForm" role="form">
     <div class="form-group">
         <label for="leavingStorage">Leaving storage:</label>
@@ -13,21 +17,64 @@
 
     <div class="form-group">
         <label for="drivers">Driver:</label>
-        <select id = "drivers">
-            <option ng-repeat="driver in vm.drivers">{{driver.firstName}}</option>
-        </select>
-    </div>
-
-    <div class="form-group" ng-controller="DispatcherOfferSubmitController">
-        <h3>Select2 theme</h3>
-        <ui-select ng-model="vm.driver" title="Choose a person">
+        <ui-select ng-model="vm.driver" title="Choose a driver" id = "drivers">
             <ui-select-match>
-                <span ng-bind="vm.driver.firstName"></span>
+                <span ng-bind="($select.selected.firstName) + ' '+ ($select.selected.lastName)"></span>
             </ui-select-match>
 
-            <ui-select-choices repeat="driver in (drivers | filter: driver.search) track by driver.id">
-                <span ng-bind="driver.firstName"></span>
+            <ui-select-choices repeat="driver in (vm.drivers | filter: $select.search) track by driver.id">
+                <span ng-bind="driver.firstName + ' ' + driver.lastName"></span>
             </ui-select-choices>
         </ui-select>
     </div>
+
+    <div class="form-group">
+        <label for="trucks">Truck:</label>
+        <ui-select ng-model="vm.truck" title="Choose a truck" id = "trucks">
+            <ui-select-match>
+                <span ng-bind="$select.selected.regNumber"></span>
+            </ui-select-match>
+
+            <ui-select-choices repeat="truck in (vm.trucks | filter: $select.search) track by truck.id">
+                <span ng-bind="truck.regNumber"></span>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+
+    <div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">From</label>
+            <div class="col-sm-10">
+                <p class="input-group">
+                    <input type="text" class="form-control"
+                           datetime-picker="dd MMM yyyy HH:mm"
+                           ng-model="vm.leaveDate"
+                           is-open="vm.leavingPicker.open"
+                           enable-time="true"
+                           datepicker-options="vm.leavingPicker.datepickerOptions"/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar($event, 'leavingPicker')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">To</label>
+            <div class="col-sm-10">
+                <p class="input-group">
+                    <input type="text" class="form-control"
+                           datetime-picker="dd MMM yyyy HH:mm"
+                           ng-model="vm.arrivalDate"
+                           is-open="vm.arrivalPicker.open"
+                           enable-time="true"
+                           datepicker-options="vm.arrivalPicker.datepickerOptions" />
+                    <span class="input-group-btn">
+                  <button type="button" class="btn btn-default" ng-click="vm.openCalendar($event, 'arrivalPicker')"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+                </p>
+            </div>
+        </div>
+    </div>
 </form>
+<a href="#/dispatcher/offer" class="btn btn-warning pull-right">Cancel</a>
+<a href="" class="btn btn-success pull-right" ng-click="vm.createWaybill()">Create Waybill</a>

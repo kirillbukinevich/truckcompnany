@@ -3,14 +3,14 @@
     <thead>
     <tr>
         <th>id</th>
-        <th>Consumption</th>
+        <th>Consumption per 100km</th>
         <th>Reg. number</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="truck in vm.trucks">
         <td>{{truck.id}}</td>
-        <td>{{truck.consumption}}</td>
+        <td>{{truck.consumption}} l.</td>
         <td>{{truck.regNumber}}</td>
     </tr>
     </tbody>

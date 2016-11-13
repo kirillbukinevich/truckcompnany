@@ -6,6 +6,7 @@ import com.truckcompany.domain.enums.WaybillState;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "waybill")
@@ -30,13 +31,16 @@ public class Waybill implements Serializable {
     @JoinColumn(name = "dispatcher_id", nullable = false)
     private User dispatcher;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "route_list_id", nullable = false)
     private RouteList routeList;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "write_off_id", nullable = false)
     private WriteOffAct writeOff;
+
+    /*@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<WaybillGoods> waybillGoods;*/
 
     public Long getId() {
         return id;
@@ -87,14 +91,11 @@ public class Waybill implements Serializable {
         this.writeOff = writeOff;
     }
 
-    @Override
-    public String toString() {
-        return "WayBill {id:" + id + "," +
-                    "date:" + date + "," +
-                    "driver_id:" + driver.getId() + "," +
-                    "state:" + state.name() + "," +
-                    "dispatcher_id:" + dispatcher.getId() + "," +
-                    "route_list_id:" + routeList.getId() + "," +
-                    "write_off_id:" + writeOff.getId() + "}";
+    /*public Set<WaybillGoods> getWaybillGoods() {
+        return waybillGoods;
     }
+
+    public void setWaybillGoods(Set<WaybillGoods> waybillGoods) {
+        this.waybillGoods = waybillGoods;
+    }*/
 }

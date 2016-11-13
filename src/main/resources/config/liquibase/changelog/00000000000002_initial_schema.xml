@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <property name="now" value="now()" dbms="mysql,h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+    <property name="now" value="sysdate" dbms="oracle"/>
+
+    <property name="autoIncrement" value="true" dbms="mysql,h2,postgresql,oracle"/>
+
+    <changeSet id="00000000000000" author="jhipster" dbms="postgresql,oracle">
+        <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="1"/>
+    </changeSet>
+
+    <!--
+        JHipster core tables.
+        The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
+    -->
+    <changeSet id="00000000000003" author="dobroselsky">
+
+        <createTable tableName="offer">
+            <column name="id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="created_by" type="varchar(50)">
+            </column>
+
+            <column name="state" type="ENUM('NEW', 'CANCELED', 'ACCEPTED')" defaultValue="NEW">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="company_id" type="int">
+            </column>
+
+            <column name="leaving_storage_id" type="int">
+            </column>
+
+            <column name="arrival_storage_id" type="int">
+            </column>
+
+            <column name="created_date" type="timestamp">
+            </column>
+        </createTable>
+
+        <createTable tableName="offer_goods">
+            <column name="id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="goods_id" type="int">
+            </column>
+
+            <column name="count" type="int">
+            </column>
+
+            <column name="offer_id" type="int">
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="company_id"
+                                 baseTableName="offer"
+                                 constraintName="company_offer"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tc_company"/>
+
+        <addForeignKeyConstraint baseColumnNames="leaving_storage_id"
+                                 baseTableName="offer"
+                                 constraintName="leaving_offer"
+                                 referencedColumnNames="id"
+                                 referencedTableName="storage"/>
+
+        <addForeignKeyConstraint baseColumnNames="arrival_storage_id"
+                                 baseTableName="offer"
+                                 constraintName="arrival_offer"
+                                 referencedColumnNames="id"
+                                 referencedTableName="storage"/>
+
+        <addForeignKeyConstraint baseColumnNames="offer_id"
+                                 baseTableName="offer_goods"
+                                 constraintName="offer_goods"
+                                 referencedColumnNames="id"
+                                 referencedTableName="offer"/>
+
+        <addForeignKeyConstraint baseColumnNames="goods_id"
+                                 baseTableName="offer_goods"
+                                 constraintName="offer_goods_to_goods"
+                                 referencedColumnNames="id"
+                                 referencedTableName="goods"/>
+
+    </changeSet>
+</databaseChangeLog>

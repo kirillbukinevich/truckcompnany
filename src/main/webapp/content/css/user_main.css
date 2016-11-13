@@ -1,5 +1,5 @@
 /*default css*/
-.btn-default{
+/*.btn-default{
     color: #fff;
     background: #0e6ab4;
     border: 2px solid #0e6ab4;
@@ -8,7 +8,7 @@
 .btn-default:hover{
     color: #0e6ab4;
     background: #fff;
-}
+}*/
 .ribbon{
     display: none;
 }

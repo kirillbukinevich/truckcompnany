@@ -33,53 +33,6 @@
                             return $translate.refresh();
                         }]
                     }
-                }
-            )
-            .state('dispatcher.storagecreate',{
-                parent: 'dispatcher',
-                url: '/dispatcher/storage/create',
-
-                data: {
-                    authorities: ["ROLE_DISPATCHER"],
-                    pageTitle: 'activate.title'
-                },
-
-                views: {
-                    'page@dispatcher': {
-                        templateUrl: 'app/dispatcher/storage/dispatcher.storagecreate.html',
-                        controller: 'DispatcherStorageCreateController',
-                        controllerAs: 'vm'
-                    },
-                },
-                resolve: {
-                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('activate');
-                        return $translate.refresh();
-                    }]
-                }
-            })
-            .state('dispatcher.storageupdate',{
-                parent: 'dispatcher',
-                url: '/dispatcher/storage/:id',
-
-                data: {
-                    authorities: ["ROLE_DISPATCHER"],
-                    pageTitle: 'activate.title'
-                },
-
-                views: {
-                    'page@dispatcher': {
-                        templateUrl: 'app/dispatcher/storage/dispatcher.storageupdate.html',
-                        controller: 'DispatcherStorageUpdateController',
-                        controllerAs: 'vm'
-                    },
-                },
-                resolve: {
-                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('activate');
-                        return $translate.refresh();
-                    }]
-                }
             });
     }
 })();
