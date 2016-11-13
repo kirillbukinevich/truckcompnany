@@ -2,6 +2,7 @@ package com.truckcompany.service;
 
 import com.truckcompany.domain.Authority;
 import com.truckcompany.domain.Company;
+import com.truckcompany.domain.Template;
 import com.truckcompany.domain.User;
 import com.truckcompany.repository.AuthorityRepository;
 import com.truckcompany.repository.CompanyRepository;
@@ -56,6 +57,12 @@ public class UserService {
 
     @Inject
     private MailService mailService;
+
+    @Inject
+    private TemplateService templateService;
+
+    @Inject
+    private CompanyService companyService;
 
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
@@ -334,6 +341,44 @@ public class UserService {
             user.setLogo(null);
             userRepository.save(user);
         }
+    }
+
+
+
+    public List<User> getUsersBelongCompanyWithoutAssignedTemplate(){
+
+        Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+        if (!optionalUser.isPresent()) return Collections.emptyList();
+        User admin = optionalUser.get();
+
+        List<User> allEmployee = companyService.getCompanyUsersWithoutAdmin(admin);
+        List<Template> templates = templateService.getTemplatesCreatedByCurrentAdmin();
+
+        for (Template template : templates){
+            if (allEmployee.contains(template.getRecipient())) {
+                allEmployee.remove(template.getRecipient());
+            }
+        }
+
+        return allEmployee;
+    }
+
+    public List<User> getUsersBelongCompanyWithoutAssignedTemplateIncludeUserById(Long id){
+
+        Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+        if (!optionalUser.isPresent()) return Collections.emptyList();
+        User admin = optionalUser.get();
+
+        List<User> allEmployee = companyService.getCompanyUsersWithoutAdmin(admin);
+        List<Template> templates = templateService.getTemplatesCreatedByCurrentAdmin();
+
+        for (Template template : templates){
+            if (allEmployee.contains(template.getRecipient()) && template.getRecipient().getId() != id) {
+                allEmployee.remove(template.getRecipient());
+            }
+        }
+
+        return allEmployee;
     }
 
 

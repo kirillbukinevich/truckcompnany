@@ -1,14 +1,25 @@
 package com.truckcompany.web.rest;
 
+import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.Storage;
 import com.truckcompany.domain.Template;
+import com.truckcompany.domain.User;
+import com.truckcompany.repository.TemplateRepository;
 import com.truckcompany.service.TemplateService;
+import com.truckcompany.service.UserService;
+import com.truckcompany.service.dto.TruckDTO;
 import com.truckcompany.service.util.UploadException;
 import com.truckcompany.service.util.UploadUtil;
+import com.truckcompany.web.rest.util.HeaderUtil;
+import com.truckcompany.web.rest.util.PaginationUtil;
 import com.truckcompany.web.rest.vm.ManagedStorageVM;
 import com.truckcompany.web.rest.vm.ManagedTemplateVM;
+import com.truckcompany.web.rest.vm.ManagedTruckVM;
+import com.truckcompany.web.rest.vm.ManagedUserVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +31,7 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +40,8 @@ import static java.lang.String.valueOf;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -43,6 +57,12 @@ public class TemplateResource {
     @Inject
     private TemplateService templateService;
 
+    @Inject
+    private TemplateRepository templateRepository;
+
+    @Inject
+    private UserService userService;
+
     @RequestMapping(value = "/templates/{id}", method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ManagedTemplateVM> getTemplate(@PathVariable Long id) {
         LOG.debug("REST request to get Template with id {}", id);
@@ -55,19 +75,24 @@ public class TemplateResource {
 
 
     @RequestMapping(value = "/templates", method = GET, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ManagedTemplateVM>> getTemplates() {
+    public ResponseEntity<List<ManagedTemplateVM>> getTemplates(Pageable pageable) throws URISyntaxException {
         LOG.debug("REST request to get Template");
 
-        List<ManagedTemplateVM> managedTemplateVMs = templateService.getTemplatesCreatedByCurrentAdmin().stream()
+
+        Page<Template> page = templateService.getTemplatesCreatedByCurrentAdmin(pageable);
+
+        List<ManagedTemplateVM> managedTemplateVMs = page.getContent().stream()
             .map( template -> new ManagedTemplateVM(template, template.getRecipient(), template.getAdmin()))
             .collect(Collectors.toList());
 
-        HttpHeaders headers = createAlert("templates.getAll", null);
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/templates");
         return new ResponseEntity<>(managedTemplateVMs, headers, OK);
+
     }
 
     @RequestMapping(value = "/templates", method = POST, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createStorage(@RequestBody ManagedTemplateVM template) throws URISyntaxException {
+    public ResponseEntity<?> createTemplate(@RequestBody ManagedTemplateVM template) throws URISyntaxException {
         LOG.debug("REST request to save Template: {};", template.getName());
 
         Template result = templateService.createTemplate(template);
@@ -77,9 +102,33 @@ public class TemplateResource {
             .body(new ManagedTemplateVM(result));
     }
 
+    @RequestMapping(value = "/templates", method = PUT, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateTemplate(@RequestBody ManagedTemplateVM template) throws URISyntaxException {
+        LOG.debug("REST request to update Template with id: {};", template.getId());
+
+        Template result = templateService.updateTemplate(template);
+
+        return ResponseEntity.created(new URI("/templates/" + result.getId()))
+            .headers(createAlert("template.update", valueOf(result.getId())))
+            .body(new ManagedTemplateVM(result));
+    }
+
+    @RequestMapping(value = "/templates/{templateId}", method = DELETE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> deleteTemplate(@PathVariable Long templateId){
+        LOG.debug("REST request to delete Template: {}", templateId);
+        templateRepository.delete(templateId);
+        return ResponseEntity.ok().headers(createAlert("template.deleted", valueOf(templateId))).build();
+    }
+
+    @RequestMapping(value = "/templates/deleteArray", method = POST)
+    public ResponseEntity<Void> deleteCompanies(@RequestBody Long[] idList){
+        LOG.debug("REST request to delete list of companies {}" ,idList);
+        templateService.deleteTemplates(idList);
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert("templates.deleted", "null")).build();
+    }
 
     @ResponseBody
-    @RequestMapping(value = "/template/upload", method = RequestMethod.POST)
+    @RequestMapping(value = "/template/upload", method = POST)
     public String testSendEmail(@RequestParam(value = "upload", required = false) Part file, HttpServletRequest request) throws IOException {
         LOG.debug("Upload image for template");
         String rootUploadDirectory = request.getServletContext().getRealPath("content/upload/templateimage");
@@ -94,6 +143,34 @@ public class TemplateResource {
             LOG.debug("Problem with upload image for mail template", e);
             return null;
         }
+    }
 
+
+
+
+
+    @RequestMapping(value = "/template/employee", method = GET)
+    public ResponseEntity<List<ManagedUserVM>> getEmployeeWithoutAssignedTemplate(){
+        LOG.debug("REST request to get Employees(Users) without assigned template for birthday card ");
+        List<User> users = userService.getUsersBelongCompanyWithoutAssignedTemplate();
+        List<ManagedUserVM> managedUserVMs = new ArrayList<>();
+        for(User user : users){
+            managedUserVMs.add(new ManagedUserVM(user));
+        }
+        HttpHeaders headers = createAlert("templates.employee.getAll", null);
+        return new ResponseEntity<>(managedUserVMs, headers, OK);
+    }
+
+    @RequestMapping(value = "/template/employee/{idUserInclude}", method = GET)
+    public ResponseEntity<List<ManagedUserVM>> getEmployeeWithoutAssignedTemplateIncludingUser(@PathVariable Long idUserInclude){
+        LOG.debug("REST request to get Employees(Users) without assigned template for birthday card includind current user ");
+        List<User> users = userService.getUsersBelongCompanyWithoutAssignedTemplateIncludeUserById(idUserInclude);
+
+        List<ManagedUserVM> managedUserVMs = new ArrayList<>();
+        for(User user : users){
+            managedUserVMs.add(new ManagedUserVM(user));
+        }
+        HttpHeaders headers = createAlert("templates.employee.getAll", null);
+        return new ResponseEntity<>(managedUserVMs, headers, OK);
     }
 }

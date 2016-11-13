@@ -14,7 +14,7 @@
         $stateProvider
             .state('admincompany.templates', {
                 parent: 'admincompany',
-                url: '/admincompany/templates',
+                url: '/admincompany/templates/page&size',
 
                 data: {
                     authorities: ['ROLE_ADMIN'],
@@ -27,7 +27,20 @@
                         controllerAs: 'vm'
                     },
                 },
+                params: {
+                    page: 1,
+                    size: 10
+                },
                 resolve: {
+                    pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
+                        return {
+                            page: PaginationUtil.parsePage($stateParams.page),
+                            size: PaginationUtil.parsePage($stateParams.size)
+                            /*sort: $stateParams.sort,
+                             predicate: PaginationUtil.parsePredicate($stateParams.sort),
+                             ascending: PaginationUtil.parseAscending($stateParams.sort)*/
+                        };
+                    }],
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('activate');
                         return $translate.refresh();

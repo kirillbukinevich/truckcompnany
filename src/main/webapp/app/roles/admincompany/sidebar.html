@@ -1,13 +1,16 @@
+
 <li ui-sref-active="active">
     <a ui-sref="admincompany.users" href="/#/admincompany/users"><span class="glyphicon glyphicon glyphicon-user sidebar-icon"></span>Employee</a>
 </li>
+
+
 <li ui-sref-active="active">
     <a ui-sref="admincompany.storages" href="/#/admincompany/storages"><span class="glyphicon glyphicon-home sidebar-icon"></span>Strorages</a>
 </li>
 <li ui-sref-active="active">
     <a ui-sref="admincompany.trucks" href="/#/admincompany/trucks"><span class="glyphicon glyphicon-bed sidebar-icon"></span>Trucks</a>
 </li>
-<li ui-sref-active="active">
-    <a ui-sref="admincompany.templates" href="/#/admincompany/templates"><span class="glyphicon glyphicon-envelope sidebar-icon"></span>Mail templates</a>
+<li ui-sref-active="active" ng-class="{'active': $state.includes('admincompany.template') || $state.includes('admincompany.createtemplate')}">
+    <a ui-sref="admincompany.templates" href="/#/admincompany/templates"><span class="glyphicon glyphicon-envelope sidebar-icon"></span>Birthday cards</a>
 </li>
 

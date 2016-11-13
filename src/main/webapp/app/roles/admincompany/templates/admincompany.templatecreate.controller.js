@@ -16,7 +16,25 @@
         vm.template = {};
         vm.loadPage = loadPage;
 
-        vm.rootUriApp = $location.absUrl().replace(new RegExp("#" +$location.url()), "");
+        vm.rootUriApp = $location.absUrl().replace(new RegExp("#" + $location.url()), "");
+
+
+        vm.monthes = [
+            {name: 'January', value: 1},
+            {name: 'February', value: 2},
+            {name: 'March', value: 3},
+            {name: 'April', value: 4},
+            {name: 'May', value: 5},
+            {name: 'June', value: 6},
+            {name: 'July', value: 7},
+            {name: 'August', value: 8},
+            {name: 'September', value: 9},
+            {name: 'October', value: 10},
+            {name: 'November', value: 11},
+            {name: 'December', value: 12}];
+
+        vm.isDefaultBirthday = "true";
+        vm.isValidDate = true;
 
         vm.options = {
             language: 'en',
@@ -35,24 +53,51 @@
 
         vm.loadPage();
 
-       function loadPage(){
-            Employee.query({}, onSuccess, onError);
+        vm.changeInputDate= function(){
+            vm.isValidDate = true;
+            vm.day = '';
+            vm.month = '';
         }
 
-        function onSuccess(data){
+        function loadPage() {
+            $http({
+                method: 'GET',
+                url: '/api/template/employee'
+            }).then(function successCallback(response) {
+                vm.users = response.data;
+            }, function errorCallback(response) {
+
+            });
+        }
+
+        $scope.$watch('vm.template.recipient', function (val) {
+            if (val != undefined && val.birthDate != null) {
+                vm.defaultBirthday = new Date(val.birthDate);
+            } else {
+                vm.defaultBirthday = undefined;
+            }
+        });
+
+        function onSuccess(data) {
             vm.users = data;
         }
-        function onError(){
+
+        function onError() {
             console.log("Error upload employee");
         }
 
-        vm.getTitle = function(user){
-            switch(user.authorities[0]){
-                case "ROLE_DISPATCHER" : return "Dispatcher";
-                case "ROLE_DRIVER" : return "Driver";
-                case "ROLE_MANAGER": return "Manager";
-                case "ROLE_COMPANYOWNER": return "Company owner";
-                default: return "Anonymous";
+        vm.getTitle = function (user) {
+            switch (user.authorities[0]) {
+                case "ROLE_DISPATCHER" :
+                    return "Dispatcher";
+                case "ROLE_DRIVER" :
+                    return "Driver";
+                case "ROLE_MANAGER":
+                    return "Manager";
+                case "ROLE_COMPANYOWNER":
+                    return "Company owner";
+                default:
+                    return "Anonymous";
             }
         }
 
@@ -61,14 +106,35 @@
 
         }
         vm.createTemplate = function () {
-            console.log(vm.template);
-            Template.save(vm.template, onSuccessCreateTemplate, onErrorCreateTemplate);
+            if (vm.isValidDate) {
+                console.log(vm.template);
+                if (vm.isDefaultBirthday =="true") {
+                    vm.template.birthday = vm.defaultBirthday;
+                } else{
+                    vm.checkDate();
+                    vm.template.birthday = vm.newAssignedBirthday;
+                }
+                Template.save(vm.template, onSuccessCreateTemplate, onErrorCreateTemplate);
+            }
         }
 
-        function onSuccessCreateTemplate(){
+        vm.checkDate = function () {
+            if (vm.day == '' || vm.day > 31 || vm.day < 1 || vm.month == undefined) {
+                vm.isValidDate = false;
+                return;
+            }
+            var assignYear = vm.defaultBirthday == undefined ? new Date().getFullYear() : vm.defaultBirthday.getFullYear();
+            var date = new Date(assignYear, vm.month.value - 1, vm.day);
+
+            vm.isValidDate = (date.getFullYear() == assignYear) && (date.getDate() == vm.day) && (date.getMonth() == vm.month.value - 1);
+            if (vm.isValidDate) vm.newAssignedBirthday = date;
+        }
+
+        function onSuccessCreateTemplate() {
             $state.go("admincompany.templates");
         }
-        function onErrorCreateTemplate(){
+
+        function onErrorCreateTemplate() {
             console.log("Error create template");
         }
 

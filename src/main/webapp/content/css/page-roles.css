@@ -109,6 +109,9 @@
 #action-th{
     width:150px;
 }
+.table > tbody > tr.selected{
+    background: #fcf8e3;
+}
 
 
 #logo-company{
@@ -166,4 +169,21 @@
 
 #save-template{
     margin:10px 0;
+}
+
+.select-show-title{
+    line-height:33px;
+}
+
+#control-table{
+    text-align:right;
+}
+
+.info{
+    display: inline-block;
+}
+
+.pagination{
+    margin:0;
+    float:right;
 }

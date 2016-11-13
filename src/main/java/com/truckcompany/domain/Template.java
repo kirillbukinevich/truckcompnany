@@ -32,12 +32,12 @@ public class Template {
 
 
     @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "recipient_id" )
     private User recipient;
 
     @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "admin_id" )
     private User admin;
 

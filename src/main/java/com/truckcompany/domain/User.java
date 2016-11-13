@@ -92,6 +92,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @JoinColumn(name = "company_id" )
     private Company company;
 
+
     @Column (name = "middle_name")
     private String middleName;
 
