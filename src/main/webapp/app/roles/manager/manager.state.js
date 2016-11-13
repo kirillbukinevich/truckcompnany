@@ -15,10 +15,10 @@
             abstract: true,
             parent: 'roles',
             views: {
-                'content@': {
-                    templateUrl: 'app/roles/manager/manager.html',
-                    controller: 'ManagerController',
-                    controllerAs: 'vm'
+                'sidebar@roles': {
+                    templateUrl: 'app/roles/manager/sidebar.html'
+                    // controller: 'ManagerController',
+                    // controllerAs: 'vm'
                 }
             }
         });
