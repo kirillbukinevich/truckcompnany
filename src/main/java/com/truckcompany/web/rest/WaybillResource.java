@@ -38,13 +38,9 @@ public class WaybillResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Waybill>> getAllWaybills ()  throws URISyntaxException {
+    public ResponseEntity<List<ManagedWaybillVM>> getAllWaybills ()  throws URISyntaxException {
         log.debug("REST request get all Waybills");
-        List<Waybill> waybills = waybillRepository.findAll();
-
-        List<ManagedWaybillVM> managedWaybillVMs = waybills.stream()
-            .map(ManagedWaybillVM::new)
-            .collect(Collectors.toList());
+        List<ManagedWaybillVM> managedWaybillVMs = waybillService.getAllWaybills();
 
         HttpHeaders headers = HeaderUtil.createAlert("waybill.getAll", null);
 
@@ -58,10 +54,10 @@ public class WaybillResource {
     public ResponseEntity<ManagedWaybillVM> getWaybill (@PathVariable Long id) {
         log.debug("REST request to get Waybill : {}", id);
 
-        Waybill waybill = waybillService.getWaybillById(id);
+        ManagedWaybillVM waybill = waybillService.getWaybillById(id);
 
         if (waybill == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<ManagedWaybillVM>(new ManagedWaybillVM(waybill),HttpStatus.OK);
+        return new ResponseEntity<ManagedWaybillVM>(waybill,HttpStatus.OK);
     }
 
     @RequestMapping (value = "/waybills",

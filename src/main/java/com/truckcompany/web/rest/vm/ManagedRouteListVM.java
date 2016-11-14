@@ -1,12 +1,9 @@
 package com.truckcompany.web.rest.vm;
 
 import com.truckcompany.domain.RouteList;
-import com.truckcompany.domain.util.JSR310DateConverters;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
 
 public class ManagedRouteListVM {
     private Long id;
@@ -21,16 +18,25 @@ public class ManagedRouteListVM {
 
     private Long arrivalStorageId;
 
+    private ManagedStorageVM leavingStorage;
+
+    private ManagedStorageVM arrivalStorage;
+
+    private ManagedTruckVM truck;
+
     public ManagedRouteListVM() {
     }
 
     public ManagedRouteListVM (RouteList routeList) {
         this.id = routeList.getId();
         this.truckId = routeList.getTruck().getId();
-        //this.leavingDate = routeList.getLeavingDate();
-        //this.arrivalDate = routeList.getArrivalDate();
+        this.leavingDate = routeList.getLeavingDate();
+        this.arrivalDate = routeList.getArrivalDate();
         this.leavingStorageId = routeList.getLeavingStorage().getId();
         this.arrivalStorageId = routeList.getArrivalStorage().getId();
+        this.arrivalStorage = new ManagedStorageVM(routeList.getArrivalStorage());
+        this.leavingStorage = new ManagedStorageVM(routeList.getLeavingStorage());
+        this.truck = new ManagedTruckVM(routeList.getTruck());
     }
 
     public ManagedRouteListVM(Long id, Long truckId, ZonedDateTime leavingDate,
@@ -98,5 +104,29 @@ public class ManagedRouteListVM {
 
     public void setLeavingDate(String leavingDate) {
         this.leavingDate = ZonedDateTime.parse(leavingDate, DateTimeFormatter.RFC_1123_DATE_TIME);
+    }
+
+    public ManagedStorageVM getLeavingStorage() {
+        return leavingStorage;
+    }
+
+    public void setLeavingStorage(ManagedStorageVM leavingStorage) {
+        this.leavingStorage = leavingStorage;
+    }
+
+    public ManagedStorageVM getArrivalStorage() {
+        return arrivalStorage;
+    }
+
+    public void setArrivalStorage(ManagedStorageVM arrivalStorage) {
+        this.arrivalStorage = arrivalStorage;
+    }
+
+    public ManagedTruckVM getTruck() {
+        return truck;
+    }
+
+    public void setTruck(ManagedTruckVM truck) {
+        this.truck = truck;
     }
 }

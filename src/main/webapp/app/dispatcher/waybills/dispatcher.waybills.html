@@ -3,28 +3,29 @@
 <table class="table">
     <thead>
     <tr>
-        <th>id</th>
+        <th>№</th>
         <th>Date</th>
         <th>Driver</th>
         <th>State</th>
         <th>Dispatcher</th>
-        <th>route_list_id</th>
-        <th>write_off_id</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="waybill in vm.waybills">
         <td>{{waybill.id}}</td>
-        <td>{{waybill.date}}</td>
-        <td><a href="#" data-toggle="tooltip">{{waybill.driver.firstName}} {{waybill.driver.lastName}}</a></td>
-        <td>
-            <span ng-if = "offer.state == 'CREATED'" class="label label-info" >CREATED</span>
-            <span ng-if = "offer.state == 'DELIVERED'" class="label label-success" >DELIVERED</span>
-            <span ng-if = "offer.state == 'CHECKED'" class="label label-primary" >CHECKED</span>
-        </td>
+        <td>{{waybill.date | date:'dd/MM/yy HH:mm'}}</td>
         <td>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</td>
-        <td>{{waybill.routeListId}}</td>
-        <td>{{waybill.writeOffId}}</td>
+        <td>
+            <span ng-if = "waybill.state == 'CREATED'" class="label label-info" >CREATED</span>
+            <span ng-if = "waybill.state == 'DELIVERED'" class="label label-success" >DELIVERED</span>
+            <span ng-if = "waybill.state == 'CHECKED'" class="label label-primary" >CHECKED</span>
+        </td>
+        <td>{{waybill.dispatcher.firstName}} {{waybill.dispatcher.lastName}}</td>
+        <td>
+            <a type="button" class="btn btn-primary btn-xs" href="#/dispatcher/waybills/details/{{waybill.id}}">
+                <span class="glyphicon glyphicon-eye-open">&nbsp;Details</span>
+            </a>
+        </td>
     </tr>
     </tbody>
 </table>

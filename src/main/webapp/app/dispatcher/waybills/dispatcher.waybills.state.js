@@ -14,7 +14,7 @@
         $stateProvider
             .state('dispatcher.waybills', {
                 parent: 'dispatcher',
-                url: '/dispatcher/waybills', /*'/activate?key',*/
+                url: '/dispatcher/waybills',
 
                 data: {
                     authorities: ["ROLE_DISPATCHER"],
@@ -34,28 +34,30 @@
                     }]
                 }
             }
-        ).state('dispatcher.waybillCreate', {
-                parent: 'dispatcher',
-                url: '/dispatcher/waybills/create', /*'/activate?key',*/
-
-                data: {
-                    authorities: ["ROLE_DISPATCHER"],
-                    pageTitle: 'activate.title'
-                },
-                views: {
-                    'page@dispatcher': {
-                        templateUrl: 'app/dispatcher/waybills/dispatcher.waybills.create.html',
-                        controller: 'DispatcherWaybillCreateController',
-                        controllerAs: 'vm'
-                    },
-                },
-                resolve: {
-                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('activate');
-                        return $translate.refresh();
-                    }]
-                }
-            }
-        );
+        ).state('dispatcher.waybills-details', {
+            parent: 'dispatcher.waybills',
+            url: '/details/{id}',
+            data: {
+                authorities: ['ROLE_DISPATCHER']
+            },
+            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                $uibModal.open({
+                    templateUrl: 'app/dispatcher/waybills/dispatcher.waybills-details.html',
+                    controller: 'DispatcherWaybillDetailsController',
+                    controllerAs: 'vm',
+                    backdrop: 'static',
+                    size: 'lg',
+                    resolve: {
+                        entity: ['Waybill', function(Waybill) {
+                            return Waybill.get({id : $stateParams.id});
+                        }]
+                    }
+                }).result.then(function() {
+                    $state.go('dispatcher.waybills', null, { reload: true });
+                }, function() {
+                    $state.go('dispatcher.waybills');
+                });
+            }]
+        });
     }
 })();

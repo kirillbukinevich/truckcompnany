@@ -12,15 +12,15 @@ public class ManagedWaybillVM {
 
     private String state;
 
-    private Long dispatcherId;
-
-    private Long driverId;
-
     private ManagedRouteListVM routeList;
 
     private ManagedWriteOffVM writeOff;
 
     private Long offerId;
+
+    private ManagedUserVM driver;
+
+    private ManagedUserVM dispatcher;
 
     public ManagedWaybillVM() {
     }
@@ -30,16 +30,14 @@ public class ManagedWaybillVM {
         this.id = id;
         this.date = date;
         this.state = state.toString();
-        this.dispatcherId = dispatcherId;
-        this.driverId = driverId;
     }
 
     public ManagedWaybillVM (Waybill waybill) {
         this.id = waybill.getId();
         this.date = waybill.getDate();
         this.state = waybill.getState().toString();
-        this.dispatcherId = waybill.getDispatcher().getId();
-        this.driverId = waybill.getDriver().getId();
+        this.dispatcher = new ManagedUserVM(waybill.getDispatcher());
+        this.driver = new ManagedUserVM(waybill.getDriver());
         this.routeList = new ManagedRouteListVM(waybill.getRouteList());
     }
 
@@ -67,20 +65,20 @@ public class ManagedWaybillVM {
         this.state = state;
     }
 
-    public Long getDispatcherId() {
-        return dispatcherId;
+    public ManagedUserVM getDriver() {
+        return driver;
     }
 
-    public void setDispatcherId(Long dispatcherId) {
-        this.dispatcherId = dispatcherId;
+    public void setDriver(ManagedUserVM driver) {
+        this.driver = driver;
     }
 
-    public Long getDriverId() {
-        return driverId;
+    public ManagedUserVM getDispatcher() {
+        return dispatcher;
     }
 
-    public void setDriverId(Long driverId) {
-        this.driverId = driverId;
+    public void setDispatcher(ManagedUserVM dispatcher) {
+        this.dispatcher = dispatcher;
     }
 
     public ManagedRouteListVM getRouteList() {
