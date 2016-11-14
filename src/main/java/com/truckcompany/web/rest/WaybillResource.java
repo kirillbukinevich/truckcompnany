@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.Waybill;
 import com.truckcompany.repository.WaybillRepository;
 import com.truckcompany.service.WaybillService;
+import com.truckcompany.service.dto.WaybillDTO;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
 import org.slf4j.Logger;
@@ -40,11 +41,11 @@ public class WaybillResource {
     @Timed
     public ResponseEntity<List<ManagedWaybillVM>> getAllWaybills ()  throws URISyntaxException {
         log.debug("REST request get all Waybills");
-        List<ManagedWaybillVM> managedWaybillVMs = waybillService.getAllWaybills();
+        List<WaybillDTO> waybillDTOList = waybillService.getAllWaybills();
 
         HttpHeaders headers = HeaderUtil.createAlert("waybill.getAll", null);
 
-        return new ResponseEntity(managedWaybillVMs, headers, HttpStatus.OK);
+        return new ResponseEntity(waybillDTOList, headers, HttpStatus.OK);
     }
 
     @RequestMapping (value = "/waybills/{id}",

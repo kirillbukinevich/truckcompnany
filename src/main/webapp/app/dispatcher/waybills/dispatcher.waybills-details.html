@@ -45,6 +45,15 @@
             <dt><span>Leaving date:</span></dt>
             <dd><span>{{vm.waybill.routeList.arrivalDate | date:'dd/MM/yy HH:mm'}}</span></dd>
         </dl>
+
+        <h4>Waybill goods</h4>
+
+        <dl class="dl-horizontal">
+            <div ng-repeat="stuff in vm.waybill.waybillGoods">
+                <dt>{{stuff.name}}:</dt>
+                <dd>{{stuff.count}} units</dd>
+            </div>
+        </dl>
     </div>
 
     <div class="modal-footer">

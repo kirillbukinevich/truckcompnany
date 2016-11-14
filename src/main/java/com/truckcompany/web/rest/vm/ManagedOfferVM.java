@@ -30,9 +30,6 @@ public class ManagedOfferVM extends OfferDTO {
         super(offer);
 
         this.companyId = offer.getCompany().getId();
-        /*this.leavingStorageId = offer.getLeavingStorage().getId();
-        this.arrivalStorageId = offer.getArrivalStorage().getId();
-        this.offerGoods = offer.getOfferGoods().stream().map(ManagedOfferGoodsVM::new).collect(Collectors.toSet());*/
         this.arrivalStorage = new ManagedStorageVM(offer.getArrivalStorage());
         this.leavingStorage = new ManagedStorageVM(offer.getLeavingStorage());
         this.offerGoods = offer.getOfferGoods()

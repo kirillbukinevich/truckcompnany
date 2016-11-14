@@ -6,6 +6,7 @@ import com.truckcompany.domain.enums.WaybillGoodsState;
 import com.truckcompany.domain.enums.WaybillState;
 import com.truckcompany.repository.*;
 import com.truckcompany.security.SecurityUtils;
+import com.truckcompany.service.dto.WaybillDTO;
 import com.truckcompany.web.rest.vm.ManagedCompanyVM;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
 import org.slf4j.Logger;
@@ -52,25 +53,25 @@ public class WaybillService {
         return waybill;
     }
 
-    public List<ManagedWaybillVM> getAllWaybills () {
-        final List<ManagedWaybillVM> managedWaybillVMs = new ArrayList<>();
+    public List<WaybillDTO> getAllWaybills () {
+        final List<WaybillDTO> waybillDTOList = new ArrayList<>();
         Optional <User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
         user.ifPresent( u -> {
             List<Waybill> waybills = waybillRepository.findAll();
 
             waybills.stream()
-                .map(ManagedWaybillVM::new)
-                .collect(Collectors.toCollection(() -> managedWaybillVMs));
+                .map(WaybillDTO::new)
+                .collect(Collectors.toCollection(() -> waybillDTOList));
         });
 
-        return managedWaybillVMs;
+        return waybillDTOList;
     }
 
     public Waybill createWaybill (ManagedWaybillVM managedWaybillVM) {
         Waybill waybill = new Waybill();
 
         Optional<User> dispatcher = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
-        User driver = userRepository.findOne(managedWaybillVM.getDriver().getId());
+        User driver = userRepository.findOne(managedWaybillVM.getDriverId());
         RouteList routeList = routeListService.createRouteList(managedWaybillVM.getRouteList());
 
         waybill.setDispatcher(dispatcher.get());

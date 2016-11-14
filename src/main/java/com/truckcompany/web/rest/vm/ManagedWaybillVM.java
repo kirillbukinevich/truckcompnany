@@ -2,83 +2,34 @@ package com.truckcompany.web.rest.vm;
 
 import com.truckcompany.domain.Waybill;
 import com.truckcompany.domain.enums.WaybillState;
+import com.truckcompany.service.dto.WaybillDTO;
 
 import java.time.ZonedDateTime;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public class ManagedWaybillVM {
-    private Long id;
-
-    private ZonedDateTime date;
-
-    private String state;
-
+public class ManagedWaybillVM extends WaybillDTO {
     private ManagedRouteListVM routeList;
 
     private ManagedWriteOffVM writeOff;
 
     private Long offerId;
 
-    private ManagedUserVM driver;
+    private Long driverId;
 
-    private ManagedUserVM dispatcher;
+    private Set<ManagedWaybillGoodsVM> waybillGoods;
 
     public ManagedWaybillVM() {
     }
 
-    public ManagedWaybillVM(Long id, ZonedDateTime date,
-                            WaybillState state, Long dispatcherId, Long driverId) {
-        this.id = id;
-        this.date = date;
-        this.state = state.toString();
-    }
 
     public ManagedWaybillVM (Waybill waybill) {
-        this.id = waybill.getId();
-        this.date = waybill.getDate();
-        this.state = waybill.getState().toString();
-        this.dispatcher = new ManagedUserVM(waybill.getDispatcher());
-        this.driver = new ManagedUserVM(waybill.getDriver());
+        super(waybill);
         this.routeList = new ManagedRouteListVM(waybill.getRouteList());
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public ZonedDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(ZonedDateTime date) {
-        this.date = date;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public ManagedUserVM getDriver() {
-        return driver;
-    }
-
-    public void setDriver(ManagedUserVM driver) {
-        this.driver = driver;
-    }
-
-    public ManagedUserVM getDispatcher() {
-        return dispatcher;
-    }
-
-    public void setDispatcher(ManagedUserVM dispatcher) {
-        this.dispatcher = dispatcher;
+        this.waybillGoods = waybill.getWaybillGoods()
+            .stream()
+            .map(ManagedWaybillGoodsVM::new)
+            .collect(Collectors.toSet());
     }
 
     public ManagedRouteListVM getRouteList() {
@@ -103,5 +54,21 @@ public class ManagedWaybillVM {
 
     public void setOfferId(Long offerId) {
         this.offerId = offerId;
+    }
+
+    public Long getDriverId() {
+        return driverId;
+    }
+
+    public void setDriverId(Long driverId) {
+        this.driverId = driverId;
+    }
+
+    public Set<ManagedWaybillGoodsVM> getWaybillGoods() {
+        return waybillGoods;
+    }
+
+    public void setWaybillGoods(Set<ManagedWaybillGoodsVM> waybillGoods) {
+        this.waybillGoods = waybillGoods;
     }
 }
