@@ -40,9 +40,6 @@ public class OfferService {
     @Inject
     private OfferRepository offerRepository;
 
-    @Inject
-    private OfferGoodsRepository offerGoodsRepository;
-
     @Transactional
     public Offer createOffer (ManagedOfferVM managedOfferVM){
         final Offer offer = new Offer();

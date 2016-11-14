@@ -34,12 +34,13 @@
             console.log("Create new Waybill");
             vm.saveObj = {
                 driverId: vm.driver.id,
+                offerId: vm.offer.id,
                 routeList: {
                     truckId: vm.truck.id,
                     leavingStorageId: vm.offer.leavingStorage.id,
                     arrivalStorageId: vm.offer.arrivalStorage.id,
-                    leaving: vm.leaveDate.getTime(),
-                    arrival: vm.arrivalDate.getTime()
+                    leavingDate: vm.leaveDate.toUTCString(),
+                    arrivalDate: vm.arrivalDate.toUTCString()
                 }
             };
             console.log(vm.saveObj);

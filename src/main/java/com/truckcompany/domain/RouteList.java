@@ -18,11 +18,10 @@ public class RouteList implements Serializable {
     private Truck truck;
 
     @Column(name = "leaving_date")
-    private Date leavingDate;
+    private ZonedDateTime leavingDate;
 
     @Column(name = "arrival_date")
-    @Temporal(TemporalType.DATE)
-    private Date arrivalDate;
+    private ZonedDateTime arrivalDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leaving_storage_id", nullable = false)
@@ -42,34 +41,18 @@ public class RouteList implements Serializable {
         this.id = id;
     }
 
-    /*public ZonedDateTime getLeavingDate() {
+    public ZonedDateTime getLeavingDate() {
         return leavingDate;
     }
     public void setLeavingDate(ZonedDateTime leavingDate) {
         this.leavingDate = leavingDate;
     }
 
-    /*public ZonedDateTime getArrivalDate() {
+    public ZonedDateTime getArrivalDate() {
         return arrivalDate;
     }
     public void setArrivalDate(ZonedDateTime arrivalDate) {
         this.arrivalDate = arrivalDate;
-    }*/
-
-    public Date getArrivalDate() {
-        return arrivalDate;
-    }
-
-    public void setArrivalDate(Date arrivalDate) {
-        this.arrivalDate = arrivalDate;
-    }
-
-    public Date getLeavingDate() {
-        return leavingDate;
-    }
-
-    public void setLeavingDate(Date leavingDate) {
-        this.leavingDate = leavingDate;
     }
 
     public Truck getTruck() {

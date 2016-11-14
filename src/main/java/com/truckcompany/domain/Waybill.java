@@ -39,8 +39,9 @@ public class Waybill implements Serializable {
     @JoinColumn(name = "write_off_id", nullable = false)
     private WriteOffAct writeOff;
 
-    /*@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<WaybillGoods> waybillGoods;*/
+    @JoinColumn (name = "waybill_id")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<WaybillGoods> waybillGoods;
 
     public Long getId() {
         return id;
@@ -91,11 +92,11 @@ public class Waybill implements Serializable {
         this.writeOff = writeOff;
     }
 
-    /*public Set<WaybillGoods> getWaybillGoods() {
+    public Set<WaybillGoods> getWaybillGoods() {
         return waybillGoods;
     }
 
     public void setWaybillGoods(Set<WaybillGoods> waybillGoods) {
         this.waybillGoods = waybillGoods;
-    }*/
+    }
 }

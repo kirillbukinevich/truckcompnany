@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -56,9 +58,8 @@ public class RouteListService {
 
     public RouteList createRouteList (ManagedRouteListVM managedRouteListVM) {
         RouteList routeList = new RouteList();
-        //routeList.setLeavingDate(managedRouteListVM.getLeavingDate());
-        routeList.setArrivalDate(new Date(managedRouteListVM.getArrival()));
-        routeList.setLeavingDate(new Date(managedRouteListVM.getLeaving()));
+        routeList.setArrivalDate(managedRouteListVM.getArrivalDate());
+        routeList.setLeavingDate(managedRouteListVM.getLeavingDate());
         routeList.setLeavingStorage(storageRepository.findOne(managedRouteListVM.getLeavingStorageId()));
         routeList.setArrivalStorage(storageRepository.findOne(managedRouteListVM.getArrivalStorageId()));
         routeList.setTruck(truckRepository.findOne(managedRouteListVM.getTruckId()));

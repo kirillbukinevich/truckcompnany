@@ -16,27 +16,22 @@ public class ManagedWaybillVM {
 
     private Long driverId;
 
-    private Long routeListId;
-
-    private Long writeOffId;
-
     private ManagedRouteListVM routeList;
 
     private ManagedWriteOffVM writeOff;
+
+    private Long offerId;
 
     public ManagedWaybillVM() {
     }
 
     public ManagedWaybillVM(Long id, ZonedDateTime date,
-                            WaybillState state, Long dispatcherId, Long driverId,
-                            Long routeListId, Long writeOffId) {
+                            WaybillState state, Long dispatcherId, Long driverId) {
         this.id = id;
         this.date = date;
         this.state = state.toString();
         this.dispatcherId = dispatcherId;
         this.driverId = driverId;
-        this.routeListId = routeListId;
-        this.writeOffId = writeOffId;
     }
 
     public ManagedWaybillVM (Waybill waybill) {
@@ -45,8 +40,7 @@ public class ManagedWaybillVM {
         this.state = waybill.getState().toString();
         this.dispatcherId = waybill.getDispatcher().getId();
         this.driverId = waybill.getDriver().getId();
-        this.routeListId = waybill.getRouteList().getId();
-        this.writeOffId = waybill.getWriteOff().getId();
+        this.routeList = new ManagedRouteListVM(waybill.getRouteList());
     }
 
     public Long getId() {
@@ -89,22 +83,6 @@ public class ManagedWaybillVM {
         this.driverId = driverId;
     }
 
-    public Long getRouteListId() {
-        return routeListId;
-    }
-
-    public void setRouteListId(Long routeListId) {
-        this.routeListId = routeListId;
-    }
-
-    public Long getWriteOffId() {
-        return writeOffId;
-    }
-
-    public void setWriteOffId(Long writeOffId) {
-        this.writeOffId = writeOffId;
-    }
-
     public ManagedRouteListVM getRouteList() {
         return routeList;
     }
@@ -119,5 +97,13 @@ public class ManagedWaybillVM {
 
     public void setWriteOff(ManagedWriteOffVM writeOff) {
         this.writeOff = writeOff;
+    }
+
+    public Long getOfferId() {
+        return offerId;
+    }
+
+    public void setOfferId(Long offerId) {
+        this.offerId = offerId;
     }
 }

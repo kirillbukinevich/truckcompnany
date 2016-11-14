@@ -87,21 +87,4 @@ public class WaybillResource {
         waybillService.deleteWaybill(id);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert( "waybillManagement.deleted", id.toString())).build();
     }
-
-    @RequestMapping (value = "/waybills",
-        method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity updateWaybill (@RequestBody ManagedWaybillVM managedWaybillVM) {
-        log.debug("REST request to update Waybill : {}", managedWaybillVM);
-        Waybill existingWaybill = waybillRepository.findOne(managedWaybillVM.getId());
-
-        if (existingWaybill == null)
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("waybillManagement", "waybilldontexist", "Waybill doesn't exist!")).body(null);
-
-        waybillService.updateWaybill(managedWaybillVM);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createAlert("userManagement.updated", managedWaybillVM.getId().toString()))
-            .body(new ManagedWaybillVM(waybillService.getWaybillById(managedWaybillVM.getId())));
-    }
 }

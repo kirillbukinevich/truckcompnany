@@ -4,6 +4,7 @@ import com.truckcompany.domain.RouteList;
 import com.truckcompany.domain.util.JSR310DateConverters;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -15,10 +16,6 @@ public class ManagedRouteListVM {
     private ZonedDateTime leavingDate;
 
     private ZonedDateTime arrivalDate;
-
-    private Long arrival;
-
-    private Long leaving;
 
     private Long leavingStorageId;
 
@@ -95,19 +92,11 @@ public class ManagedRouteListVM {
         this.arrivalStorageId = arrivalStorageId;
     }
 
-    public Long getArrival() {
-        return arrival;
+    public void setArrivalDate(String arrivalDate) {
+        this.arrivalDate = ZonedDateTime.parse(arrivalDate, DateTimeFormatter.RFC_1123_DATE_TIME);
     }
 
-    public void setArrival(Long arrival) {
-        this.arrival = arrival;
-    }
-
-    public Long getLeaving() {
-        return leaving;
-    }
-
-    public void setLeaving(Long leaving) {
-        this.leaving = leaving;
+    public void setLeavingDate(String leavingDate) {
+        this.leavingDate = ZonedDateTime.parse(leavingDate, DateTimeFormatter.RFC_1123_DATE_TIME);
     }
 }
