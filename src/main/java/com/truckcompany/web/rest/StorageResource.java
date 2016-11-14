@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.Storage;
 import com.truckcompany.repository.CompanyRepository;
 import com.truckcompany.repository.StorageRepository;
+import com.truckcompany.repository.search.StorageSearchRepository;
 import com.truckcompany.service.StorageService;
 import com.truckcompany.service.dto.StorageDTO;
 import com.truckcompany.service.facade.StorageFacade;
@@ -43,8 +44,13 @@ public class StorageResource {
 
     @Inject
     private StorageRepository storageRepository;
+
+    @Inject
+    private StorageSearchRepository storageSearchRepository;
+
     @Inject
     private StorageService storageService;
+
     @Inject
     private StorageFacade storageFacade;
 
@@ -74,6 +80,7 @@ public class StorageResource {
         LOG.debug("REST request to save Storage: {};", storage.getName());
 
         Storage result = storageService.createStorage(storage);
+        storageSearchRepository.save(result);
 
         return ResponseEntity.created(new URI("/storage/" + result.getId()))
             .headers(createAlert("storage.created", valueOf(storage.getId())))

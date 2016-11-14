@@ -1,10 +1,14 @@
 package com.truckcompany.domain;
 
+import org.apache.solr.client.solrj.beans.Field;
+import org.springframework.data.solr.core.mapping.SolrDocument;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "storage")
+@SolrDocument(solrCoreName = "storages")
 public class Storage implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -15,18 +19,20 @@ public class Storage implements Serializable {
     private Long id;
 
     @Column(name = "name")
+    @Field("name")
     private String name;
 
     @Column(name = "activated")
+    @Field("activated")
     private boolean activated;
+
+    @Column(name = "address")
+    @Field("address")
+    private String address;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
-
-    @Column(name = "address")
-    private String address;
-
 
     public Long getId() {
         return id;

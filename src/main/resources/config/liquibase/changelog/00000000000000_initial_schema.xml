@@ -49,7 +49,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="address" type="varchar(45)">
-                <constraints nullable="false"/>
+                <!--<constraints nullable="false"/>-->
             </column>
 
         </createTable>
