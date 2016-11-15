@@ -17,8 +17,6 @@
             views: {
                 'sidebar@roles': {
                     templateUrl: 'app/roles/manager/sidebar.html'
-                    // controller: 'ManagerController',
-                    // controllerAs: 'vm'
                 }
             }
         });
