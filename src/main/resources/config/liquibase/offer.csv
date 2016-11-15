@@ -1,0 +1,5 @@
+id;created_by;state;company_id;leaving_storage_id;arrival_storage_id;created_date
+1;company-creator;NEW;3;1;2;2016-11-01 16:40:03
+2;company-creator;NEW;3;2;2;2016-11-01 16:40:03
+3;company-creator;CANCELED;3;1;2;2016-11-01 16:40:03
+4;company-creator;ACCEPTED;3;1;2;2016-11-01 16:40:03
