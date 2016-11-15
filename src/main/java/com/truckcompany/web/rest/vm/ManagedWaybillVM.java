@@ -1,10 +1,13 @@
 package com.truckcompany.web.rest.vm;
 
+import com.truckcompany.domain.RouteList;
+import com.truckcompany.domain.User;
 import com.truckcompany.domain.Waybill;
+import com.truckcompany.domain.WriteOffAct;
 import com.truckcompany.domain.enums.WaybillState;
+import com.truckcompany.service.dto.UserDTO;
 import com.truckcompany.service.dto.WaybillDTO;
 
-import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,13 +18,14 @@ public class ManagedWaybillVM extends WaybillDTO {
 
     private Long offerId;
 
-    private Long driverId;
+    private String driverLogin;
 
     private Set<ManagedWaybillGoodsVM> waybillGoods;
 
+    private UserDTO driver;
+
     public ManagedWaybillVM() {
     }
-
 
     public ManagedWaybillVM (Waybill waybill) {
         super(waybill);
@@ -56,12 +60,12 @@ public class ManagedWaybillVM extends WaybillDTO {
         this.offerId = offerId;
     }
 
-    public Long getDriverId() {
-        return driverId;
+    public String getDriverLogin() {
+        return driverLogin;
     }
 
-    public void setDriverId(Long driverId) {
-        this.driverId = driverId;
+    public void setDriverLogin(String driverLogin) {
+        this.driverLogin = driverLogin;
     }
 
     public Set<ManagedWaybillGoodsVM> getWaybillGoods() {

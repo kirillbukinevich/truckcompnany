@@ -1,13 +1,18 @@
 package com.truckcompany.service;
 
+import com.truckcompany.config.JHipsterProperties;
+import com.truckcompany.domain.Company;
 import com.truckcompany.domain.Truck;
 import com.truckcompany.domain.User;
+import com.truckcompany.repository.CompanyRepository;
 import com.truckcompany.repository.TruckRepository;
 import com.truckcompany.repository.UserRepository;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.web.rest.vm.ManagedTruckVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,9 +30,10 @@ public class TruckService {
 
     @Inject
     private TruckRepository truckRepository;
-
     @Inject
     private UserRepository userRepository;
+    @Inject
+    private CompanyRepository companyRepository;
 
     public Truck getTruckById (Long id) {
         Truck truck = truckRepository.getOne(id);
@@ -44,13 +50,36 @@ public class TruckService {
         return trucks;
     }
 
+    public List<Truck> getAllTrucksBelongsCompany(Company company){
+        log.debug("Get all trucks belongs company {}.", company);
+        return truckRepository.findByCompanyIdWithCompany(company.getId());
+    }
+
+    public Page<Truck> getTrucksBelongsCompany(Company company, Pageable pageable){
+        log.debug("Get all trucks belongs company {}.", company);
+        return truckRepository.findByCompanyIdWithCompany(company.getId(), pageable);
+    }
+
+
+
+    public Truck getTruckByIdWIthCompany(Long id){
+        log.debug("Get truck id={} with company.", id);
+        return truckRepository.getOne(id);
+    }
 
     public Truck createTruck (ManagedTruckVM managedTruckVM) {
         Truck truck = new Truck();
         truck.setRegNumber(managedTruckVM.getRegNumber());
         truck.setConsumption(managedTruckVM.getConsumption());
 
-        truckRepository.save(truck);
+        Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+        if (optionalUser.isPresent()){
+            User user = optionalUser.get();
+            truck.setCompany(user.getCompany());
+            truckRepository.save(truck);
+        }
+
+
         log.debug("Created Information for Truck");
         return truck;
     }

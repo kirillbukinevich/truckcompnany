@@ -79,7 +79,6 @@ public class RouteList implements Serializable {
     public Waybill getWaybill() {
         return waybill;
     }
-
     public void setWaybill(Waybill waybill) {
         this.waybill = waybill;
     }

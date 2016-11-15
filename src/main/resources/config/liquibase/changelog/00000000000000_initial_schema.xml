@@ -41,9 +41,17 @@
             <column name="name" type="varchar(45)">
                 <constraints nullable="false"/>
             </column>
+
+            <column name="activated" type="boolean" defaultValue="true">
+            </column>
+
             <column name="company_id" type="int">
                 <constraints nullable="false"/>
             </column>
+            <column name="address" type="varchar(45)">
+                <constraints nullable="false"/>
+            </column>
+
         </createTable>
 
         <createTable tableName="truck">
@@ -72,6 +80,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="arrival_storage_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="ENUM('TRANSPORTATION', 'DELIVERED')">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -109,7 +120,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="date" type="datetime"/>
-            <column name="count" type="varchar(45)">
+            <column name="count" type="int">
                 <constraints nullable="false"/>
             </column>
         </createTable>

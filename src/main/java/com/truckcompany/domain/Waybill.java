@@ -19,7 +19,7 @@ public class Waybill implements Serializable {
     @Column(name = "date")
     private ZonedDateTime date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "driver_id", nullable = false)
     private User driver;
 
@@ -95,7 +95,6 @@ public class Waybill implements Serializable {
     public Set<WaybillGoods> getWaybillGoods() {
         return waybillGoods;
     }
-
     public void setWaybillGoods(Set<WaybillGoods> waybillGoods) {
         this.waybillGoods = waybillGoods;
     }

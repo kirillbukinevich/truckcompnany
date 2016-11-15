@@ -45,4 +45,8 @@ public final class PaginationUtil {
     private static String generateUri(String baseUrl, int page, int size) throws URISyntaxException {
         return UriComponentsBuilder.fromUriString(baseUrl).queryParam("page", page).queryParam("size", size).toUriString();
     }
+
+
+
+
 }

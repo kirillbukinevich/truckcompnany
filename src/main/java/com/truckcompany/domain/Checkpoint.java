@@ -1,6 +1,7 @@
 package com.truckcompany.domain;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -9,12 +10,12 @@ public class Checkpoint {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "name", length = 45, nullable = false)
     private String name;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "check_date")
     private Date checkDate;
 
@@ -22,10 +23,11 @@ public class Checkpoint {
     @JoinColumn(name = "route_list_id", nullable = false)
     private RouteList routeList;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(Integer id) {
+
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -39,6 +41,7 @@ public class Checkpoint {
     public Date getCheckDate() {
         return checkDate;
     }
+
     public void setCheckDate(Date checkDate) {
         this.checkDate = checkDate;
     }
@@ -49,4 +52,15 @@ public class Checkpoint {
     public void setRouteList(RouteList routeList) {
         this.routeList = routeList;
     }
+
+    @Override
+    public String toString() {
+        return "Checkpoint{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", checkDate=" + checkDate +
+            ", routeList=" + routeList +
+            '}';
+    }
+
 }

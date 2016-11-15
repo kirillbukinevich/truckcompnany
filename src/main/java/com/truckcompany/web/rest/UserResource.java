@@ -2,12 +2,14 @@ package com.truckcompany.web.rest;
 
 import com.truckcompany.config.Constants;
 import com.codahale.metrics.annotation.Timed;
+import com.truckcompany.domain.Company;
 import com.truckcompany.domain.User;
 import com.truckcompany.repository.UserRepository;
 import com.truckcompany.security.AuthoritiesConstants;
-import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.MailService;
 import com.truckcompany.service.UserService;
+import com.truckcompany.service.util.UploadException;
+import com.truckcompany.service.util.UploadUtil;
 import com.truckcompany.web.rest.vm.KeyAndPasswordVM;
 import com.truckcompany.web.rest.vm.ManagedUserVM;
 import com.truckcompany.web.rest.util.HeaderUtil;
@@ -24,9 +26,12 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -232,6 +237,30 @@ public class UserResource {
         List<ManagedUserVM> userList = userService.getDrivers();
 
         return new ResponseEntity<>(userList, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/users/uploadlogo", method = RequestMethod.POST)
+    public ResponseEntity<Void> uploadFile(@RequestParam(value = "file", required = false) String file,
+                                        @RequestParam(value = "file_name") String fileName,
+                                        @RequestParam(value = "user_id") Long user_id,
+                                        HttpServletRequest request) throws IOException {
+        try {
+            String rootUploadDirectory = request.getServletContext().getRealPath("content/upload/logouser");
+            String imageName = userService.uploadUserLogo(file, fileName, user_id, rootUploadDirectory);
+            return new ResponseEntity<Void>(HeaderUtil.createEntityCreationAlert("image",imageName),HttpStatus.OK);
+        } catch (UploadException e) {
+            log.debug("Can not upload logo for user with id = {}", user_id);
+            return new ResponseEntity<Void>(HeaderUtil.createFailureAlert("logoUser", "uploadimageproblem", e.getError().toString()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/users/deletelogo/{user_id}", method = RequestMethod.GET)
+    public void deleteLogo(@PathVariable Long user_id, HttpServletRequest request) throws IOException {
+        log.debug("REST to request to delete logo for user with id {}", user_id);
+        String rootUploadDirectory = request.getServletContext().getRealPath("content/upload/logouser");
+        userService.deleteUserLogo(user_id, rootUploadDirectory);
     }
 
 }

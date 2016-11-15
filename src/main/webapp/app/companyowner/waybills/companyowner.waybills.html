@@ -1,0 +1,24 @@
+<h1>Waybills</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>State</th>
+        <th>Dispatcher</th>
+        <th>Driver</th>
+        <th>Route list id</th>
+        <th>Write off id</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="waybill in vm.waybills">
+        <td>{{waybill.id}}</td>
+        <td>{{waybill.state}}</td>
+        <td>{{waybill.dispatcher.firstName}} {{waybill.dispatcher.lastName}}</td>
+        <td>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</td>
+        <td>{{waybill.routeListId}}</td>
+        <td>{{waybill.writeOffId}}</td>
+    </tr>
+    </tbody>
+</table>

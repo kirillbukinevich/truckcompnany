@@ -19,7 +19,8 @@
             'angular-loading-bar',
             'ui.select',
             'ngSanitize',
-            "ngAnimate"
+            "ngAnimate",
+            'ngImgCrop'
         ])
         .run(run);
 
