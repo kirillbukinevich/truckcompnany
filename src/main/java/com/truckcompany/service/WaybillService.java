@@ -93,7 +93,7 @@ public class WaybillService {
         Waybill waybill = new Waybill();
 
         Optional<User> dispatcher = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
-        User driver = userRepository.findOne(managedWaybillVM.getDriver().getId());
+        User driver = userRepository.findOne(managedWaybillVM.getDriverId());
         RouteList routeList = routeListService.createRouteList(managedWaybillVM.getRouteList());
 
         waybill.setDispatcher(dispatcher.get());

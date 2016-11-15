@@ -45,23 +45,22 @@ public class WaybillResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Waybill>> getAllWaybills() throws URISyntaxException {
+    public ResponseEntity<List> getAllWaybills() throws URISyntaxException {
         log.debug("REST request get all Waybills");
         Collection<SimpleGrantedAuthority> authorities =
             (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-        List<Waybill> waybills;
-        if (authorities.contains(new SimpleGrantedAuthority("ROLE_DRIVER"))) {
-            waybills = waybillService.getWaybillForDriver();
-        } else {
-            waybills = waybillRepository.findAll();
-        }
-        List<ManagedWaybillVM> managedWaybillVMs = waybills.stream()
-            .map(ManagedWaybillVM::new)
-            .collect(Collectors.toList());
 
         HttpHeaders headers = HeaderUtil.createAlert("waybill.getAll", null);
 
-        return new ResponseEntity(managedWaybillVMs, headers, HttpStatus.OK);
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_DRIVER"))) {
+            List <Waybill> waybills = waybillService.getWaybillForDriver();
+
+            return new ResponseEntity(waybills, headers, HttpStatus.OK);
+        } else {
+            List<WaybillDTO> waybillDTOs = waybillService.getAllWaybills();
+
+            return new ResponseEntity(waybillDTOs, headers, HttpStatus.OK);
+        }
     }
 
     @RequestMapping(value = "/waybills/{id}",
@@ -73,7 +72,8 @@ public class WaybillResource {
 
         ManagedWaybillVM waybill = waybillService.getWaybillById(id);
 
-        if (waybill == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (waybill == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<ManagedWaybillVM>(waybill, HttpStatus.OK);
     }

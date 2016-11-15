@@ -1,9 +1,6 @@
 package com.truckcompany.web.rest.vm;
 
 import com.truckcompany.domain.RouteList;
-import com.truckcompany.domain.Storage;
-import com.truckcompany.domain.Truck;
-import com.truckcompany.domain.Waybill;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;

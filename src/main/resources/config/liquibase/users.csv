@@ -20,8 +20,7 @@ id;login;password_hash;first_name;last_name;email;activated;lang_key;created_by;
 19;testadmin14;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;SuperAdmin;Superadmin;testadmin14@localhost;true;en;system;system;14
 20;testadmin15;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;SuperAdmin;Superadmin;testadmin15@localhost;true;en;system;system;15
 21;dispatcher;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;dispatcher@localhost;true;en;system;system;3
-22;dispatcher;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;dispatcher@localhost;true;en;system;system;3
-23;Driver_1_comp_3;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Alex;Hirch;driver_1_3@localhost;true;en;system;system;3
-24;Driver_2_comp_3;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Brain;Mozgh;driver_2_3@localhost;true;en;system;system;3
-25;Driver_3_comp_3;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Mike;Stark;driver_3_3@localhost;true;en;system;system;3
-26;Driver_4_comp_3;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Heisenberg;Letscook;driver_4_3@localhost;true;en;system;system;3
+22;Driver_1_comp_3;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Alex;Hirch;driver_1_3@localhost;true;en;system;system;3
+23;Driver_2_comp_3;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Brain;Mozgh;driver_2_3@localhost;true;en;system;system;3
+24;Driver_3_comp_3;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Mike;Stark;driver_3_3@localhost;true;en;system;system;3
+25;Driver_4_comp_3;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Heisenberg;Letscook;driver_4_3@localhost;true;en;system;system;3

@@ -1,10 +1,6 @@
 package com.truckcompany.web.rest.vm;
 
-import com.truckcompany.domain.RouteList;
-import com.truckcompany.domain.User;
 import com.truckcompany.domain.Waybill;
-import com.truckcompany.domain.WriteOffAct;
-import com.truckcompany.domain.enums.WaybillState;
 import com.truckcompany.service.dto.UserDTO;
 import com.truckcompany.service.dto.WaybillDTO;
 
@@ -18,11 +14,17 @@ public class ManagedWaybillVM extends WaybillDTO {
 
     private Long offerId;
 
+    private Long driverId;
+
     private String driverLogin;
 
     private Set<ManagedWaybillGoodsVM> waybillGoods;
 
-    private UserDTO driver;
+    private ManagedStorageVM arrivalStorage;
+
+    private ManagedStorageVM leavingStorage;
+
+    private ManagedTruckVM truck;
 
     public ManagedWaybillVM() {
     }
@@ -34,6 +36,9 @@ public class ManagedWaybillVM extends WaybillDTO {
             .stream()
             .map(ManagedWaybillGoodsVM::new)
             .collect(Collectors.toSet());
+        this.arrivalStorage = new ManagedStorageVM(waybill.getRouteList().getArrivalStorage());
+        this.leavingStorage = new ManagedStorageVM(waybill.getRouteList().getLeavingStorage());
+        this.truck = new ManagedTruckVM(waybill.getRouteList().getTruck());
     }
 
     public ManagedRouteListVM getRouteList() {
@@ -74,5 +79,37 @@ public class ManagedWaybillVM extends WaybillDTO {
 
     public void setWaybillGoods(Set<ManagedWaybillGoodsVM> waybillGoods) {
         this.waybillGoods = waybillGoods;
+    }
+
+    public Long getDriverId() {
+        return driverId;
+    }
+
+    public void setDriverId(Long driverId) {
+        this.driverId = driverId;
+    }
+
+    public ManagedStorageVM getArrivalStorage() {
+        return arrivalStorage;
+    }
+
+    public void setArrivalStorage(ManagedStorageVM arrivalStorage) {
+        this.arrivalStorage = arrivalStorage;
+    }
+
+    public ManagedStorageVM getLeavingStorage() {
+        return leavingStorage;
+    }
+
+    public void setLeavingStorage(ManagedStorageVM leavingStorage) {
+        this.leavingStorage = leavingStorage;
+    }
+
+    public ManagedTruckVM getTruck() {
+        return truck;
+    }
+
+    public void setTruck(ManagedTruckVM truck) {
+        this.truck = truck;
     }
 }
