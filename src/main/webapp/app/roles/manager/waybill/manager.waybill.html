@@ -23,7 +23,7 @@
         <tbody>
         <tr ng-repeat="waybill in vm.waybills">
             <td><div class="text-center">{{waybill.id}}</div></td>
-            <td>{{waybill.dispatcherLogin}}</td>
+            <td>{{waybill.dispatcher.firstName}}</td>
             <td>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</td>
             <td>{{waybill.date | date:"dd/MM/yyyy 'at' HH:mm"}}</td>
             <td><div class="text-center"><a href="">{{waybill.routeListId}}</a></div></td>
