@@ -1,5 +1,6 @@
 package com.truckcompany.service;
 
+import com.truckcompany.domain.Company;
 import com.truckcompany.domain.WriteOffAct;
 import com.truckcompany.repository.WriteOffActRepository;
 import com.truckcompany.web.rest.vm.ManagedWriteOffVM;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Created by Viktor Dobroselsky.
@@ -25,6 +27,11 @@ public class WriteOffActService {
         WriteOffAct writeOffAct = writeOffActRepository.getOne(id);
         log.debug("Get Information about WriteOffAct with id: {}", id);
         return writeOffAct;
+    }
+
+    public List<WriteOffAct> getWriteOffActByCompany (Company company){
+        log.debug("Get writeOffAct for company with id: {}", company.getId());
+        return writeOffActRepository.findByCompany(company);
     }
 
     public WriteOffAct createWriteOffAct (ManagedWriteOffVM managedWriteOffVM) {

@@ -15,7 +15,7 @@ public class ManagedRouteListVM extends RouteListDTO {
     public ManagedRouteListVM(RouteList routeList) {
         super(routeList);
     }
-    
+
     public ManagedRouteListVM(RouteListDTO routeListDTO){
         super(routeListDTO);
     }

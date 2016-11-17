@@ -4,7 +4,6 @@ import com.truckcompany.domain.RouteList;
 import com.truckcompany.domain.User;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.RouteListService;
-import com.truckcompany.service.StorageService;
 import com.truckcompany.service.UserService;
 import com.truckcompany.service.dto.RouteListDTO;
 import com.truckcompany.service.dto.StorageDTO;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.truckcompany.security.SecurityUtils.isCurrentUserInRole;
@@ -46,7 +44,7 @@ public class DefaultRouteListFacade implements RouteListFacade {
             log.debug("Get all routeLists for user \'{}\'", user.getLogin());
             List<RouteListDTO> routeLists = emptyList();
             if (isCurrentUserInRole("ROLE_COMPANYOWNER")){
-                routeLists = routeListService.getRouteListsBelongsCompany(user.getCompany())
+                routeLists = routeListService.getRouteListsByCompany(user.getCompany())
                                 .stream()
                                 .map(s -> toCompanyOwnerDTO(s))
                                 .collect(Collectors.toList());
@@ -64,7 +62,8 @@ public class DefaultRouteListFacade implements RouteListFacade {
         baseDTO.setArrivalStorage(new StorageDTO(routeList.getArrivalStorage()));
         baseDTO.setTruck(new TruckDTO(routeList.getTruck()));
         baseDTO.setWaybill( routeList.getWaybill() != null ?
-            new WaybillDTO(routeList.getWaybill().getId()) : null);
+            new WaybillDTO(routeList.getWaybill().getId(), routeList.getWaybill().getDate(),
+                routeList.getWaybill().getState().toString()) : null);
         return baseDTO;
     }
 

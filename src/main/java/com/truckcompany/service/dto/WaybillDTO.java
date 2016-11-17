@@ -2,6 +2,8 @@ package com.truckcompany.service.dto;
 
 import com.truckcompany.domain.Waybill;
 
+import java.time.ZonedDateTime;
+
 
 /**
  * A DTO representing a Waybill.
@@ -9,6 +11,10 @@ import com.truckcompany.domain.Waybill;
  */
 public class WaybillDTO {
     private Long id;
+
+    private ZonedDateTime date;
+
+    private String state;
 
     private UserDTO dispatcher;
 
@@ -21,16 +27,32 @@ public class WaybillDTO {
     public WaybillDTO() {
     }
 
-    public WaybillDTO(Long id) {
+    public WaybillDTO(Long id, ZonedDateTime date, String state) {
         this.id = id;
+        this.date = date;
+        this.state = state;
     }
 
     public WaybillDTO(Waybill waybill, RouteListDTO routeList) {
-        this(waybill.getId());
+        this(waybill);
+        this.routeList = routeList;
+    }
+
+    public WaybillDTO(Waybill waybill){
+        this(waybill.getId(), waybill.getDate(), waybill.getState().toString());
         this.dispatcher = waybill.getDispatcher() != null ? new UserDTO(waybill.getDispatcher()) : null;
         this.driver = waybill.getDriver() != null ? new UserDTO(waybill.getDispatcher()) : null;
-        this.routeList = routeList;
         this.writeOffAct = waybill.getWriteOff() != null ? new WriteOffActDTO(waybill.getWriteOff()) : null;
+        this.routeList = new RouteListDTO(waybill.getRouteList().getId(), waybill.getRouteList().getDate(),
+            waybill.getRouteList().getLeavingDate(), waybill.getRouteList().getArrivalDate());
+    }
+
+    public WaybillDTO(WaybillDTO waybill){
+        this(waybill.getId(), waybill.getDate(), waybill.getState().toString());
+        this.dispatcher = waybill.getDispatcher();
+        this.driver = waybill.getDriver();
+        this.writeOffAct = waybill.getWriteOffAct();
+        this.routeList = waybill.getRouteList();
     }
 
     public Long getId() {
@@ -71,6 +93,22 @@ public class WaybillDTO {
 
     public void setWriteOffAct(WriteOffActDTO writeOffAct) {
         this.writeOffAct = writeOffAct;
+    }
+
+    public ZonedDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(ZonedDateTime date) {
+        this.date = date;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     @Override

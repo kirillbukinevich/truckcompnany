@@ -30,4 +30,12 @@
         </addColumn>
 
     </changeSet>
+
+    <changeSet id="00000000000006" author="momotov">
+        <addColumn tableName="waybill">
+            <column name="company_id" type="INT(11)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

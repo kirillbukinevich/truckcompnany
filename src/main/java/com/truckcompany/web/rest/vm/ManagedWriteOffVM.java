@@ -9,4 +9,8 @@ public class ManagedWriteOffVM extends WriteOffActDTO{
    public ManagedWriteOffVM(WriteOffActDTO writeOff){
        super(writeOff);
    }
+
+   public ManagedWriteOffVM(WriteOffAct writeOffAct){
+       super(writeOffAct);
+   }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,8 +35,8 @@ public class RouteListService {
         return routeList;
     }
 
-    public List<RouteList> getRouteListsBelongsCompany(Company company){
-        return routeListRepository.findByCompany(company);
+    public List<RouteList> getRouteListsByCompany(Company company){
+        return routeListRepository.findByCompany(company).orElse(Collections.emptyList());
     }
 
     public void deleteRouteList (Long id) {

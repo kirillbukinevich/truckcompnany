@@ -29,5 +29,5 @@ public interface RouteListRepository extends JpaRepository <RouteList, Long> {
     @Override
     RouteList findOne (Long id);
 
-    List<RouteList> findByCompany(Company company);
+    Optional<List<RouteList>> findByCompany(Company company);
 }

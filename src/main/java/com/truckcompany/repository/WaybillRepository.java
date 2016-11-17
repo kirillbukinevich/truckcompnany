@@ -1,8 +1,6 @@
 package com.truckcompany.repository;
 
-import com.truckcompany.domain.Storage;
-import com.truckcompany.domain.User;
-import com.truckcompany.domain.Waybill;
+import com.truckcompany.domain.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -36,4 +34,6 @@ public interface WaybillRepository extends JpaRepository<Waybill, Long> {
         "left join fetch routeList.arrivalStorage " +
         "where waybill.driver=?1")
     List<Waybill> findByDriver(User driver);
+
+    List<Waybill> findByCompany(Company company);
 }

@@ -5,6 +5,7 @@ import com.truckcompany.domain.Storage;
 import com.truckcompany.domain.Waybill;
 import com.truckcompany.repository.WaybillRepository;
 import com.truckcompany.service.WaybillService;
+import com.truckcompany.service.facade.WaybillFacade;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import com.truckcompany.web.rest.vm.ManagedStorageVM;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
@@ -40,21 +41,16 @@ public class WaybillResource {
     @Inject
     private WaybillService waybillService;
 
+    @Inject
+    private WaybillFacade waybillFacade;
+
     @RequestMapping(value = "/waybills",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<List<Waybill>> getAllWaybills() throws URISyntaxException {
         log.debug("REST request get all Waybills");
-        Collection<SimpleGrantedAuthority> authorities =
-            (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-        List<Waybill> waybills;
-        if (authorities.contains(new SimpleGrantedAuthority("ROLE_DRIVER"))) {
-            waybills = waybillService.getWaybillForDriver();
-        } else {
-            waybills = waybillRepository.findAll();
-        }
-        List<ManagedWaybillVM> managedWaybillVMs = waybills.stream()
+        List<ManagedWaybillVM> managedWaybillVMs = waybillFacade.findWaybills().stream()
             .map(ManagedWaybillVM::new)
             .collect(Collectors.toList());
 

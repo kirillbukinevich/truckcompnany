@@ -63,7 +63,7 @@ public class RouteListResource {
 
         RouteList routeList = routeListService.getRouteListById(id);
         if (routeList == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<ManagedRouteListVM>(new ManagedRouteListVM(routeList),HttpStatus.OK);
+        return new ResponseEntity<>(new ManagedRouteListVM(routeList),HttpStatus.OK);
     }
 
     @RequestMapping (value = "/routelists",

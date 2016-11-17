@@ -15,6 +15,10 @@ public class Waybill implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
+
     @Column(name = "date")
     private ZonedDateTime date;
 
@@ -87,10 +91,19 @@ public class Waybill implements Serializable {
         this.writeOff = writeOff;
     }
 
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
     @Override
     public String toString() {
         return "Waybill{" +
             "id=" + id +
+            "company" + company +
             ", date=" + date +
             ", driver=" + driver +
             ", state=" + state +
