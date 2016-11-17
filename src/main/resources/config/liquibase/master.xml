@@ -6,9 +6,10 @@
 
     <include file="classpath:config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/02_fill_tc_company.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/03_fill_storage.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/04_fill_truck.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/05_add_companyid_to_routelist.xml" relativeToChangelogFile="false"/>
+    <!--<include file="classpath:config/liquibase/changelog/03_fill_storage.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/04_fill_truck.xml" relativeToChangelogFile="false"/> -->
+    <include file="classpath:config/liquibase/changelog/05_add_companyid_columns.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/06_add_companyid_to_writeoff.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>
