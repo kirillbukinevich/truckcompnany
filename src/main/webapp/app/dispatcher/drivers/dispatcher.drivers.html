@@ -3,7 +3,6 @@
 <table class="table table-hover">
     <thead>
     <tr>
-        <th><input type="checkbox" ng-model="vm.checkedAll" ng-change="vm.changeStateCheckbox()"></th>
         <th>id</th>
         <th>First name</th>
         <th>Last name</th>
@@ -13,7 +12,6 @@
     </thead>
     <tbody>
     <tr ng-repeat="driver in vm.drivers">
-        <td><input type="checkbox"></td>
         <td>{{driver.id}}</td>
         <td>{{driver.firstName}}</td>
         <td>{{driver.lastName}}</td>

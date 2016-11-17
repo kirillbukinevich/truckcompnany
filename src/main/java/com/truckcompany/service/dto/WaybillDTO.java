@@ -1,6 +1,9 @@
 package com.truckcompany.service.dto;
 
 import com.truckcompany.domain.Waybill;
+import com.truckcompany.domain.enums.WaybillState;
+
+import java.time.ZonedDateTime;
 
 
 /**
@@ -8,71 +11,72 @@ import com.truckcompany.domain.Waybill;
  * Created by Viktor Dobroselsky.
  */
 public class WaybillDTO {
-    private Long dispatcherId;
+    private Long id;
 
-    private Long driverId;
+    private ZonedDateTime date;
 
-    private Long routeListId;
+    private UserDTO driver;
 
-    private Long writeOffId;
+    private WaybillState state;
+
+    private UserDTO dispatcher;
+
+    public WaybillDTO(Long id, ZonedDateTime date, UserDTO driver, WaybillState state, UserDTO dispatcher) {
+        this.id = id;
+        this.date = date;
+        this.driver = driver;
+        this.state = state;
+        this.dispatcher = dispatcher;
+    }
 
     public WaybillDTO() {
     }
 
-    public WaybillDTO(Long dispatcherId,Long driverId,
-                      Long routeListId,Long writeOffId) {
-        this.dispatcherId = dispatcherId;
-        this.driverId = driverId;
-        this.routeListId = routeListId;
-        this.writeOffId = writeOffId;
+    public WaybillDTO (Waybill waybill) {
+        this.id = waybill.getId();
+        this.date = waybill.getDate();
+        this.driver = new UserDTO(waybill.getDriver());
+        this.dispatcher = new UserDTO(waybill.getDispatcher());
+        this.state = waybill.getState();
     }
 
-    public WaybillDTO(Waybill waybill) {
-        this(waybill.getDispatcher().getId(),
-            waybill.getDriver().getId(),
-            waybill.getRouteList().getId(),
-            waybill.getWriteOff().getId());
+    public Long getId() {
+        return id;
     }
 
-    public Long getDispatcherId() {
-        return dispatcherId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setDispatcherId(Long dispatcherId) {
-        this.dispatcherId = dispatcherId;
+    public ZonedDateTime getDate() {
+        return date;
     }
 
-    public Long getDriverId() {
-        return driverId;
+    public void setDate(ZonedDateTime date) {
+        this.date = date;
     }
 
-    public void setDriverId(Long driverId) {
-        this.driverId = driverId;
+    public UserDTO getDriver() {
+        return driver;
     }
 
-    public Long getRouteListId() {
-        return routeListId;
+    public void setDriver(UserDTO driver) {
+        this.driver = driver;
     }
 
-    public void setRouteListId(Long routeListId) {
-        this.routeListId = routeListId;
+    public WaybillState getState() {
+        return state;
     }
 
-    public Long getWriteOffId() {
-        return writeOffId;
+    public void setState(WaybillState state) {
+        this.state = state;
     }
 
-    public void setWriteOffId(Long writeOffId) {
-        this.writeOffId = writeOffId;
+    public UserDTO getDispatcher() {
+        return dispatcher;
     }
 
-    @Override
-    public String toString () {
-        return "WaybillDTO{" +
-            "dispatcherId=" + dispatcherId +
-            ", driverId=" + driverId +
-            ", routeListId=" + routeListId +
-            ", writeOffId=" + writeOffId +
-            "}";
+    public void setDispatcher(UserDTO dispatcher) {
+        this.dispatcher = dispatcher;
     }
 }
