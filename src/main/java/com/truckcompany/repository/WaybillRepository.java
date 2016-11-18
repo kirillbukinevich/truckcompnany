@@ -1,6 +1,5 @@
 package com.truckcompany.repository;
 
-import com.truckcompany.domain.Storage;
 import com.truckcompany.domain.User;
 import com.truckcompany.domain.Waybill;
 import org.springframework.data.jpa.repository.JpaRepository;

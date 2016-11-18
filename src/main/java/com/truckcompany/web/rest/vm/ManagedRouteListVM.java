@@ -1,11 +1,9 @@
 package com.truckcompany.web.rest.vm;
 
 import com.truckcompany.domain.RouteList;
-import com.truckcompany.domain.Storage;
-import com.truckcompany.domain.Truck;
-import com.truckcompany.domain.Waybill;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ManagedRouteListVM {
     private Long id;
@@ -19,6 +17,13 @@ public class ManagedRouteListVM {
     private Long leavingStorageId;
 
     private Long arrivalStorageId;
+
+
+    private ManagedStorageVM leavingStorage;
+
+    private ManagedStorageVM arrivalStorage;
+
+    private ManagedTruckVM truck;
 
     private Long waybillId;
 
@@ -52,8 +57,6 @@ public class ManagedRouteListVM {
     public void setId(Long id) {
         this.id = id;
     }
-
-
 
     public ZonedDateTime getLeavingDate() {
         return leavingDate;
@@ -93,6 +96,38 @@ public class ManagedRouteListVM {
 
     public void setArrivalStorageId(Long arrivalStorageId) {
         this.arrivalStorageId = arrivalStorageId;
+    }
+
+    public void setArrivalDate(String arrivalDate) {
+        this.arrivalDate = ZonedDateTime.parse(arrivalDate, DateTimeFormatter.RFC_1123_DATE_TIME);
+    }
+
+    public void setLeavingDate(String leavingDate) {
+        this.leavingDate = ZonedDateTime.parse(leavingDate, DateTimeFormatter.RFC_1123_DATE_TIME);
+    }
+
+    public ManagedStorageVM getLeavingStorage() {
+        return leavingStorage;
+    }
+
+    public void setLeavingStorage(ManagedStorageVM leavingStorage) {
+        this.leavingStorage = leavingStorage;
+    }
+
+    public ManagedStorageVM getArrivalStorage() {
+        return arrivalStorage;
+    }
+
+    public void setArrivalStorage(ManagedStorageVM arrivalStorage) {
+        this.arrivalStorage = arrivalStorage;
+    }
+
+    public ManagedTruckVM getTruck() {
+        return truck;
+    }
+
+    public void setTruck(ManagedTruckVM truck) {
+        this.truck = truck;
     }
 
     public Long getWaybillId() {

@@ -165,8 +165,10 @@
         </createTable>
 
         <createTable tableName="waybill_goods">
+            <column name="id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
             <column name="waybill_id" type="int">
-                <constraints nullable="false"/>
             </column>
             <column name="goods_id" type="int">
                 <constraints nullable="false"/>
@@ -179,7 +181,7 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="waybill_id, goods_id" tableName="waybill_goods"/>
+        <!--<addPrimaryKey columnNames="waybill_id, goods_id" tableName="waybill_goods"/>-->
 
         <createTable tableName="jhi_user">
             <column name="id" type="int" autoIncrement="${autoIncrement}">
