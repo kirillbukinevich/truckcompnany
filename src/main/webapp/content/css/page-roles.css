@@ -219,3 +219,31 @@
 #show-select{
     text-align: right;
 }
+
+
+.table > tbody > tr > td{
+    text-align:left;
+}
+.table > tbody > tr > td.text-align-right{
+    text-align: right;
+}
+.table > tbody > tr > td:last-child{
+    padding-right: 15px;
+}
+
+.status-active-nonactive{
+    min-width:100px;
+    width:1px;
+}
+.table-checkbox{
+    width:1px;
+    min-width:25px;
+}
+.table-delete{
+    width:1px;
+    min-width:25px;
+}
+
+.modal-content{
+    border-radius: 0;
+}

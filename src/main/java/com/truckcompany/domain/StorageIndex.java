@@ -25,6 +25,8 @@ public class StorageIndex {
     @Field("activated")
     private boolean activated;
 
+    @Field("deleted")
+    private boolean deleted;
 
     @Field("address")
     private String address;
@@ -34,10 +36,11 @@ public class StorageIndex {
 
     public StorageIndex(){}
 
-    public StorageIndex(Long id, String name, boolean activated, String address, Long idCompany){
+    public StorageIndex(Long id, String name, boolean activated, boolean deleted,  String address, Long idCompany){
         this.id = id;
         this.name = name;
         this.activated = activated;
+        this.deleted = deleted;
         this.address = address;
         this.idCompany = idCompany;
     }
@@ -46,6 +49,7 @@ public class StorageIndex {
         this.id = storage.getId();
         this.name = storage.getName();
         this.activated = storage.isActivated();
+        this.deleted = storage.isDeleted();
         this.address = storage.getAddress();
         this.idCompany = idCompany;
     }
@@ -72,6 +76,10 @@ public class StorageIndex {
 
     public void setActivated(boolean activated) {
         this.activated = activated;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 
     public String getAddress() {

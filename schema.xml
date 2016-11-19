@@ -190,6 +190,7 @@
     <uniqueKey>id</uniqueKey>
 	<field name="name" type="text_general" indexed="true" stored="true"/>
 	<field name="activated" type="boolean" indexed="true" stored="true"/>
+    <field name="deleted" type="boolean" indexed="true" stored="true"/>
 	<field name="address" type="text_general" indexed="true" stored="true"/>
     <field name="idcompany" type="long" indexed="true" stored="true"/>
 

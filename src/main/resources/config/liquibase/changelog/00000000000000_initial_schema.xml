@@ -44,6 +44,8 @@
 
             <column name="activated" type="boolean" defaultValue="true">
             </column>
+            <column name="deleted" type="boolean" defaultValue="false">
+            </column>
 
             <column name="company_id" type="int">
                 <constraints nullable="false"/>

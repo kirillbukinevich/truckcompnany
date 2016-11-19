@@ -19,15 +19,15 @@ public class Storage implements Serializable {
     private Long id;
 
     @Column(name = "name")
-    @Field("name")
     private String name;
 
     @Column(name = "activated")
-    @Field("activated")
     private boolean activated;
 
+    @Column(name="deleted")
+    private boolean deleted;
+
     @Column(name = "address")
-    @Field("address")
     private String address;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -56,6 +56,14 @@ public class Storage implements Serializable {
 
     public void setActivated(boolean activated) {
         this.activated = activated;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public Company getCompany() {
