@@ -8,11 +8,13 @@ import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 
 @Configuration
 @EnableSolrRepositories(basePackages = "com.truckcompany.repository.search", multicoreSupport = true, schemaCreationSupport = true)
+@ImportResource("classpath:repository-populate.xml")
 public class SolrConfiguration implements EnvironmentAware {
 
 

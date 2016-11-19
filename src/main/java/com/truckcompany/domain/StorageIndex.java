@@ -19,21 +19,17 @@ public class StorageIndex {
 
 
     @Field("name")
-
     private String name;
 
 
     @Field("activated")
-
     private boolean activated;
 
 
     @Field("address")
-
     private String address;
 
     @Field("idcompany")
-
     private Long idCompany;
 
     public StorageIndex(){}
