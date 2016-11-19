@@ -11,7 +11,6 @@ public class WriteOffActDTO {
 
     private ZonedDateTime date;
 
-    private CompanyDTO company;
 
     public WriteOffActDTO(Long id, Integer count, ZonedDateTime date){
         this.id = id;
@@ -25,7 +24,6 @@ public class WriteOffActDTO {
             writeOffAct.getCount(),
             writeOffAct.getDate()
         );
-        this.company = new CompanyDTO(writeOffAct.getCompany());
     }
 
     public WriteOffActDTO(WriteOffActDTO writeOffAct){
@@ -34,7 +32,6 @@ public class WriteOffActDTO {
             writeOffAct.getCount(),
             writeOffAct.getDate()
         );
-        this.company = writeOffAct.getCompany();
     }
 
     public Long getId() {
@@ -61,11 +58,4 @@ public class WriteOffActDTO {
         this.date = date;
     }
 
-    public CompanyDTO getCompany() {
-        return company;
-    }
-
-    public void setCompany(CompanyDTO company) {
-        this.company = company;
-    }
 }

@@ -7,10 +7,12 @@ import com.truckcompany.domain.Waybill;
 import com.truckcompany.service.dto.RouteListDTO;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ManagedRouteListVM extends RouteListDTO {
 
     public ManagedRouteListVM() {}
+
 
     public ManagedRouteListVM(RouteList routeList) {
         super(routeList);
@@ -19,7 +21,6 @@ public class ManagedRouteListVM extends RouteListDTO {
     public ManagedRouteListVM(RouteListDTO routeListDTO){
         super(routeListDTO);
     }
-
 
 
 }

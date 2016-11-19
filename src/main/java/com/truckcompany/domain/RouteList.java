@@ -10,6 +10,7 @@ import java.util.Date;
 public class RouteList implements Serializable {
     @Id
     @GeneratedValue
+    @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,6 +37,7 @@ public class RouteList implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "arrival_storage_id", nullable = false)
     private Storage arrivalStorage;
+
 
     @OneToOne(mappedBy = "routeList", fetch = FetchType.LAZY)
     private Waybill waybill;
@@ -82,6 +84,7 @@ public class RouteList implements Serializable {
         this.arrivalStorage = arrivalStorage;
     }
 
+
     public void setWaybill(Waybill waybill) {
         this.waybill = waybill;
     }
@@ -105,4 +108,5 @@ public class RouteList implements Serializable {
     public Waybill getWaybill() {
         return waybill;
     }
+
 }

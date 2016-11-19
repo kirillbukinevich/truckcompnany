@@ -23,6 +23,9 @@ public class WriteOffAct implements Serializable {
     @Column (name = "count")
     private Integer count;
 
+    @OneToOne(mappedBy = "writeOff")
+    private Waybill waybill;
+
     public Long getId() {
         return id;
     }
@@ -50,5 +53,12 @@ public class WriteOffAct implements Serializable {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+    public Waybill getWaybill() {
+        return waybill;
+    }
+
+    public void setWaybill(Waybill waybill) {
+        this.waybill = waybill;
     }
 }

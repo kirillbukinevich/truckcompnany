@@ -82,6 +82,15 @@
             <column name="arrival_storage_id" type="int">
                 <constraints nullable="false"/>
             </column>
+            <column name="state" type="ENUM('TRANSPORTATION', 'DELIVERED')">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_id" type="INT(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <createTable tableName="checkpoint">
@@ -120,6 +129,9 @@
             <column name="count" type="int">
                 <constraints nullable="false"/>
             </column>
+            <column name="company_id" type="INT(11)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <createTable tableName="waybill">
@@ -142,11 +154,16 @@
                 <constraints nullable="false"/>
             </column>
             <column name="write_off_id" type="int"/>
+            <column name="company_id" type="INT(11)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <createTable tableName="waybill_goods">
+            <column name="id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
             <column name="waybill_id" type="int">
-                <constraints nullable="false"/>
             </column>
             <column name="goods_id" type="int">
                 <constraints nullable="false"/>
@@ -159,7 +176,7 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="waybill_id, goods_id" tableName="waybill_goods"/>
+        <!--<addPrimaryKey columnNames="waybill_id, goods_id" tableName="waybill_goods"/>-->
 
         <createTable tableName="jhi_user">
             <column name="id" type="int" autoIncrement="${autoIncrement}">

@@ -63,7 +63,7 @@ public class DefaultRouteListFacade implements RouteListFacade {
         baseDTO.setTruck(new TruckDTO(routeList.getTruck()));
         baseDTO.setWaybill( routeList.getWaybill() != null ?
             new WaybillDTO(routeList.getWaybill().getId(), routeList.getWaybill().getDate(),
-                routeList.getWaybill().getState().toString()) : null);
+                routeList.getWaybill().getState()) : null);
         return baseDTO;
     }
 

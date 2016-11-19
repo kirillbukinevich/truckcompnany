@@ -1,0 +1,64 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title">Waybill details</h4>
+    </div>
+
+    <div class="modal-body">
+        <dl class="dl-horizontal">
+            <dt><span>Waybill's number:</span></dt>
+            <dd><span>{{vm.waybill.id}}</span></dd>
+
+            <dt><span>Dispatcher:</span></dt>
+            <dd><span>{{vm.waybill.dispatcher.firstName + " " + vm.waybill.dispatcher.lastName}}</span></dd>
+
+            <dt><span>Creation date:</span></dt>
+            <dd><span>{{vm.waybill.date | date:'dd/MM/yy HH:mm'}}</span></dd>
+
+            <dt><span>Driver:</span></dt>
+            <dd><span>{{vm.waybill.driver.firstName + " " + vm.waybill.driver.lastName}}</span></dd>
+
+            <dt><span>State:</span></dt>
+            <dd><span>{{vm.waybill.state}}</span></dd>
+        </dl>
+
+        <h4>Route list info:</h4>
+
+        <dl class="dl-horizontal">
+            <dt><span>Truck consumption:</span></dt>
+            <dd><span>{{vm.waybill.truck.consumption}}</span></dd>
+
+            <dt><span>Truck reg number:</span></dt>
+            <dd><span>{{vm.waybill.truck.regNumber}}</span></dd>
+
+
+            <dt><span>Leaving storage:</span></dt>
+            <dd><span>{{vm.waybill.leavingStorage.name}}</span></dd>
+
+            <dt><span>Leaving date:</span></dt>
+            <dd><span>{{vm.waybill.routeList.leavingDate | date:'dd/MM/yy HH:mm'}}</span></dd>
+
+
+            <dt><span>Arrival storage:</span></dt>
+            <dd><span>{{vm.waybill.arrivalStorage.name}}</span></dd>
+
+            <dt><span>Arrival date:</span></dt>
+            <dd><span>{{vm.waybill.routeList.arrivalDate | date:'dd/MM/yy HH:mm'}}</span></dd>
+        </dl>
+
+        <h4>Waybill goods</h4>
+
+        <dl class="dl-horizontal">
+            <div ng-repeat="stuff in vm.waybill.waybillGoods">
+                <dt>{{stuff.name}}:</dt>
+                <dd>{{stuff.count}} units</dd>
+            </div>
+        </dl>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon glyphicon-eye-close">&nbsp;Cancel</span>
+        </button>
+    </div>
+</div>

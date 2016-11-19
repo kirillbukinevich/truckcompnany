@@ -1,0 +1,43 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title">Offer details</h4>
+    </div>
+
+    <div class="modal-body">
+        <dl class="dl-horizontal">
+            <dt><span>Offer's number:</span></dt>
+            <dd><span>{{vm.offer.id}}</span></dd>
+
+            <dt><span>Created by:</span></dt>
+            <dd><span>{{vm.offer.createdBy}}</span></dd>
+
+            <dt><span>Creation date:</span></dt>
+            <dd><span>{{vm.offer.creationDate | date:'dd/MM/yy HH:mm'}}</span></dd>
+
+            <dt><span>Leaving storage:</span></dt>
+            <dd><span>{{vm.offer.leavingStorage.name}}</span></dd>
+
+            <dt><span>Arrival storage:</span></dt>
+            <dd><span>{{vm.offer.arrivalStorage.name}}</span></dd>
+
+            <dt><span>State:</span></dt>
+            <dd><span>{{vm.offer.state}}</span></dd>
+        </dl>
+
+        <h4>Offer goods</h4>
+
+        <dl class="dl-horizontal">
+            <div ng-repeat="stuff in vm.offer.offerGoods">
+                <dt><span>{{stuff.name}}:</span></dt>
+                <dd><span>{{stuff.count}} units</span></dd>
+            </div>
+        </dl>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon glyphicon-eye-close">&nbsp;Cancel</span>
+        </button>
+    </div>
+</div>

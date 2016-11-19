@@ -4,6 +4,7 @@ import com.truckcompany.domain.Company;
 import com.truckcompany.domain.RouteList;
 import com.truckcompany.repository.RouteListRepository;
 import com.truckcompany.repository.StorageRepository;
+import com.truckcompany.repository.TruckRepository;
 import com.truckcompany.web.rest.vm.ManagedRouteListVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,6 @@ import java.util.List;
 
 /**
  * Created by Viktor Dobroselsky.
- * ДОБАВИТЬ TRUCK REPOSITORY
  */
 @Service
 @Transactional
@@ -28,6 +28,9 @@ public class RouteListService {
 
     @Inject
     private StorageRepository storageRepository;
+
+    @Inject
+    private TruckRepository truckRepository;
 
     public RouteList getRouteListById (Long id) {
         RouteList routeList = routeListRepository.findOne(id);
@@ -53,17 +56,16 @@ public class RouteListService {
             r.setLeavingDate(managedRouteListVM.getLeavingDate());
             r.setArrivalStorage(storageRepository.getOne(managedRouteListVM.getArrivalStorage().getId()));
             r.setLeavingStorage(storageRepository.getOne(managedRouteListVM.getLeavingStorage().getId()));
-            //r.setTruck(truckRepository.getOne(managedRouteListVM.getTruckId()));
+            r.setTruck(truckRepository.getOne(managedRouteListVM.getTruck().getId()));
         });
     }
 
     public RouteList createRouteList (ManagedRouteListVM managedRouteListVM) {
         RouteList routeList = new RouteList();
-        routeList.setLeavingDate(managedRouteListVM.getLeavingDate());
         routeList.setArrivalDate(managedRouteListVM.getArrivalDate());
         routeList.setLeavingStorage(storageRepository.findOne(managedRouteListVM.getLeavingStorage().getId()));
         routeList.setArrivalStorage(storageRepository.findOne(managedRouteListVM.getArrivalStorage().getId()));
-        //routeList.setTruck(truckRepository.findOne(managedRouteListVM.getTruckId()));
+        routeList.setTruck(truckRepository.findOne(managedRouteListVM.getTruck().getId()));
 
         routeListRepository.save(routeList);
         log.debug("Created Information for RouteList");
