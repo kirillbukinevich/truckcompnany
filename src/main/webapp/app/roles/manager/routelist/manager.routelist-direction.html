@@ -1,0 +1,15 @@
+<ng-map center="[53, 25]" zoom="6">
+    <directions
+        draggable="false"
+        panel="directions-panel"
+        travel-mode="DRIVING"
+        waypoints={{vm.wayPoints}}
+        origin="Minsk"
+        destination="Moscow">
+    </directions>
+</ng-map>
+<div>
+    {{vm.wayPoints}}
+</div>
+<div id="directions-panel" style="width: 28%; float:left; height: 100%; overflow: auto; padding: 0px 5px">
+</div>

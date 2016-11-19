@@ -35,5 +35,29 @@
                     }
                 }
             )
+            .state('manager.routelist-direction', {
+                parent: 'manager',
+                url: '/manager/routelist/add-direction',
+
+                data: {
+                    authorities: ["ROLE_MANAGER"],
+                    pageTitle: 'activate.title'
+                },
+
+                views: {
+                    'page@roles': {
+                        templateUrl: 'app/roles/manager/routelist/manager.routelist-direction.html',
+                        controller: 'ManagerRoutelistsDirectionController',
+                        controllerAs: 'vm'
+                    }
+                },
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('activate');
+                        return $translate.refresh();
+                    }]
+                }
+
+            })
     }
 })();

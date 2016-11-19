@@ -24,3 +24,4 @@ id;login;password_hash;first_name;last_name;email;activated;lang_key;created_by;
 23;Driver_2_comp_3;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Brain;Mozgh;driver_2_3@localhost;true;en;system;system;3
 24;Driver_3_comp_3;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Mike;Stark;driver_3_3@localhost;true;en;system;system;3
 25;Driver_4_comp_3;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Heisenberg;Letscook;driver_4_3@localhost;true;en;system;system;3
+26;manager;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Mad;Manager;madman@localhost;true;en;system;system;3

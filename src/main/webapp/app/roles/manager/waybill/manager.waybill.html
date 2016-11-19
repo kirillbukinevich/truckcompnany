@@ -6,30 +6,46 @@
 
 <div ng-if="!vm.error">
     <!--<div id="control-panel">-->
-        <!--<a href="#/admincompany/storagecreate" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Create</a>-->
+    <!--<a href="#/admincompany/storagecreate" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Create</a>-->
     <!--</div>-->
 
     <table class="table table-hover">
         <thead>
         <tr>
             <th>Waybill №</th>
+            <th>Registration date</th>
             <th>Dispatcher</th>
             <th>Driver</th>
-            <th>Date</th>
-            <th>Route list №</th>
+            <!--<th>Route list №</th>-->
             <th>State</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="waybill in vm.waybills">
-            <td><div class="text-center">{{waybill.id}}</div></td>
+            <td>
+                <div class="text-center">{{waybill.id}}</div>
+            </td>
+            <td>{{waybill.date | date:"dd/MM/yy HH:mm"}}</td>
             <td>{{waybill.dispatcher.firstName}}</td>
             <td>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</td>
-            <td>{{waybill.date | date:"dd/MM/yyyy 'at' HH:mm"}}</td>
-            <td><div class="text-center"><a href="">{{waybill.routeListId}}</a></div></td>
-            <td>{{waybill.state}}</td>
+            <!--<td><div class="text-center"><a href="">{{waybill.routeList.id}}</a></div></td>-->
+            <td>
+                <span ng-if="waybill.state == 'CREATED'" class="label label-info"><span class="glyphicon glyphicon-transfer"></span>&nbsp;CREATED</span>
+                <span ng-if="waybill.state == 'CHECKED'" class="label label-primary"><span class="glyphicon glyphicon-ok"></span>&nbsp;CHECKED</span>
+                <span ng-if="waybill.state == 'DELIVERED'" class="label label-success">DELIVERED</span>
+            </td>
+            <td class="text-right">
+                <div class="btn-group flex-btn-group-container">
+                    <a href="#/manager/waybills/details/{{waybill.id}}" type="button" class="btn btn-success btn-sm" ng-if="waybill.state == 'CREATED'">
+                        <span class="glyphicon glyphicon-list-alt"></span>&nbsp;Handle</a>
+                    <button ng-click="vm.cancelOffer(offer)" type="button" class="btn btn-danger btn-sm" ng-if="offer.state == 'NEW'">
+                        <span class="glyphicon glyphicon-remove-sign"></span>&nbsp;Cancel
+                    </button>
+                    <a href="#/manager/waybills/details/{{waybill.id}}" type="button" class="btn btn-primary btn-sm" ng-if="waybill.state == 'CHECKED'">
+                        <span class="glyphicon glyphicon glyphicon-eye-open"></span>&nbsp;Details</a>
+                </div>
+            </td>
         </tr>
         </tbody>
     </table>
-
 </div>

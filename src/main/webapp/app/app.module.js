@@ -20,7 +20,8 @@
             'ui.select',
             'ngSanitize',
             "ngAnimate",
-            'ngImgCrop'
+            'ngImgCrop',
+            'ngMap'
         ])
         .run(run);
 
