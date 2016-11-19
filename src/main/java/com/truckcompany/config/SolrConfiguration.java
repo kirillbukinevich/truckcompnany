@@ -36,9 +36,11 @@ public class SolrConfiguration implements EnvironmentAware {
         return new HttpSolrClient(solrHost);
     }
 
-/*    @Bean
+
+/*
+   @Bean
     public SolrTemplate solrTemplate(SolrClient server) throws Exception {
         return new SolrTemplate(new HttpSolrServerFactory(server));
     }*/
-
 }
+

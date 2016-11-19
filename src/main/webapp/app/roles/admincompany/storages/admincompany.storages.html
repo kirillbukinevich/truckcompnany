@@ -1,3 +1,4 @@
+<form name="form">
 <h1>Storages</h1>
 
 <div ng-if="vm.error" class="alert alert-danger" role="alert">
@@ -5,21 +6,42 @@
 </div>
 
 <div ng-if="!vm.error">
+
     <div id="control-panel">
         <a href="#/admincompany/storagecreate" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Create</a>
+
+
+        <div class="row">
+            <div class="col-md-4">
+                <div id="wrap-search">
+                    <input type="text" ng-keyup ="vm.searchStorage($event)" ng-model="vm.searchQuery">
+                </div>
+            </div>
+            <div class="col-md-8" id="show-select">
+                <span class="select-show-title">Show:</span>
+                <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage"
+                        ng-change="vm.changeItemsPerPage()" class="btn btn-default">
+                </select>
+            </div>
+        </div>
     </div>
+
+
+
 
     <table class="table table-hover">
         <thead>
 
         <tr>
             <th>Name</th>
+            <th>Address</th>
             <th>Status</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="storage in vm.storages">
-            <td><a href="#/admincompany/storages/{{storage.id}}">{{storage.name}}</a></td>
+            <td><a href="#/admincompany/storages/{{storage.id}}"><span ng-bind-html="storage.name">{{storage.name}}</span></a></td>
+            <td ng-bind-html="storage.address">{{storage.address}}</td>
             <td class="text-align-center">
                 <span ng-if="storage.activated" ng-click="vm.toggleStatus(storage)" class="label label-success">ACTIVE</span>
                 <span ng-if="!storage.activated" ng-click="vm.toggleStatus(storage)"
@@ -31,4 +53,4 @@
 
 </div>
 
-
+</form>

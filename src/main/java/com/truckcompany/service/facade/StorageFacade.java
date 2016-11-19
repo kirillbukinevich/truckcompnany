@@ -12,6 +12,7 @@ import java.util.List;
 public interface StorageFacade {
 
     List<StorageDTO> findStorages();
+    List<StorageDTO> findStoragesAccordingQuery(String query);
     Storage updateStorage(ManagedStorageVM managedStorageVM) throws UpdateStorageException;
 
 }

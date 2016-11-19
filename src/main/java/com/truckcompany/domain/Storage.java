@@ -5,10 +5,10 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 
 import javax.persistence.*;
 import java.io.Serializable;
-
 @Entity
 @Table(name = "storage")
-@SolrDocument(solrCoreName = "storages")
+
+
 public class Storage implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -72,5 +72,7 @@ public class Storage implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+
+
     }
 }

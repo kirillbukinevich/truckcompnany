@@ -187,3 +187,35 @@
     margin:0;
     float:right;
 }
+
+
+#wrap-search input{
+    width:100%;
+    height:34px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 12px;
+    padding-left: 35px;
+}
+#wrap-search{
+    position:relative;
+}
+#wrap-search:after{
+    display:block;
+    position:absolute;
+    top:7px;
+    left:10px;
+    content: "\e003";
+    font-size:16px;
+    font-family: 'Glyphicons Halflings';
+    color:#717171;
+}
+
+#control-panel .row{
+    margin:0;
+    padding-top: 10px;
+}
+
+#show-select{
+    text-align: right;
+}

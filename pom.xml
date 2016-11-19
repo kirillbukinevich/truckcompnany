@@ -66,8 +66,16 @@
         <profile.swagger></profile.swagger>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>spring-milestone</id>
+            <name>Spring Milestone Maven Repository</name>
+            <url>http://repo.springsource.org/libs-milestone</url>
+        </repository>
+    </repositories>
 
     <dependencies>
+
 
         <dependency>
             <groupId>org.springframework.data</groupId>

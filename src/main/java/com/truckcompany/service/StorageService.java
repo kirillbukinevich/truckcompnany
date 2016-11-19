@@ -71,6 +71,7 @@ public class StorageService {
             .ifPresent(user -> {
                 storage.setName(managedStorageVM.getName());
                 storage.setActivated(managedStorageVM.isActivated());
+                storage.setAddress(managedStorageVM.getAddress());
                 storage.setCompany(user.getCompany());
                 storageRepository.save(storage);
             });
