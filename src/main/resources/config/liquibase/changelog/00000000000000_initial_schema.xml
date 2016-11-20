@@ -67,6 +67,23 @@
             </column>
         </createTable>
 
+        <createTable tableName="template">
+            <column name="id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(20)"/>
+            <column name="birthday" type="timestamp"/>
+            <column name="template" type="text"/>
+            <column name="background" type="varchar(8)"/>
+            <column name="recipient_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="admin_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+
         <createTable tableName="route_list">
             <column name="id" type="int" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
@@ -246,6 +263,11 @@
             </column>
         </createTable>
 
+
+
+
+
+
         <addPrimaryKey columnNames="user_id, authority_name" tableName="jhi_user_authority"/>
 
         <createTable tableName="jhi_persistent_token">
@@ -261,6 +283,10 @@
             <column name="ip_address" type="varchar(39)"/>
             <column name="user_agent" type="varchar(255)"/>
         </createTable>
+
+
+
+
 
         <addForeignKeyConstraint baseColumnNames="authority_name"
                                  baseTableName="jhi_user_authority"
@@ -407,6 +433,19 @@
                                  constraintName="fk_evt_pers_audit_evt_data"
                                  referencedColumnNames="event_id"
                                  referencedTableName="jhi_persistent_audit_event"/>
+
+
+        <addForeignKeyConstraint baseColumnNames="recipient_id"
+                                 baseTableName="template"
+                                 constraintName="fk_recipient_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="admin_id"
+                                 baseTableName="template"
+                                 constraintName="fk_admin_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
 
     </changeSet>
 </databaseChangeLog>

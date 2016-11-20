@@ -67,7 +67,6 @@
         }
 
         vm.changeStateCheckbox = function () {
-            console.log("changeState")
             for (var i in vm.selected){
                 vm.selected[i] = vm.checkedAll;
             }

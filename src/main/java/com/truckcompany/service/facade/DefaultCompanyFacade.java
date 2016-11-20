@@ -49,7 +49,7 @@ public class DefaultCompanyFacade implements CompanyFacade {
     public CompanyDTO getCompanyWithAdmin(Long id){
         Company company = companyService.getCompanyById(id);
         if (company != null){
-            return new CompanyDTO(company, companyService.getAdminForCompany(company));
+            return convertToCompanyDtoWithAdmins().apply(company);
         }
         return null;
     }

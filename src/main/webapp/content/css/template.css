@@ -1,0 +1,27 @@
+#day{
+    float:left;
+    width:55px;
+    margin:10px 5px 0px 0;
+}
+#month{
+    width:110px;
+    float:left;
+    margin:10px 5px 0px 0;
+}
+.clear{
+    clear:both;
+}
+
+#modal-warning-before-delete .modal-header{
+    background: #f2dede;
+    color: #a94442;
+}
+#modal-warning-before-delete .modal-body p {
+    padding: 0px;
+    text-align: center;
+
+}
+
+#modal-warning-before-delete .modal-body{
+    text-align:center;
+}

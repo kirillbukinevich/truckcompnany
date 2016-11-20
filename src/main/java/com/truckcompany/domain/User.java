@@ -76,7 +76,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private ZonedDateTime resetDate = null;
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(
         name = "jhi_user_authority",
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
@@ -91,6 +91,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "company_id" )
     private Company company;
+
 
     @Column (name = "middle_name")
     private String middleName;

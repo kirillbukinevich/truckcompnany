@@ -9,6 +9,7 @@ import com.truckcompany.domain.User;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.*;
+import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,18 +45,20 @@ public class UserDTO {
 
     private Set<String> authorities;
 
+    private ZonedDateTime birthDate;
+
     public UserDTO() {
     }
 
     public UserDTO(User user) {
         this(user.getId(), user.getLogin(), user.getFirstName(), user.getLastName(),
-            user.getEmail(), user.getLogo(), user.getActivated(), user.getLangKey(),
+            user.getEmail(), user.getLogo(), user.getActivated(), user.getLangKey(), user.getBirthDate(),
             user.getAuthorities().stream().map(Authority::getName)
                 .collect(Collectors.toSet()), user.getCompany());
     }
 
     public UserDTO(Long id, String login, String firstName, String lastName,
-        String email, String logo, boolean activated, String langKey, Set<String> authorities, Company company) {
+        String email, String logo, boolean activated, String langKey, ZonedDateTime birthDate, Set<String> authorities, Company company) {
         this.id = id;
         this.login = login;
         this.firstName = firstName;
@@ -64,6 +67,7 @@ public class UserDTO {
         this.logo = logo;
         this.activated = activated;
         this.langKey = langKey;
+        this.birthDate = birthDate;
         this.authorities = authorities;
         this.company = company;
     }
@@ -100,8 +104,9 @@ public class UserDTO {
         return  logo;
     }
 
-
-
+    public ZonedDateTime getBirthDate() {
+        return birthDate;
+    }
 
     @Override
     public String toString() {

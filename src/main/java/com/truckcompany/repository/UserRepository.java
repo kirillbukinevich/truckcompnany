@@ -42,4 +42,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findUsersBelongCompanyWithAuthorities(Long id);
 
     List<User> findByCompanyAndAuthorities(Company company, Set authorities);
+
+
 }

@@ -35,6 +35,43 @@ public class UploadUtil {
 
     private static Set<String> accessExt = new HashSet<>(Arrays.asList("JPG", "PNG", "BMP", "GIF", "TIF"));
 
+    public static String uploadImage(Part image, String uploadDirectory) throws UploadException, IOException {
+
+        if (image == null) {
+            throw new UploadException(IMAGE_NOT_EXCITED);
+        }
+        if (!accessExt.contains(getExtensionFile(image.getSubmittedFileName()))) {
+            throw new UploadException(INVALID_EXTENSTION);
+        }
+        if (!createFolderForUpload(uploadDirectory)) {
+            throw new UploadException(INVALID_UPLOAD_DIRECTORY);
+        }
+
+        FileOutputStream fileOutputStream = null;
+        InputStream inputStream = null;
+        byte[] filecontent = null;
+        try {
+            String nameImage = getUniqueFileName(image.getSubmittedFileName());
+            File newImage = new File(uploadDirectory + File.separator + nameImage);
+            fileOutputStream = new FileOutputStream(newImage);
+
+            inputStream = image.getInputStream();
+            filecontent = IOUtils.toByteArray(inputStream);
+            fileOutputStream.write(filecontent);
+            return nameImage;
+        } catch (IOException ex) {
+            throw new UploadException(UploadImageErrors.UPLOAD_ERROR, ex);
+        } finally {
+            if (fileOutputStream != null) {
+                fileOutputStream.close();
+            }
+            if (inputStream != null){
+                inputStream.close();
+            }
+        }
+    }
+
+
     public static String uploadImage(String image, String realImageName, String uploadDirectory) throws IOException, UploadException {
         if (image == null) {
             throw new UploadException(IMAGE_NOT_EXCITED);
