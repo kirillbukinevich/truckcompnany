@@ -1,49 +1,203 @@
+
+
+
+
+
+
+
+
+
 <h1>Employee</h1>
+
 <div class="alert alert-danger" ng-if="vm.error">
     {{vm.messageError}}
 </div>
 
-<form>
-    <div class="form-group">
-        <label for="firstName">First name:</label>
-        <input type="text" ng-model="vm.user.firstName" class="form-control" id="firstName" placeholder="Enter first name">
+<form name="form">
+    <div class="form-group" ng-class="{'has-error' : (form.firstName.$dirty && form.firstName.$invalid) }">
+        <label for="firstName" class="control-label">First name:</label>
+        <input type="text" ng-model="vm.user.firstName" name="firstName" class="form-control" id="firstName"
+               placeholder="First name" required ng-maxlength="50">
+        <div ng-show="form.firstName.$dirty && form.firstName.$invalid">
+            <p class="help-block"
+               ng-show="form.firstName.$error.required">
+                First name is required.
+            </p>
+            <p class="help-block"
+               ng-show="form.firstName.$error.maxlength">
+                First name must consist of less than 50 symbols.
+            </p>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="lastname">Last name:</label>
-        <input type="text" ng-model="vm.user.lastName" class="form-control" id="lastname" placeholder="Enter last name">
-    </div>
-    <div class="form-group">
-        <label for="login">Login:</label>
-        <input type="text" ng-model="vm.user.login" class="form-control" id="login" placeholder="Enter login">
-    </div>
-    <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="text" ng-model="vm.user.email" class="form-control" id="email" placeholder="Enter email">
-    </div>
-    <div class="form-group">
-        <label for="role">Role:</label>
-        <div>
-            <label>
-                <input type="radio" ng-model="vm.user.authorities[0]" id="role" value="ROLE_DISPATCHER">
-                DISPATCHER
-            </label>
-            <label>
-                <input type="radio" ng-model="vm.user.authorities[0]"  value="ROLE_MANAGER">
-                MANAGER
-            </label>
-            <label>
-                <input type="radio" ng-model="vm.user.authorities[0]"  value="ROLE_DRIVER">
-                DRIVER
-            </label>
-            <label>
-                <input type="radio" ng-model="vm.user.authorities[0]"  value="ROLE_COMPANYOWNER">
-                COMPANY OWNER
-            </label>
+    <div class="form-group" ng-class="{'has-error' : (form.lastName.$dirty && form.lastName.$invalid) }">
+        <label for="lastname" class="control-label">Last name:</label>
+        <input type="text" ng-model="vm.user.lastName" name="lastName" class="form-control" id="lastname"
+               placeholder="Last name" required ng-maxlength="50">
+        <div ng-show="form.lastName.$dirty && form.firstName.$invalid">
+            <p class="help-block"
+               ng-show="form.lastName.$error.required">
+                Last name is required.
+            </p>
+            <p class="help-block"
+               ng-show="form.lastName.$error.maxlength">
+                Last name must consist of less than 50 symbols.
+            </p>
         </div>
     </div>
 
+    <div class="form-group" ng-class="{'has-error' : (form.birthday.$dirty && form.birthday.$invalid) }">
+        <label for="birthday" class="control-label">Birthday:</label>
+        <p class="input-group" id="wrap-birthday">
+            <input type="text" class="form-control"
+                   uib-datepicker-popup="{{vm.format}}"
+                   ng-model="vm.user.birthDate"
+                   is-open="vm.isOpenDatePopup"
+                   datepicker-options="vm.dateOptions"
+                   ng-required="true" name="birthday"
+                   close-text="Close"
+                   alt-input-formats="vm.altInputFormats" id="birthday" placeholder="Birthday"/>
+            <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="vm.openDatePopup()"><i
+                class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+        </p>
+        <div ng-show="form.birthday.$dirty && form.birthday.$invalid">
+            <p class="help-block"
+               ng-show="form.birthday.$error.required">
+                Birthday is required.
+            </p>
+            <p class="help-block"
+               ng-show="form.birthday.$error.date">
+                Date is invalid.
+            </p>
+        </div>
+    </div>
 
-    <a href="" class="btn btn-default" ng-click="vm.update()">Update</a>
-    <a href="#/admincompany/users" class="btn btn-default">Cancel</a>
+    <div class="form-group">
+        <div class="row" id="fragments-address">
+            <div class="col-md-3">
+                <div class="form-group" ng-class="{'has-error' : (form.city.$dirty && form.city.$invalid) }">
+                    <label class="control-label">City</label>
+                    <input type="text" ng-model="vm.user.city" name="city" class="form-control" ng-maxlength="45"
+                           placeholder="City"/>
+                    <div ng-show="form.city.$dirty && form.city.$invalid">
+                        <p class="help-block"
+                           ng-show="form.city.$error.maxlength">
+                            Name of city must consist of less than 45 symbols.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group" ng-class="{'has-error' : (form.street.$dirty && form.street.$invalid) }">
+                    <label class="control-label">Street</label>
+                    <input type="text" ng-model="vm.user.street" name="street" class="form-control" ng-maxlength="45"
+                           placeholder="Street"/>
+                    <div ng-show="form.street.$dirty && form.street.$invalid">
+                        <p class="help-block"
+                           ng-show="form.street.$error.maxlength">
+                            Name of street must consist of less than 45 symbols.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group" ng-class="{'has-error' : (form.house.$dirty && form.house.$invalid) }">
+                    <label class="control-label">House</label>
+                    <input type="text" ng-model="vm.user.house" name="house" class="form-control" ng-pattern="/^\d+$/"
+                           placeholder="House"/>
+                    <div ng-show="form.house.$dirty && form.house.$invalid">
+                        <p class="help-block"
+                           ng-show="form.house.$error.pattern">
+                            Number of house must be numeric only.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group" ng-class="{'has-error' : (form.flat.$dirty && form.flat.$invalid) }">
+                    <label class="control-label">Flat</label>
+                    <input type="text" ng-model="vm.user.flat" name="flat" class="form-control" ng-pattern="/^\d+$/"
+                           placeholder="Flat"/>
+                    <div ng-show="form.flat.$dirty && form.flat.$invalid">
+                        <p class="help-block"
+                           ng-show="form.flat.$error.pattern">
+                            Number of flat must be numeric only.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group" ng-class="{'has-error' : (form.passport.$dirty && form.passport.$invalid) }">
+        <label for="passport" class="control-label">Passport data:</label>
+        <input type="text" ng-model="vm.user.passport" name="passport" class="form-control" id="passport" placeholder="Passport data"
+               ng-maxlength="45">
+        <div ng-show="form.passport.$dirty && form.passport.$invalid">
+            <p class="help-block"
+               ng-show="form.passport.$error.maxlength">
+                Passport data must consist of less than 45 symbols.
+            </p>
+        </div>
+    </div>
+    <div class="form-group" ng-class="{'has-error' : (form.login.$dirty && form.login.$invalid) }">
+        <label for="login" class="control-label">Login:</label>
+        <input type="text" ng-model="vm.user.login" name="login" class="form-control" id="login" placeholder="Login" disabled
+               required ng-maxlength="50">
+        <div ng-show="form.login.$dirty && form.login.$invalid">
+            <p class="help-block"
+               ng-show="form.login.$error.required">
+                Login is required.
+            </p>
+            <p class="help-block"
+               ng-show="form.login.$error.maxlength">
+                Login must consist of less than 50 symbols.
+            </p>
+        </div>
+    </div>
+    <div class="form-group" ng-class="{'has-error' : (form.email.$dirty && form.email.$invalid) }">
+        <label for="email" class="control-label">Email:</label>
+        <input type="text" ng-model="vm.user.email" name="email" class="form-control" id="email" placeholder="Email" disabled
+               required
+               ng-pattern='/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'>
+        <div ng-show="form.email.$dirty && form.email.$invalid">
+            <p class="help-block"
+               ng-show="form.email.$error.required">
+                Email is required.
+            </p>
+            <p class="help-block"
+               ng-show="form.email.$error.pattern">
+                Email is invalid.
+            </p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="dispatcher">Role:</label>
+        <div>
+            <div class="wrap-radio-role" id="role-dispatcher">
+                <input type="radio" id="dispatcher" ng-model="vm.user.authorities[0]" value="ROLE_DISPATCHER">
+                <label for="dispatcher"></label>
+            </div>
+            <div class="wrap-radio-role" id="role-manager">
+                <input type="radio" id="manager" ng-model="vm.user.authorities[0]" value="ROLE_MANAGER">
+                <label for="manager"></label>
+            </div>
+            <div class="wrap-radio-role" id="role-driver">
+                <input type="radio" id="driver" ng-model="vm.user.authorities[0]" value="ROLE_DRIVER">
+                <label for="driver"></label>
+            </div>
+            <div class="wrap-radio-role" id="role-companyowner">
+                <input type="radio" id="companyowner" ng-model="vm.user.authorities[0]" value="ROLE_COMPANYOWNER">
+                <label for="companyowner"></label>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="form-control-button">
+        <a href="" class="btn btn-primary" ng-click="vm.update()" ng-disabled="form.$invalid">Update</a>
+        <a href="#/admincompany/users" class="btn btn-primary">Cancel</a>
+    </div>
 </form>
+
 

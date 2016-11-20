@@ -1,44 +1,78 @@
-/**
- * Created by Vladimir on 30.10.2016.
- */
-
 (function() {
     'use strict';
-
     angular
         .module('truckCompanyApp')
         .controller('AdmincompanyUsersController', AdmincompanyUsersController);
 
-    AdmincompanyUsersController.$inject = ['$stateParams', '$state','Company', 'Upload','$http'];
+    AdmincompanyUsersController.$inject = ['$state','$http','pagingParams', 'UserUtilService', 'Employee'];
 
-    function AdmincompanyUsersController ($stateParams, $state, Company, Upload, $http) {
+    function AdmincompanyUsersController ( $state, $http, pagingParams, UserUtilService, Employee) {
         var vm = this;
 
-        vm.load = load;
+        vm.loadPage = loadPage;
+        vm.transition = transition;
+        vm.changeItemsPerPage = changeItemsPerPage;
         vm.toggleStatus = toggleStatus;
+        vm.changeStateCheckbox = changeStateCheckbox;
+        vm.getRoleForUI =UserUtilService.getRoleForUI;
+
         vm.users = [];
-        vm.load();
+        vm.checkedAll = false;
+
+        vm.availableItemsPerPage = [2, 10, 20];
+        vm.page = 1;
+        vm.itemsPerPage = pagingParams.size;
 
 
-        function load () {
-            console.log('LOAD AdmincompanyUsersController')
-            $http({
-                method: 'GET',
-                url: '/api/company/employee'
-            }).then(function successCallback(response) {
-                vm.users = response.data;
-                console.log(vm.users)
-            }, function errorCallback(response) {
+        vm.loadPage();
 
-            });
+
+        function loadPage () {
+            Employee.query({
+                page: pagingParams.page - 1,
+                size: vm.itemsPerPage
+            }, onSuccess, onError);
+        }
+
+        function onSuccess(data, headers){
+            vm.error = false;
+            vm.users = data;
+            vm.totalItems = headers('X-Total-Count');
+            vm.queryCount = vm.totalItems;
+            vm.page = pagingParams.page;
+        }
+
+        function onError(){
+
         }
 
         function toggleStatus(user){
             $http({
                 method: 'GET',
-                url: '/api/user/change_status/' + user.id,
-            }).then(function successCallback(response) {
+                url: '/api/user/change_status/' + user.id
+            }).then(function() {
                 user.activated = !user.activated;
+            });
+        }
+
+
+        function changeStateCheckbox() {
+            for (var i in vm.selected) {
+                vm.selected[i] = vm.checkedAll;
+            }
+        }
+
+        function transition () {
+            $state.transitionTo($state.$current, {
+                page: vm.page,
+                size:  vm.itemsPerPage
+            });
+        }
+
+        function changeItemsPerPage(){
+            $state.transitionTo($state.$current, {
+                page: 1,
+                size:  vm.itemsPerPage
             });
         }
     }

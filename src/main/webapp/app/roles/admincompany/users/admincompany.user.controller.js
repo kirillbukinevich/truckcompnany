@@ -15,6 +15,18 @@
 
         vm.load = load;
         vm.update = update;
+
+        vm.dateOptions = {
+            maxDate: new Date()
+        };
+        vm.format = 'yyyy/MM/dd';
+        vm.altInputFormats = ['M!/d!/yyyy'];
+
+
+        vm.openDatePopup = function(){
+            vm.isOpenDatePopup = true;
+        }
+
         vm.user = {};
         vm.error = false;
 
@@ -27,6 +39,7 @@
                 url: '/api/company/employee/' + id,
             }).then(function successCallback(response) {
                 vm.user = response.data;
+                vm.user.birthDate = new Date(vm.user.birthDate);
                 console.log(vm.user)
             }, function errorCallback(response) {
                 console.log("ERROR GET EMPLOYEE")

@@ -27,6 +27,7 @@
 #logo-image{
     border-radius: 50%;
     width: 100%;
+    max-width:62px;
 }
 .row-margin{
     margin:0 0;
@@ -156,7 +157,7 @@
 }
 
 
-
+/*
 .btn-default{
     background: #fff;
     border: 1px solid #ccc;
@@ -165,7 +166,7 @@
 .btn-default:hover{
     color:#333;
     border: 1px solid #ccc;
-}
+}*/
 
 #save-template{
     margin:10px 0;
@@ -186,4 +187,25 @@
 .pagination{
     margin:0;
     float:right;
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (max-width: 991px) {
+    #page-role > .row{
+        margin-right:0px;
+    }
+    #wrap-profile{
+        margin: 0 auto;
+        text-align:center;
+    }
+    #page-role-content{
+        margin-right:0;
+        margin-left:15px;
+    }
+
+
+}
+
+.form-control-button{
+    margin:40px 0 10px 0;
 }
