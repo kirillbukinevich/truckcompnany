@@ -27,7 +27,7 @@
 
     run.$inject = ['stateHandler', 'translationHandler','$rootScope', '$state', '$stateParams'];
 
-    function run(stateHandler, translationHandler) {
+    function run(stateHandler, translationHandler, $rootScope, $state, $stateParams) {
         stateHandler.initialize();
         translationHandler.initialize();
         $rootScope.$state = $state;
