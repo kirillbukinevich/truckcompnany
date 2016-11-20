@@ -32,8 +32,8 @@ public class CheckpointService {
 
     @Inject WaybillService waybillService;
 
-    public List<Checkpoint> getCheckpoints(){
-        List<Waybill> waybill = waybillService.getWaybillForDriver();
+    public List<Checkpoint> getCheckpoints(User driver){
+        List<Waybill> waybill = waybillService.getWaybillByDriver(driver);
 
         return checkpointRepository.findByRouteList(waybill.get(0).getRouteList());
     }

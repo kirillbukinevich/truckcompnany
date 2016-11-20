@@ -85,6 +85,12 @@
             <column name="state" type="ENUM('TRANSPORTATION', 'DELIVERED')">
                 <constraints nullable="false"/>
             </column>
+            <column name="company_id" type="INT(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <createTable tableName="checkpoint">
@@ -123,6 +129,9 @@
             <column name="count" type="int">
                 <constraints nullable="false"/>
             </column>
+            <column name="company_id" type="INT(11)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <createTable tableName="waybill">
@@ -145,6 +154,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="write_off_id" type="int"/>
+            <column name="company_id" type="INT(11)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <createTable tableName="waybill_goods">

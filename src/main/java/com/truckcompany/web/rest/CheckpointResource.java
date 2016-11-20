@@ -3,8 +3,11 @@ package com.truckcompany.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.Checkpoint;
+import com.truckcompany.domain.User;
 import com.truckcompany.repository.CheckpointRepository;
+import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.CheckpointService;
+import com.truckcompany.service.UserService;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import com.truckcompany.web.rest.vm.ManagedCheckPointVM;
 import org.slf4j.Logger;
@@ -17,7 +20,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,6 +34,8 @@ public class CheckpointResource {
     @Inject
     private CheckpointService checkpointService;
 
+    @Inject
+    private UserService userService;
 
 
     @RequestMapping(value = "/checkpoint",
@@ -38,7 +45,13 @@ public class CheckpointResource {
     public ResponseEntity<List<Checkpoint>> getAllCheckPoints()throws URISyntaxException{
         log.debug("REST request get all Checkpoints");
 
-        List<Checkpoint> checkpoints = checkpointService.getCheckpoints();
+        List<Checkpoint> checkpoints = Collections.emptyList();
+
+        Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            checkpoints = checkpointService.getCheckpoints(user);
+        }
         List<ManagedCheckPointVM> managedCheckPointVMs = checkpoints.stream()
             .map(ManagedCheckPointVM::new)
             .collect(Collectors.toList());
