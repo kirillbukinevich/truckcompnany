@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="content/css/template.css">
 
     <link rel="stylesheet" href="content/css/page-roles.css">
+    <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css">
     <!-- endbuild -->
 </head>
 <body ng-app="truckCompanyApp" ng-strict-di>
@@ -92,6 +93,9 @@
     <script src="bower_components/bootstrap-ui-datetime-picker/dist/datetime-picker.js"></script>
     <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
     <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
+    <script src="bower_components/angular-ui-select/dist/select.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
     <!-- endinject -->
     <!-- endbuild -->
 
@@ -286,14 +290,12 @@
     <script src="app/dispatcher/dispatcher.state.js"></script>
     <script src="app/dispatcher/dispatcher.controller.js"></script>
     <script src="app/dispatcher/waybills/dispatcher.waybills.controller.js"></script>
+    <script src="app/dispatcher/waybills/dispatcher.waybills-details.controller.js"></script>
     <script src="app/dispatcher/waybills/dispatcher.waybills.state.js"></script>
-    <script src="app/dispatcher/waybills/dispatcher.waybills.create.controller.js"></script>
     <script src="app/services/waybill/waybill.service.js"></script>
 
-    <script src="app/dispatcher/storage/dispatcher.storagecreate.controller.js"></script>
     <script src="app/dispatcher/storage/dispatcher.storage.controller.js"></script>
     <script src="app/dispatcher/storage/dispatcher.storage.state.js"></script>
-    <script src="app/dispatcher/storage/dispatcher.storageupdate.controller.js"></script>
     <script src="app/services/storage/storage.service.js"></script>
 
     <script src="app/dispatcher/trucks/dispatcher.truck.controller.js"></script>
@@ -303,6 +305,12 @@
     <script src="app/dispatcher/drivers/dispatcher.drivers.controller.js"></script>
     <script src="app/dispatcher/drivers/dispatcher.drivers.state.js"></script>
     <script src="app/services/driver/driver.service.js"></script>
+
+    <script src="app/dispatcher/offer/dispatcher.offer.state.js"></script>
+    <script src="app/dispatcher/offer/dispatcher.offer.controller.js"></script>
+    <script src="app/dispatcher/offer/dispatcher.offer-details.controller.js"></script>
+    <script src="app/dispatcher/offer/dispatcher.offer-submit.controller.js"></script>
+    <script src="app/services/offer/offer.service.js"></script>
 
     <script src="app/dispatcher/initial/dispatcher.initial.state.js"></script>
 

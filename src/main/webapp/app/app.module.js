@@ -20,14 +20,14 @@
             'ngImgCrop',
             'ckeditor',
             'ui.select',
-            'ngSanitize'
-
+            'ngSanitize',
+            "ngAnimate"
         ])
         .run(run);
 
     run.$inject = ['stateHandler', 'translationHandler','$rootScope', '$state', '$stateParams'];
 
-    function run(stateHandler, translationHandler, $rootScope, $state, $stateParams) {
+    function run(stateHandler, translationHandler) {
         stateHandler.initialize();
         translationHandler.initialize();
         $rootScope.$state = $state;

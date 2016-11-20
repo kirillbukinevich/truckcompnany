@@ -5,6 +5,7 @@ import com.truckcompany.domain.Storage;
 import com.truckcompany.domain.Waybill;
 import com.truckcompany.repository.WaybillRepository;
 import com.truckcompany.service.WaybillService;
+import com.truckcompany.service.dto.WaybillDTO;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import com.truckcompany.web.rest.vm.ManagedStorageVM;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
@@ -44,23 +45,22 @@ public class WaybillResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Waybill>> getAllWaybills() throws URISyntaxException {
+    public ResponseEntity<List> getAllWaybills() throws URISyntaxException {
         log.debug("REST request get all Waybills");
         Collection<SimpleGrantedAuthority> authorities =
             (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-        List<Waybill> waybills;
-        if (authorities.contains(new SimpleGrantedAuthority("ROLE_DRIVER"))) {
-            waybills = waybillService.getWaybillForDriver();
-        } else {
-            waybills = waybillRepository.findAll();
-        }
-        List<ManagedWaybillVM> managedWaybillVMs = waybills.stream()
-            .map(ManagedWaybillVM::new)
-            .collect(Collectors.toList());
 
         HttpHeaders headers = HeaderUtil.createAlert("waybill.getAll", null);
 
-        return new ResponseEntity(managedWaybillVMs, headers, HttpStatus.OK);
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_DRIVER"))) {
+            List <Waybill> waybills = waybillService.getWaybillForDriver();
+
+            return new ResponseEntity(waybills, headers, HttpStatus.OK);
+        } else {
+            List<WaybillDTO> waybillDTOs = waybillService.getAllWaybills();
+
+            return new ResponseEntity(waybillDTOs, headers, HttpStatus.OK);
+        }
     }
 
     @RequestMapping(value = "/waybills/{id}",
@@ -70,10 +70,12 @@ public class WaybillResource {
     public ResponseEntity<ManagedWaybillVM> getWaybill(@PathVariable Long id) {
         log.debug("REST request to get Waybill : {}", id);
 
-        Waybill waybill = waybillService.getWaybillById(id);
+        ManagedWaybillVM waybill = waybillService.getWaybillById(id);
 
-        if (waybill == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<ManagedWaybillVM>(new ManagedWaybillVM(waybill), HttpStatus.OK);
+        if (waybill == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<ManagedWaybillVM>(waybill, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/waybills",
@@ -114,9 +116,7 @@ public class WaybillResource {
         waybillService.updateWaybill(managedWaybillVM);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createAlert("userManagement.updated", managedWaybillVM.getId().toString()))
-            .body(new ManagedWaybillVM(waybillService.getWaybillById(managedWaybillVM.getId())));
+            .body(waybillService.getWaybillById(managedWaybillVM.getId()));
     }
-
-
 }
 

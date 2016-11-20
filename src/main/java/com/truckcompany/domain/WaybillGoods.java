@@ -9,8 +9,17 @@ import javax.persistence.*;
 @Entity
 @Table(name = "waybill_goods")
 public class WaybillGoods {
-    @EmbeddedId
-    private WaybillGoodsId waybillGoodsId;
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "waybill_id")
+    private Waybill waybill;
+
+    @OneToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn (name = "goods_id")
+    private Goods goods;
 
     @Column(name = "count")
     private Integer count;
@@ -19,11 +28,28 @@ public class WaybillGoods {
     @Enumerated(EnumType.STRING)
     private WaybillGoodsState state;
 
-    public WaybillGoodsId getWaybillGoodsId() {
-        return waybillGoodsId;
+    public Long getId() {
+        return id;
     }
-    public void setWaybillGoodsId(WaybillGoodsId waybillGoodsId) {
-        this.waybillGoodsId = waybillGoodsId;
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Waybill getWaybill() {
+        return waybill;
+    }
+
+    public void setWaybill(Waybill waybill) {
+        this.waybill = waybill;
+    }
+
+    public Goods getGoods() {
+        return goods;
+    }
+
+    public void setGoods(Goods goods) {
+        this.goods = goods;
     }
 
     public Integer getCount() {
