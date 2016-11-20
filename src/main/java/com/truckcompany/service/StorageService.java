@@ -28,7 +28,7 @@ public class StorageService {
 /*
     @Transactional(readOnly = true)
     public List<Storage> getStorages () {
-        log.debug("Get all storages.");
+        log.debug("Get all storages");
         Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
 
         List<Storage> storages = storageRepository.findByCompany(user.get().getCompany());

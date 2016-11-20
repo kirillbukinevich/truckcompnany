@@ -1,2 +1,2 @@
-id; date; driver_id; state; dispatcher_id; route_list_id; write_off_id
-1;2016-11-01 16:40:03;10;CHECKED;9;1;1
+id; date; driver_id; state; dispatcher_id; route_list_id; write_off_id;company_id
+1;2016-11-01 16:40:03;10;CHECKED;9;1;1;1

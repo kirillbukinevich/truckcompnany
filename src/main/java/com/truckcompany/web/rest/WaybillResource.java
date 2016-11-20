@@ -1,13 +1,11 @@
 package com.truckcompany.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.truckcompany.domain.Storage;
 import com.truckcompany.domain.Waybill;
 import com.truckcompany.repository.WaybillRepository;
 import com.truckcompany.service.WaybillService;
-import com.truckcompany.service.dto.WaybillDTO;
+import com.truckcompany.service.facade.WaybillFacade;
 import com.truckcompany.web.rest.util.HeaderUtil;
-import com.truckcompany.web.rest.vm.ManagedStorageVM;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,15 +13,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 /**
@@ -41,27 +35,25 @@ public class WaybillResource {
     @Inject
     private WaybillService waybillService;
 
+    @Inject
+    private WaybillFacade waybillFacade;
+
     @RequestMapping(value = "/waybills",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<List> getAllWaybills() throws URISyntaxException {
         log.debug("REST request get all Waybills");
-        Collection<SimpleGrantedAuthority> authorities =
-            (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+
+        List<ManagedWaybillVM> managedWaybillVMs = waybillFacade.findWaybills().stream()
+            .map(ManagedWaybillVM::new)
+            .collect(Collectors.toList());
 
         HttpHeaders headers = HeaderUtil.createAlert("waybill.getAll", null);
 
-        if (authorities.contains(new SimpleGrantedAuthority("ROLE_DRIVER"))) {
-            List <Waybill> waybills = waybillService.getWaybillForDriver();
-
-            return new ResponseEntity(waybills, headers, HttpStatus.OK);
-        } else {
-            List<WaybillDTO> waybillDTOs = waybillService.getAllWaybills();
-
-            return new ResponseEntity(waybillDTOs, headers, HttpStatus.OK);
-        }
+        return new ResponseEntity(managedWaybillVMs, headers, HttpStatus.OK);
     }
+
 
     @RequestMapping(value = "/waybills/{id}",
         method = RequestMethod.GET,
