@@ -3,7 +3,13 @@
 
 <div id="control-panel">
     <a href="#/admincompany/usercreate" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Create</a>
-    <a href="" ng-click="vm.deleteSelectedCompany()" class="btn btn-admin"><span class="glyphicon glyphicon-remove"></span>Delete</a>
+</div>
+
+<div id="control-table">
+    <span class="select-show-title">Show:</span>
+    <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage"
+            ng-change="vm.changeItemsPerPage()" class="btn btn-default">
+    </select>
 </div>
 
 <table class="table table-hover">
@@ -13,21 +19,32 @@
         <th>Login</th>
         <th>First name, last name</th>
         <th>Email</th>
-        <th>Status</th>
+        <th id="row-status">Status</th>
         <th>Role</th>
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="user in vm.users">
-        <td><a href="#/admincompany/users/{{user.id}}">{{user.login}}</a></td>
+    <tr ng-repeat="user in vm.users" ng-class="{'selected' : vm.selected[$index]}">
+        <td class="padding-for-first-row"><a href="#/admincompany/users/{{user.id}}">{{user.login}}</a></td>
         <td>{{user.firstName}} {{user.lastName}}</td>
         <td>{{user.email}}</td>
         <td class="text-align-center">
-            <span ng-if = "user.activated" ng-click="vm.toggleStatus(user)" class="label label-success" >ACTIVE</span>
-            <span ng-if = "!user.activated" ng-click="vm.toggleStatus(user)" class="label label-warning">NON-ACTIVE</span>
+            <span ng-if="user.activated" ng-click="vm.toggleStatus(user)" class="label label-success">ACTIVE</span>
+            <span ng-if="!user.activated" ng-click="vm.toggleStatus(user)" class="label label-warning">NON-ACTIVE</span>
         </td>
-        <td>{{user.authorities[0]}}</td>
+        <td>{{vm.getRoleForUI(user.authorities[0])| uppercase}}</td>
     </tr>
     </tbody>
 </table>
+<div ng-if="vm.totalItems > vm.itemsPerPage ">
+    <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+    <uib-pagination class="pagination-sm"
+                    total-items="vm.totalItems"
+                    items-per-page="vm.itemsPerPage"
+                    boundary-link-numbers="true"
+                    rotate="true"
+                    ng-model="vm.page"
+                    ng-change="vm.transition()">
+    </uib-pagination>
+</div>
 

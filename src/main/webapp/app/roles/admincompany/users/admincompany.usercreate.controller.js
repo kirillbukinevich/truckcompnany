@@ -14,6 +14,13 @@
         var vm = this;
         vm.create = create;
 
+        vm.dateOptions = {
+            maxDate: new Date(),
+        };
+        vm.format = 'yyyy/MM/dd';
+        vm.altInputFormats = ['M!/d!/yyyy'];
+
+
 
         vm.user = {};
         vm.user.authorities = [];
@@ -23,8 +30,6 @@
         vm.messageError = '';
 
         function create(){
-            console.log("Create new employee");
-            console.log(vm.user);
             $http({
                 method: 'POST',
                 url: '/api/company/employee',
@@ -33,10 +38,28 @@
                 vm.error = false;
                 $state.go('admincompany.users');
             }, function errorCallback(response) {
-                console.log("Can not create new employee");
                 vm.error = true;
-                vm.messageError = "Problem with saving new employee."
+                switch(response.headers('X-truckCompanyApp-error')){
+                    case 'error.userexists': {
+                        vm.messageError = 'Login already in use';
+                        break;
+                    }
+                    case 'error.emailexists':{
+                        vm.messageError = 'Email already in use.';
+                        break;
+                    }
+                    default: {
+                        vm.messageError = 'You don\'t fill all fields.';
+                    }
+                }
+
             });
+        }
+
+
+
+        vm.openDatePopup = function(){
+            vm.isOpenDatePopup = true;
         }
 
 

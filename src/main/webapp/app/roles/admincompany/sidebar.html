@@ -1,5 +1,5 @@
 
-<li ui-sref-active="active">
+<li ui-sref-active="active" ng-class="{'active': $state.includes('admincompany.user') || $state.includes('admincompany.createuser')}">
     <a ui-sref="admincompany.users" href="/#/admincompany/users"><span class="glyphicon glyphicon glyphicon-user sidebar-icon"></span>Employee</a>
 </li>
 

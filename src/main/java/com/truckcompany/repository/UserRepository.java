@@ -41,6 +41,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select distinct user from User user left join fetch user.authorities where user.company.id = ?1")
     List<User> findUsersBelongCompanyWithAuthorities(Long id);
 
+    @Query(value = "select distinct user from User user left join user.authorities auth where user.company.id = ?1 and auth.name <> 'ROLE_ADMIN'",
+           countQuery ="select distinct count(user) from User user left join user.authorities auth where user.company.id = ?1 and auth.name <> 'ROLE_ADMIN'")
+    Page<User> findUsersBelongsCompanyWithoutAdmin(Long idCompany, Pageable page);
+
+    @Query(value = "select distinct user from User user left join user.authorities auth where user.company.id = ?1 and auth.name <> 'ROLE_ADMIN'")
+    List<User> findUsersBelongsCompanyWithoutAdmin(Long idCompany);
+
+    @Query( value = "select distinct count(user) from User user left join user.authorities auth where user.company.id = ?1 and auth.name <> 'ROLE_ADMIN'")
+    Long countUsersBelongsCompanyWithoutAdmin(Long idCompany);
+
     List<User> findByCompanyAndAuthorities(Company company, Set authorities);
 
 

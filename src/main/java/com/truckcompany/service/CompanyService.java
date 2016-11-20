@@ -193,6 +193,8 @@ public class CompanyService {
             .collect(toList());
     }
 
+
+
     private Predicate<? super User> hasAuthority(String role) {
         return user -> user.getAuthorities().stream()
             .filter(authority -> StringUtils.equals(authority.getName(), role))
