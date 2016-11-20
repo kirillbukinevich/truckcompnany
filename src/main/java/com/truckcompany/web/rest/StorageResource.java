@@ -117,8 +117,7 @@ public class StorageResource {
         try {
             Storage storage = storageFacade.updateStorage(managedStorageVM);
             storageSearchRepository.save(new StorageIndex(storage, storage.getCompany().getId()));
-
-
+            
             storageSearchRepository.save(new StorageIndex(storage, storage.getCompany().getId()));
             return ResponseEntity.ok().headers(createAlert("storage.updated", valueOf(storage.getId()))).body(new ManagedStorageVM(storage));
         } catch (UpdateStorageException e) {
