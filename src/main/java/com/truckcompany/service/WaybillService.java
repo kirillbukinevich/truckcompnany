@@ -6,6 +6,7 @@ import com.truckcompany.domain.enums.WaybillGoodsState;
 import com.truckcompany.domain.enums.WaybillState;
 import com.truckcompany.repository.*;
 import com.truckcompany.security.SecurityUtils;
+import com.truckcompany.service.dto.UserDTO;
 import com.truckcompany.service.dto.WaybillDTO;
 import com.truckcompany.web.rest.vm.ManagedCompanyVM;
 import com.truckcompany.domain.User;
@@ -67,7 +68,7 @@ public class WaybillService {
 
 
     @Transactional(readOnly = true)
-    public List<Waybill> getWaybillForDriver () {
+    public List<Waybill> getWaybillForDriver() {
         log.debug("Get waybills for drivers");
         Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
 
@@ -75,7 +76,7 @@ public class WaybillService {
         return waybills;
     }
 
-    public List<WaybillDTO> getAllWaybills () {
+    public List<WaybillDTO> getAllWaybills() {
         final List<WaybillDTO> waybillDTOList = new ArrayList<>();
         Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
         user.ifPresent(u -> {
@@ -89,7 +90,7 @@ public class WaybillService {
         return waybillDTOList;
     }
 
-    public Waybill createWaybill (ManagedWaybillVM managedWaybillVM) {
+    public Waybill createWaybill(ManagedWaybillVM managedWaybillVM) {
         Waybill waybill = new Waybill();
 
         Optional<User> dispatcher = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
@@ -125,17 +126,24 @@ public class WaybillService {
         }
     }
 
-    public void updateWaybill (ManagedWaybillVM managedWaybillVM) {
+    public void updateWaybill(ManagedWaybillVM managedWaybillVM) {
         waybillRepository.findOneById(managedWaybillVM.getId()).ifPresent(w -> {
             w.setDispatcher(userRepository.findOneByLogin(managedWaybillVM.getDispatcher().getLogin()).get());
             w.setDriver(userRepository.findOneByLogin(managedWaybillVM.getDriver().getLogin()).get());
             w.setDate(managedWaybillVM.getDate());
             w.setState(managedWaybillVM.getState());
-            w.setWriteOff(writeOffActRepository.getOne(managedWaybillVM.getWriteOff().getId()));
-            w.setRouteList(routeListRepository.getOne(managedWaybillVM.getRouteList().getId()));
+            w.setDateChecked(managedWaybillVM.getDateChecked());
+            if (managedWaybillVM.getManager() != null) {
+                w.setManager(userRepository.findOneById(managedWaybillVM.getManager().getId()).get());
+            }
+            if (managedWaybillVM.getWriteOff() != null) {
+                w.setWriteOff(writeOffActRepository.getOne(managedWaybillVM.getWriteOff().getId()));
+            }
+            if (managedWaybillVM.getRouteList() != null) {
+                w.setRouteList(routeListRepository.getOne(managedWaybillVM.getRouteList().getId()));
+            }
             waybillRepository.save(w);
-            log.debug("Changed fields for Waybill {}", w);
+            log.debug("Changed fields for Waybill id={}", w.getId());
         });
-
     }
 }

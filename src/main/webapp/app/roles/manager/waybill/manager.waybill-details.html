@@ -80,14 +80,14 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="checkDate" class="pull-left">At:</label>
-                    <input type="date" id="checkDate" class="form-control" name="checkDate">
+                    <input type="date" id="checkDate" class="form-control" name="checkDate"
+                    ng-model="vm.waybill.dateChecked">
                 </div>
             </div>
         </div>
         <button type="button" class="btn btn-success" data-dismiss="modal"
-                href="#/manager/routelist/confirm/{{vm.waybill.routeList.id}}">
+                ng-click="vm.confirmWaybill()">
             <span class="glyphicon glyphicon-ok">&nbsp;Confirm</span>
         </button>
     </form>
-</div>
 </div>

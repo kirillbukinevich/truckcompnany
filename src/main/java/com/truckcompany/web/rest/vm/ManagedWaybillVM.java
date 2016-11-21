@@ -112,4 +112,20 @@ public class ManagedWaybillVM extends WaybillDTO {
     public void setTruck(ManagedTruckVM truck) {
         this.truck = truck;
     }
+
+    @Override
+    public String toString() {
+        return "ManagedWaybillVM{" +
+            "routeList=" + routeList +
+            "dateChecked=" + getDateChecked() +
+            ", writeOff=" + writeOff +
+            ", offerId=" + offerId +
+            ", driverId=" + driverId +
+            ", driverLogin='" + driverLogin + '\'' +
+            ", waybillGoods=" + waybillGoods +
+            ", arrivalStorage=" + arrivalStorage +
+            ", leavingStorage=" + leavingStorage +
+            ", truck=" + truck +
+            '}';
+    }
 }
