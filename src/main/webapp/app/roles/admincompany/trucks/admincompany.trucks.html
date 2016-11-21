@@ -19,13 +19,19 @@
 
         <tr>
             <th>Register number</th>
+            <th>Model</th>
+            <th>Type</th>
             <th>Consumption</th>
+            <th>Status</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="truck in vm.trucks">
-            <td><a href="#/admincompany/trucks/{{truck.id}}">{{truck.regNumber}}</a></td>
+            <td class="padding-for-first-row"><a href="#/admincompany/trucks/{{truck.id}}">{{truck.regNumber}}</a></td>
+            <td>{{truck.model}}</td>
+            <td>{{truck.type}}</td>
             <td>{{truck.consumption}}</td>
+            <td>{{truck.status}}</td>
         </tr>
         </tbody>
     </table>

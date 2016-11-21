@@ -59,6 +59,13 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="consumption" type="int"/>
+            <column name="type" type="ENUM('BODY', 'REFRIGERATOR','TANK')" defaultValue="BODY">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="ENUM('REPAIRING','WRITTENOFF','READY')" defaultValue="READY">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model" type="varchar(20)" />
             <column name="reg_number" type="varchar(20)">
                 <constraints nullable="false"/>
             </column>

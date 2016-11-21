@@ -14,7 +14,7 @@
         $stateProvider
             .state('admincompany.trucks', {
                 parent: 'admincompany',
-                url: '/admincompany/trucks/page&size',
+                url: '/admincompany/trucks',
 
                 data: {
                     authorities: ['ROLE_ADMIN'],
