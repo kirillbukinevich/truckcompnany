@@ -36,8 +36,10 @@
 
                     <dt><span>State:</span></dt>
                     <dd>
-                        <span ng-if="vm.waybill.state == 'CREATED'" class="label label-info"><span class="glyphicon glyphicon-transfer"></span>&nbsp;CREATED</span>
-                        <span ng-if="vm.waybill.state == 'CHECKED'" class="label label-primary"><span class="glyphicon glyphicon-ok"></span>&nbsp;CHECKED</span>
+                        <span ng-if="vm.waybill.state == 'CREATED'" class="label label-info"><span
+                            class="glyphicon glyphicon-transfer"></span>&nbsp;CREATED</span>
+                        <span ng-if="vm.waybill.state == 'CHECKED'" class="label label-primary"><span
+                            class="glyphicon glyphicon-ok"></span>&nbsp;CHECKED</span>
                         <span ng-if="vm.waybill.state == 'DELIVERED'" class="label label-success">DELIVERED</span>
                     </dd>
 
@@ -65,19 +67,23 @@
 
 <div ng-if="vm.waybill.state == 'CREATED'" class="modal-footer">
     <form name="submitWaybillForm">
-
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="manager">Checked by:</label>
-                </div>
-                <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="manager" class="pull-left">Checked by:</label>
                     <input type="text" id="manager" class="form-control" name="confirmedBy"
-                           ng-model="vm.account.firstName" readonly>
+                           ng-model="vm.fullName" readonly>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="checkDate" class="pull-left">At:</label>
+                    <input type="date" id="checkDate" class="form-control" name="checkDate">
                 </div>
             </div>
         </div>
-
         <button type="button" class="btn btn-success" data-dismiss="modal"
                 href="#/manager/routelist/confirm/{{vm.waybill.routeList.id}}">
             <span class="glyphicon glyphicon-ok">&nbsp;Confirm</span>

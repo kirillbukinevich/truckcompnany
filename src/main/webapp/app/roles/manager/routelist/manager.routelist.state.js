@@ -1,7 +1,7 @@
 /**
  * Created by Dmitry on 12.11.2016.
  */
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -37,7 +37,7 @@
             )
             .state('manager.routelist-direction', {
                 parent: 'manager',
-                url: '/manager/routelist/add-direction',
+                url: '/manager/routelist-for-waybill/{id}',
 
                 data: {
                     authorities: ["ROLE_MANAGER"],
@@ -52,6 +52,9 @@
                     }
                 },
                 resolve: {
+/*                    entity: ['Waybill', function (Waybill, $stateParams) {
+                        return Waybill.get({id: $stateParams.id});
+                    }],*/
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('activate');
                         return $translate.refresh();

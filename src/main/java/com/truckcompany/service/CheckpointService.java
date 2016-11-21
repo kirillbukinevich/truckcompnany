@@ -37,6 +37,7 @@ public class CheckpointService {
 
         return checkpointRepository.findByRouteList(waybill.get(0).getRouteList());
     }
+
     public Checkpoint createCheckpoint(ManagedCheckPointVM checkPointVM){
         Checkpoint checkpoint = new Checkpoint();
         checkpoint.setName(checkPointVM.getName());
@@ -45,10 +46,11 @@ public class CheckpointService {
         log.debug("Created Information for Checkpoint: {}", checkpoint);
         return checkpoint;
     }
+
     public void  updateCheckpointByManager(Long id,String name){
         checkpointRepository.findOneById(id).ifPresent(checkpoint -> {
             checkpoint.setName(name);
-            log.debug("Changed Information for Goods id: {}", checkpoint.getId()," by manager");
+            log.debug("Changed Information for Checkpoint with id: {} by manager", checkpoint.getId());
         });
     }
 
@@ -66,6 +68,7 @@ public class CheckpointService {
         log.debug("Deleted all checkpoint routeList id: {}", routeList.getId());
 
     }
+
     public void markDate(Long id) {
         Checkpoint checkpoint = checkpointRepository.getOne(id);
 
@@ -75,4 +78,8 @@ public class CheckpointService {
 
     }
 
+    public List<Checkpoint> getCheckpointsByRouteListId(Long id) {
+        List<Checkpoint> checkpoints = checkpointRepository.findByRouteListId(id);
+        return checkpoints;
+    }
 }

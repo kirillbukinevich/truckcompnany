@@ -8,9 +8,9 @@
         .module('truckCompanyApp')
         .controller('ManagerWaybillDetailsController', ManagerWaybillDetailsController);
 
-    ManagerWaybillDetailsController.$inject = ['Principal', '$stateParams', '$uibModalInstance', 'entity', 'Waybill'];
+    ManagerWaybillDetailsController.$inject = ['Principal', '$uibModalInstance', 'entity'];
 
-    function ManagerWaybillDetailsController(Principal, $stateParams, $uibModalInstance, entity, Waybill) {
+    function ManagerWaybillDetailsController(Principal, $uibModalInstance, entity) {
         var vm = this;
 
         vm.clear = clear;
@@ -19,8 +19,9 @@
         getAccount();
 
         function getAccount() {
-            Principal.identity().then(function(account) {
+            Principal.identity().then(function (account) {
                 vm.account = account;
+                vm.fullName = account.firstName + ' ' + account.lastName;
             });
         }
 

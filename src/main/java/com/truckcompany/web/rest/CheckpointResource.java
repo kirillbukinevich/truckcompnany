@@ -3,7 +3,6 @@ package com.truckcompany.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.Checkpoint;
-import com.truckcompany.repository.CheckpointRepository;
 import com.truckcompany.service.CheckpointService;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import com.truckcompany.web.rest.vm.ManagedCheckPointVM;
@@ -25,11 +24,8 @@ import java.util.stream.Collectors;
 public class CheckpointResource {
     private final Logger log = LoggerFactory.getLogger(CheckpointResource.class);
 
-
     @Inject
     private CheckpointService checkpointService;
-
-
 
     @RequestMapping(value = "/checkpoint",
         method = RequestMethod.GET,
@@ -52,4 +48,18 @@ public class CheckpointResource {
         checkpointService.markDate(id);
     }
 
+    @RequestMapping(value = "/checkpointsByRouteListId/{id}",
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public  ResponseEntity<List<Checkpoint>> getCheckpointsByRouteListId(@PathVariable Long id) {
+        log.debug("REST request for checkpoints by routeListId");
+
+        List<Checkpoint> checkpoints = checkpointService.getCheckpointsByRouteListId(id);
+        List<ManagedCheckPointVM> managedCheckPointVMs = checkpoints.stream()
+            .map(ManagedCheckPointVM::new)
+            .collect(Collectors.toList());
+
+        HttpHeaders headers = HeaderUtil.createAlert("checkpoints.getByRouteListId", null);
+        return new ResponseEntity(managedCheckPointVMs, headers, HttpStatus.OK);
+    }
 }
