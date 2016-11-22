@@ -55,9 +55,14 @@ public class TruckService {
         return truckRepository.findByCompanyIdWithCompany(company.getId());
     }
 
-    public Page<Truck> getTrucksBelongsCompany(Company company, Pageable pageable){
+    public Page<Truck> getAllTrucksBelongsCompany(Company company, Pageable pageable){
         log.debug("Get all trucks belongs company {}.", company);
         return truckRepository.findByCompanyIdWithCompany(company.getId(), pageable);
+    }
+
+    public List<Truck> getReadyTrucksBelongsCompany(Company company){
+        log.debug("Get ready trucks belongs company {}.", company);
+        return truckRepository.findByCompanyAndReady(company);
     }
 
 
@@ -69,9 +74,7 @@ public class TruckService {
 
     public Truck createTruck (ManagedTruckVM managedTruckVM) {
         Truck truck = new Truck();
-        truck.setRegNumber(managedTruckVM.getRegNumber());
-        truck.setConsumption(managedTruckVM.getConsumption());
-
+        setFieldsTruckFromTruckVM(truck, managedTruckVM);
         Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
         if (optionalUser.isPresent()){
             User user = optionalUser.get();
@@ -79,17 +82,22 @@ public class TruckService {
             truckRepository.save(truck);
         }
 
-
         log.debug("Created Information for Truck");
         return truck;
     }
 
+    private void setFieldsTruckFromTruckVM(Truck truck, ManagedTruckVM managedTruckVM){
+        truck.setRegNumber(managedTruckVM.getRegNumber());
+        truck.setConsumption(managedTruckVM.getConsumption());
+        truck.setType(managedTruckVM.getType());
+        truck.setModel(managedTruckVM.getModel());
+        truck.setStatus(managedTruckVM.getStatus());
+    }
+
     public void updateTruck (ManagedTruckVM managedTruckVM) {
         Truck truck = truckRepository.findOne(managedTruckVM.getId());
-
-        truck.setConsumption(managedTruckVM.getConsumption());
-        truck.setRegNumber(managedTruckVM.getRegNumber());
-
+        setFieldsTruckFromTruckVM(truck, managedTruckVM);
+        truckRepository.save(truck);
         log.debug("Changed fields for Truck {}", truck);
     }
 

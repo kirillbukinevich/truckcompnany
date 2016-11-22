@@ -6,6 +6,7 @@ import com.truckcompany.domain.enums.WaybillState;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "waybill")
@@ -14,6 +15,10 @@ public class Waybill implements Serializable {
     @GeneratedValue
     @Column(name = "id")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
 
     @Column(name = "date")
     private ZonedDateTime date;
@@ -30,13 +35,17 @@ public class Waybill implements Serializable {
     @JoinColumn(name = "dispatcher_id", nullable = false)
     private User dispatcher;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "route_list_id", nullable = false)
     private RouteList routeList;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "write_off_id", nullable = false)
     private WriteOffAct writeOff;
+
+    @JoinColumn (name = "waybill_id")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<WaybillGoods> waybillGoods;
 
     public Long getId() {
         return id;
@@ -87,10 +96,19 @@ public class Waybill implements Serializable {
         this.writeOff = writeOff;
     }
 
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
     @Override
     public String toString() {
         return "Waybill{" +
             "id=" + id +
+            "company" + company +
             ", date=" + date +
             ", driver=" + driver +
             ", state=" + state +
@@ -98,5 +116,12 @@ public class Waybill implements Serializable {
             ", routeList=" + routeList +
             ", writeOff=" + writeOff +
             '}';
+    }
+    public Set<WaybillGoods> getWaybillGoods() {
+        return waybillGoods;
+    }
+
+    public void setWaybillGoods(Set<WaybillGoods> waybillGoods) {
+        this.waybillGoods = waybillGoods;
     }
 }

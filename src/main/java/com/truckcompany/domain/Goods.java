@@ -1,5 +1,7 @@
 package com.truckcompany.domain;
 
+import com.truckcompany.domain.emb_id.WaybillGoodsId;
+
 import javax.persistence.*;
 import java.io.Serializable;
 

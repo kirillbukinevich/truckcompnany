@@ -30,6 +30,13 @@ public class UserDTO {
     @Size(max = 50)
     private String lastName;
 
+    private String city;
+    private String street;
+    private String flat;
+    private String house;
+    private String passport;
+
+
     @Email
     @Size(min = 5, max = 100)
     private String email;
@@ -53,12 +60,14 @@ public class UserDTO {
     public UserDTO(User user) {
         this(user.getId(), user.getLogin(), user.getFirstName(), user.getLastName(),
             user.getEmail(), user.getLogo(), user.getActivated(), user.getLangKey(), user.getBirthDate(),
+            user.getCity(), user.getStreet(), user.getHouse(), user.getFlat(), user.getPassport(),
             user.getAuthorities().stream().map(Authority::getName)
                 .collect(Collectors.toSet()), user.getCompany());
     }
 
     public UserDTO(Long id, String login, String firstName, String lastName,
-        String email, String logo, boolean activated, String langKey, ZonedDateTime birthDate, Set<String> authorities, Company company) {
+                   String email, String logo, boolean activated, String langKey, ZonedDateTime birthDate,
+                   String city, String street, String house, String flat, String passport, Set<String> authorities, Company company) {
         this.id = id;
         this.login = login;
         this.firstName = firstName;
@@ -68,8 +77,17 @@ public class UserDTO {
         this.activated = activated;
         this.langKey = langKey;
         this.birthDate = birthDate;
+        this.city = city;
+        this.street = street;
+        this.flat = flat;
+        this.house = house;
+        this.passport = passport;
         this.authorities = authorities;
         this.company = company;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getLogin() {
@@ -100,12 +118,36 @@ public class UserDTO {
         return authorities;
     }
 
-    public String getLogo(){
-        return  logo;
+    public String getLogo() {
+        return logo;
     }
 
     public ZonedDateTime getBirthDate() {
         return birthDate;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public String getFlat() {
+        return flat;
+    }
+
+    public String getHouse() {
+        return house;
+    }
+
+    public String getPassport() {
+        return passport;
+    }
+
+    public Company getCompany() {
+        return company;
     }
 
     @Override
@@ -121,11 +163,5 @@ public class UserDTO {
             "}";
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

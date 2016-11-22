@@ -16,8 +16,15 @@ public class WriteOffAct implements Serializable {
     @Column(name = "date")
     private ZonedDateTime date;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
+
     @Column (name = "count")
     private Integer count;
+
+    @OneToOne(mappedBy = "writeOff")
+    private Waybill waybill;
 
     public Long getId() {
         return id;
@@ -38,5 +45,20 @@ public class WriteOffAct implements Serializable {
     }
     public void setCount(Integer count) {
         this.count = count;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+    public Waybill getWaybill() {
+        return waybill;
+    }
+
+    public void setWaybill(Waybill waybill) {
+        this.waybill = waybill;
     }
 }

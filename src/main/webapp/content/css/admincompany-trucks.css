@@ -1,0 +1,135 @@
+.table > tbody > tr > td.padding-for-first-row{
+    padding-left:15px;
+}
+
+.table > tbody > tr > td.row-status-truck{
+    width:100px;
+}
+.table > tbody > tr > td.row-type-truck{
+    width:115px;
+}
+.table > tbody > tr > td.row-consumption-truck{
+    width:125px;
+}
+
+.wrap-radio-type-truck{
+    position:relative;
+    height:30px;
+    display:inline-block;
+    margin-top:5px;
+}
+.wrap-radio-type-truck input{
+    opacity:0;
+    position:absolute;
+}
+.wrap-radio-type-truck > input + label {
+    cursor: pointer;
+}
+
+.wrap-radio-type-truck > input:not(checked) + label:before {
+    position: absolute;
+    display:block;
+    top: 0;
+    left: 0;
+    padding:3px 5px;
+    border: 2px solid #CDD1DA;
+    border-radius: 5px;
+    color:#CDD1DA;
+}
+.wrap-radio-type-truck > input:not(checked) + label:after {
+    position: absolute;
+    display:block;
+    top: 0;
+    left: 0;
+    padding:3px 5px;
+    border: 2px solid #5cb85c;
+    border-radius: 5px;
+    color:#fff;
+    background: #5cb85c;
+    opacity: 0;
+}
+.wrap-radio-type-truck > input:checked + label:after {
+    opacity: 1;
+}
+
+/*TYPE BODY*/
+#type-truck-body{
+    width:55px;
+}
+#type-truck-body > label:before{
+    content: "BODY";
+    width:55px;
+}
+#type-truck-body > label:after{
+    content: "BODY";
+    width:55px;
+}
+
+/*TYPE REFRIGIRATOR*/
+#type-truck-refrigirator{
+    width:120px;
+}
+#type-truck-refrigirator > label:before{
+    content: "REFRIGERATOR";
+    width:120px;
+}
+#type-truck-refrigirator > label:after{
+    content: "REFRIGERATOR";
+    width:120px;
+}
+
+/*TYPE TANK*/
+#type-truck-tank{
+    width:50px;
+}
+#type-truck-tank > label:before{
+    content: "TANK";
+    width:50px;
+}
+#type-truck-tank > label:after{
+    content: "TANK";
+    width:50px;
+}
+
+
+/*STATUS READY*/
+#status-truck-ready{
+    width:65px;
+}
+#status-truck-ready > label:before{
+    content: "READY";
+    width:65px;
+}
+#status-truck-ready > label:after{
+    content: "READY";
+    width:65px;
+}
+/*STATUS REPAIRING*/
+#status-truck-repairing{
+    width:90px;
+}
+#status-truck-repairing > label:before{
+    content: "REPAIRING";
+    width:90px;
+}
+#status-truck-repairing > label:after{
+    content: "REPAIRING";
+    width:90px;
+    background: #f0ad4e;
+    border-color: #f0ad4e;
+}
+/*STATUS WRITTENOFF*/
+#status-truck-writtenoff{
+    width:115px;
+}
+#status-truck-writtenoff > label:before{
+    content: "WRITTEN OFF";
+    width:110px;
+}
+#status-truck-writtenoff > label:after{
+    content: "WRITTEN OFF";
+    width:110px;
+    background: #d9534f;
+    border-color: #d9534f;
+}
+

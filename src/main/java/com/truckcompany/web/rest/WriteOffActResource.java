@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.WriteOffAct;
 import com.truckcompany.repository.WriteOffActRepository;
 import com.truckcompany.service.WriteOffActService;
+import com.truckcompany.service.facade.WriteOffActFacade;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import com.truckcompany.web.rest.vm.ManagedWriteOffVM;
 import org.slf4j.Logger;
@@ -34,21 +35,25 @@ public class WriteOffActResource {
     @Inject
     private WriteOffActService writeOffActService;
 
+    @Inject
+    private WriteOffActFacade writeOffActFacade;
+
     @RequestMapping (value = "/writeoffs",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<List<WriteOffAct>> getAllWriteOff ()  throws URISyntaxException {
         log.debug("REST request get all WriteOffActs");
-        List<WriteOffAct> writeOffActs = writeOffActRepository.findAll();
+        //List<WriteOffAct> writeOffActs = writeOffActRepository.findAll();
 
-        List<ManagedWriteOffVM> managedWaybillVMs = writeOffActs.stream()
+        List<ManagedWriteOffVM> managedWriteOffVMs = writeOffActFacade.findWriteOffActs()
+            .stream()
             .map(ManagedWriteOffVM::new)
             .collect(Collectors.toList());
 
         HttpHeaders headers = HeaderUtil.createAlert("waybill.getAll", null);
 
-        return new ResponseEntity(managedWaybillVMs, headers, HttpStatus.OK);
+        return new ResponseEntity(managedWriteOffVMs, headers, HttpStatus.OK);
     }
 
     @RequestMapping (value = "/writeoffs/{id}",

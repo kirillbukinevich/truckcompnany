@@ -20,8 +20,8 @@
             'ngImgCrop',
             'ckeditor',
             'ui.select',
-            'ngSanitize'
-
+            'ngSanitize',
+            "ngAnimate"
         ])
         .run(run);
 

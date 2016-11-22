@@ -16,9 +16,10 @@
             switch (role){
                 case 'ROLE_SUPERADMIN': return 'Superadmin';
                 case 'ROLE_DISPATCHER': return 'Dispatcher';
-                case 'ROLE_ADMIN': return 'Company adminsdfsd';
+                case 'ROLE_ADMIN': return 'Admin';
                 case 'ROLE_DRIVER': return  'Driver';
                 case 'ROLE_MANAGER': return  'Manager';
+                case 'ROLE_COMPANYOWNER': return  'Owner';
                 default:  return "Anonymous role";
             }
         }
