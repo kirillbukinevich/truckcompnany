@@ -22,7 +22,10 @@
         vm.availableItemsPerPage = [5, 10, 15, 20];
         vm.page = 1;
         vm.itemsPerPage = pagingParams.size;
-
+        vm.predicate = pagingParams.predicate;
+        vm.reverse = pagingParams.ascending;
+        console.log(vm.predicate);
+        console.log(vm.reverse);
 
         vm.trucks = [];
         vm.error = false;
@@ -34,6 +37,7 @@
             Truck.query({
                 page: pagingParams.page - 1,
                 size: vm.itemsPerPage,
+                sort: sort()
             }, onSuccess, onError);
 
         }
@@ -57,6 +61,7 @@
             $state.transitionTo($state.$current, {
                 page: vm.page,
                 size:  vm.itemsPerPage,
+                sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
             });
         }
 
@@ -64,9 +69,17 @@
             $state.transitionTo($state.$current, {
                 page: 1,
                 size:  vm.itemsPerPage,
+                sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
             });
         }
 
+        function sort () {
+            var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')];
+            if (vm.predicate !== 'id') {
+                result.push('id');
+            }
+            return result;
+        }
 
     }
 })();

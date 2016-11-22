@@ -38,23 +38,22 @@ public class DefaultTruckFacade implements TruckFacade {
         Function<Truck, TruckDTO> toDTO = convertToTruckDto();
 
         Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
-        if (optionalUser.isPresent()){
-            User user = optionalUser.get();
-            Page<Truck> pageTrucks = new PageImpl<Truck>(emptyList());
-            if (isCurrentUserInRole("ROLE_ADMIN")) {
-                pageTrucks = truckService.getTrucksBelongsCompany(user.getCompany(), pageable);
-            }
-            if (isCurrentUserInRole("ROLE_DISPATCHER")) {
-                List<Truck> trucks = truckService.getAllTrucksBelongsCompany(user.getCompany());
-                pageTrucks = new PageImpl<Truck>(trucks, pageable, trucks.size());
-            }
-            return new PageImpl<TruckDTO>(pageTrucks.getContent().stream().map(toDTO).collect(toList()),pageable,pageTrucks.getTotalElements());
-        } else{
-            return new PageImpl<TruckDTO>(emptyList());
+        if (!optionalUser.isPresent()) return new PageImpl<TruckDTO>(emptyList());
+
+        User user = optionalUser.get();
+        Page<Truck> pageTrucks = new PageImpl<Truck>(emptyList());
+        if (isCurrentUserInRole("ROLE_ADMIN")) {
+            pageTrucks = truckService.getAllTrucksBelongsCompany(user.getCompany(), pageable);
         }
+        if (isCurrentUserInRole("ROLE_DISPATCHER")) {
+            List<Truck> trucks = truckService.getReadyTrucksBelongsCompany(user.getCompany());
+            pageTrucks = new PageImpl<Truck>(trucks, pageable, trucks.size());
+        }
+        return new PageImpl<TruckDTO>(pageTrucks.getContent().stream().map(toDTO).collect(toList()), pageable, pageTrucks.getTotalElements());
+
     }
 
-    private Function<Truck, TruckDTO> convertToTruckDto(){
+    private Function<Truck, TruckDTO> convertToTruckDto() {
         return truck -> new TruckDTO(truck, truck.getCompany());
     }
 }

@@ -48,7 +48,6 @@ public class TruckResource {
     @Inject
     private TruckFacade truckFacade;
 
-    @Timed
     @RequestMapping(value = "/trucks/{id}", method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ManagedTruckVM> getTruck (@PathVariable Long id) {
         LOG.debug("REST request to get Truck : {}", id);
@@ -58,41 +57,33 @@ public class TruckResource {
         return new ResponseEntity<>(body, status);
     }
 
-    @Timed
+
     @RequestMapping (value = "/trucks", method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ManagedTruckVM>> getAllTrucks (Pageable pageable, HttpServletRequest request)  throws URISyntaxException {
         LOG.debug("REST request get all Trucks");
-
         Page<TruckDTO> page = truckFacade.findTrucks(pageable, request);
-
         List<ManagedTruckVM> managedTruckVMs = page.getContent().stream()
             .map(ManagedTruckVM::new)
             .collect(Collectors.toList());
-
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/trucks");
         return new ResponseEntity<List<ManagedTruckVM>>(managedTruckVMs, headers, OK);
     }
 
 
-    @RequestMapping(value = "/trucks/{id}",
-        method = DELETE,
-        produces = APPLICATION_JSON_VALUE)
-    @Timed
+    @RequestMapping(value = "/trucks/{id}", method = DELETE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity deleteTruck (@PathVariable Long id) {
         LOG.debug("REST request to delete Truck: {}", id);
         truckService.deleteTruck(id);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert( "truck.deleted", id.toString())).build();
     }
 
-    @Timed
+
     @RequestMapping (value = "/trucks", method = PUT, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity updateTruck (@RequestBody ManagedTruckVM managedTruckVM) {
         LOG.debug("REST request to update Truck : {}", managedTruckVM);
         Truck existingTruck = truckRepository.findOne(managedTruckVM.getId());
-
         if (existingTruck == null)
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("truckManagement", "truckdontexist", "Truck doesn't exist!")).body(null);
-
         truckService.updateTruck(managedTruckVM);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createAlert("truckManagement.updated", managedTruckVM.getId().toString()))
@@ -101,11 +92,9 @@ public class TruckResource {
 
 
     @RequestMapping (value = "/trucks", method = POST, produces = APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<?> createTruck (@RequestBody ManagedTruckVM managedTruckVM) throws URISyntaxException {
+    public ResponseEntity<Truck> createTruck (@RequestBody ManagedTruckVM managedTruckVM) throws URISyntaxException {
         LOG.debug("REST request to create new Truck {}", managedTruckVM);
         Truck newTruck = truckService.createTruck(managedTruckVM);
-
         return ResponseEntity.created(new URI("/api/trucks/" + newTruck.getId()))
             .headers(HeaderUtil.createAlert("truck.created", newTruck.getId().toString()))
             .body(newTruck);

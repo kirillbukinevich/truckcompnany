@@ -29,4 +29,7 @@ public interface TruckRepository extends JpaRepository<Truck, Long> {
     Page<Truck> findByCompanyIdWithCompany(Long id, Pageable pageable);
 
     List<Truck> findByCompany(Company company);
+
+    @Query(value = "select distinct truck from Truck truck left join fetch truck.company where truck.company = ?1 and truck.status = 'READY'")
+    List<Truck> findByCompanyAndReady(Company company);
 }

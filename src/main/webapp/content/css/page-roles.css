@@ -91,14 +91,18 @@
     margin-bottom: 10px;
 }
 
-
-
+.table-responsive {
+    border: 1px solid #ddd;
+    margin-top:10px;
+    margin-bottom:10px;
+}
 .table > tbody > tr > td, .table > tbody > tr > th{
     vertical-align: middle;
     text-align:left;
 }
 .table{
     border: none;
+    margin-bottom:0;
 }
 .table > thead > tr > th{
     border: none;
@@ -208,4 +212,8 @@
 
 .form-control-button{
     margin:40px 0 10px 0;
+}
+
+thead > tr > th >span.fa{
+    margin-left:8px;
 }

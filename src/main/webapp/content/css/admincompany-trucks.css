@@ -2,6 +2,16 @@
     padding-left:15px;
 }
 
+.table > tbody > tr > td.row-status-truck{
+    width:100px;
+}
+.table > tbody > tr > td.row-type-truck{
+    width:115px;
+}
+.table > tbody > tr > td.row-consumption-truck{
+    width:125px;
+}
+
 .wrap-radio-type-truck{
     position:relative;
     height:30px;
