@@ -16,6 +16,7 @@ Before run this application you have to install Apche Solr following steps below
     solr stop -all
  ```
 - Go to the folder <'solr_directory'>/server/solr/storages/conf. Insert file  'schema.xml' which is placed in root Github folder.
+- Go to the folder <'solr_directory'>/server/solr/storages/conf. The folder containts file "managed-schema". You have to delete it.
 - Start Apache Solr again
 ```
     solr start
