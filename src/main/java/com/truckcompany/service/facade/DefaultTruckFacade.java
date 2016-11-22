@@ -41,6 +41,7 @@ public class DefaultTruckFacade implements TruckFacade {
         if (!optionalUser.isPresent()) return new PageImpl<TruckDTO>(emptyList());
 
         User user = optionalUser.get();
+        if (user.getCompany() == null) return new PageImpl<TruckDTO>(emptyList());
         Page<Truck> pageTrucks = new PageImpl<Truck>(emptyList());
         if (isCurrentUserInRole("ROLE_ADMIN")) {
             pageTrucks = truckService.getAllTrucksBelongsCompany(user.getCompany(), pageable);

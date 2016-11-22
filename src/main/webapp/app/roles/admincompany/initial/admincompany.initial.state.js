@@ -22,6 +22,8 @@
             views: {
                 'page@roles': {
                     templateUrl: 'app/roles/admincompany/initial/admincompany.initial.html',
+                    controller: 'AdmincompanyInitialController',
+                    controllerAs: 'vm'
                 },
             },
             resolve: {

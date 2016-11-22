@@ -96,6 +96,12 @@ public class DefaultStorageFacade implements StorageFacade {
         if (storage == null) return false;
         storage.setDeleted(true);
         storageRepository.save(storage);
+
+
+        StorageIndex storageIndex =  storageSearchRepository.findOne(storage.getId());
+        storageIndex.setDeleted(true);
+        storageSearchRepository.save(storageIndex);
+
         return true;
     }
 
@@ -106,6 +112,10 @@ public class DefaultStorageFacade implements StorageFacade {
             if (storage != null) {
                 storage.setDeleted(true);
                 storageRepository.save(storage);
+
+                StorageIndex storageIndex =  storageSearchRepository.findOne(storage.getId());
+                storageIndex.setDeleted(true);
+                storageSearchRepository.save(storageIndex);
             };
         });
     }

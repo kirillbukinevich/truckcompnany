@@ -5,12 +5,16 @@
     <div class="form-group" ng-class="{'has-error' : (form.name.$dirty && form.name.$invalid) }">
         <label for="name" class="control-label">Name template:</label>
         <input ng-model="vm.template.name" name="name" type="text" class="form-control" id="name"
-               placeholder="Name template" ng-minlength=1 required>
+               placeholder="Name template" ng-minlength=1  ng-maxlength="20" required>
 
         <div ng-show="form.name.$dirty && form.name.$invalid">
             <p class="help-block"
                ng-show="form.name.$error.required" >
                 Name template is required.
+            </p>
+            <p class="help-block"
+               ng-show="form.name.$error.maxlength" >
+                Name template must consist of less than 20 symbols.
             </p>
         </div>
     </div>

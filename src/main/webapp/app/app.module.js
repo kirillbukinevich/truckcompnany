@@ -21,7 +21,8 @@
             'ckeditor',
             'ui.select',
             'ngSanitize',
-            "ngAnimate"
+            "ngAnimate",
+            "highcharts-ng"
         ])
         .run(run);
 

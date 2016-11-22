@@ -22,9 +22,11 @@
                 data: vm.truck
             }).then(function (response) {
                 vm.error = false;
+
                 vm.truck = response.data;
                 $state.go('admincompany.trucks');
             }, function () {
+                console.log("error");
                 vm.error = true;
                 vm.messageError = "Problem with connection."
             });

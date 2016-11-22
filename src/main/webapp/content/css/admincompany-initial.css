@@ -1,0 +1,71 @@
+#admincompany-initial .row {
+    margin: 0 0 0 0;
+}
+
+#admincompany-initial .card {
+    text-align: left;
+    color: #73879C;
+    padding: 10px;
+
+}
+
+#admincompany-initial .card .fa {
+    margin-right: 5px;
+}
+
+#admincompany-initial .card h1 {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+}
+
+#common-statisctic div[class*='col-']{
+    border-right: 2px solid #ADB2B5;
+}
+#common-statisctic div[class*='col-']:last-of-type {
+    border-right:none;
+}
+.wrap-chart{
+    width:70%;
+}
+
+
+.wrap-pie-card{
+    background:#fff;
+    margin:30px 15px 15px 5px;
+}
+
+.wrap-pie-card h2{
+    margin:15px 15px 0 15px;
+    padding:10px;
+    border-bottom: 1px solid #C5C7CB;
+    font-size:16px;
+    color:#73879C;
+    text-align: left;
+
+}
+
+.wrap-pie{
+   width:50%;
+    float:left;
+}
+.wrap-legend{
+    height:165px;
+
+}
+
+.wrap-legend table{
+    width:50%;
+}
+
+#admincompany-initial .wrap-legend table {
+    margin-top:15px;
+}
+.legend-circle{
+    display: inline-block;
+    height:15px;
+    width:15px;
+    border-radius: 50%;
+    background:red;
+    margin-right:10px;
+}

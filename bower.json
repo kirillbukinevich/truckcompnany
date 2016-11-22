@@ -32,7 +32,9 @@
     "ngImgCrop": "0.3.2",
     "angular-ckeditor": "1.0.3",
     "angular-ui-select" : "0.19.6",
-    "angular-animate": "1.5.8"
+    "angular-animate": "1.5.8",
+    "highcharts-ng":"0.0.13",
+    "highcharts": "5.0.3"
 
   },
   "devDependencies": {
