@@ -21,6 +21,7 @@
             isWithoutAuthority: isWithoutAuthority
         };
 
+
         return service;
 
         function authenticate (identity) {

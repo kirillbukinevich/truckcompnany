@@ -31,3 +31,7 @@
     color:#0e6ab4;
 }
 
+
+#login-form-body .row div[class*='col-']{
+    padding:0 10px;
+}

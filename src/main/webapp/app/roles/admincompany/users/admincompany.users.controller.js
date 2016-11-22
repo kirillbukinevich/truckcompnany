@@ -22,6 +22,8 @@
         vm.availableItemsPerPage = [2, 10, 20];
         vm.page = 1;
         vm.itemsPerPage = pagingParams.size;
+        vm.predicate = pagingParams.predicate;
+        vm.reverse = pagingParams.ascending;
 
 
         vm.loadPage();
@@ -30,7 +32,8 @@
         function loadPage () {
             Employee.query({
                 page: pagingParams.page - 1,
-                size: vm.itemsPerPage
+                size: vm.itemsPerPage,
+                sort: sort()
             }, onSuccess, onError);
         }
 
@@ -65,7 +68,8 @@
         function transition () {
             $state.transitionTo($state.$current, {
                 page: vm.page,
-                size:  vm.itemsPerPage
+                size:  vm.itemsPerPage,
+                sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
             });
         }
 
@@ -74,6 +78,14 @@
                 page: 1,
                 size:  vm.itemsPerPage
             });
+        }
+
+        function sort () {
+            var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')];
+            if (vm.predicate !== 'id') {
+                result.push('id');
+            }
+            return result;
         }
     }
 })();
