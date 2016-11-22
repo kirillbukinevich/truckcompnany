@@ -22,6 +22,8 @@ import com.truckcompany.web.rest.vm.ManagedRouteListVM;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,6 +80,11 @@ public class WaybillService {
     public List<Waybill> getWaybillByCompany (Company company){
         log.debug("Get waybills for company with id: {}", company.getId());
         return waybillRepository.findByCompany(company);
+    }
+
+    public Page<Waybill> getPageWaybillByCompany(Pageable pageable, Company company){
+        log.debug("Get waybills for company with id: {}", company.getId());
+        return waybillRepository.findPageByCompany(company, pageable);
     }
 
     public List<WaybillDTO> getAllWaybills () {

@@ -6,6 +6,8 @@ import com.truckcompany.domain.*;
 import com.truckcompany.domain.User;
 import com.truckcompany.domain.Waybill;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -41,4 +43,6 @@ public interface WaybillRepository extends JpaRepository<Waybill, Long> {
     List<Waybill> findByDriver(User driver);
 
     List<Waybill> findByCompany(Company company);
+
+    Page<Waybill> findPageByCompany(Company company, Pageable pageable);
 }

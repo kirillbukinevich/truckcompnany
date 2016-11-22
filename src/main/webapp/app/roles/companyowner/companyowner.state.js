@@ -11,12 +11,10 @@
     function stateConfig($stateProvider) {
         $stateProvider.state('companyowner', {
             abstract: true,
-            parent: 'app',
+            parent: 'roles',
             views: {
-                'content@': {
-                    templateUrl: 'app/companyowner/companyowner.html',
-                    controller: 'CompanyownerController',
-                    controllerAs: 'vm'
+                'sidebar@roles':{
+                    templateUrl: 'app/roles/companyowner/sidebar.html'
                 }
             }
         });
