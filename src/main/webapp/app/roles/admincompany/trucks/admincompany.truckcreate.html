@@ -1,22 +1,86 @@
-<h1>Create new storage</h1>
+
+
+
+
+<h1>Create new truck</h1>
 <div class="alert alert-danger" ng-if="vm.error">
     {{vm.messageError}}
 </div>
 
-<form>
-    <div class="form-group">
-        <label for="regNumber">Register number:</label>
-        <input type="text" ng-model="vm.truck.regNumber" class="form-control" id="regNumber"
-               placeholder="Enter register number">
+<form name="form">
+    <div class="form-group" ng-class="{'has-error' : (form.regNumber.$dirty && form.regNumber.$invalid)}">
+        <label for="regNumber" class="control-label">Register number:</label>
+        <input type="text" ng-model="vm.truck.regNumber" name="regNumber" class="form-control" id="regNumber"
+               placeholder="Enter register number" required>
+        <div ng-show="form.regNumber.$dirty && form.regNumber.$invalid">
+            <p class="help-block"
+               ng-show="form.regNumber.$error.required">
+                Register number is required.
+            </p>
+        </div>
+    </div>
+    <div class="form-group" ng-class="{'has-error' : (form.model.$dirty && form.model.$invalid)}">
+        <label for="model" class="control-label">Model:</label>
+        <input type="text" ng-model="vm.truck.model" name="model" class="form-control" id="model"
+               placeholder="Model of truck" required>
+        <div ng-show="form.model.$dirty && form.model.$invalid">
+            <p class="help-block"
+               ng-show="form.model.$error.required">
+                Model is required.
+            </p>
+        </div>
     </div>
     <div class="form-group">
-        <label for="consumption">Fuel consumption:</label>
-        <input type="text" ng-model="vm.truck.consumption" class="form-control" id="consumption"
-               placeholder="Enter register number">
-
+        <label for="truck-body">Type:</label>
+        <div>
+            <div class="wrap-radio-type-truck" id="type-truck-body">
+                <input type="radio" id="truck-body" ng-model="vm.truck.type" value="BODY">
+                <label for="truck-body"></label>
+            </div>
+            <div class="wrap-radio-type-truck" id="type-truck-refrigirator">
+                <input type="radio" id="truck-refrigirator" ng-model="vm.truck.type" value="REFRIGERATOR">
+                <label for="truck-refrigirator"></label>
+            </div>
+            <div class="wrap-radio-type-truck" id="type-truck-tank">
+                <input type="radio" id="truck-tank" ng-model="vm.truck.type" value="TANK">
+                <label for="truck-tank"></label>
+            </div>
+        </div>
     </div>
 
-    <a href="" class="btn btn-default" ng-click="vm.create()">Create</a>
-    <a href="#/admincompany/trucks" class="btn btn-default">Cancel</a>
+    <div class="form-group" ng-class="{'has-error' : (form.consumption.$dirty && form.consumption.$invalid)}">
+        <label for="consumption" class="control-label">Fuel consumption:</label>
+        <input type="text" ng-model="vm.truck.consumption" name="consumption" class="form-control" id="consumption"
+               placeholder="Enter fuel consumption" ng-pattern="/^\d+$/">
+        <div ng-show="form.consumption.$dirty && form.consumption.$invalid">
+            <p class="help-block"
+               ng-show="form.consumption.$error.pattern">
+                Fuel consumption must be numeric only.
+            </p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="truck-body">Status:</label>
+        <div>
+            <div class="wrap-radio-type-truck" id="status-truck-ready">
+                <input type="radio" id="truck-ready" ng-model="vm.truck.status" value="READY">
+                <label for="truck-ready"></label>
+            </div>
+            <div class="wrap-radio-type-truck" id="status-truck-repairing">
+                <input type="radio" id="truck-repairing" ng-model="vm.truck.status" value="REPAIRING">
+                <label for="truck-repairing"></label>
+            </div>
+            <div class="wrap-radio-type-truck" id="status-truck-writtenoff">
+                <input type="radio" id="truck-writtenoff" ng-model="vm.truck.status" value="WRITTENOFF">
+                <label for="truck-writtenoff"></label>
+            </div>
+        </div>
+    </div>
+
+
+    <a href="" class="btn btn-primary" ng-click="vm.create()" ng-disabled="form.$invalid">Update</a>
+    <a href="#/admincompany/trucks" class="btn btn-primary">Cancel</a>
 </form>
+
 

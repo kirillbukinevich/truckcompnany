@@ -9,26 +9,43 @@
         <a href="#/admincompany/truckcreate" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Create</a>
     </div>
 
+    <div id="control-table">
+        <span class="select-show-title">Show:</span>
+        <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage"
+                ng-change="vm.changeItemsPerPage()" class="btn btn-default">
+        </select>
+    </div>
 
-    Show:
-    <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage" ng-change="vm.changeItemsPerPage()">
-    </select>
 
+    <div class="table-responsive">
     <table class="table table-hover">
         <thead>
 
-        <tr>
-            <th>Register number</th>
-            <th>Consumption</th>
+        <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+            <th jh-sort-by="regNumber">Register number<span class="fa fa-sort"></span></th>
+            <th jh-sort-by="model">Model<span class="fa fa-sort"></span></span></th>
+            <th jh-sort-by="consumption">Consumption<span class="fa fa-sort"></span></span></th>
+            <th jh-sort-by="type">Type<span class="fa fa-sort"></span></th>
+            <th jh-sort-by="status">Status<span class="fa fa-sort"></span></th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="truck in vm.trucks">
-            <td><a href="#/admincompany/trucks/{{truck.id}}">{{truck.regNumber}}</a></td>
-            <td>{{truck.consumption}}</td>
+            <td class="padding-for-first-row"><a href="#/admincompany/trucks/{{truck.id}}">{{truck.regNumber}}</a></td>
+            <td>{{truck.model}}</td>
+            <td class="row-consumption-truck">{{truck.consumption}}</td>
+            <td class="row-type-truck"><span class="label label-default">{{truck.type}}</span></td>
+            <td class="row-status-truck">
+                <span class="label label-success" ng-if="truck.status == 'READY'"> READY</span>
+                <span class="label label-warning" ng-if="truck.status == 'REPAIRING'"> REPAIRING</span>
+                <span class="label label-danger" ng-if="truck.status == 'WRITTENOFF'"> WRITTEN OFF</span>
+
+            </td>
         </tr>
         </tbody>
     </table>
+        </div>
+
     <div class="text-center">
         <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
         <uib-pagination class="pagination-sm"
