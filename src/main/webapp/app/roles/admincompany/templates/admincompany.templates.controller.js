@@ -36,7 +36,6 @@
 
         function onSuccess(data, headers) {
 
-
             vm.error = false;
             vm.templates = data;
 
@@ -97,7 +96,9 @@
 
         $scope.deleteTemplate = function () {
             Template.delete({id: vm.selectedTemplate.id}, function () {
-                vm.templates.splice(vm.templates.indexOf(vm.selectedTemplate), 1);
+                Template.query({}, onSuccess, onError);
+                vm.selected = [];
+                vm.checkedAll = false;
             });
             vm.modalDelete.close();
         }

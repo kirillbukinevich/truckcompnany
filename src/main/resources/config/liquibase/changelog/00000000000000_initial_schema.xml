@@ -44,12 +44,14 @@
 
             <column name="activated" type="boolean" defaultValue="true">
             </column>
+            <column name="deleted" type="boolean" defaultValue="false">
+            </column>
 
             <column name="company_id" type="int">
                 <constraints nullable="false"/>
             </column>
             <column name="address" type="varchar(45)">
-                <constraints nullable="false"/>
+                <!--<constraints nullable="false"/>-->
             </column>
 
         </createTable>

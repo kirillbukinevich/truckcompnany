@@ -1,0 +1,162 @@
+[
+    {
+        "_class" : "com.truckcompany.domain.StorageIndex",
+        "id": "1",
+        "name": "euroopt",
+        "activated": true,
+        "address": "minsk",
+        "idCompany" : 2,
+        "deleted" : false
+
+    },
+    {
+        "_class" : "com.truckcompany.domain.StorageIndex",
+        "id": "2",
+        "name": "euroopt",
+        "activated": true,
+        "address": "vitebsk",
+        "idCompany" : 2,
+        "deleted" : false
+    },
+    {
+        "_class" : "com.truckcompany.domain.StorageIndex",
+        "id": "3",
+        "name": "storage01",
+        "activated": true,
+        "address": "Vitebsk",
+        "idCompany" : 3,
+        "deleted" : false
+    },
+    {
+        "_class" : "com.truckcompany.domain.StorageIndex",
+        "id": "4",
+        "name": "storage02",
+        "activated": true,
+        "address": "Vitebsk",
+        "idCompany" : 3,
+        "deleted" : false
+    },
+    {
+        "_class" : "com.truckcompany.domain.StorageIndex",
+        "id": "5",
+        "name": "storage03",
+        "activated": true,
+        "address": "Vitebsk",
+        "idCompany" : 3,
+        "deleted" : false
+    },
+    {
+        "_class" : "com.truckcompany.domain.StorageIndex",
+        "id": "6",
+        "name": "storage04",
+        "activated": true,
+        "address": "Vitebsk",
+        "idCompany" : 3,
+        "deleted" : false
+    },
+    {
+        "_class" : "com.truckcompany.domain.StorageIndex",
+        "id": "7",
+        "name": "storage05",
+        "activated": true,
+        "address": "Vitebsk",
+        "idCompany" : 3,
+        "deleted" : false
+    },
+    {
+        "_class" : "com.truckcompany.domain.StorageIndex",
+        "id": "8",
+        "name": "storage06",
+        "activated": true,
+        "address": "Vitebsk",
+        "idCompany" : 3,
+        "deleted" : false
+    },
+    {
+        "_class" : "com.truckcompany.domain.StorageIndex",
+        "id": "9",
+        "name": "storage07",
+        "activated": true,
+        "address": "Vitebsk",
+        "idCompany" : 3,
+        "deleted" : false
+    },
+    {
+        "_class" : "com.truckcompany.domain.StorageIndex",
+        "id": "10",
+        "name": "storage08",
+        "activated": true,
+        "address": "Vitebsk",
+        "idCompany" : 3,
+        "deleted" : false
+    },
+    {
+        "_class" : "com.truckcompany.domain.StorageIndex",
+        "id": "11",
+        "name": "storage09",
+        "activated": true,
+        "address": "Vitebsk",
+        "idCompany" : 3,
+        "deleted" : false
+    },
+    {
+        "_class" : "com.truckcompany.domain.StorageIndex",
+        "id": "12",
+        "name": "storage10",
+        "activated": true,
+        "address": "Vitebsk",
+        "idCompany" : 3,
+        "deleted" : false
+    },
+    {
+        "_class" : "com.truckcompany.domain.StorageIndex",
+        "id": "13",
+        "name": "storage11",
+        "activated": true,
+        "address": "Vitebsk",
+        "idCompany" : 3,
+        "deleted" : false
+    },
+    {
+        "_class" : "com.truckcompany.domain.StorageIndex",
+        "id": "14",
+        "name": "storage12",
+        "activated": true,
+        "address": "Vitebsk",
+        "idCompany" : 3,
+        "deleted" : false
+    },
+    {
+        "_class" : "com.truckcompany.domain.StorageIndex",
+        "id": "15",
+        "name": "storage13",
+        "activated": true,
+        "address": "Vitebsk",
+        "idCompany" : 3,
+        "deleted" : false
+    },
+    {
+        "_class" : "com.truckcompany.domain.StorageIndex",
+        "id": "16",
+        "name": "storage14",
+        "activated": true,
+        "address": "Vitebsk",
+        "idCompany" : 3,
+        "deleted" : false
+    },
+    {
+        "_class" : "com.truckcompany.domain.StorageIndex",
+        "id": "17",
+        "name": "storage15",
+        "activated": true,
+        "address": "Vitebsk",
+        "idCompany" : 3,
+        "deleted" : false
+    }
+]
+
+
+
+
+
+
