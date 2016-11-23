@@ -42,6 +42,9 @@ public class RouteList implements Serializable {
     @OneToOne(mappedBy = "routeList", fetch = FetchType.LAZY)
     private Waybill waybill;
 
+    @Column(name = "state")
+    private String state;
+
     public Long getId() {
         return id;
     }
@@ -107,6 +110,14 @@ public class RouteList implements Serializable {
 
     public Waybill getWaybill() {
         return waybill;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
 }

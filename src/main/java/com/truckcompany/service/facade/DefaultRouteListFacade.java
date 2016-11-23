@@ -42,28 +42,48 @@ public class DefaultRouteListFacade implements RouteListFacade {
         Page<RouteList> pageRouteLists = new PageImpl<>(emptyList());
 
         Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
-        if (optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 
             log.debug("Get all routeLists for user \'{}\'", user.getLogin());
 
-            if (isCurrentUserInRole("ROLE_COMPANYOWNER")){
+            if (isCurrentUserInRole("ROLE_COMPANYOWNER")) {
                 pageRouteLists = routeListService
-                        .getPageRouteListsByCompany(pageable, user.getCompany());
+                    .getPageRouteListsByCompany(pageable, user.getCompany());
             }
         }
         return new PageImpl<RouteListDTO>(pageRouteLists.getContent().stream()
-                .map(s -> toCompanyOwnerDTO(s))
-                .collect(Collectors.toList()), pageable, pageRouteLists.getTotalElements());
+            .map(s -> toCompanyOwnerDTO(s))
+            .collect(Collectors.toList()), pageable, pageRouteLists.getTotalElements());
     }
 
-    private RouteListDTO toCompanyOwnerDTO(RouteList routeList){
+    @Override
+    public List<RouteListDTO> findRouteLists() {
+        Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            log.debug("Get all routeList for user \'{}\'", user.getLogin());
+            List<RouteListDTO> routeList = emptyList();
+            if (isCurrentUserInRole("ROLE_MANAGER")) {
+                routeList = routeListService.getRouteListsByCompany(user.getCompany())
+                    .stream()
+                    .map(RouteListDTO::new)
+                    .collect(Collectors.toList());
+            }
+            return routeList;
+        } else {
+            return emptyList();
+        }
+    }
+
+    private RouteListDTO toCompanyOwnerDTO(RouteList routeList) {
         RouteListDTO baseDTO = new RouteListDTO(routeList.getId(), routeList.getDate(),
-            routeList.getLeavingDate(), routeList.getArrivalDate());
+            routeList.getLeavingDate(), routeList.getArrivalDate(), routeList.getState());
         baseDTO.setLeavingStorage(new StorageDTO(routeList.getLeavingStorage()));
         baseDTO.setArrivalStorage(new StorageDTO(routeList.getArrivalStorage()));
         baseDTO.setTruck(new TruckDTO(routeList.getTruck()));
-        baseDTO.setWaybill( routeList.getWaybill() != null ?
+        baseDTO.setWaybill(routeList.getWaybill() != null ?
             new WaybillDTO(routeList.getWaybill().getId(), routeList.getWaybill().getDate(),
                 routeList.getWaybill().getState()) : null);
         return baseDTO;

@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface RouteListFacade {
     Page<RouteListDTO> findRouteLists(Pageable pageable);
+
+    List<RouteListDTO> findRouteLists();
 }
