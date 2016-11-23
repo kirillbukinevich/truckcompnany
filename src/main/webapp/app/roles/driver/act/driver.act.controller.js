@@ -17,10 +17,11 @@
 
 
         vm.create = function(){
-            console.log("Create new write-off certificate by driver " + vm.driver.firstName + vm.driver.lastName);
+            console.log("Create new write-off certificate by driver " + vm.act.date + "||||" + vm.act.count);
             WriteOffAct.save(
                 vm.act,
                 function () {
+                    console.log("Create new act");
                     $state.go('driver.routelist');
                 },
                 function(resp){
