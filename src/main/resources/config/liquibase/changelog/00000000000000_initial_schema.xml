@@ -151,7 +151,10 @@
             <column name="id" type="int" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="date" type="datetime"/>
+            <column name="date" type="datetime">
+            <constraints nullable="false"/>
+            </column>
+
             <column name="count" type="int">
                 <constraints nullable="false"/>
             </column>
