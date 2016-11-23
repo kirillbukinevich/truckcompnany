@@ -6,9 +6,11 @@
 
 <div ng-if="!vm.error">
     <div id="control-panel">
-        <a href="#/admincompany/templatecreate" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Create</a>
+        <a href="#/admincompany/templatecreate" class="btn btn-admin" ng-disabled="vm.employee.length===0"><span class="glyphicon glyphicon-plus"></span>Create</a>
         <a class="btn btn-admin" ng-click="vm.deleteSelectedTemplates()"><span class="glyphicon glyphicon-trash"></span>Delete</a>
     </div>
+
+    <div class="alert alert-warning" ng-if="vm.employee.length!=0"><strong>Attention:</strong> You have not assigned template of birthday cards for {{vm.employee.length}} employee.</div>
 
     <div id="control-table">
         <span class="select-show-title">Show:</span>

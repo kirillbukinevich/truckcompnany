@@ -6,7 +6,9 @@ import com.truckcompany.domain.Truck;
 import com.truckcompany.domain.Waybill;
 
 import javax.persistence.*;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 public class RouteListDTO {
 
@@ -90,17 +92,13 @@ public class RouteListDTO {
         return leavingDate;
     }
 
-    public void setLeavingDate(ZonedDateTime leavingDate) {
-        this.leavingDate = leavingDate;
-    }
+
 
     public ZonedDateTime getArrivalDate() {
         return arrivalDate;
     }
 
-    public void setArrivalDate(ZonedDateTime arrivalDate) {
-        this.arrivalDate = arrivalDate;
-    }
+
 
     public StorageDTO getLeavingStorage() {
         return leavingStorage;
@@ -140,5 +138,21 @@ public class RouteListDTO {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public void setArrivalDate (Date arrivalDate) {
+        this.arrivalDate = ZonedDateTime.ofInstant(arrivalDate.toInstant(),ZoneId.systemDefault());
+    }
+
+    public void setLeavingDate (Date leavingDate) {
+        this.leavingDate = ZonedDateTime.ofInstant(leavingDate.toInstant(),ZoneId.systemDefault());
+    }
+
+    public void setLeavingZonedDate(ZonedDateTime leavingDate) {
+        this.leavingDate = leavingDate;
+    }
+
+    public void setArrivalZonedDate(ZonedDateTime arrivalDate) {
+        this.arrivalDate = arrivalDate;
     }
 }

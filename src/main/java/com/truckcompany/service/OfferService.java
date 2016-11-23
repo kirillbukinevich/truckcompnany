@@ -7,9 +7,12 @@ import com.truckcompany.domain.User;
 import com.truckcompany.domain.enums.OfferState;
 import com.truckcompany.repository.*;
 import com.truckcompany.security.SecurityUtils;
+import com.truckcompany.service.dto.OfferDTO;
 import com.truckcompany.web.rest.vm.ManagedOfferVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,14 +74,12 @@ public class OfferService {
         return offer;
     }
 
-    public List<ManagedOfferVM> getAllOffers () {
+    public Page<OfferDTO> getAllOffers (Pageable pageable) {
         log.debug("Get all offers.");
         Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
 
-        List<ManagedOfferVM> offers = offerRepository.findByCompany(user.get().getCompany())
-            .stream()
-            .map(ManagedOfferVM::new)
-            .collect(Collectors.toList());
+        Page<OfferDTO> offers = offerRepository.findByCompany(user.get().getCompany(), pageable)
+            .map(this::convertToOfferDTO);
 
         return offers;
     }
@@ -100,5 +101,9 @@ public class OfferService {
             return true;
         } else
             return false;
+    }
+
+    private OfferDTO convertToOfferDTO (Offer offer) {
+        return new OfferDTO(offer);
     }
 }

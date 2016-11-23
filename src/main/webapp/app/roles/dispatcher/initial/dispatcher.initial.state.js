@@ -20,9 +20,9 @@
                 pageTitle: 'activate.title'
             },
             views: {
-                'content@': {
-                    templateUrl: 'app/dispatcher/initial/dispatcher.initial.html'
-                },
+                'page@roles': {
+                    templateUrl: 'app/roles/dispatcher/initial/dispatcher.initial.html'
+                }
             },
             resolve: {
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {

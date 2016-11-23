@@ -3,11 +3,11 @@
     <table class="table table-striped">
         <tbody>
         <tr><td><h4>Waybill № {{waybill.id}}</h4></td></tr>
-        <tr><td><h4>Truck: {{vm.routeList.truck.regNumber}}</h4></td></tr>
+        <tr><td><h4>Truck: {{vm.routeList.truck.model}} {{vm.routeList.truck.type}} {{vm.routeList.truck.regNumber}}</h4></td></tr>
         <tr><td><h4>Driver: {{waybill.driver.firstName}} {{waybill.driver.lastName}}</h4></td></tr>
         <tr><td><h4>route from {{vm.routeList.leavingStorage.address}} to {{vm.routeList.arrivalStorage.address}}</h4></td></tr>
-        <tr><td><h4>start date: {{waybill.routeList.leavingDate}}</h4></td></tr>
-        <tr><td><h4>arrival date:  {{waybill.routeList.arrivalDate}}</h4></td></tr>
+        <tr><td><h4>start date: {{waybill.routeList.leavingDate | date:'yyyy-MM-dd HH:mm'}}</h4></td></tr>
+        <tr><td><h4>arrival date:  {{waybill.routeList.arrivalDate | date:'yyyy-MM-dd HH:mm'}}</h4></td></tr>
         </tbody>
     </table>
     <ng-map zoom="14" center="37.7699298, -122.4469157" style="height:90%">

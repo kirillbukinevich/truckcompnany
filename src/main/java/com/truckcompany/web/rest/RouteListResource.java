@@ -91,8 +91,8 @@ public class RouteListResource {
         if (routeList == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         RouteListDTO routeListDTO = new RouteListDTO();
         routeListDTO.setId(routeList.getId());
-        routeListDTO.setLeavingDate(routeList.getLeavingDate());
-        routeListDTO.setArrivalDate(routeList.getArrivalDate());
+        routeListDTO.setLeavingZonedDate(routeList.getLeavingDate());
+        routeListDTO.setArrivalZonedDate(routeList.getArrivalDate());
         routeListDTO.setArrivalStorage(new StorageDTO(routeList.getArrivalStorage()));
         routeListDTO.setLeavingStorage(new StorageDTO(routeList.getLeavingStorage()));
         routeListDTO.setTruck(new TruckDTO(routeList.getTruck()));

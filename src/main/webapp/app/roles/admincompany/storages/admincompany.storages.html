@@ -22,59 +22,62 @@
                 </div>
             </div>
         </div>
-        <div id="show-select">
-            <span class="select-show-title">Show:</span>
-            <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage"
-                    ng-change="vm.changeItemsPerPage()" class="btn btn-default">
-            </select>
-        </div>
+
+        <div class="alert alert-warning" ng-if="vm.storages.length === 0">List of storages is empty. You can create new itemes to using buttom Create.</div>
+
+        <div ng-if="vm.storages.length !=0">
+            <div id="show-select">
+                <span class="select-show-title">Show:</span>
+                <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage"
+                        ng-change="vm.changeItemsPerPage()" class="btn btn-default">
+                </select>
+            </div>
 
 
+            <table class="table table-hover">
+                <thead>
 
-
-    </div>
-
-
-    <table class="table table-hover">
-        <thead>
-
-        <tr>
-            <th class="table-checkbox"><input type="checkbox" ng-model="vm.checkedAll" ng-change="vm.changeStateCheckbox()"></th>
-            <th>Name</th>
-            <th>Address</th>
-            <th class="status-active-nonactive">Status</th>
-            <th class="table-delete"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="storage in vm.storages" ng-class="{'selected' : vm.selected[$index]}">
-            <td><input type="checkbox" ng-init="vm.selected[$index] = false" ng-model="vm.selected[$index]"></td>
-            <td><a href="#/admincompany/storages/{{storage.id}}"><span
-                ng-bind-html="storage.name">{{storage.name}}</span></a></td>
-            <td ng-bind-html="storage.address">{{storage.address}}</td>
-            <td class="text-align-center">
+                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                    <th class="table-checkbox"><input type="checkbox" ng-model="vm.checkedAll"
+                                                      ng-change="vm.changeStateCheckbox()"></th>
+                    <th jh-sort-by="name">Name<span class="fa fa-sort"></span></th>
+                    <th jh-sort-by="address">Address<span class="fa fa-sort"></span></th>
+                    <th jh-sort-by="activated" class="status-active-nonactive">Status<span class="fa fa-sort"></span></th>
+                    <th class="table-delete"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="storage in vm.storages" ng-class="{'selected' : vm.selected[$index]}">
+                    <td><input type="checkbox" ng-init="vm.selected[$index] = false" ng-model="vm.selected[$index]">
+                    </td>
+                    <td><a href="#/admincompany/storages/{{storage.id}}"><span
+                        ng-bind-html="storage.name">{{storage.name}}</span></a></td>
+                    <td ng-bind-html="storage.address">{{storage.address}}</td>
+                    <td class="text-align-center">
                 <span ng-if="storage.activated" ng-click="vm.toggleStatus(storage)"
                       class="label label-success">ACTIVE</span>
-                <span ng-if="!storage.activated" ng-click="vm.toggleStatus(storage)"
-                      class="label label-warning">NON-ACTIVE</span>
-            </td>
-            <td class="text-align-right">
-                <span ng-click="vm.showModalDeleteStorage(storage)" class="glyphicon glyphicon-trash"></span>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <div ng-if="(vm.totalItems > vm.itemsPerPage) && !vm.isModeSearch ">
-        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
-        <uib-pagination class="pagination-sm"
-                        total-items="vm.totalItems"
-                        items-per-page="vm.itemsPerPage"
-                        boundary-link-numbers="true"
-                        rotate="true"
-                        ng-model="vm.page"
-                        ng-change="vm.transition()">
-        </uib-pagination>
-    </div>
+                        <span ng-if="!storage.activated" ng-click="vm.toggleStatus(storage)"
+                              class="label label-warning">NON-ACTIVE</span>
+                    </td>
+                    <td class="text-align-right">
+                        <span ng-click="vm.showModalDeleteStorage(storage)" class="glyphicon glyphicon-trash"></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div ng-if="(vm.totalItems > vm.itemsPerPage) && !vm.isModeSearch ">
+                <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+                <uib-pagination class="pagination-sm"
+                                total-items="vm.totalItems"
+                                items-per-page="vm.itemsPerPage"
+                                boundary-link-numbers="true"
+                                rotate="true"
+                                ng-model="vm.page"
+                                ng-change="vm.transition()">
+                </uib-pagination>
+            </div>
+
+        </div>
 
     </div>
 

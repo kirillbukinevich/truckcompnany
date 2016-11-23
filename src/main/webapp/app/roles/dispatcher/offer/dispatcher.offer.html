@@ -1,14 +1,16 @@
 <h1>Offers</h1>
+Show:
+<select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage" ng-change="vm.changeItemsPerPage()">
+</select>
 
 <table class="table table-striped table-condensed">
     <thead>
-        <tr>
-            <th>№</th>
-            <th>Date</th>
-            <!--<th>Created by</th>-->
+        <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+            <th jh-sort-by="id"><span class="glyphicon glyphicon-sort"></span>№</th>
+            <th jh-sort-by="creationDate"><span class="glyphicon glyphicon-sort"></span>Date</th>
             <th>Leaving storage</th>
             <th>Arrival storage</th>
-            <th>State</th>
+            <th jh-sort-by="state"><span class="glyphicon glyphicon-sort"></span>State</th>
         </tr>
     </thead>
     <tbody>
@@ -38,3 +40,15 @@
         </tr>
     </tbody>
 </table>
+
+<div class="text-center">
+    <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+    <uib-pagination class="pagination-sm"
+                    total-items="vm.totalItems"
+                    items-per-page = "vm.itemsPerPage"
+                    boundary-link-numbers = "true"
+                    rotate = "true"
+                    ng-model="vm.page"
+                    ng-change="vm.transition()">
+    </uib-pagination>
+</div>

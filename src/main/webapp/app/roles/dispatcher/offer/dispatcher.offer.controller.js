@@ -1,23 +1,23 @@
 /**
- * Created by Vladimir on 30.10.2016.
+ * Created by Viktor Dobroselsky on 04.11.2016.
  */
-
 (function() {
     'use strict';
 
     angular
         .module('truckCompanyApp')
-        .controller('AdmincompanyTrucksController', AdmincompanyTrucksController);
+        .controller('DispatcherOfferController', DispatcherOfferController);
 
-    AdmincompanyTrucksController.$inject = ['Truck','$state','pagingParams', 'ParseLinks'];
+    DispatcherOfferController.$inject = ['$stateParams', 'Offer', 'pagingParams', '$state'];
 
-    function AdmincompanyTrucksController (Truck, $state, pagingParams, ParseLinks) {
+    function DispatcherOfferController ($stateParams, Offer, pagingParams, $state) {
         var vm = this;
 
         vm.loadPage = loadPage;
+        vm.cancelOffer = cancelOffer;
         vm.transition = transition;
         vm.changeItemsPerPage = changeItemsPerPage;
-
+        vm.loadAll = loadAll;
 
         vm.availableItemsPerPage = [5, 10, 15, 20];
         vm.page = 1;
@@ -25,31 +25,22 @@
         vm.predicate = pagingParams.predicate;
         vm.reverse = pagingParams.ascending;
 
-
-        vm.trucks = [];
-        vm.error = false;
-        vm.messageError = '';
+        vm.offers = [];
         vm.loadPage();
 
-
-        function loadPage () {
-            Truck.query({
+        function loadPage() {
+            Offer.query({
                 page: pagingParams.page - 1,
-                size: vm.itemsPerPage,
-                sort: sort()
+                size: vm.itemsPerPage
             }, onSuccess, onError);
-
         }
 
         function onSuccess(data, headers){
             vm.error = false;
-
-            vm.trucks = data;
-
+            vm.offers = data;
             vm.totalItems = headers('X-Total-Count');
             vm.queryCount = vm.totalItems;
             vm.page = pagingParams.page;
-            vm.users = data;
         }
 
         function onError(error){
@@ -57,19 +48,33 @@
             vm.messageError = 'Problems with connection.'
         }
 
-        function transition () {
+        /*function transition () {
             $state.transitionTo($state.$current, {
                 page: vm.page,
                 size:  vm.itemsPerPage,
-                sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
             });
-        }
+        }*/
 
         function changeItemsPerPage(){
             $state.transitionTo($state.$current, {
                 page: 1,
                 size:  vm.itemsPerPage,
+            });
+        }
+
+        console.log(vm.offers);
+
+        function cancelOffer(offer) {
+            offer.state = "CANCELED";
+            Offer.update(offer);
+        }
+
+        function transition () {
+            $state.transitionTo($state.$current, {
+                page: vm.page,
+                size:  vm.itemsPerPage,
                 sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
+                search: vm.currentSearch
             });
         }
 
@@ -81,5 +86,12 @@
             return result;
         }
 
+        function loadAll () {
+            User.query({
+                page: pagingParams.page - 1,
+                size: vm.itemsPerPage,
+                sort: sort()
+            }, onSuccess, onError);
+        }
     }
 })();

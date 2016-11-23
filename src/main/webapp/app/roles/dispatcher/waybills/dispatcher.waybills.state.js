@@ -21,8 +21,8 @@
                     pageTitle: 'activate.title'
                 },
                 views: {
-                    'page@dispatcher': {
-                        templateUrl: 'app/dispatcher/waybills/dispatcher.waybills.html',
+                    'page@roles': {
+                        templateUrl: 'app/roles/dispatcher/waybills/dispatcher.waybills.html',
                         controller: 'DispatcherWaybillsController',
                         controllerAs: 'vm'
                     },
@@ -42,7 +42,7 @@
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/dispatcher/waybills/dispatcher.waybills-details.html',
+                    templateUrl: 'app/roles/dispatcher/waybills/dispatcher.waybills-details.html',
                     controller: 'DispatcherWaybillDetailsController',
                     controllerAs: 'vm',
                     backdrop: 'static',
