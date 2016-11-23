@@ -8,14 +8,14 @@
         .module('truckCompanyApp')
         .controller('ManagerWaybillDetailsController', ManagerWaybillDetailsController);
 
-    ManagerWaybillDetailsController.$inject = ['Principal', '$uibModalInstance', 'entity', 'Waybill'];
+    ManagerWaybillDetailsController.$inject = ['Principal', 'entity', 'Waybill', '$uibModalInstance'];
 
-    function ManagerWaybillDetailsController(Principal, $uibModalInstance, entity, Waybill) {
+    function ManagerWaybillDetailsController(Principal, entity, Waybill, $uibModalInstance) {
         var vm = this;
 
         vm.clear = clear;
         vm.waybill = entity;
-        vm.confirmWaybill = confirmWaybill;
+        vm.changeWaybillState = changeWaybillState;
 
         getAccount();
 
@@ -26,16 +26,15 @@
             });
         }
 
-        function confirmWaybill() {
+        function changeWaybillState() {
             vm.waybill.manager = vm.account;
             vm.waybill.routeList = null;
             vm.waybill.state = 'CHECKED';
             Waybill.update(vm.waybill);
-            clear();
         }
 
         function clear() {
-            $uibModalInstance.dismiss('cancel');
+            $uibModalInstance.close();
         }
     }
 })();

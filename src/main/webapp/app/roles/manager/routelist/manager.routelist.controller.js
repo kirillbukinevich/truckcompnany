@@ -6,11 +6,11 @@
 
     angular
         .module('truckCompanyApp')
-        .controller('ManagerRoutelistsController', ManagerRoutelistsController);
+        .controller('ManagerRoutelistController', ManagerRoutelistController);
 
-    ManagerRoutelistsController.$inject = ['$stateParams', 'RouteList'];
+    ManagerRoutelistController.$inject = ['RouteList'];
 
-    function ManagerRoutelistsController($stateParams, RouteList) {
+    function ManagerRoutelistController(RouteList) {
         var vm = this;
         vm.routelists = RouteList.query();
     }

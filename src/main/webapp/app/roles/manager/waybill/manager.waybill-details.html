@@ -86,7 +86,7 @@
             </div>
         </div>
         <button type="button" class="btn btn-success" data-dismiss="modal"
-                ng-click="vm.confirmWaybill()">
+                ng-click="closeModalWaybillDetails(vm.waybill.id); vm.changeWaybillState()">
             <span class="glyphicon glyphicon-ok">&nbsp;Confirm</span>
         </button>
     </form>

@@ -6,11 +6,11 @@
 
     angular
         .module('truckCompanyApp')
-        .controller('ManagerRoutelistsDirectionController', ManagerRoutelistsDirectionController);
+        .controller('ManagerRoutelistDirectionController', ManagerRoutelistDirectionController);
 
-    ManagerRoutelistsDirectionController.$inject = ['$scope', 'RouteList', '$stateParams', 'Waybill'];
+    ManagerRoutelistDirectionController.$inject = ['$scope', 'RouteList', '$stateParams', 'Waybill'];
 
-    function ManagerRoutelistsDirectionController($scope, RouteList, $stateParams, Waybill) {
+    function ManagerRoutelistDirectionController($scope, RouteList, $stateParams, Waybill) {
         var vm = this;
         vm.routelist = RouteList.query();
         vm.waybill = getWaybill(Waybill, $stateParams);

@@ -23,7 +23,7 @@
                     views: {
                         'page@roles': {
                             templateUrl: 'app/roles/manager/routelist/manager.routelist.html',
-                            controller: 'ManagerRoutelistsController',
+                            controller: 'ManagerRoutelistController',
                             controllerAs: 'vm'
                         }
                     },
@@ -47,14 +47,11 @@
                 views: {
                     'page@roles': {
                         templateUrl: 'app/roles/manager/routelist/manager.routelist-direction.html',
-                        controller: 'ManagerRoutelistsDirectionController',
+                        controller: 'ManagerRoutelistDirectionController',
                         controllerAs: 'vm'
                     }
                 },
                 resolve: {
-/*                    entity: ['Waybill', function (Waybill, $stateParams) {
-                        return Waybill.get({id: $stateParams.id});
-                    }],*/
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('activate');
                         return $translate.refresh();

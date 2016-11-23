@@ -12,18 +12,22 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <th>Waybill №</th>
-            <th>Dispatcher</th>
-            <th>Driver</th>
-            <th>Date</th>
             <th>Route list №</th>
+            <!--<th>Driver</th>-->
+            <th>Truck number</th>
+            <th>Leaving date</th>
+            <th>Arrival date</th>
+            <th>Route</th>
             <th>State</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="routelist in vm.routelists">
             <td><div class="text-center">{{routelist.id}}</div></td>
-            <td>{{routelist.truckId}}</td>
+            <td>{{routelist.truck}}</td>
+            <td>{{routelist.leavingDate}}</td>
+            <td>{{routelist.arrivalDate}}</td>
+            <td>{{routelist.arrivalDate}}</td>
             <!--<td>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</td>-->
             <!--<td>{{waybill.date | date:"dd/MM/yyyy 'at' HH:mm"}}</td>-->
             <!--<td><div class="text-center"><a href="">{{waybill.routeListId}}</a></div></td>-->
