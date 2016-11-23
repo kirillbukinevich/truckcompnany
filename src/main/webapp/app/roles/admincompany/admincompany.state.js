@@ -16,8 +16,8 @@
             parent: 'roles',
             views: {
                 'sidebar@roles': {
-                    templateUrl: 'app/roles/admincompany/sidebar.html',
-                },
+                    templateUrl: 'app/roles/admincompany/sidebar.html'
+                }
             }
         });
     }

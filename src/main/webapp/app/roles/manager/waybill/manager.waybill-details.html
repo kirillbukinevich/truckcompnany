@@ -1,0 +1,93 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title">Waybill details</h4>
+    </div>
+
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="text-center">Waybill</h4>
+                <dl class="dl-horizontal">
+                    <dt><span>Waybill number:</span></dt>
+                    <dd><span>{{vm.waybill.id}}</span></dd>
+
+                    <dt><span>Dispatcher:</span></dt>
+                    <dd><span>{{vm.waybill.dispatcher.firstName}} {{vm.waybill.dispatcher.lastName}}</span></dd>
+
+                    <dt><span>Creation date:</span></dt>
+                    <dd><span>{{vm.waybill.date | date:'dd/MM/yy HH:mm'}}</span></dd>
+
+                    <dt><span>Driver:</span></dt>
+                    <dd><span>{{vm.waybill.driver.firstName}} {{vm.waybill.driver.lastName}}</span></dd>
+
+                    <dt><span>Leaving storage:</span></dt>
+                    <dd><span>{{vm.waybill.routeList.leavingStorage.address}}</span></dd>
+
+                    <dt><span>Leaving date:</span></dt>
+                    <dd><span>{{vm.waybill.routeList.leavingDate | date:'dd/MM/yy HH:mm'}}</span></dd>
+
+                    <dt><span>Arrival storage:</span></dt>
+                    <dd><span>{{vm.waybill.routeList.arrivalStorage.address}}</span></dd>
+
+                    <dt><span>Arrival date:</span></dt>
+                    <dd><span>{{vm.waybill.routeList.arrivalDate | date:'dd/MM/yy HH:mm'}}</span></dd>
+
+                    <dt><span>State:</span></dt>
+                    <dd>
+                        <span ng-if="vm.waybill.state == 'CREATED'" class="label label-info"><span
+                            class="glyphicon glyphicon-transfer"></span>&nbsp;CREATED</span>
+                        <span ng-if="vm.waybill.state == 'CHECKED'" class="label label-primary"><span
+                            class="glyphicon glyphicon-ok"></span>&nbsp;CHECKED</span>
+                        <span ng-if="vm.waybill.state == 'DELIVERED'" class="label label-success">DELIVERED</span>
+                    </dd>
+
+                    <div ng-if="vm.waybill.state == 'CHECKED'">
+                        <dt><span>Checked by:</span></dt>
+                        <dd><span><b>{{vm.waybill.manager.firstName}} {{vm.waybill.manager.lastName}}</b></span> at
+                            {{vm.waybill.dateChecked | date:'dd/MM/yy HH:mm'}}
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="col-md-6">
+                <h4 class="text-center">Waybill goods</h4>
+                <dl class="dl-horizontal">
+                    <div ng-repeat="stuff in vm.waybill.waybillGoods">
+                        <dt>{{stuff.name}}:</dt>
+                        <dd>{{stuff.count}} units</dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-if="vm.waybill.state == 'CREATED'" class="modal-footer">
+    <form name="submitWaybillForm">
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="manager" class="pull-left">Checked by:</label>
+                    <input type="text" id="manager" class="form-control" name="confirmedBy"
+                           ng-model="vm.fullName" readonly>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="checkDate" class="pull-left">At:</label>
+                    <input type="date" id="checkDate" class="form-control" name="checkDate"
+                    ng-model="vm.waybill.dateChecked">
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-success" data-dismiss="modal"
+                ng-click="closeModalWaybillDetails(vm.waybill.id); vm.changeWaybillState()">
+            <span class="glyphicon glyphicon-ok">&nbsp;Confirm</span>
+        </button>
+    </form>
+</div>

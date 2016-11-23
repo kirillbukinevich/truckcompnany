@@ -47,6 +47,13 @@ public class Waybill implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<WaybillGoods> waybillGoods;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "manager")
+    private User manager;
+
+    @Column(name = "date_checked")
+    private ZonedDateTime dateChecked;
+
     public Long getId() {
         return id;
     }
@@ -123,5 +130,21 @@ public class Waybill implements Serializable {
 
     public void setWaybillGoods(Set<WaybillGoods> waybillGoods) {
         this.waybillGoods = waybillGoods;
+    }
+
+    public ZonedDateTime getDateChecked() {
+        return dateChecked;
+    }
+
+    public void setDateChecked(ZonedDateTime dateChecked) {
+        this.dateChecked = dateChecked;
+    }
+
+    public User getManager() {
+        return manager;
+    }
+
+    public void setManager(User manager) {
+        this.manager = manager;
     }
 }

@@ -1,0 +1,50 @@
+<h1>Waybills</h1>
+
+<div ng-if="vm.error" class="alert alert-danger" role="alert">
+    {{vm.messageError}}
+</div>
+
+<div ng-if="!vm.error">
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Waybill №</th>
+            <th>Registration date</th>
+            <th>Dispatcher</th>
+            <th>Driver</th>
+            <!--<th>Route list №</th>-->
+            <th>State</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="waybill in vm.waybills">
+            <td>
+                <div class="text-center">{{waybill.id}}</div>
+            </td>
+            <td>{{waybill.date | date:"dd/MM/yy HH:mm"}}</td>
+            <td>{{waybill.dispatcher.firstName}}</td>
+            <td>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</td>
+            <td>
+                <span ng-if="waybill.state == 'CREATED'" class="label label-info">
+                    <span class="glyphicon glyphicon-transfer"></span>&nbsp;CREATED</span>
+                <span ng-if="waybill.state == 'CHECKED'" class="label label-primary">
+                    <span class="glyphicon glyphicon-ok"></span>&nbsp;CHECKED</span>
+                <span ng-if="waybill.state == 'DELIVERED'" class="label label-success">DELIVERED</span>
+            </td>
+            <td class="text-right">
+                <div class="btn-group flex-btn-group-container">
+                    <button type="button" class="btn btn-success btn-sm"
+                            ng-click="vm.showModalWaybillDetails(waybill.id)" ng-if="waybill.state == 'CREATED'">
+                        <span class="glyphicon glyphicon glyphicon-list-alt"></span>&nbsp;Handle
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm"
+                            ng-click="vm.showModalWaybillDetails(waybill.id)" ng-if="waybill.state == 'CHECKED'">
+                        <span class="glyphicon glyphicon glyphicon-eye-open"></span>&nbsp;Details
+                    </button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

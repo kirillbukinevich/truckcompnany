@@ -1,0 +1,39 @@
+<h1>Route lists</h1>
+
+<div ng-if="vm.error" class="alert alert-danger" role="alert">
+    {{vm.messageError}}
+</div>
+
+<div ng-if="!vm.error">
+    <!--<div id="control-panel">-->
+    <!--<a href="#/admincompany/storagecreate" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Create</a>-->
+    <!--</div>-->
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Route list №</th>
+            <!--<th>Driver</th>-->
+            <th>Truck number</th>
+            <th>Leaving date</th>
+            <th>Arrival date</th>
+            <th>Route</th>
+            <th>State</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="routelist in vm.routelists">
+            <td><div class="text-center">{{routelist.id}}</div></td>
+            <td>{{routelist.truck}}</td>
+            <td>{{routelist.leavingDate}}</td>
+            <td>{{routelist.arrivalDate}}</td>
+            <td>{{routelist.arrivalDate}}</td>
+            <!--<td>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</td>-->
+            <!--<td>{{waybill.date | date:"dd/MM/yyyy 'at' HH:mm"}}</td>-->
+            <!--<td><div class="text-center"><a href="">{{waybill.routeListId}}</a></div></td>-->
+            <!--<td>{{waybill.state}}</td>-->
+        </tr>
+        </tbody>
+    </table>
+
+</div>

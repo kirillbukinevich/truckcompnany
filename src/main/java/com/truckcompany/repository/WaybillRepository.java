@@ -21,12 +21,14 @@ import java.util.Optional;
 public interface WaybillRepository extends JpaRepository<Waybill, Long> {
     @Query(value = "select distinct waybill from Waybill waybill left join fetch waybill.driver " +
         "left join fetch waybill.dispatcher " +
+        "left join fetch waybill.manager " +
         "left join fetch waybill.routeList " +
         "left join fetch waybill.writeOff")
     List<Waybill> findAll();
 
     @Query(value = "select distinct waybill from Waybill waybill left join fetch waybill.driver " +
         "left join fetch waybill.dispatcher " +
+        "left join fetch waybill.manager " +
         "left join fetch waybill.routeList " +
         "left join fetch waybill.writeOff " +
         "where waybill.id = ?1")
