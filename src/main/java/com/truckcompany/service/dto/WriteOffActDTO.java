@@ -5,12 +5,14 @@ import com.truckcompany.domain.WriteOffAct;
 import java.time.ZonedDateTime;
 
 public class WriteOffActDTO {
-    private Long id;
+    protected Long id;
 
-    private Integer count;
+    protected Integer count;
 
-    private ZonedDateTime date;
+    protected ZonedDateTime date;
 
+
+    public WriteOffActDTO(){}
 
     public WriteOffActDTO(Long id, Integer count, ZonedDateTime date){
         this.id = id;

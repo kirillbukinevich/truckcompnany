@@ -1,8 +1,11 @@
 package com.truckcompany.service;
 
 import com.truckcompany.domain.Company;
+import com.truckcompany.domain.User;
 import com.truckcompany.domain.WriteOffAct;
+import com.truckcompany.repository.UserRepository;
 import com.truckcompany.repository.WriteOffActRepository;
+import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.web.rest.vm.ManagedWriteOffVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Viktor Dobroselsky.
@@ -22,6 +26,9 @@ public class WriteOffActService {
 
     @Inject
     private WriteOffActRepository writeOffActRepository;
+
+    @Inject
+    UserService userService;
 
     public WriteOffAct getWriteOffActById (Long id) {
         WriteOffAct writeOffAct = writeOffActRepository.getOne(id);
@@ -35,10 +42,12 @@ public class WriteOffActService {
     }
 
     public WriteOffAct createWriteOffAct (ManagedWriteOffVM managedWriteOffVM) {
+        Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
         WriteOffAct writeOffAct = new WriteOffAct();
         writeOffAct.setCount(managedWriteOffVM.getCount());
         writeOffAct.setDate(managedWriteOffVM.getDate());
 
+        writeOffAct.setCompany(optionalUser.get().getCompany());
         writeOffActRepository.save(writeOffAct);
         log.debug("Created Information for WriteOffAct");
         return writeOffAct;
