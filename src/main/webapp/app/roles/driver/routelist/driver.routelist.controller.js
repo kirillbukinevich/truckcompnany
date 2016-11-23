@@ -11,16 +11,27 @@
         var vm = this;
         vm.routeList = {};
         vm.checkpoints = [];
+        vm.checkpointNames = [];
         vm.waybills = Waybill.query(function () {
             angular.forEach(vm.waybills, function(value) {
                     RouteList.get({id: value.routeList.id}, function (result) {
                         vm.routeList = result;
                         console.log(vm.routeList);
                     });
-                    vm.checkpoints = Checkpoint.query({id: value.routeList.id});
+                    vm.checkpoints = Checkpoint.query({id: value.routeList.id},function(){
+                        var i = 0;
+                        angular.forEach(vm.checkpoints, function(value){
+                            console.log(value);
+                            console.log("!!!!!" + " " + value.name);
+                            vm.checkpointNames[i] = {location: value.name, stopover: true};
+                            i++;
+                            // {location: 'ozarichi', stopover: true}
+                        });
+                    });
             });
         });
         vm.markDate = markDate;
+        vm.travelMode = 'DRIVING';
         console.log(vm.waybills);
 
 
