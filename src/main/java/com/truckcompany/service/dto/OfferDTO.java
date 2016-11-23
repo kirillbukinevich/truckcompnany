@@ -1,6 +1,7 @@
 package com.truckcompany.service.dto;
 
 import com.truckcompany.domain.Offer;
+import com.truckcompany.web.rest.vm.ManagedStorageVM;
 
 import java.time.ZonedDateTime;
 
@@ -12,6 +13,10 @@ public class OfferDTO {
     private String createdBy;
 
     private String state;
+
+    private ManagedStorageVM leavingStorage;
+
+    private ManagedStorageVM arrivalStorage;
 
     public OfferDTO(Long id, ZonedDateTime creationDate, String createdBy) {
         this.id = id;
@@ -27,6 +32,8 @@ public class OfferDTO {
         this.creationDate = offer.getCreationDate();
         this.createdBy = offer.getCreatedBy();
         this.state = offer.getState().toString();
+        this.arrivalStorage = new ManagedStorageVM(offer.getArrivalStorage());
+        this.leavingStorage = new ManagedStorageVM(offer.getLeavingStorage());
     }
 
     public Long getId() {
@@ -59,5 +66,21 @@ public class OfferDTO {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public ManagedStorageVM getLeavingStorage() {
+        return leavingStorage;
+    }
+
+    public void setLeavingStorage(ManagedStorageVM leavingStorage) {
+        this.leavingStorage = leavingStorage;
+    }
+
+    public ManagedStorageVM getArrivalStorage() {
+        return arrivalStorage;
+    }
+
+    public void setArrivalStorage(ManagedStorageVM arrivalStorage) {
+        this.arrivalStorage = arrivalStorage;
     }
 }

@@ -21,13 +21,23 @@
                         pageTitle: 'activate.title'
                     },
                     views: {
-                        'page@dispatcher': {
-                            templateUrl: 'app/dispatcher/offer/dispatcher.offer.html',
+                        'page@roles': {
+                            templateUrl: 'app/roles/dispatcher/offer/dispatcher.offer.html',
                             controller: 'DispatcherOfferController',
                             controllerAs: 'vm'
                         },
                     },
+                    params: {
+                        page: 1,
+                        size: 10
+                    },
                     resolve: {
+                        pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
+                            return {
+                                page: PaginationUtil.parsePage($stateParams.page),
+                                size: PaginationUtil.parsePage($stateParams.size)
+                            };
+                        }],
                         translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart('activate');
                             return $translate.refresh();
@@ -43,7 +53,7 @@
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'app/dispatcher/offer/dispatcher.offer-details.html',
+                        templateUrl: 'app/roles/dispatcher/offer/dispatcher.offer-details.html',
                         controller: 'DispatcherOfferDetailsController',
                         controllerAs: 'vm',
                         backdrop: 'static',
@@ -69,8 +79,8 @@
                     pageTitle: 'activate.title'
                 },
                 views: {
-                    'page@dispatcher': {
-                        templateUrl: 'app/dispatcher/offer/dispatcher.offer-submit.html',
+                    'page@roles': {
+                        templateUrl: 'app/roles/dispatcher/offer/dispatcher.offer-submit.html',
                         controller: 'DispatcherOfferSubmitController',
                         controllerAs: 'vm'
                     }

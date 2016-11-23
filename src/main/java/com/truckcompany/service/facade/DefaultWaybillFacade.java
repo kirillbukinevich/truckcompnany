@@ -6,7 +6,6 @@ import com.truckcompany.domain.Waybill;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.UserService;
 import com.truckcompany.service.WaybillService;
-import com.truckcompany.service.dto.RouteListDTO;
 import com.truckcompany.service.dto.WaybillDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +58,11 @@ public class DefaultWaybillFacade implements WaybillFacade {
             }
             else if(isCurrentUserInRole("ROLE_MANAGER")){
                 waybills = waybillService.getAllWaybills()
+                    .stream()
+                    .map(WaybillDTO::new)
+                    .collect(Collectors.toList());
+            } else if (isCurrentUserInRole("ROLE_DISPATCHER")) {
+                waybills = waybillService.getWaybillByCompany(user.getCompany())
                     .stream()
                     .map(WaybillDTO::new)
                     .collect(Collectors.toList());
