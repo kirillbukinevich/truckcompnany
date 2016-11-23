@@ -5,6 +5,8 @@ import com.truckcompany.domain.RouteList;
 import com.truckcompany.repository.RouteListRepository;
 import com.truckcompany.repository.StorageRepository;
 import com.truckcompany.repository.TruckRepository;
+import com.truckcompany.repository.UserRepository;
+import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.web.rest.vm.ManagedRouteListVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +35,9 @@ public class RouteListService {
 
     @Inject
     private TruckRepository truckRepository;
+
+    @Inject
+    private UserRepository userRepository;
 
     public RouteList getRouteListById (Long id) {
         RouteList routeList = routeListRepository.findOne(id);
@@ -72,6 +77,7 @@ public class RouteListService {
         routeList.setLeavingStorage(storageRepository.findOne(managedRouteListVM.getLeavingStorage().getId()));
         routeList.setArrivalStorage(storageRepository.findOne(managedRouteListVM.getArrivalStorage().getId()));
         routeList.setTruck(truckRepository.findOne(managedRouteListVM.getTruck().getId()));
+        routeList.setCompany(userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get().getCompany());
 
         routeListRepository.save(routeList);
         log.debug("Created Information for RouteList");

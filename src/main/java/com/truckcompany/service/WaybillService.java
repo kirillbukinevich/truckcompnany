@@ -111,8 +111,6 @@ public class WaybillService {
         waybill.setState(WaybillState.valueOf(managedWaybillVM.getState()));
         waybill.setRouteList(routeListRepository.getOne(managedWaybillVM.getRouteList().getId()));*/
 
-
-
         Optional<User> dispatcher = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
         User driver = userRepository.findOne(managedWaybillVM.getDriver().getId());
         RouteList routeList = routeListService.createRouteList(new ManagedRouteListVM(managedWaybillVM.getRouteList()));
@@ -122,6 +120,7 @@ public class WaybillService {
         waybill.setState(WaybillState.CREATED);
         waybill.setRouteList(routeList);
         waybill.setDate(ZonedDateTime.now());
+        waybill.setCompany(dispatcher.get().getCompany());
         waybill.setWaybillGoods(offerRepository.getOne(managedWaybillVM.getOffer().getId()).getOfferGoods().stream()
             .map(og -> {
                 WaybillGoods waybillGoods = new WaybillGoods();
@@ -131,8 +130,6 @@ public class WaybillService {
 
                 return waybillGoods;
             }).collect(Collectors.toSet()));
-        waybill.setWriteOff(writeOffActRepository.getOne(managedWaybillVM.getWriteOffAct().getId()));
-
 
         waybillRepository.save(waybill);
 

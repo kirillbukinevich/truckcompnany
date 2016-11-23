@@ -13,12 +13,10 @@
     function stateConfig($stateProvider) {
         $stateProvider.state('dispatcher', {
             abstract: true,
-            parent: 'app',
+            parent: 'roles',
             views: {
-                'content@': {
-                    templateUrl: 'app/dispatcher/dispatcher.html',
-                    controller: 'DispatcherController',
-                    controllerAs: 'vm'
+                'sidebar@roles': {
+                    templateUrl: 'app/roles/dispatcher/sidebar.html',
                 },
             }
         });

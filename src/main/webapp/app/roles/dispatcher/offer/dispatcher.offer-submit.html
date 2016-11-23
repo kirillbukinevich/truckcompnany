@@ -4,7 +4,7 @@
     {{vm.messageError}}
 </div>
 
-<form name="submitOfferForm" role="form">
+<form name="form" role="form" ng-submit="vm.createWaybill()">
     <div class="form-group">
         <label for="leavingStorage">Leaving storage:</label>
         <input type="text" id="leavingStorage" class="form-control" name="leavingStorage" ng-model="vm.offer.leavingStorage.name" readonly>
@@ -43,12 +43,15 @@
 
     <div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">Leaving</label>
+            <label class="col-sm-2 control-label">Leaving:</label>
             <div class="col-sm-10">
                 <p class="input-group">
-                    <input type="text" class="form-control"
+                    <input type="text"
+                           name="leavingDate"
+                           class="form-control"
                            datetime-picker="dd MMM yyyy HH:mm"
                            ng-model="vm.leaveDate"
+                           required
                            is-open="vm.leavingPicker.open"
                            enable-time="true"
                            datepicker-options="vm.leavingPicker.datepickerOptions"/>
@@ -59,22 +62,31 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">Arrival</label>
+            <label class="col-sm-2 control-label" for="arrivalDate">Arrival:</label>
             <div class="col-sm-10">
                 <p class="input-group">
-                    <input type="text" class="form-control"
+                    <input type="text"
+                           id="arrivalDate"
+                           name="arrivalDate"
+                           class="form-control"
                            datetime-picker="dd MMM yyyy HH:mm"
                            ng-model="vm.arrivalDate"
+                           required
                            is-open="vm.arrivalPicker.open"
                            enable-time="true"
-                           datepicker-options="vm.arrivalPicker.datepickerOptions" />
+                           datepicker-options="vm.arrivalPicker.datepickerOptions"/>
                     <span class="input-group-btn">
-                  <button type="button" class="btn btn-default" ng-click="vm.openCalendar($event, 'arrivalPicker')"><i class="glyphicon glyphicon-calendar"></i></button>
-              </span>
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar($event, 'arrivalPicker')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
                 </p>
+                <div ng-show="form.arrivalDate.$dirty && form.arrivalDate.$invalid">
+                    <p class="help-block" ng-show="form.arrivalDate.$error.required">Arrival date is required!</p>
+                </div>
             </div>
         </div>
     </div>
+    <div class="btn-group flex-btn-group-container pull-right">
+        <button type="submit" ng-disabled="form.$invalid" class="btn btn-success">Submit offer</button>
+        <a href="#/dispatcher/offer" class="btn btn-warning">Cancel</a>
+    </div>
 </form>
-<a href="#/dispatcher/offer" class="btn btn-warning pull-right">Cancel</a>
-<a href="" class="btn btn-success pull-right" ng-click="vm.createWaybill()">Create Waybill</a>

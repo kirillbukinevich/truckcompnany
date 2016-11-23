@@ -25,22 +25,18 @@
         vm.arrivalDate = {};
         vm.leaveDate = {};
         vm.error = false;
-        vm.messageError;
-
-        console.log(vm.drivers);
-        console.log(vm.trucks);
 
         function createWaybill() {
             console.log("Create new Waybill");
             vm.saveObj = {
-                driverId: vm.driver.id,
-                offerId: vm.offer.id,
+                driver: vm.driver,
+                offer: vm.offer,
                 routeList: {
-                    truckId: vm.truck.id,
-                    leavingStorageId: vm.offer.leavingStorage.id,
-                    arrivalStorageId: vm.offer.arrivalStorage.id,
-                    leavingDate: vm.leaveDate.toUTCString(),
-                    arrivalDate: vm.arrivalDate.toUTCString()
+                    truck: vm.truck,
+                    leavingStorage: vm.offer.leavingStorage,
+                    arrivalStorage: vm.offer.arrivalStorage,
+                    leavingDate: vm.leaveDate.getTime(),
+                    arrivalDate: vm.arrivalDate.getTime()
                 }
             };
             console.log(vm.saveObj);
