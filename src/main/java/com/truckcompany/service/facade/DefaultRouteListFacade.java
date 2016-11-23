@@ -11,6 +11,9 @@ import com.truckcompany.service.dto.TruckDTO;
 import com.truckcompany.service.dto.WaybillDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,24 +38,23 @@ public class DefaultRouteListFacade implements RouteListFacade {
 
 
     @Override
-    public List<RouteListDTO> findRouteLists() {
+    public Page<RouteListDTO> findRouteLists(Pageable pageable) {
+        Page<RouteList> pageRouteLists = new PageImpl<>(emptyList());
 
         Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
         if (optionalUser.isPresent()){
             User user = optionalUser.get();
 
             log.debug("Get all routeLists for user \'{}\'", user.getLogin());
-            List<RouteListDTO> routeLists = emptyList();
+
             if (isCurrentUserInRole("ROLE_COMPANYOWNER")){
-                routeLists = routeListService.getRouteListsByCompany(user.getCompany())
-                                .stream()
-                                .map(s -> toCompanyOwnerDTO(s))
-                                .collect(Collectors.toList());
+                pageRouteLists = routeListService
+                        .getPageRouteListsByCompany(pageable, user.getCompany());
             }
-            return routeLists;
-        }else {
-            return emptyList();
         }
+        return new PageImpl<RouteListDTO>(pageRouteLists.getContent().stream()
+                .map(s -> toCompanyOwnerDTO(s))
+                .collect(Collectors.toList()), pageable, pageRouteLists.getTotalElements());
     }
 
     private RouteListDTO toCompanyOwnerDTO(RouteList routeList){

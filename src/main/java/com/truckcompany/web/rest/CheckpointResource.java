@@ -38,19 +38,19 @@ public class CheckpointResource {
     private UserService userService;
 
 
-    @RequestMapping(value = "/checkpoint",
+    @RequestMapping(value = "/checkpoint/{routeListId}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Checkpoint>> getAllCheckPoints()throws URISyntaxException{
+    public ResponseEntity<List<Checkpoint>> getAllCheckPoints(@PathVariable Long routeListId)throws URISyntaxException{
         log.debug("REST request get all Checkpoints");
 
         List<Checkpoint> checkpoints = Collections.emptyList();
-
-        Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            checkpoints = checkpointService.getCheckpoints(user);
+        System.out.println("HERE---------" + routeListId);
+        checkpoints = checkpointService.getCheckpoints(routeListId);
+        System.out.println(checkpoints);
+        for (Checkpoint checkpoint : checkpoints){
+            checkpoint.setRouteList(null);
         }
         List<ManagedCheckPointVM> managedCheckPointVMs = checkpoints.stream()
             .map(ManagedCheckPointVM::new)
@@ -61,7 +61,7 @@ public class CheckpointResource {
 
     @RequestMapping(value = "/checkpoint_mark_date/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public void changeCompanyStatus(@PathVariable Long id){
+    public void markDate(@PathVariable Long id){
         checkpointService.markDate(id);
     }
 

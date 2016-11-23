@@ -47,8 +47,8 @@ public class RouteListDTO {
             new StorageDTO(routeList.getLeavingStorage()) : null;
         this.arrivalStorage = routeList.getArrivalStorage() != null ?
             new StorageDTO(routeList.getArrivalStorage()) : null;
-        this.waybill = routeList.getWaybill() != null ?
-            new WaybillDTO(routeList.getWaybill(), this) : null;
+/*        this.waybill = routeList.getWaybill() != null ?
+            new WaybillDTO(routeList.getWaybill(), this) : null;*/
     }
 
     public RouteListDTO(RouteListDTO routeListDTO){

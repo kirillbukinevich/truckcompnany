@@ -1,0 +1,41 @@
+<h1>Waybills</h1>
+
+Show:
+<select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage" ng-change="vm.changeItemsPerPage()">
+</select>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>State</th>
+        <th>Dispatcher</th>
+        <th>Driver</th>
+        <th>Route list id</th>
+        <th>Write off id</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="waybill in vm.waybills">
+        <td>{{waybill.id}}</td>
+        <td>{{waybill.state}}</td>
+        <td>{{waybill.dispatcher.firstName}} {{waybill.dispatcher.lastName}}</td>
+        <td>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</td>
+        <td>{{waybill.routeList.id}}</td>
+        <td>{{waybill.writeOffAct.id}}</td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="text-center">
+    <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+    <uib-pagination class="pagination-sm"
+                    total-items="vm.totalItems"
+                    items-per-page = "vm.itemsPerPage"
+                    boundary-link-numbers = "true"
+                    rotate = "true"
+                    ng-model="vm.page"
+                    ng-change="vm.transition()">
+    </uib-pagination>
+</div>
+

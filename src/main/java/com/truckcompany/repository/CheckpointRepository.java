@@ -19,5 +19,5 @@ public interface CheckpointRepository extends JpaRepository<Checkpoint,Long>{
         "where checkpoint.routeList=?1")
     List<Checkpoint> findByRouteList(RouteList routeList);
 
-
+    List<Checkpoint> findByRouteListId(Long id);//// TODO: 20.11.2016
 }

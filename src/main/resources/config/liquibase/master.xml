@@ -9,9 +9,11 @@
     <include file="classpath:config/liquibase/changelog/03_fill_storage.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/04_fill_truck.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/05_fill_route_list.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/06_fill_write_off_act.xml" relativeToChangelogFile="false"/>
+    <!--<include file="classpath:config/liquibase/changelog/06_fill_write_off_act.xml" relativeToChangelogFile="false"/>-->
     <include file="classpath:config/liquibase/changelog/07_fill_waybill.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/08_fill_offer.xml" relativeToChangelogFile="false"/>
-        <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="classpath:config/liquibase/changelog/09_fill_checkpoint.xml" relativeToChangelogFile="false"/>
+
+    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

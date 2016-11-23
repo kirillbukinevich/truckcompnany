@@ -8,6 +8,8 @@ import com.truckcompany.repository.TruckRepository;
 import com.truckcompany.web.rest.vm.ManagedRouteListVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,10 @@ public class RouteListService {
 
     public List<RouteList> getRouteListsByCompany(Company company){
         return routeListRepository.findByCompany(company).orElse(Collections.emptyList());
+    }
+
+    public Page<RouteList> getPageRouteListsByCompany(Pageable pageable, Company company){
+        return routeListRepository.findPageByCompany(company, pageable);
     }
 
     public void deleteRouteList (Long id) {

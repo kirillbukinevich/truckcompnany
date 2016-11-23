@@ -8,6 +8,7 @@ import com.truckcompany.domain.enums.WaybillState;
 import com.truckcompany.repository.*;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.dto.RouteListDTO;
+import com.truckcompany.service.dto.UserDTO;
 import com.truckcompany.service.dto.WaybillDTO;
 import com.truckcompany.web.rest.vm.ManagedCompanyVM;
 import com.truckcompany.domain.User;
@@ -22,6 +23,8 @@ import com.truckcompany.web.rest.vm.ManagedRouteListVM;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,6 +81,11 @@ public class WaybillService {
     public List<Waybill> getWaybillByCompany (Company company){
         log.debug("Get waybills for company with id: {}", company.getId());
         return waybillRepository.findByCompany(company);
+    }
+
+    public Page<Waybill> getPageWaybillByCompany(Pageable pageable, Company company){
+        log.debug("Get waybills for company with id: {}", company.getId());
+        return waybillRepository.findPageByCompany(company, pageable);
     }
 
     public List<WaybillDTO> getAllWaybills () {
@@ -145,12 +153,19 @@ public class WaybillService {
             w.setDispatcher(userRepository.findOneByLogin(managedWaybillVM.getDispatcher().getLogin()).get());
             w.setDriver(userRepository.findOneByLogin(managedWaybillVM.getDriver().getLogin()).get());
             w.setDate(managedWaybillVM.getDate());
-            w.setWriteOff(writeOffActRepository.getOne(managedWaybillVM.getWriteOffAct().getId()));
             w.setState(managedWaybillVM.getState());
-            w.setRouteList(routeListRepository.getOne(managedWaybillVM.getRouteList().getId()));
+            w.setDateChecked(managedWaybillVM.getDateChecked());
+            if (managedWaybillVM.getManager() != null) {
+                w.setManager(userRepository.findOneById(managedWaybillVM.getManager().getId()).get());
+            }
+            if (managedWaybillVM.getWriteOffAct() != null) {
+                w.setWriteOff(writeOffActRepository.getOne(managedWaybillVM.getWriteOffAct().getId()));
+            }
+            if (managedWaybillVM.getRouteList() != null) {
+                w.setRouteList(routeListRepository.getOne(managedWaybillVM.getRouteList().getId()));
+            }
             waybillRepository.save(w);
-            log.debug("Changed fields for Waybill {}", w);
+            log.debug("Changed fields for Waybill id={}", w.getId());
         });
-
     }
 }
