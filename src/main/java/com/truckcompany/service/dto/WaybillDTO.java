@@ -1,9 +1,13 @@
 package com.truckcompany.service.dto;
 
 import com.truckcompany.domain.Waybill;
+import com.truckcompany.domain.WaybillGoods;
 import com.truckcompany.domain.enums.WaybillState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 
 /**
@@ -30,6 +34,8 @@ public class WaybillDTO {
     private ZonedDateTime dateChecked;
 
     private OfferDTO offer;
+
+    private Set<WaybillGoods> waybillGoods;
 
     public WaybillDTO(Long id, ZonedDateTime date, UserDTO driver, WaybillState state, UserDTO dispatcher, UserDTO manager, ZonedDateTime dateChecked) {
         this.id = id;
@@ -58,10 +64,12 @@ public class WaybillDTO {
         this.state = state;
     }
 
+
     public WaybillDTO(Waybill waybill, RouteListDTO routeList) {
         this(waybill);
         this.routeList = routeList;
     }
+
 
     public WaybillDTO (Waybill waybill) {
         this(waybill.getId(), waybill.getDate(), waybill.getState());
@@ -72,8 +80,20 @@ public class WaybillDTO {
             waybill.getRouteList().getLeavingDate(), waybill.getRouteList().getArrivalDate());
         this.manager = waybill.getManager() == null ? null : new UserDTO(waybill.getManager());
         this.dateChecked = waybill.getDateChecked();
-        //this.offer = new OfferDTO(waybill.getOffer());
+        this.waybillGoods = waybill.getWaybillGoods();
+
+        //this.offer = new OfferDTO(waybill.getOffer);
     }
+
+/*    public WaybillDTO(Waybill waybill) {
+        this.id = waybill.getId();
+        this.date = waybill.getDate();
+        this.driver = new UserDTO(waybill.getDriver());
+        this.dispatcher = new UserDTO(waybill.getDispatcher());
+        this.state = waybill.getState();
+        this.manager = waybill.getManager() == null ? null : new UserDTO(waybill.getManager());
+        this.dateChecked = waybill.getDateChecked();
+    }*/
 
     public WaybillDTO(WaybillDTO waybill){
         this(waybill.getId(), waybill.getDate(), waybill.getState());
@@ -165,6 +185,14 @@ public class WaybillDTO {
 
     public void setOffer(OfferDTO offer) {
         this.offer = offer;
+    }
+
+    public Set<WaybillGoods> getWaybillGoods() {
+        return waybillGoods;
+    }
+
+    public void setWaybillGoods(Set<WaybillGoods> waybillGoods) {
+        this.waybillGoods = waybillGoods;
     }
 
 //    @Override

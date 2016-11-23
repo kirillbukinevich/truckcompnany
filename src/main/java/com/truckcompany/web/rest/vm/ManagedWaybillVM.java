@@ -4,9 +4,9 @@ import com.truckcompany.domain.Waybill;
 import com.truckcompany.service.dto.WaybillDTO;
 
 
-public class ManagedWaybillVM extends WaybillDTO{
+public class ManagedWaybillVM extends WaybillDTO {
 
-    public ManagedWaybillVM(WaybillDTO waybillDTO){
+    public ManagedWaybillVM(WaybillDTO waybillDTO) {
 
         super(waybillDTO);
     }
@@ -15,4 +15,7 @@ public class ManagedWaybillVM extends WaybillDTO{
         super(waybill);
     }
 
+    public ManagedWaybillVM() {
+
+    }
 }
