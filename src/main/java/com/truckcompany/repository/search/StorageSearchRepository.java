@@ -30,7 +30,7 @@ public interface StorageSearchRepository extends SolrCrudRepository<StorageIndex
 
     @Highlight(prefix = "<b>", postfix = "</b>")
     @Query(
-        value = "(name:?0 OR address:?0) AND idcompany:?1",
+        value = "(name:?0 OR address:?0) AND idcompany:?1 AND deleted: false",
         fields = {ID_FIELD_NAME, NAME_FIELD_NAME, ACTIVATED_FIELD_NAME, ADDRESS_FIELD_NAME },
         defaultOperator = org.springframework.data.solr.core.query.Query.Operator.OR)
     HighlightPage<StorageIndex> findByNameLikeOrAddressLikeAndIdCompany(String query, Long idCompany, Pageable page);

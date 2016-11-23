@@ -242,9 +242,7 @@
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
             <column name="middle_name" type="varchar(50)"/>
-            <column name="birth_date" type="date">
-                <constraints nullable="false"/>
-            </column>
+            <column name="birth_date" type="date"/>
             <column name="city" type="varchar(45)"/>
             <column name="street" type="varchar(45)"/>
             <column name="flat" type="varchar(45)"/>

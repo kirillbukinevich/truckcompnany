@@ -78,7 +78,9 @@ public class TruckService {
         Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
         if (optionalUser.isPresent()){
             User user = optionalUser.get();
-            truck.setCompany(user.getCompany());
+            if (user.getCompany() != null){
+                truck.setCompany(user.getCompany());
+            }
             truckRepository.save(truck);
         }
 

@@ -5,14 +5,15 @@
         .module('truckCompanyApp')
         .controller('NavbarController', NavbarController);
 
-    NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ProfileService', 'LoginService'];
+    NavbarController.$inject = ['$scope', '$state', 'Auth', 'Principal', 'ProfileService', 'LoginService'];
 
-    function NavbarController ($state, Auth, Principal, ProfileService, LoginService) {
+    function NavbarController ($scope, $state, Auth, Principal, ProfileService, LoginService) {
         var vm = this;
 
         vm.isNavbarCollapsed = true;
         vm.isAuthenticated = Principal.isAuthenticated;
         vm.isAuthenticatedAndNotHasRole = Principal.isWithoutAuthority;
+        vm.forwardToControlPanel = forwardToControlPanel;
 
 
 
@@ -27,6 +28,15 @@
         vm.collapseNavbar = collapseNavbar;
         vm.$state = $state;
 
+
+
+        function getAccount() {
+            Principal.identity().then(function(account) {
+                vm.account = account;
+                console.log("Navbar")
+                console.log(account);
+            });
+        }
 
         function login() {
             collapseNavbar();
@@ -45,6 +55,24 @@
 
         function collapseNavbar() {
             vm.isNavbarCollapsed = true;
+        }
+
+
+        $scope.$on('authenticationSuccess', function() {
+            getAccount();
+        });
+
+        function forwardToControlPanel(){
+            console.log("forward")
+            console.log(vm.account.authorities[0])
+            switch (vm.account.authorities[0]){
+                case "ROLE_ADMIN": $state.go('admincompany.initial'); break;
+                case "ROLE_SUPERADMIN":$state.go('superadmin.companies'); break;
+                case "ROLE_DRIVER":$state.go('driver.act'); break;
+                case "ROLE_MANAGER":$state.go('manager.initial'); break;
+                case "ROLE_COMPANYOWNER":$state.go('companyowner.initial'); break;
+                case "ROLE_DISPATCHER":$state.go('dispatcher.initial'); break;
+            }
         }
     }
 })();

@@ -22,6 +22,7 @@
             'ui.select',
             'ngSanitize',
             "ngAnimate",
+            "highcharts-ng",
             'ngMap'
         ])
         .run(run);
