@@ -58,7 +58,7 @@ public class WaybillDTO {
     public WaybillDTO(Waybill waybill){
         this(waybill.getId(), waybill.getDate(), waybill.getState());
         this.dispatcher = waybill.getDispatcher() != null ? new UserDTO(waybill.getDispatcher()) : null;
-        this.driver = waybill.getDriver() != null ? new UserDTO(waybill.getDispatcher()) : null;
+        this.driver = waybill.getDriver() != null ? new UserDTO(waybill.getDriver()) : null;
         this.writeOffAct = waybill.getWriteOff() != null ? new WriteOffActDTO(waybill.getWriteOff()) : null;
         this.routeList = new RouteListDTO(waybill.getRouteList().getId(), waybill.getRouteList().getDate(),
             waybill.getRouteList().getLeavingDate(), waybill.getRouteList().getArrivalDate());
@@ -141,16 +141,29 @@ public class WaybillDTO {
         this.offer = offer;
     }
 
+//    @Override
+//    public String toString () {
+//        return "WaybillDTO{" +
+//            "id=" + id +
+//            "dispatcherId=" + dispatcher.getId() +
+//            ", driverId=" + driver.getId() +
+//            ", routeListId=" + routeList.getId() +
+//            ", writeOffId=" + writeOffAct.getId() +
+//            "}";
+//    }
+
+
     @Override
-    public String toString () {
+    public String toString() {
         return "WaybillDTO{" +
             "id=" + id +
-            "dispatcherId=" + dispatcher.getId() +
-            ", driverId=" + driver.getId() +
-            ", routeListId=" + routeList.getId() +
-            ", writeOffId=" + writeOffAct.getId() +
-            "}";
+            ", date=" + date +
+            ", routeList=" + routeList +
+            ", writeOffAct=" + writeOffAct +
+            ", driver=" + driver +
+            ", state=" + state +
+            ", dispatcher=" + dispatcher +
+            ", offer=" + offer +
+            '}';
     }
-
-
 }

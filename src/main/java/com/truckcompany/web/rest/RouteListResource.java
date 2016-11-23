@@ -5,6 +5,8 @@ import com.truckcompany.domain.RouteList;
 import com.truckcompany.repository.RouteListRepository;
 import com.truckcompany.service.RouteListService;
 import com.truckcompany.service.dto.RouteListDTO;
+import com.truckcompany.service.dto.StorageDTO;
+import com.truckcompany.service.dto.TruckDTO;
 import com.truckcompany.service.facade.RouteListFacade;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import com.truckcompany.web.rest.vm.ManagedRouteListVM;
@@ -72,7 +74,14 @@ public class RouteListResource {
 
         RouteList routeList = routeListService.getRouteListById(id);
         if (routeList == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(new ManagedRouteListVM(routeList),HttpStatus.OK);
+        RouteListDTO routeListDTO = new RouteListDTO();
+        routeListDTO.setId(routeList.getId());
+        routeListDTO.setLeavingDate(routeList.getLeavingDate());
+        routeListDTO.setArrivalDate(routeList.getArrivalDate());
+        routeListDTO.setArrivalStorage(new StorageDTO(routeList.getArrivalStorage()));
+        routeListDTO.setLeavingStorage(new StorageDTO(routeList.getLeavingStorage()));
+        routeListDTO.setTruck(new TruckDTO(routeList.getTruck()));
+        return new ResponseEntity<>(new ManagedRouteListVM(routeListDTO),HttpStatus.OK);
     }
 
     @RequestMapping (value = "/routelists",

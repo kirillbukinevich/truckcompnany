@@ -17,11 +17,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,16 +54,27 @@ public class WaybillResource {
     @Timed
     public ResponseEntity<List> getAllWaybills(Pageable pageable) throws URISyntaxException {
         log.debug("REST request get all Waybills");
+        Collection<SimpleGrantedAuthority> authorities =
+            (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
-        Page<WaybillDTO> page = waybillFacade.findWaybills(pageable);
 
-        List<ManagedWaybillVM> managedWaybillVMs = page.getContent().stream()
-            .map(ManagedWaybillVM::new)
-            .collect(Collectors.toList());
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_DRIVER"))) {
+            List<WaybillDTO> waybills = waybillFacade.findWaybills();
+            HttpHeaders headers = HeaderUtil.createAlert("waybill.getAll", null);
+            return new ResponseEntity(waybills, headers, HttpStatus.OK);
+        }
+        else {
 
-        HttpHeaders headers = generatePaginationHttpHeaders(page, "/api/waybills");
+            Page<WaybillDTO> page = waybillFacade.findWaybills(pageable);
 
-        return new ResponseEntity(managedWaybillVMs, headers, HttpStatus.OK);
+            List<ManagedWaybillVM> managedWaybillVMs = page.getContent().stream()
+                .map(ManagedWaybillVM::new)
+                .collect(Collectors.toList());
+
+            HttpHeaders headers = generatePaginationHttpHeaders(page, "/api/waybills");
+
+            return new ResponseEntity(managedWaybillVMs, headers, HttpStatus.OK);
+        }
     }
 
 

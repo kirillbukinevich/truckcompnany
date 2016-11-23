@@ -33,12 +33,7 @@ public interface WaybillRepository extends JpaRepository<Waybill, Long> {
     Optional <Waybill> findOneById(Long id);
 
     @Query(value = "select distinct waybill from Waybill as waybill " +
-        "left join fetch waybill.routeList as routeList " +
         "left join fetch waybill.driver " +
-        "left join fetch waybill.writeOff " +
-        "left join fetch routeList.truck " +
-        "left join fetch routeList.leavingStorage " +
-        "left join fetch routeList.arrivalStorage " +
         "where waybill.driver=?1")
     List<Waybill> findByDriver(User driver);
 
