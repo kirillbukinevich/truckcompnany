@@ -24,8 +24,7 @@
         vm.itemsPerPage = pagingParams.size;
         vm.predicate = pagingParams.predicate;
         vm.reverse = pagingParams.ascending;
-        console.log(vm.predicate);
-        console.log(vm.reverse);
+
 
         vm.trucks = [];
         vm.error = false;
@@ -44,6 +43,7 @@
 
         function onSuccess(data, headers){
             vm.error = false;
+
             vm.trucks = data;
 
             vm.totalItems = headers('X-Total-Count');

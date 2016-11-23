@@ -26,12 +26,26 @@
 
         vm.loadPage();
 
+        function getCountEmployeeWithoutTemplate(){
+            $http({
+                method: 'GET',
+                url: '/api/template/employee'
+            }).then(function successCallback(response) {
+                vm.employee = response.data;
+            }, function errorCallback(response) {
+
+            });
+        }
+
         function loadPage() {
             Template.query({
                     page: pagingParams.page - 1,
                     size: vm.itemsPerPage
                 },
                 onSuccess, onError);
+
+
+
         }
 
         function onSuccess(data, headers) {
@@ -42,7 +56,8 @@
             vm.totalItems = headers('X-Total-Count');
             vm.queryCount = vm.totalItems;
             vm.page = pagingParams.page;
-            console.log("total items = " + vm.totalItems)
+            console.log("total items = " + vm.totalItems);
+            getCountEmployeeWithoutTemplate();
 
 
         }
@@ -84,6 +99,7 @@
                     Template.query({}, onSuccess, onError);
                     vm.selected = [];
                     vm.checkedAll = false;
+                    getCountEmployeeWithoutTemplate();
                 }, function errorCallback(response) {
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
@@ -99,6 +115,7 @@
                 Template.query({}, onSuccess, onError);
                 vm.selected = [];
                 vm.checkedAll = false;
+                getCountEmployeeWithoutTemplate();
             });
             vm.modalDelete.close();
         }

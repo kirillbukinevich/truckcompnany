@@ -10,7 +10,7 @@
     <tbody>
     <tr ng-repeat="checkpoint in vm.checkpoints">
         <td><p>{{checkpoint.name}}</p></td>
-        <td><p>{{checkpoint.checkDate}}</p></td>
+        <td><p>{{checkpoint.checkDate | date:'yyyy-MM-dd HH:mm'}}</p></td>
         <td class="text-align-center">
             <span ng-if = "!checkpoint.checkDate" ng-click="vm.markDate(checkpoint.id)" class="label label-warning" >mark</span>
             <span ng-if = "checkpoint.checkDate" class="label label-success">ok</span>

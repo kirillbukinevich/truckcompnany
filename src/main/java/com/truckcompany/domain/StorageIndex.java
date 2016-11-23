@@ -97,4 +97,8 @@ public class StorageIndex {
     public void setIdCompany(Long idCompany) {
         this.idCompany = idCompany;
     }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }
