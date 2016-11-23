@@ -3,27 +3,58 @@
     {{vm.messageError}}
 </div>
 
-<form>
-    <div class="form-group">
-        <label for="firstName">Storage name:</label>
-        <input type="text" ng-model="vm.storage.name" class="form-control" id="firstName"
-               placeholder="Enter first name">
+<form name="form">
+    <div class="form-group" ng-class="{'has-error' : (form.name.$dirty && form.name.$invalid) }">
+        <label for="name" class="control-label">Storage name:</label>
+        <input type="text" ng-model="vm.storage.name" class="form-control" id="name" name="name"
+               placeholder="Enter storage name" required ng-maxlength="45">
+
+        <div ng-show="form.name.$dirty && form.name.$invalid">
+            <p class="help-block"
+               ng-show="form.name.$error.required">
+                Name is required.
+            </p>
+            <p class="help-block"
+               ng-show="form.name.$error.maxlength">
+                Lenght of name have to be less than 45 symbols.
+            </p>
+        </div>
+    </div>
+    <div class="form-group" ng-class="{'has-error' : (form.address.$dirty && form.address.$invalid) }">
+        <label for="address" class="control-label">Address:</label>
+        <input type="text" ng-model="vm.storage.address" class="form-control" id="address" name="address"
+               placeholder="Enter address" required ng-maxlength="45">
+
+        <div ng-show="form.address.$dirty && form.address.$invalid">
+            <p class="help-block"
+               ng-show="form.address.$error.required">
+                Address is required.
+            </p>
+            <p class="help-block"
+               ng-show="form.address.$error.maxlenght">
+                Lenght of address have to be less than 45 symbols.
+            </p>
+        </div>
     </div>
     <div class="form-group">
-        <label for="status">Status:</label>
+
         <div>
-            <label>
-                <input type="radio" ng-model="vm.storage.activated" id="status" value="true">
-                ACTIVE
-            </label>
-            <label>
-                <input type="radio" ng-model="vm.storage.activated" value="false">
-                NON-ACTIVE
-            </label>
+
+            <div class="wrap-radio" id="wrap-status-active">
+                <input type="radio" ng-model="vm.storage.activated" id="status-active" value="true" class="radio">
+                <label for="status-active"></label>
+            </div>
+            <div class="wrap-radio" id="wrap-status-nonactive">
+                <input type="radio" ng-model="vm.storage.activated" id="status-nonactive" value="false" class="radio">
+                <label for="status-nonactive"></label>
+            </div>
+
+
+
         </div>
     </div>
 
 
-    <a href="" class="btn btn-default" ng-click="vm.update()">Update</a>
+    <a href="" class="btn btn-default" ng-click="vm.update()" ng-disabled="form.$invalid">Update</a>
     <a href="#/admincompany/storages" class="btn btn-default">Cancel</a>
 </form>

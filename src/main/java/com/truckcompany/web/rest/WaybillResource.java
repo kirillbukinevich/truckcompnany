@@ -4,11 +4,15 @@ import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.Waybill;
 import com.truckcompany.repository.WaybillRepository;
 import com.truckcompany.service.WaybillService;
+import com.truckcompany.service.dto.RouteListDTO;
 import com.truckcompany.service.dto.WaybillDTO;
+import com.truckcompany.service.facade.WaybillFacade;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +26,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.truckcompany.web.rest.util.PaginationUtil.generatePaginationHttpHeaders;
+
 /**
  * Created by Viktor Dobroselsky.
  */
@@ -37,27 +45,38 @@ public class WaybillResource {
     @Inject
     private WaybillService waybillService;
 
+    @Inject
+    private WaybillFacade waybillFacade;
+
     @RequestMapping(value = "/waybills",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List> getAllWaybills() throws URISyntaxException {
+    public ResponseEntity<List> getAllWaybills(Pageable pageable) throws URISyntaxException {
         log.debug("REST request get all Waybills");
         Collection<SimpleGrantedAuthority> authorities =
             (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
-        HttpHeaders headers = HeaderUtil.createAlert("waybill.getAll", null);
 
         if (authorities.contains(new SimpleGrantedAuthority("ROLE_DRIVER"))) {
-            List <Waybill> waybills = waybillService.getWaybillForDriver();
-
+            List<WaybillDTO> waybills = waybillFacade.findWaybills();
+            HttpHeaders headers = HeaderUtil.createAlert("waybill.getAll", null);
             return new ResponseEntity(waybills, headers, HttpStatus.OK);
-        } else {
-            List<WaybillDTO> waybillDTOs = waybillService.getAllWaybills();
+        }
+        else {
 
-            return new ResponseEntity(waybillDTOs, headers, HttpStatus.OK);
+            Page<WaybillDTO> page = waybillFacade.findWaybills(pageable);
+
+            List<ManagedWaybillVM> managedWaybillVMs = page.getContent().stream()
+                .map(ManagedWaybillVM::new)
+                .collect(Collectors.toList());
+
+            HttpHeaders headers = generatePaginationHttpHeaders(page, "/api/waybills");
+
+            return new ResponseEntity(managedWaybillVMs, headers, HttpStatus.OK);
         }
     }
+
 
     @RequestMapping(value = "/waybills/{id}",
         method = RequestMethod.GET,
@@ -103,7 +122,7 @@ public class WaybillResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity updateWaybill(@RequestBody ManagedWaybillVM managedWaybillVM) {
-        log.debug("REST request to update Waybill : {}", managedWaybillVM.toString());
+        log.debug("REST request to update Waybill : {}", managedWaybillVM);
         Waybill existingWaybill = waybillRepository.findOne(managedWaybillVM.getId());
 
         if (existingWaybill == null)
@@ -115,3 +134,4 @@ public class WaybillResource {
             .body(waybillService.getWaybillById(managedWaybillVM.getId()));
     }
 }
+

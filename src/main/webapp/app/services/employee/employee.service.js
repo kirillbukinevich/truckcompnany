@@ -13,7 +13,7 @@
     function Employee ($resource) {
         var service = $resource('/api/company/employee/:id', {}, {
             'query': {method: 'GET', isArray: true},
-            /*'get': {
+            'get': {
                 method: 'GET',
                 transformResponse: function (data) {
                     data = angular.fromJson(data);
@@ -22,7 +22,7 @@
             },
             'save': { method:'POST' },
             'update': { method:'PUT' },
-            'delete':{ method:'DELETE'}*/
+            'delete':{ method:'DELETE'}
         });
 
         return service;

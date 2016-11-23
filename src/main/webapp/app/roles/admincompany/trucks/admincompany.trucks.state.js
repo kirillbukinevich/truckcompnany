@@ -14,7 +14,7 @@
         $stateProvider
             .state('admincompany.trucks', {
                 parent: 'admincompany',
-                url: '/admincompany/trucks/page&size',
+                url: '/admincompany/trucks',
 
                 data: {
                     authorities: ['ROLE_ADMIN'],
@@ -29,16 +29,21 @@
                 },
                 params: {
                     page: 1,
-                    size: 5
+                    size: 5,
+                    sort: {
+                        value: 'id,asc',
+                        squash: true
+                    }
                 },
+
                 resolve: {
                     pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
                         return {
                             page: PaginationUtil.parsePage($stateParams.page),
-                            size: PaginationUtil.parsePage($stateParams.size)
-                            /*sort: $stateParams.sort,
+                            size: PaginationUtil.parsePage($stateParams.size),
+                            sort: $stateParams.sort,
                             predicate: PaginationUtil.parsePredicate($stateParams.sort),
-                            ascending: PaginationUtil.parseAscending($stateParams.sort)*/
+                            ascending: PaginationUtil.parseAscending($stateParams.sort)
                         };
                     }],
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {

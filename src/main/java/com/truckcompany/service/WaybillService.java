@@ -1,11 +1,13 @@
 package com.truckcompany.service;
 
+import com.truckcompany.domain.Company;
 import com.truckcompany.domain.*;
 import com.truckcompany.domain.emb_id.WaybillGoodsId;
 import com.truckcompany.domain.enums.WaybillGoodsState;
 import com.truckcompany.domain.enums.WaybillState;
 import com.truckcompany.repository.*;
 import com.truckcompany.security.SecurityUtils;
+import com.truckcompany.service.dto.RouteListDTO;
 import com.truckcompany.service.dto.UserDTO;
 import com.truckcompany.service.dto.WaybillDTO;
 import com.truckcompany.web.rest.vm.ManagedCompanyVM;
@@ -17,9 +19,12 @@ import com.truckcompany.repository.UserRepository;
 import com.truckcompany.repository.WaybillRepository;
 import com.truckcompany.repository.WriteOffActRepository;
 import com.truckcompany.security.SecurityUtils;
+import com.truckcompany.web.rest.vm.ManagedRouteListVM;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,15 +73,22 @@ public class WaybillService {
 
 
     @Transactional(readOnly = true)
-    public List<Waybill> getWaybillForDriver() {
-        log.debug("Get waybills for drivers");
-        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
-
-        List<Waybill> waybills = waybillRepository.findByDriver(user.get());
-        return waybills;
+    public List<Waybill> getWaybillByDriver (User driver) {
+        log.debug("Get waybills for driver {}", driver.getLogin());
+        return waybillRepository.findByDriver(driver);
     }
 
-    public List<WaybillDTO> getAllWaybills() {
+    public List<Waybill> getWaybillByCompany (Company company){
+        log.debug("Get waybills for company with id: {}", company.getId());
+        return waybillRepository.findByCompany(company);
+    }
+
+    public Page<Waybill> getPageWaybillByCompany(Pageable pageable, Company company){
+        log.debug("Get waybills for company with id: {}", company.getId());
+        return waybillRepository.findPageByCompany(company, pageable);
+    }
+
+    public List<WaybillDTO> getAllWaybills () {
         final List<WaybillDTO> waybillDTOList = new ArrayList<>();
         Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
         user.ifPresent(u -> {
@@ -90,19 +102,27 @@ public class WaybillService {
         return waybillDTOList;
     }
 
-    public Waybill createWaybill(ManagedWaybillVM managedWaybillVM) {
+    public Waybill createWaybill (ManagedWaybillVM managedWaybillVM) {
         Waybill waybill = new Waybill();
 
+       /* waybill.setDate(managedWaybillVM.getDate());
+        waybill.setDispatcher(userRepository.findOneByLogin(managedWaybillVM.getDispatcher().getLogin()).get());
+        waybill.setDriver(userRepository.findOneByLogin(managedWaybillVM.getDriver().getLogin()).get());
+        waybill.setState(WaybillState.valueOf(managedWaybillVM.getState()));
+        waybill.setRouteList(routeListRepository.getOne(managedWaybillVM.getRouteList().getId()));*/
+
+
+
         Optional<User> dispatcher = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
-        User driver = userRepository.findOne(managedWaybillVM.getDriverId());
-        RouteList routeList = routeListService.createRouteList(managedWaybillVM.getRouteList());
+        User driver = userRepository.findOne(managedWaybillVM.getDriver().getId());
+        RouteList routeList = routeListService.createRouteList(new ManagedRouteListVM(managedWaybillVM.getRouteList()));
 
         waybill.setDispatcher(dispatcher.get());
         waybill.setDriver(driver);
         waybill.setState(WaybillState.CREATED);
         waybill.setRouteList(routeList);
         waybill.setDate(ZonedDateTime.now());
-        waybill.setWaybillGoods(offerRepository.getOne(managedWaybillVM.getOfferId()).getOfferGoods().stream()
+        waybill.setWaybillGoods(offerRepository.getOne(managedWaybillVM.getOffer().getId()).getOfferGoods().stream()
             .map(og -> {
                 WaybillGoods waybillGoods = new WaybillGoods();
                 waybillGoods.setGoods(og.getGoods());
@@ -111,6 +131,8 @@ public class WaybillService {
 
                 return waybillGoods;
             }).collect(Collectors.toSet()));
+        waybill.setWriteOff(writeOffActRepository.getOne(managedWaybillVM.getWriteOffAct().getId()));
+
 
         waybillRepository.save(waybill);
 
@@ -126,7 +148,7 @@ public class WaybillService {
         }
     }
 
-    public void updateWaybill(ManagedWaybillVM managedWaybillVM) {
+    public void updateWaybill (ManagedWaybillVM managedWaybillVM) {
         waybillRepository.findOneById(managedWaybillVM.getId()).ifPresent(w -> {
             w.setDispatcher(userRepository.findOneByLogin(managedWaybillVM.getDispatcher().getLogin()).get());
             w.setDriver(userRepository.findOneByLogin(managedWaybillVM.getDriver().getLogin()).get());
@@ -136,8 +158,8 @@ public class WaybillService {
             if (managedWaybillVM.getManager() != null) {
                 w.setManager(userRepository.findOneById(managedWaybillVM.getManager().getId()).get());
             }
-            if (managedWaybillVM.getWriteOff() != null) {
-                w.setWriteOff(writeOffActRepository.getOne(managedWaybillVM.getWriteOff().getId()));
+            if (managedWaybillVM.getWriteOffAct() != null) {
+                w.setWriteOff(writeOffActRepository.getOne(managedWaybillVM.getWriteOffAct().getId()));
             }
             if (managedWaybillVM.getRouteList() != null) {
                 w.setRouteList(routeListRepository.getOne(managedWaybillVM.getRouteList().getId()));

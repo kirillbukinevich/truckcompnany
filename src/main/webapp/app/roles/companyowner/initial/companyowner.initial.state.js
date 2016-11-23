@@ -17,8 +17,9 @@
                 pageTitle: 'activate.title'
             },
             views: {
-                'page@companyowner': {
-                    templateUrl: 'app/companyowner/initial/companyowner.initial.html',
+                'page@roles': {
+                    templateUrl: 'app/roles/companyowner/initial/companyowner.initial.html',
+                    /*templateUrl: 'app/roles/companyowner/initial/companyowner.initial.html',
                     /*controller: 'AdmincompanyUsersController',
                     controllerAs: 'vm'*/
                 }

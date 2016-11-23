@@ -20,6 +20,9 @@
     <link rel="stylesheet" href="content/css/user_main.css">
     <link rel="stylesheet" href="content/css/profile-settings.css">
     <link rel="stylesheet" href="content/css/template.css">
+    <link rel="stylesheet" href="content/css/admincompany-users.css">
+    <link rel="stylesheet" href="content/css/admincompany-trucks.css">
+    <link rel="stylesheet" href="content/css/font-awesome.min.css">
 
     <link rel="stylesheet" href="content/css/page-roles.css">
     <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css">
@@ -282,6 +285,7 @@
     <!--DIRECTIVES-->
     <script src="app/directives/checkimagecompany.directive.js"></script>
     <script src="app/directives/checkimageuser.directive.js"></script>
+    <script src="app/directives/checkvaliddate.directive.js"></script>
 
 
     <!--UI FOR USER WITH ROLE DISPATCHER-->
@@ -330,17 +334,16 @@
             <!--async defer></script>-->
 
     <!--UI FOR USER WITH ROLE COMPANYOWNER-->
-    <script src="app/companyowner/companyowner.state.js"></script>
-    <script src="app/companyowner/initial/companyowner.initial.state.js"></script>
-    <script src="app/companyowner/statistics/companyowner.statistics.state.js"></script>
-    <script src="app/companyowner/routelists/companyowner.routelists.state.js"></script>
-    <script src="app/companyowner/waybills/companyowner.waybills.state.js"></script>
-    <script src="app/companyowner/writeoffacts/companyowner.writeoffacts.state.js"></script>
+    <script src="app/roles/companyowner/companyowner.state.js"></script>
+    <script src="app/roles/companyowner/initial/companyowner.initial.state.js"></script>
+    <script src="app/roles/companyowner/statistics/companyowner.statistics.state.js"></script>
+    <script src="app/roles/companyowner/routelists/companyowner.routelists.state.js"></script>
+    <script src="app/roles/companyowner/waybills/companyowner.waybills.state.js"></script>
+    <script src="app/roles/companyowner/writeoffacts/companyowner.writeoffacts.state.js"></script>
 
-    <script src="app/companyowner/companyowner.controller.js"></script>
-    <script src="app/companyowner/routelists/companyowner.routelists.controller.js"></script>
-    <script src="app/companyowner/waybills/companyowner.waybills.controller.js"></script>
-    <script src="app/companyowner/writeoffacts/companyowner.writeoffacts.controller.js"></script>
+    <script src="app/roles/companyowner/routelists/companyowner.routelists.controller.js"></script>
+    <script src="app/roles/companyowner/waybills/companyowner.waybills.controller.js"></script>
+    <script src="app/roles/companyowner/writeoffacts/companyowner.writeoffacts.controller.js"></script>
 
     <script src="app/services/routelist/routelist.service.js"></script>
     <script src="app/services/writeoffact/writeoffact.service.js"></script>
@@ -354,6 +357,9 @@
 
     <script src="app/roles/driver/act/driver.act.controller.js"></script>
     <script src="app/roles/driver/act/driver.act.state.js"></script>
+
+    <script src="app/roles/driver/routelist/map/ng-map.js"></script>
+    <script src="https://maps.google.com/maps/api/js?key=AIzaSyBel0LRaz69ahJzGwW9VtqiymjknJhOs0M&libraries=placeses,visualization,drawing,geometry,places"></script>
 
 
 

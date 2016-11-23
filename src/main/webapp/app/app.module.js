@@ -17,18 +17,22 @@
             'infinite-scroll',
             // jhipster-needle-angularjs-add-module JHipster will add new module here
             'angular-loading-bar',
+            'ngImgCrop',
+            'ckeditor',
             'ui.select',
             'ngSanitize',
             "ngAnimate",
-            'ngImgCrop',
             'ngMap'
         ])
         .run(run);
 
-    run.$inject = ['stateHandler', 'translationHandler'];
+    run.$inject = ['stateHandler', 'translationHandler','$rootScope', '$state', '$stateParams'];
 
-    function run(stateHandler, translationHandler) {
+    function run(stateHandler, translationHandler, $rootScope, $state, $stateParams) {
         stateHandler.initialize();
         translationHandler.initialize();
+        $rootScope.$state = $state;
+        $rootScope.$stateParams = $stateParams;
+
     }
 })();

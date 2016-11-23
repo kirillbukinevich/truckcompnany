@@ -1,0 +1,117 @@
+#fragments-address div[class*='col-']{
+    padding: 0 15px;
+}
+#fragments-address .form-group{
+    margin:0;
+}
+
+#wrap-birthday{
+    margin:0;
+}
+
+#row-status{
+    min-width:95px;
+}
+.table > tbody > tr > td.padding-for-first-row{
+    padding-left:15px;
+}
+
+
+
+
+
+
+
+
+
+.wrap-radio-role{
+    position:relative;
+    height:30px;
+    display:inline-block;
+    margin-top:5px;
+}
+.wrap-radio-role input{
+    opacity:0;
+    position:absolute;
+}
+.wrap-radio-role > input + label {
+    cursor: pointer;
+}
+
+.wrap-radio-role > input:not(checked) + label:before {
+    position: absolute;
+    display:block;
+    top: 0;
+    left: 0;
+    padding:3px 5px;
+    border: 2px solid #CDD1DA;
+    border-radius: 5px;
+    color:#CDD1DA;
+}
+.wrap-radio-role > input:not(checked) + label:after {
+    position: absolute;
+    display:block;
+    top: 0;
+    left: 0;
+    padding:3px 5px;
+    border: 2px solid #5cb85c;
+    border-radius: 5px;
+    color:#fff;
+    background: #5cb85c;
+    opacity: 0;
+}
+.wrap-radio-role > input:checked + label:after {
+    opacity: 1;
+}
+
+
+
+#role-dispatcher{
+    width:100px;
+}
+#role-dispatcher > label:before{
+    content: "DISPATCHER";
+    width:100px;
+}
+#role-dispatcher > label:after{
+    content: "DISPATCHER";
+    width:100px;
+}
+
+#role-manager{
+    width:85px;
+}
+#role-manager > label:before{
+    content: "MANAGER";
+    width:85px;
+}
+#role-manager > label:after{
+    content: "MANAGER";
+    width:85px;
+}
+
+#role-driver{
+    width:67px;
+}
+#role-driver > label:before{
+    content: "DRIVER";
+    width:67px;
+}
+#role-driver > label:after{
+    content: "DRIVER";
+    width:67px;
+}
+
+
+#role-companyowner{
+    width:145px;
+}
+#role-companyowner > label:before{
+    content: "COMPANY OWNER";
+    width:145px;
+}
+#role-companyowner > label:after{
+    content: "COMPANY OWNER";
+    width:145px;
+}
+

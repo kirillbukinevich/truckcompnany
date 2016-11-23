@@ -2,31 +2,51 @@ package com.truckcompany.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.Storage;
+import com.truckcompany.domain.StorageIndex;
+import com.truckcompany.domain.Template;
 import com.truckcompany.repository.CompanyRepository;
 import com.truckcompany.repository.StorageRepository;
+import com.truckcompany.repository.search.StorageSearchRepository;
 import com.truckcompany.service.StorageService;
 import com.truckcompany.service.dto.StorageDTO;
 import com.truckcompany.service.facade.StorageFacade;
 import com.truckcompany.service.facade.UpdateStorageException;
 import com.truckcompany.web.rest.util.HeaderUtil;
+import com.truckcompany.web.rest.util.PaginationUtil;
 import com.truckcompany.web.rest.vm.AdminStorageVM;
 import com.truckcompany.web.rest.vm.ManagedStorageVM;
+import com.truckcompany.web.rest.vm.ManagedTemplateVM;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.solr.core.query.result.FacetPage;
+import org.springframework.data.solr.core.query.result.HighlightEntry;
+import org.springframework.data.solr.core.query.result.HighlightPage;
+import org.springframework.data.solr.core.query.result.SolrResultPage;
+import org.springframework.data.solr.repository.Highlight;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.truckcompany.web.rest.util.HeaderUtil.createAlert;
+import static com.truckcompany.web.rest.util.PaginationUtil.generatePaginationHttpHeaders;
 import static java.lang.String.valueOf;
+import static java.util.stream.Collectors.*;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -41,10 +61,16 @@ public class StorageResource {
 
     private final Logger LOG = LoggerFactory.getLogger(StorageResource.class);
 
+
     @Inject
     private StorageRepository storageRepository;
+
+    @Inject
+    private StorageSearchRepository storageSearchRepository;
+
     @Inject
     private StorageService storageService;
+
     @Inject
     private StorageFacade storageFacade;
 
@@ -60,12 +86,15 @@ public class StorageResource {
 
     @Timed
     @RequestMapping(value = "/storages", method = GET, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ManagedStorageVM>> getAllStorages() throws URISyntaxException {
+    public ResponseEntity<List<ManagedStorageVM>> getAllStorages(Pageable pageable, HttpServletRequest request) throws URISyntaxException {
         LOG.debug("REST request get all Storages");
-        List<ManagedStorageVM> managedStorageVMs = storageFacade.findStorages().stream()
+
+        Page<StorageDTO> page = storageFacade.findStorages(pageable, request);
+
+        List<ManagedStorageVM> managedStorageVMs = page.getContent().stream()
             .map(ManagedStorageVM::new)
-            .collect(Collectors.toList());
-        HttpHeaders headers = createAlert("storages.getAll", null);
+            .collect(toList());
+        HttpHeaders headers = generatePaginationHttpHeaders(page, "/api/templates");
         return new ResponseEntity<>(managedStorageVMs, headers, OK);
     }
 
@@ -74,6 +103,7 @@ public class StorageResource {
         LOG.debug("REST request to save Storage: {};", storage.getName());
 
         Storage result = storageService.createStorage(storage);
+        storageSearchRepository.save(new StorageIndex(result, result.getCompany().getId()));
 
         return ResponseEntity.created(new URI("/storage/" + result.getId()))
             .headers(createAlert("storage.created", valueOf(storage.getId())))
@@ -86,6 +116,9 @@ public class StorageResource {
         LOG.debug("REST request to update Storage : {}", managedStorageVM);
         try {
             Storage storage = storageFacade.updateStorage(managedStorageVM);
+            storageSearchRepository.save(new StorageIndex(storage, storage.getCompany().getId()));
+
+            storageSearchRepository.save(new StorageIndex(storage, storage.getCompany().getId()));
             return ResponseEntity.ok().headers(createAlert("storage.updated", valueOf(storage.getId()))).body(new ManagedStorageVM(storage));
         } catch (UpdateStorageException e) {
             return ResponseEntity.badRequest().headers(createAlert("errorMessage", e.getMessage())).body(null);
@@ -99,8 +132,18 @@ public class StorageResource {
     public ResponseEntity<Void> deleteStorage(@PathVariable Long storageId) {
         LOG.debug("REST request to delete Storage: {}", storageId);
 
-        storageRepository.delete(storageId);
-        return ResponseEntity.ok().headers(createAlert("storage.deleted", valueOf(storageId))).build();
+        return storageFacade.deleteStorage(storageId) ?
+            ResponseEntity.ok().headers(createAlert("storage.deleted", valueOf(storageId))).build()
+            :
+            ResponseEntity.badRequest().build();
+    }
+
+
+    @RequestMapping(value = "/storages/deleteArray", method = POST)
+    public ResponseEntity<Void> deleteCompanies(@RequestBody Long[] idList){
+        LOG.debug("REST request to delete list of storages {}" ,idList);
+        storageFacade.deleteArrayStorages(idList);
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert("storages.deleted", "null")).build();
     }
 
 
@@ -113,5 +156,26 @@ public class StorageResource {
         HttpStatus status = isSuccess ? OK : BAD_REQUEST;
         return new ResponseEntity<>(status);
     }
+
+
+    @RequestMapping(value = "/_search/storages/{query}", method = GET, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ManagedStorageVM>> searcheStorage(@PathVariable String query){
+
+        LOG.debug("REST request to searche Storage accorging query: {}", query);
+        List<StorageDTO> storages = storageFacade.findStoragesAccordingQuery(query);
+
+        List<ManagedStorageVM> managedStorageVMs = storageFacade.findStoragesAccordingQuery(query).stream()
+            .map(ManagedStorageVM::new)
+            .collect(toList());
+
+        HttpHeaders headers = createAlert("storages.searchQuery", null);
+        return new ResponseEntity<>(managedStorageVMs, headers, OK);
+
+
+
+    }
+
+
+
 
 }

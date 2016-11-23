@@ -8,6 +8,8 @@ import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.web.rest.vm.ManagedStorageVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +30,7 @@ public class StorageService {
 /*
     @Transactional(readOnly = true)
     public List<Storage> getStorages () {
-        log.debug("Get all storages.");
+        log.debug("Get all storages");
         Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
 
         List<Storage> storages = storageRepository.findByCompany(user.get().getCompany());
@@ -41,13 +43,21 @@ public class StorageService {
     }*/
 
     @Transactional(readOnly = true)
-    public List<Storage> getStoragesBelongsCompany(Company company) {
-        return storageRepository.findByCompany(company);
+    public Page<Storage> getStoragesBelongsCompany(Company company, Pageable page) {
+        return storageRepository.findByCompanyAndNotDeleted(company, page);
+    }
+    @Transactional(readOnly = true)
+    public Long getNumberStoragesBelongsCompany(Company company){
+        return storageRepository.countStoragesBelongsCompanyAndNotDeleted(company);
     }
 
     @Transactional(readOnly = true)
-    public List<Storage> getStoragesBelongsCompanyAndActivated(Company company) {
-        return storageRepository.findByCompanyAndActivated(company, true);
+    public Page<Storage> getStoragesBelongsCompanyAndActivated(Company company, Pageable page) {
+        return storageRepository.findByCompanyAndActivated(company, true, page);
+    }
+
+    public Long getNumberStoragesBelongCompanyAndActivated(Company company){
+        return storageRepository.countStoragesBelongCompanyAndNotDeletedAndActivated(company);
     }
 
 
@@ -71,6 +81,7 @@ public class StorageService {
             .ifPresent(user -> {
                 storage.setName(managedStorageVM.getName());
                 storage.setActivated(managedStorageVM.isActivated());
+                storage.setAddress(managedStorageVM.getAddress());
                 storage.setCompany(user.getCompany());
                 storageRepository.save(storage);
             });

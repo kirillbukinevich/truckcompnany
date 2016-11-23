@@ -1,6 +1,28 @@
 # TruckCompany
 
 This application was generated using JHipster 3.9.1, you can find documentation and help at [https://jhipster.github.io/documentation-archive/v3.9.1](https://jhipster.github.io/documentation-archive/v3.9.1).
+## Set up Apache Solr
+Before run this application you have to install Apche Solr following steps below:
+
+- Install the latest version of Apache Solr (version was 6.3.0 during creating application) from the following location 
+[Apache Solr](http://lucene.apache.org/solr/downloads.html)
+- Extract uploaded folder on your machine and start the server. For starting server you have to go bin directory from the command prompt and issue the following command
+```
+    solr start
+```
+- Create core for application and stop the server. Issue the following command:
+```
+    solr create -c storages -d basic_configs
+    solr stop -all
+ ```
+- Go to the folder <'solr_directory'>/server/solr/storages/conf. Insert file  'schema.xml' which is placed in root Github folder.
+- Go to the folder <'solr_directory'>/server/solr/storages/conf. The folder containts file "managed-schema". You have to delete it.
+- Start Apache Solr again
+```
+    solr start
+```
+Apache Solr is ready and you can launch application.
+
 
 ## Development
 

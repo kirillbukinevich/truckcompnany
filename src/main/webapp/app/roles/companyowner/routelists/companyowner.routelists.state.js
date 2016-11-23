@@ -19,13 +19,23 @@
                     pageTitle: 'activate.title'
                 },
                 views: {
-                    'page@companyowner': {
-                        templateUrl: 'app/companyowner/routelists/companyowner.routelists.html',
+                    'page@roles': {
+                        templateUrl: 'app/roles/companyowner/routelists/companyowner.routelists.html',
                         controller: 'CompanyownerRouteListsController',
                         controllerAs: 'vm'
                     }
                 },
+                params:{
+                    page: 1,
+                    size: 5
+                },
                 resolve: {
+                    pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
+                        return {
+                            page: PaginationUtil.parsePage($stateParams.page),
+                            size: PaginationUtil.parsePage($stateParams.size)
+                        };
+                    }],
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('activate');
                         return $translate.refresh();

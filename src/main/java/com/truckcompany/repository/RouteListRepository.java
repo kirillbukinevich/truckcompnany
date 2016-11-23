@@ -1,6 +1,9 @@
 package com.truckcompany.repository;
 
+import com.truckcompany.domain.Company;
 import com.truckcompany.domain.RouteList;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -27,4 +30,8 @@ public interface RouteListRepository extends JpaRepository <RouteList, Long> {
         "where routeList.id = ?1")
     @Override
     RouteList findOne (Long id);
+
+    Optional<List<RouteList>> findByCompany(Company company);
+
+    Page<RouteList> findPageByCompany(Company company, Pageable pageable);
 }
