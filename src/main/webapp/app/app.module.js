@@ -21,7 +21,8 @@
             'ckeditor',
             'ui.select',
             'ngSanitize',
-            "ngAnimate"
+            "ngAnimate",
+            'ngMap'
         ])
         .run(run);
 
