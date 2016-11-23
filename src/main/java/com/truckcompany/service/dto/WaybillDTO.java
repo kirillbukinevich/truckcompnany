@@ -3,11 +3,11 @@ package com.truckcompany.service.dto;
 import com.truckcompany.domain.Waybill;
 import com.truckcompany.domain.WaybillGoods;
 import com.truckcompany.domain.enums.WaybillState;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.truckcompany.web.rest.vm.ManagedWaybillGoodsVM;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -35,7 +35,7 @@ public class WaybillDTO {
 
     private OfferDTO offer;
 
-    private Set<WaybillGoods> waybillGoods;
+    private Set<ManagedWaybillGoodsVM> waybillGoods;
 
     public WaybillDTO(Long id, ZonedDateTime date, UserDTO driver, WaybillState state, UserDTO dispatcher, UserDTO manager, ZonedDateTime dateChecked) {
         this.id = id;
@@ -71,37 +71,30 @@ public class WaybillDTO {
     }
 
 
-    public WaybillDTO (Waybill waybill) {
+    public WaybillDTO(Waybill waybill) {
         this(waybill.getId(), waybill.getDate(), waybill.getState());
         this.dispatcher = waybill.getDispatcher() != null ? new UserDTO(waybill.getDispatcher()) : null;
         this.driver = waybill.getDriver() != null ? new UserDTO(waybill.getDriver()) : null;
         this.writeOffAct = waybill.getWriteOff() != null ? new WriteOffActDTO(waybill.getWriteOff()) : null;
-        this.routeList = new RouteListDTO(waybill.getRouteList().getId(), waybill.getRouteList().getDate(),
-            waybill.getRouteList().getLeavingDate(), waybill.getRouteList().getArrivalDate());
+        this.routeList = new RouteListDTO(waybill.getRouteList());
         this.manager = waybill.getManager() == null ? null : new UserDTO(waybill.getManager());
         this.dateChecked = waybill.getDateChecked();
-        this.waybillGoods = waybill.getWaybillGoods();
+        this.waybillGoods = waybill.getWaybillGoods()
+            .stream()
+            .map(ManagedWaybillGoodsVM::new)
+            .collect(Collectors.toSet());
 
         //this.offer = new OfferDTO(waybill.getOffer);
     }
 
-/*    public WaybillDTO(Waybill waybill) {
-        this.id = waybill.getId();
-        this.date = waybill.getDate();
-        this.driver = new UserDTO(waybill.getDriver());
-        this.dispatcher = new UserDTO(waybill.getDispatcher());
-        this.state = waybill.getState();
-        this.manager = waybill.getManager() == null ? null : new UserDTO(waybill.getManager());
-        this.dateChecked = waybill.getDateChecked();
-    }*/
-
-    public WaybillDTO(WaybillDTO waybill){
+    public WaybillDTO(WaybillDTO waybill) {
         this(waybill.getId(), waybill.getDate(), waybill.getState());
         this.dispatcher = waybill.getDispatcher();
         this.driver = waybill.getDriver();
         this.writeOffAct = waybill.getWriteOffAct();
         this.routeList = waybill.getRouteList();
         this.offer = waybill.getOffer();
+        this.waybillGoods = waybill.getWaybillGoods();
     }
 
     public RouteListDTO getRouteList() {
@@ -119,8 +112,6 @@ public class WaybillDTO {
     public void setWriteOffAct(WriteOffActDTO writeOffAct) {
         this.writeOffAct = writeOffAct;
     }
-
-
 
 
     public Long getId() {
@@ -187,11 +178,11 @@ public class WaybillDTO {
         this.offer = offer;
     }
 
-    public Set<WaybillGoods> getWaybillGoods() {
+    public Set<ManagedWaybillGoodsVM> getWaybillGoods() {
         return waybillGoods;
     }
 
-    public void setWaybillGoods(Set<WaybillGoods> waybillGoods) {
+    public void setWaybillGoods(Set<ManagedWaybillGoodsVM> waybillGoods) {
         this.waybillGoods = waybillGoods;
     }
 

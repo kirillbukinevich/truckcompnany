@@ -23,13 +23,13 @@
                     <dd><span>{{vm.waybill.driver.firstName}} {{vm.waybill.driver.lastName}}</span></dd>
 
                     <dt><span>Leaving storage:</span></dt>
-                    <dd><span>{{vm.waybill.leavingStorage.address}}</span></dd>
+                    <dd><span>{{vm.waybill.routeList.leavingStorage.address}}</span></dd>
 
                     <dt><span>Leaving date:</span></dt>
                     <dd><span>{{vm.waybill.routeList.leavingDate | date:'dd/MM/yy HH:mm'}}</span></dd>
 
                     <dt><span>Arrival storage:</span></dt>
-                    <dd><span>{{vm.waybill.arrivalStorage.address}}</span></dd>
+                    <dd><span>{{vm.waybill.routeList.arrivalStorage.address}}</span></dd>
 
                     <dt><span>Arrival date:</span></dt>
                     <dd><span>{{vm.waybill.routeList.arrivalDate | date:'dd/MM/yy HH:mm'}}</span></dd>

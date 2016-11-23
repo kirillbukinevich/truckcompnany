@@ -19,6 +19,7 @@
 
         getAccount();
 
+        console.log(vm.waybill);
         function getAccount() {
             Principal.identity().then(function (account) {
                 vm.account = account;
@@ -29,6 +30,7 @@
         function changeWaybillState() {
             vm.waybill.manager = vm.account;
             vm.waybill.routeList = null;
+            vm.waybill.writeOffAct = null;
             vm.waybill.state = 'CHECKED';
             Waybill.update(vm.waybill);
         }
