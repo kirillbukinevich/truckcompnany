@@ -135,4 +135,12 @@ public class RouteListDTO {
     public void setLeavingDate (Date leavingDate) {
         this.leavingDate = ZonedDateTime.ofInstant(leavingDate.toInstant(),ZoneId.systemDefault());
     }
+
+    public void setLeavingZonedDate(ZonedDateTime leavingDate) {
+        this.leavingDate = leavingDate;
+    }
+
+    public void setArrivalZonedDate(ZonedDateTime arrivalDate) {
+        this.arrivalDate = arrivalDate;
+    }
 }

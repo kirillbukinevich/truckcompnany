@@ -14,6 +14,7 @@ import java.util.List;
 /**
  * Created by Viktor Dobroselsky on 01.11.2016.
  */
+
 public interface OfferRepository extends JpaRepository<Offer, Long> {
     Page<Offer> findByCompany(Company company, Pageable pageable);
 }

@@ -2,6 +2,7 @@ package com.truckcompany.service.facade;
 
 import com.truckcompany.domain.RouteList;
 import com.truckcompany.domain.User;
+import com.truckcompany.domain.Waybill;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.UserService;
 import com.truckcompany.service.WaybillService;
@@ -49,7 +50,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
                     .map(WaybillDTO::new)
                     .collect(Collectors.toList());
             }
-            else if(isCurrentUserInRole("ROLE_COMPANYOWNER") || isCurrentUserInRole("ROLE_DISPATCHER")){
+            else if(isCurrentUserInRole("ROLE_COMPANYOWNER")){
                 waybills = waybillService.getWaybillByCompany(user.getCompany())
                     .stream()
                     .map(WaybillDTO::new)
@@ -57,6 +58,11 @@ public class DefaultWaybillFacade implements WaybillFacade {
             }
             else if(isCurrentUserInRole("ROLE_MANAGER")){
                 waybills = waybillService.getAllWaybills()
+                    .stream()
+                    .map(WaybillDTO::new)
+                    .collect(Collectors.toList());
+            } else if (isCurrentUserInRole("ROLE_DISPATCHER")) {
+                waybills = waybillService.getWaybillByCompany(user.getCompany())
                     .stream()
                     .map(WaybillDTO::new)
                     .collect(Collectors.toList());

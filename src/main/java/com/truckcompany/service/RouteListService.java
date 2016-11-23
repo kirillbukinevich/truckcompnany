@@ -74,6 +74,7 @@ public class RouteListService {
     public RouteList createRouteList (ManagedRouteListVM managedRouteListVM) {
         RouteList routeList = new RouteList();
         routeList.setArrivalDate(managedRouteListVM.getArrivalDate());
+        routeList.setLeavingDate(managedRouteListVM.getLeavingDate());
         routeList.setLeavingStorage(storageRepository.findOne(managedRouteListVM.getLeavingStorage().getId()));
         routeList.setArrivalStorage(storageRepository.findOne(managedRouteListVM.getArrivalStorage().getId()));
         routeList.setTruck(truckRepository.findOne(managedRouteListVM.getTruck().getId()));

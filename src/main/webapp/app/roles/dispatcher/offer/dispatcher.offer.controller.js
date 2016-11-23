@@ -31,8 +31,7 @@
         function loadPage() {
             Offer.query({
                 page: pagingParams.page - 1,
-                size: vm.itemsPerPage,
-                sort: sort()
+                size: vm.itemsPerPage
             }, onSuccess, onError);
         }
 
