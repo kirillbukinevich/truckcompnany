@@ -18,11 +18,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,29 +50,41 @@ public class RouteListResource {
     @Inject
     private RouteListFacade routeListFacade;
 
-    @RequestMapping (value = "/routelists",
+    @RequestMapping(value = "/routelists",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<ManagedRouteListVM>> getAllRouteList (Pageable pageable )  throws URISyntaxException {
+    public ResponseEntity<List<ManagedRouteListVM>> getAllRouteList(Pageable pageable) throws URISyntaxException {
         log.debug("REST request get all RouteLists");
 
-        Page<RouteListDTO> page = routeListFacade.findRouteLists(pageable);
+        Collection<SimpleGrantedAuthority> authorities =
+            (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
-        List<ManagedRouteListVM> managedRouteLists = page.getContent().stream()
-            .map(ManagedRouteListVM::new)
-            .collect(Collectors.toList());
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_MANAGER"))) {
+            List<RouteListDTO> routeLists = routeListFacade.findRouteLists();
 
-        HttpHeaders headers = generatePaginationHttpHeaders(page, "/api/routelists");
+            log.debug("LENGTH = {}", routeLists.size());
+            List<ManagedRouteListVM> managedRouteLists = routeLists.stream().map(ManagedRouteListVM::new)
+                .collect(Collectors.toList());
 
-        return new ResponseEntity(managedRouteLists, headers, HttpStatus.OK);
+            HttpHeaders headers = HeaderUtil.createAlert("routelist.getAll", null);
+            return new ResponseEntity<List<ManagedRouteListVM>>(managedRouteLists, headers, HttpStatus.OK);
+        } else {
+            Page<RouteListDTO> page = routeListFacade.findRouteLists(pageable);
+            List<ManagedRouteListVM> managedRouteLists = page.getContent().stream()
+                .map(ManagedRouteListVM::new)
+                .collect(Collectors.toList());
+            HttpHeaders headers = generatePaginationHttpHeaders(page, "/api/routelists");
+
+            return new ResponseEntity(managedRouteLists, headers, HttpStatus.OK);
+        }
     }
 
-    @RequestMapping (value = "/routelists/{id}",
+    @RequestMapping(value = "/routelists/{id}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ManagedRouteListVM> getRouteList (@PathVariable Long id) {
+    public ResponseEntity<ManagedRouteListVM> getRouteList(@PathVariable Long id) {
         log.debug("REST request to get RouteList : {}", id);
 
         RouteList routeList = routeListService.getRouteListById(id);
@@ -81,14 +96,14 @@ public class RouteListResource {
         routeListDTO.setArrivalStorage(new StorageDTO(routeList.getArrivalStorage()));
         routeListDTO.setLeavingStorage(new StorageDTO(routeList.getLeavingStorage()));
         routeListDTO.setTruck(new TruckDTO(routeList.getTruck()));
-        return new ResponseEntity<>(new ManagedRouteListVM(routeListDTO),HttpStatus.OK);
+        return new ResponseEntity<>(new ManagedRouteListVM(routeListDTO), HttpStatus.OK);
     }
 
-    @RequestMapping (value = "/routelists",
+    @RequestMapping(value = "/routelists",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<?> createRouteList (@RequestBody ManagedRouteListVM managedRouteListVM)
+    public ResponseEntity<?> createRouteList(@RequestBody ManagedRouteListVM managedRouteListVM)
         throws URISyntaxException {
         log.debug("REST request to save Waybill");
         RouteList newRouteList = routeListService.createRouteList(managedRouteListVM);
@@ -106,14 +121,14 @@ public class RouteListResource {
         log.debug("REST request to delete RouteList: {}", id);
         routeListService.deleteRouteList(id);
 
-        return ResponseEntity.ok().headers(HeaderUtil.createAlert( "routelistManagement.deleted", id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert("routelistManagement.deleted", id.toString())).build();
     }
 
-    @RequestMapping (value = "/routelists",
+    @RequestMapping(value = "/routelists",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity updateWaybill (@RequestBody ManagedRouteListVM managedRouteListVM) {
+    public ResponseEntity updateWaybill(@RequestBody ManagedRouteListVM managedRouteListVM) {
         log.debug("REST request to update Waybill : {}", managedRouteListVM);
         RouteList existingWaybill = routeListRepository.findOne(managedRouteListVM.getId());
 

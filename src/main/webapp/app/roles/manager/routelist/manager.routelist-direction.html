@@ -18,28 +18,35 @@
     {{map.directionsRenderers[0].directions.routes[0].overview_path.length}} km
 </div>-->
 <form role="form">
-    <div class="col-md-5">
-        <div class="form-group">
-            <label for="origin" class="control-label">Origin:</label>
-            <input type="text" id="origin" class="form-control" ng-model="vm.waybill.routeList.leavingStorage.address">
+    <div class="row">
+        <div class="col-sm-1">
         </div>
-        <div class="form-group">
-            <label for="destination" class="control-label">Destination:</label>
-            <input type="text" id="destination" class="form-control" ng-model="vm.waybill.routeList.arrivalStorage.address">
-        </div>
-    </div>
-    <div class="col-sm-1">
-    </div>
-    <div class="col-md-5">
-        <label ng-if="wayPoints.length != 0" class="control-label">Waypoints:</label>
-        <fieldset data-ng-repeat="wayPoint in wayPoints">
-            <div class="form-group form-inline">
-                <input class="form-control" type="text" ng-model="wayPoint.location" name="''"
-                       placeholder="Enter checkpoint">
-                <button class="btn-small btn-danger" ng-show="$last" ng-click="removeWayPoint()"><span
-                    class="glyphicon glyphicon-minus"></span></button>
+        <div class="col-md-5">
+            <div class="form-group">
+                <label for="origin" class="control-label">Origin:</label>
+                <input type="text" id="origin" class="form-control"
+                       ng-model="vm.waybill.routeList.leavingStorage.address">
             </div>
-        </fieldset>
-        <button class="btn btn-default" ng-click="addNewWayPoint()">Add waypoints</button>
+            <div class="form-group">
+                <label for="destination" class="control-label">Destination:</label>
+                <input type="text" id="destination" class="form-control"
+                       ng-model="vm.waybill.routeList.arrivalStorage.address">
+            </div>
+        </div>
+        <div class="col-sm-1">
+        </div>
+        <div class="col-md-5">
+            <label ng-if="wayPoints.length != 0" class="control-label">Waypoints:</label>
+            <fieldset data-ng-repeat="wayPoint in wayPoints">
+                <div class="form-group form-inline">
+                    <input class="form-control" type="text" ng-model="wayPoint.location" name="''"
+                           placeholder="Enter checkpoint">
+                    <button class="btn-small btn-danger" ng-show="$last" ng-click="removeWayPoint()"><span
+                        class="glyphicon glyphicon-minus"></span></button>
+                </div>
+            </fieldset>
+            <button class="btn btn-default" ng-click="addNewWayPoint()">Add waypoints</button>
+        </div>
     </div>
+    <button class="btn btn-success pull-right" ng-click="vm.confirmRoutelist()">Confirm</button>
 </form>

@@ -28,13 +28,15 @@ public class RouteListDTO {
 
     private WaybillDTO waybill;
 
+    private String state;
 
     public RouteListDTO(Long id, ZonedDateTime date,
-                        ZonedDateTime leavingDate, ZonedDateTime arrivalDate){
+                        ZonedDateTime leavingDate, ZonedDateTime arrivalDate, String state){
         this.id = id;
         this.date = date;
         this.leavingDate = leavingDate;
         this.arrivalDate = arrivalDate;
+        this.state = state;
     }
 
     public RouteListDTO(RouteList routeList){
@@ -42,7 +44,8 @@ public class RouteListDTO {
             routeList.getId(),
             routeList.getDate(),
             routeList.getLeavingDate(),
-            routeList.getArrivalDate()
+            routeList.getArrivalDate(),
+            routeList.getState()
         );
         this.truck = routeList.getTruck() != null ? new TruckDTO(routeList.getTruck()) : null;
         this.leavingStorage = routeList.getLeavingStorage() != null ?
@@ -58,7 +61,8 @@ public class RouteListDTO {
             routeListDTO.getId(),
             routeListDTO.getDate(),
             routeListDTO.getLeavingDate(),
-            routeListDTO.getArrivalDate()
+            routeListDTO.getArrivalDate(),
+            routeListDTO.getState()
         );
         this.truck = routeListDTO.getTruck();
         this.leavingStorage = routeListDTO.getLeavingStorage();
@@ -126,6 +130,14 @@ public class RouteListDTO {
 
     public void setDate(ZonedDateTime date) {
         this.date = date;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public void setArrivalDate (Date arrivalDate) {
