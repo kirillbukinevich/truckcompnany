@@ -65,7 +65,7 @@ public class DefaultRouteListFacade implements RouteListFacade {
 
             log.debug("Get all routeList for user \'{}\'", user.getLogin());
             List<RouteListDTO> routeList = emptyList();
-            if (isCurrentUserInRole("ROLE_MANAGER")) {
+            if (isCurrentUserInRole("ROLE_MANAGER") || isCurrentUserInRole("ROLE_COMPANYOWNER")) {
                 routeList = routeListService.getRouteListsByCompany(user.getCompany())
                     .stream()
                     .map(RouteListDTO::new)
