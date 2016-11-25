@@ -145,23 +145,16 @@
             <column name="name" type="varchar(45)">
                 <constraints nullable="false"/>
             </column>
-        </createTable>
-
-        <createTable tableName="write_off_act">
-            <column name="id" type="int" autoIncrement="${autoIncrement}">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="date" type="datetime">
-            <constraints nullable="false"/>
-            </column>
-
-            <column name="count" type="int">
+            <column name="accepted_number" type="varchar(45)"/>
+            <column name="unchecked_number" type="varchar(45)"/>
+            <column name="delivered_number" type="varchar(45)"/>
+            <column name="state" type="ENUM('CHECKED', 'ACCEPTED','TRANSPORTATION','DELIVERED')">
                 <constraints nullable="false"/>
             </column>
-            <column name="company_id" type="INT(11)">
-                <constraints nullable="false"/>
+            <column name="waybill_id" type="int">
             </column>
         </createTable>
+
 
         <createTable tableName="waybill">
             <column name="id" type="int" autoIncrement="${autoIncrement}">
@@ -182,27 +175,9 @@
             <column name="route_list_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="write_off_id" type="int"/>
             <column name="manager" type="int"/>
             <column name="date_checked" type="timestamp"/>
             <column name="company_id" type="INT(11)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <createTable tableName="waybill_goods">
-            <column name="id" type="int" autoIncrement="${autoIncrement}">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="waybill_id" type="int">
-            </column>
-            <column name="goods_id" type="int">
-                <constraints nullable="false"/>
-            </column>
-            <column name="count" type="varchar(45)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="state" type="ENUM('ACCEPTED', 'CHECKED', 'DELIVERED')">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -379,12 +354,6 @@
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
 
-        <addForeignKeyConstraint baseColumnNames="write_off_id"
-                                 baseTableName="waybill"
-                                 constraintName="waybill_write_off_act"
-                                 referencedColumnNames="id"
-                                 referencedTableName="write_off_act"/>
-
         <addForeignKeyConstraint baseColumnNames="manager"
                                  baseTableName="waybill"
                                  constraintName="waybill_checked_by_user"
@@ -392,17 +361,14 @@
                                  referencedTableName="jhi_user"/>
 
 
-        <addForeignKeyConstraint baseColumnNames="goods_id"
-                                 baseTableName="waybill_goods"
-                                 constraintName="goods_waybill"
-                                 referencedColumnNames="id"
-                                 referencedTableName="goods"/>
+
 
         <addForeignKeyConstraint baseColumnNames="waybill_id"
-                                 baseTableName="waybill_goods"
+                                 baseTableName="goods"
                                  constraintName="waybill_goods"
                                  referencedColumnNames="id"
                                  referencedTableName="waybill"/>
+
 
         <addForeignKeyConstraint baseColumnNames="company_id"
                                  baseTableName="truck"

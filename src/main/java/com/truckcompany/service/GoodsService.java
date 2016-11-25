@@ -35,6 +35,9 @@ public class GoodsService {
     public Goods createGoods(GoodsVM goodsVM) {
         Goods newGoods = new Goods();
         newGoods.setName(goodsVM.getName());
+        newGoods.setUncheckedNumber(goodsVM.getUncheckedNumber());
+        newGoods.setState(goodsVM.getState());
+
         goodsRepository.save(newGoods);
         log.debug("Created Information for Goods: {}", newGoods);
         return newGoods;

@@ -40,14 +40,6 @@ public class Waybill implements Serializable {
     private RouteList routeList;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "write_off_id", nullable = false)
-    private WriteOffAct writeOff;
-
-    @JoinColumn (name = "waybill_id")
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<WaybillGoods> waybillGoods;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "manager")
     private User manager;
 
@@ -96,12 +88,6 @@ public class Waybill implements Serializable {
         this.routeList = routeList;
     }
 
-    public WriteOffAct getWriteOff() {
-        return writeOff;
-    }
-    public void setWriteOff(WriteOffAct writeOff) {
-        this.writeOff = writeOff;
-    }
 
     public Company getCompany() {
         return company;
@@ -121,17 +107,9 @@ public class Waybill implements Serializable {
             ", state=" + state +
             ", dispatcher=" + dispatcher +
             ", routeList=" + routeList +
-            ", writeOff=" + writeOff +
+            ", writeOff=" +
             '}';
     }
-    public Set<WaybillGoods> getWaybillGoods() {
-        return waybillGoods;
-    }
-
-    public void setWaybillGoods(Set<WaybillGoods> waybillGoods) {
-        this.waybillGoods = waybillGoods;
-    }
-
     public ZonedDateTime getDateChecked() {
         return dateChecked;
     }
