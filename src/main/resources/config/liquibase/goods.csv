@@ -1,17 +1,17 @@
-id;name
-1;Водка
-2;Не водка
-3;Компьютеры
-4;Не компьютеры
-5;Водка
-6;Не водка
-7;Компьютеры
-8;Не компьютеры
-9;Водка
-10;Не водка
-11;Компьютеры
-12;Не компьютеры
-13;Водка
-14;Не водка
-15;Компьютеры
-16;Не компьютеры
+id;name;accepted_number;unchecked_number;state;waybill_id
+1;Водка;20;15;TRANSPORTATION;1
+2;Не водка;20;20;TRANSPORTATION;1
+3;Компьютеры;20;20;TRANSPORTATION;1
+4;Не компьютеры;20;20;TRANSPORTATION;1
+5;Водка;20;20;TRANSPORTATION;1
+6;Не водка;20;20;TRANSPORTATION;2
+7;Компьютеры;20;20;TRANSPORTATION;2
+8;Не компьютеры;20;20;TRANSPORTATION;2
+9;Водка;20;20;TRANSPORTATION;2
+10;Не водка;20;20;TRANSPORTATION;2
+11;Компьютеры;20;20;TRANSPORTATION;2
+12;Не компьютеры;20;20;TRANSPORTATION;2
+13;Водка;20;20;TRANSPORTATION;2
+14;Не водка;20;20;TRANSPORTATION;2
+15;Компьютеры;20;20;TRANSPORTATION;2
+16;Не компьютеры;20;20;TRANSPORTATION;2

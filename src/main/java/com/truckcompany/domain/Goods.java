@@ -16,6 +16,24 @@ public class Goods implements Serializable {
     @Column(name = "name", length = 45)
     private String name;
 
+    @Column(name = "unchecked_number")
+    private Long uncheckedNumber;
+
+    @Column(name = "accepted_number")
+    private Long acceptedNumber;
+
+    @Column(name = "delivered_number")
+    private Long deliveredNumber;
+
+
+    @Column(name = "state")
+    private String state;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "waybill_id", nullable = false)
+    private Waybill waybill;
+
+
     public Integer getId() {
         return id;
     }
@@ -28,5 +46,45 @@ public class Goods implements Serializable {
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getAcceptedNumber() {
+        return acceptedNumber;
+    }
+
+    public void setAcceptedNumber(Long acceptedNumber) {
+        this.acceptedNumber = acceptedNumber;
+    }
+
+    public Long getDeliveredNumber() {
+        return deliveredNumber;
+    }
+
+    public void setDeliveredNumber(Long deliveredNumber) {
+        this.deliveredNumber = deliveredNumber;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public Waybill getWaybill() {
+        return waybill;
+    }
+
+    public void setWaybill(Waybill waybill) {
+        this.waybill = waybill;
+    }
+
+    public Long getUncheckedNumber() {
+        return uncheckedNumber;
+    }
+
+    public void setUncheckedNumber(Long uncheckedNumber) {
+        this.uncheckedNumber = uncheckedNumber;
     }
 }
