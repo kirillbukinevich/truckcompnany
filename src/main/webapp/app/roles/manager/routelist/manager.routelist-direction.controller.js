@@ -8,9 +8,9 @@
         .module('truckCompanyApp')
         .controller('ManagerRoutelistDirectionController', ManagerRoutelistDirectionController);
 
-    ManagerRoutelistDirectionController.$inject = ['$scope', '$stateParams', '$http', 'RouteList'];
+    ManagerRoutelistDirectionController.$inject = ['$scope', '$stateParams', '$http', 'RouteList', 'NgMap'];
 
-    function ManagerRoutelistDirectionController($scope, $stateParams, $http, RouteList) {
+    function ManagerRoutelistDirectionController($scope, $stateParams, $http, RouteList, NgMap) {
         var vm = this;
         vm.confirmRoutelist = confirmRoutelist;
         vm.wayPoints = [];
@@ -18,6 +18,7 @@
             vm.waybill = data.data;
             vm.checkpoints = $http.get('api/checkpoint/' + vm.waybill.routeList.id).then(function (checkpointArray) {
                 console.log(checkpointArray.data);
+                console.log(NgMap.getMap());
                 var i = 0;
                 angular.forEach(checkpointArray.data, function (value) {
                     vm.wayPoints[i] = {location: value.name};

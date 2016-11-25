@@ -57,7 +57,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
                     .collect(Collectors.toList());
             }
             else if(isCurrentUserInRole("ROLE_MANAGER")){
-                waybills = waybillService.getAllWaybills()
+                waybills = waybillService.getWaybillByCompany(user.getCompany())
                     .stream()
                     .map(WaybillDTO::new)
                     .collect(Collectors.toList());
