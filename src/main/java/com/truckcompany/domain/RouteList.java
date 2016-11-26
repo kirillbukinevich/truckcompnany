@@ -3,7 +3,6 @@ package com.truckcompany.domain;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "route_list")
@@ -21,14 +20,20 @@ public class RouteList implements Serializable {
     @JoinColumn(name = "truck_id", nullable = false)
     private Truck truck;
 
-    @Column(name = "date")
-    private ZonedDateTime date;
+    @Column(name = "creation_date")
+    private ZonedDateTime creationDate;
 
     @Column(name = "leaving_date")
     private ZonedDateTime leavingDate;
 
     @Column(name = "arrival_date")
     private ZonedDateTime arrivalDate;
+
+    @Column(name="fuel_cost")
+    private int fuelCost;
+
+    @Column(name="distance")
+    private int distance;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leaving_storage_id", nullable = false)
@@ -92,12 +97,12 @@ public class RouteList implements Serializable {
         this.waybill = waybill;
     }
 
-    public ZonedDateTime getDate() {
-        return date;
+    public ZonedDateTime getCreationDate() {
+        return creationDate;
     }
 
-    public void setDate(ZonedDateTime date) {
-        this.date = date;
+    public void setCreationDate(ZonedDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
     public Company getCompany() {
@@ -120,4 +125,19 @@ public class RouteList implements Serializable {
         this.state = state;
     }
 
+    public int getFuelCost() {
+        return fuelCost;
+    }
+
+    public void setFuelCost(int fuelCost) {
+        this.fuelCost = fuelCost;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
 }

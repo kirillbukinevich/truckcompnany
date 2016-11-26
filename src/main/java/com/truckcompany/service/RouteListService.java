@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.time.ZonedDateTime;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,6 +54,12 @@ public class RouteListService {
     public Page<RouteList> getPageRouteListsByCompany(Pageable pageable, Company company){
         return routeListRepository.findPageByCompany(company, pageable);
     }
+
+    public Page<RouteList> getPageRouteListsByCompanyAndCreationDateBetween(Pageable pageable, Company company,
+                                                                            ZonedDateTime fromDate, ZonedDateTime toDate){
+        return routeListRepository.findPageByCompanyAndCreationDateBetween(company, fromDate, toDate, pageable);
+    }
+
 
     public void deleteRouteList (Long id) {
         RouteList waybill = routeListRepository.findOne(id);

@@ -23,7 +23,8 @@
             'ngSanitize',
             "ngAnimate",
             "highcharts-ng",
-            'ngMap'
+            'ngMap',
+            'daterangepicker'
         ])
         .run(run);
 

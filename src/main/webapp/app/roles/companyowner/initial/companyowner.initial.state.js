@@ -19,9 +19,8 @@
             views: {
                 'page@roles': {
                     templateUrl: 'app/roles/companyowner/initial/companyowner.initial.html',
-                    /*templateUrl: 'app/roles/companyowner/initial/companyowner.initial.html',
-                    /*controller: 'AdmincompanyUsersController',
-                    controllerAs: 'vm'*/
+                    controller: 'CompanyownerInitialController',
+                    controllerAs: 'vm'
                 }
             },
             resolve: {
