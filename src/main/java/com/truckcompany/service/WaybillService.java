@@ -105,7 +105,7 @@ public class WaybillService {
     public Waybill createWaybill (ManagedWaybillVM managedWaybillVM) {
         Waybill waybill = new Waybill();
 
-       /* waybill.setDate(managedWaybillVM.getDate());
+       /* waybill.setCreationDate(managedWaybillVM.getCreationDate());
         waybill.setDispatcher(userRepository.findOneByLogin(managedWaybillVM.getDispatcher().getLogin()).get());
         waybill.setDriver(userRepository.findOneByLogin(managedWaybillVM.getDriver().getLogin()).get());
         waybill.setState(WaybillState.valueOf(managedWaybillVM.getState()));

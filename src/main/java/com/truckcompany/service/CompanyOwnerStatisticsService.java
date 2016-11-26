@@ -6,9 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -27,8 +25,8 @@ public class CompanyOwnerStatisticsService {
         List<RouteListDTO> routeListDTOs = routeListFacade.findRouteLists();
 
         Map<Long, Long> map = routeListDTOs.stream()
-                .collect(Collectors.toMap(s-> s.getArrivalDate().toInstant().toEpochMilli(),
-                        s-> s.getTruck().getConsumption(),
+                .collect(Collectors.toMap(s-> s.getCreationDate().toInstant().toEpochMilli(),
+                        s-> s.getTruck().getConsumption()*s.getFuelCost()*s.getDistance(),
                         (a,b) -> a+ b));
 
         List<List<Long>> result = new ArrayList<>();
@@ -39,6 +37,7 @@ public class CompanyOwnerStatisticsService {
             result.add(list);
         }
 
+        Collections.sort(result, (o1, o2) -> o1.get(0).compareTo(o2.get(0)));
         return result;
 
     }
