@@ -4,14 +4,20 @@
     {{vm.messageError}}
 </div>
 
-<form>
+<form name="form">
     <div class="form-group">
         <label for="name">NameCompany</label>
         <input type="text" ng-model="vm.company.name" class="form-control" id="name" placeholder="Enter company name">
     </div>
     <div class="form-group">
-        <label for="login">Admin login:</label>
-        <input type="text" ng-model="vm.admin.login" class="form-control" id="login" placeholder="Enter login">
+        <label for="login" >Admin login:</label>
+        <input type="text" name="form"
+               ng-model="vm.admin.login"
+               class="form-control"
+               id="login"
+               placeholder="Enter login"
+               check-valid-login>
+
     </div>
     <div class="form-group">
         <label for="email">Admin email:</label>

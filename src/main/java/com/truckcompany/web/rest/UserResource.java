@@ -35,6 +35,9 @@ import javax.servlet.http.Part;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.HttpStatus.*;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+
 /**
  * REST controller for managing users.
  * <p>
@@ -88,7 +91,7 @@ public class UserResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/users",
-        method = RequestMethod.POST,
+        method = POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
@@ -128,7 +131,7 @@ public class UserResource {
      * or with status 500 (Internal Server Error) if the user couldn't be updated
      */
     @RequestMapping(value = "/users",
-        method = RequestMethod.PUT,
+        method = PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
@@ -159,7 +162,7 @@ public class UserResource {
      * @throws URISyntaxException if the pagination headers couldn't be generated
      */
     @RequestMapping(value = "/users",
-        method = RequestMethod.GET,
+        method = GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<List<ManagedUserVM>> getAllUsers(Pageable pageable)
@@ -169,7 +172,7 @@ public class UserResource {
             .map(ManagedUserVM::new)
             .collect(Collectors.toList());
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
-        return new ResponseEntity<>(managedUserVMs, headers, HttpStatus.OK);
+        return new ResponseEntity<>(managedUserVMs, headers, OK);
     }
 
     /**
@@ -179,15 +182,15 @@ public class UserResource {
      * @return the ResponseEntity with status 200 (OK) and with body the "login" user, or with status 404 (Not Found)
      */
     @RequestMapping(value = "/users/{login:" + Constants.LOGIN_REGEX + "}",
-        method = RequestMethod.GET,
+        method = GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<ManagedUserVM> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
         return userService.getUserWithAuthoritiesByLogin(login)
             .map(ManagedUserVM::new)
-            .map(managedUserVM -> new ResponseEntity<>(managedUserVM, HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+            .map(managedUserVM -> new ResponseEntity<>(managedUserVM, OK))
+            .orElse(new ResponseEntity<>(NOT_FOUND));
     }
 
     /**
@@ -197,7 +200,7 @@ public class UserResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @RequestMapping(value = "/users/{login:" + Constants.LOGIN_REGEX + "}",
-        method = RequestMethod.DELETE,
+        method = DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
@@ -208,39 +211,39 @@ public class UserResource {
     }
 
 
-    @RequestMapping(value = "/change_inital_password", method = RequestMethod.POST)
+    @RequestMapping(value = "/change_inital_password", method = POST)
     @ResponseBody
     public ResponseEntity<?> changeInitialAdminPassword(@RequestBody KeyAndPasswordVM keyAndPasswordVM) {
         return userService.changeInitialPasswordForAdmin(keyAndPasswordVM.getKey(), keyAndPasswordVM.getNewPassword())
-            .map(user -> new ResponseEntity<>(HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+            .map(user -> new ResponseEntity<>(OK))
+            .orElse(new ResponseEntity<>(BAD_REQUEST));
     }
 
-    @RequestMapping(value = "/isvalidkey/{key:.+}", method = RequestMethod.GET)
+    @RequestMapping(value = "/isvalidkey/{key:.+}", method = GET)
     public ResponseEntity<?> isValidKey(@PathVariable String key){
         log.debug("User is attemping create initial password for Admin profile use key= {}", key);
         return userRepository.findOneByActivationKey(key)
-            .map(user -> new ResponseEntity<>(HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+            .map(user -> new ResponseEntity<>(OK))
+            .orElse(new ResponseEntity<>(BAD_REQUEST));
     }
 
-    @RequestMapping(value = "/user/change_status/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/change_status/{id}", method = GET)
     public ResponseEntity<?> changeStatusEmployee(@PathVariable Long id){
         log.debug("Change status for user with id = {}", id);
         userService.changeStatus(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(OK);
     }
 
-    @RequestMapping(value = "/drivers", method = RequestMethod.GET)
+    @RequestMapping(value = "/drivers", method = GET)
     public ResponseEntity<List<ManagedUserVM>> getDrivers () {
         log.debug("Get drivers for current company.");
         List<ManagedUserVM> userList = userService.getDrivers();
 
-        return new ResponseEntity<>(userList, HttpStatus.OK);
+        return new ResponseEntity<>(userList, OK);
     }
 
     @ResponseBody
-    @RequestMapping(value = "/users/uploadlogo", method = RequestMethod.POST)
+    @RequestMapping(value = "/users/uploadlogo", method = POST)
     public ResponseEntity<Void> uploadFile(@RequestParam(value = "file", required = false) String file,
                                         @RequestParam(value = "file_name") String fileName,
                                         @RequestParam(value = "user_id") Long user_id,
@@ -248,19 +251,46 @@ public class UserResource {
         try {
             String rootUploadDirectory = request.getServletContext().getRealPath("content/upload/logouser");
             String imageName = userService.uploadUserLogo(file, fileName, user_id, rootUploadDirectory);
-            return new ResponseEntity<Void>(HeaderUtil.createEntityCreationAlert("image",imageName),HttpStatus.OK);
+            return new ResponseEntity<Void>(HeaderUtil.createEntityCreationAlert("image",imageName), OK);
         } catch (UploadException e) {
             log.debug("Can not upload logo for user with id = {}", user_id);
-            return new ResponseEntity<Void>(HeaderUtil.createFailureAlert("logoUser", "uploadimageproblem", e.getError().toString()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Void>(HeaderUtil.createFailureAlert("logoUser", "uploadimageproblem", e.getError().toString()), BAD_REQUEST);
         }
     }
 
     @ResponseBody
-    @RequestMapping(value = "/users/deletelogo/{user_id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/users/deletelogo/{user_id}", method = GET)
     public void deleteLogo(@PathVariable Long user_id, HttpServletRequest request) throws IOException {
         log.debug("REST to request to delete logo for user with id {}", user_id);
         String rootUploadDirectory = request.getServletContext().getRealPath("content/upload/logouser");
         userService.deleteUserLogo(user_id, rootUploadDirectory);
+    }
+
+
+    /**
+     * GET /users/validlogin/:login : check the "login" User.
+     *
+     * @param login the validation login of the user
+     * @return the ResponseEntity with status 200 (OK)  if the login isn't excited
+     * or with status 400 (Bad Request) if the login is already in use,
+     */
+    @RequestMapping(value = "/users/validlogin/{login}", method = GET)
+    public ResponseEntity<Void> checkUniqueLogin(@PathVariable String login){
+        boolean present = userRepository.findOneByLogin(login.toLowerCase()).isPresent();
+        return !present ? new ResponseEntity(OK) : new ResponseEntity(BAD_REQUEST);
+    }
+
+    /**
+     * GET /users/validemail/:email : check the "email" User.
+     *
+     * @param email the validation email of the user
+     * @return the ResponseEntity with status 200 (OK)  if the email isn't excited
+     * or with status 400 (Bad Request) if the email is already in use,
+     */
+    @RequestMapping(value = "/users/validemail/{email:.+}", method = GET)
+    public ResponseEntity<Void> checkUniqueEmail(@PathVariable String email){
+        boolean present = userRepository.findOneByEmail(email.toLowerCase()).isPresent();
+        return !present ? new ResponseEntity(OK) : new ResponseEntity(BAD_REQUEST);
     }
 
 }
