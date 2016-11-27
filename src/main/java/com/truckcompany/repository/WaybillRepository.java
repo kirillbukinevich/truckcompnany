@@ -40,4 +40,6 @@ public interface WaybillRepository extends JpaRepository<Waybill, Long> {
     List<Waybill> findByCompany(Company company);
 
     Page<Waybill> findPageByCompany(Company company, Pageable pageable);
+
+    Page<Waybill> findPageByDispatcher(User dispatcher, Pageable pageable);
 }

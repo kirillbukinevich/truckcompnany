@@ -1,6 +1,7 @@
 package com.truckcompany.repository;
 
 import com.truckcompany.domain.Goods;
+import com.truckcompany.domain.Waybill;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
