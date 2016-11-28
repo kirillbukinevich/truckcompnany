@@ -1,24 +1,13 @@
 package com.truckcompany.service;
 
 import com.truckcompany.domain.Company;
-import com.truckcompany.domain.*;
-import com.truckcompany.domain.emb_id.WaybillGoodsId;
-import com.truckcompany.domain.enums.WaybillGoodsState;
-import com.truckcompany.domain.enums.WaybillState;
-import com.truckcompany.repository.*;
-import com.truckcompany.security.SecurityUtils;
-import com.truckcompany.service.dto.RouteListDTO;
-import com.truckcompany.service.dto.UserDTO;
-import com.truckcompany.service.dto.WaybillDTO;
-import com.truckcompany.web.rest.vm.ManagedCompanyVM;
+import com.truckcompany.domain.RouteList;
 import com.truckcompany.domain.User;
 import com.truckcompany.domain.Waybill;
 import com.truckcompany.domain.enums.WaybillState;
-import com.truckcompany.repository.RouteListRepository;
-import com.truckcompany.repository.UserRepository;
-import com.truckcompany.repository.WaybillRepository;
-import com.truckcompany.repository.WriteOffActRepository;
+import com.truckcompany.repository.*;
 import com.truckcompany.security.SecurityUtils;
+import com.truckcompany.service.dto.WaybillDTO;
 import com.truckcompany.web.rest.vm.ManagedRouteListVM;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
 import org.slf4j.Logger;
@@ -31,10 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -52,9 +39,6 @@ public class WaybillService {
 
     @Inject
     private UserRepository userRepository;
-
-    @Inject
-    private WriteOffActRepository writeOffActRepository;
 
     @Inject
     private RouteListService routeListService;
@@ -126,16 +110,6 @@ public class WaybillService {
         waybill.setRouteList(routeList);
         waybill.setDate(ZonedDateTime.now());
         waybill.setCompany(dispatcher.get().getCompany());
-        waybill.setWaybillGoods(offerRepository.getOne(managedWaybillVM.getOffer().getId()).getOfferGoods().stream()
-            .map(og -> {
-                WaybillGoods waybillGoods = new WaybillGoods();
-                waybillGoods.setGoods(og.getGoods());
-                waybillGoods.setCount(og.getCount());
-                waybillGoods.setState(WaybillGoodsState.ACCEPTED);
-
-                return waybillGoods;
-            }).collect(Collectors.toSet()));
-
         waybillRepository.save(waybill);
 
         log.debug("Created Information for Waybill");
@@ -159,9 +133,6 @@ public class WaybillService {
             w.setDateChecked(managedWaybillVM.getDateChecked());
             if (managedWaybillVM.getManager() != null) {
                 w.setManager(userRepository.findOneById(managedWaybillVM.getManager().getId()).get());
-            }
-            if (managedWaybillVM.getWriteOffAct() != null) {
-                w.setWriteOff(writeOffActRepository.getOne(managedWaybillVM.getWriteOffAct().getId()));
             }
             if (managedWaybillVM.getRouteList() != null) {
                 w.setRouteList(routeListRepository.getOne(managedWaybillVM.getRouteList().getId()));
