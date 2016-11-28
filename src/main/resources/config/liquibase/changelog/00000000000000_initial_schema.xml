@@ -151,6 +151,7 @@
             <column name="accepted_number" type="varchar(45)"/>
             <column name="unchecked_number" type="varchar(45)"/>
             <column name="delivered_number" type="varchar(45)"/>
+            <column name="type" type="varchar(45)"/>
             <column name="state" type="ENUM('CHECKED', 'ACCEPTED','TRANSPORTATION','DELIVERED')">
                 <constraints nullable="false"/>
             </column>
