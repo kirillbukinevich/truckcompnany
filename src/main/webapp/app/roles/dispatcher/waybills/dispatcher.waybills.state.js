@@ -18,7 +18,7 @@
 
                 data: {
                     authorities: ["ROLE_DISPATCHER"],
-                    pageTitle: 'activate.title'
+                    pageTitle: 'dispatcher.waybills'
                 },
                 views: {
                     'page@roles': {
@@ -27,16 +27,26 @@
                         controllerAs: 'vm'
                     },
                 },
+                params: {
+                    page: 1,
+                    size: 10
+                },
                 resolve: {
+                    pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
+                        return {
+                            page: PaginationUtil.parsePage($stateParams.page),
+                            size: PaginationUtil.parsePage($stateParams.size)
+                        };
+                    }],
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('activate');
+                        $translatePartialLoader.addPart('dispatcher');
                         return $translate.refresh();
                     }]
                 }
             }
         ).state('dispatcher.waybills-details', {
             parent: 'dispatcher.waybills',
-            url: '/details/{id}',
+            url: '/{id}/details',
             data: {
                 authorities: ['ROLE_DISPATCHER']
             },

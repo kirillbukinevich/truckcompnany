@@ -8,9 +8,9 @@
         .module('truckCompanyApp')
         .controller('DispatcherOfferController', DispatcherOfferController);
 
-    DispatcherOfferController.$inject = ['$stateParams', 'Offer', 'pagingParams', '$state'];
+    DispatcherOfferController.$inject = ['$stateParams', 'Offer', 'pagingParams', '$state', 'Generator'];
 
-    function DispatcherOfferController ($stateParams, Offer, pagingParams, $state) {
+    function DispatcherOfferController ($stateParams, Offer, pagingParams, $state, Generator) {
         var vm = this;
 
         vm.loadPage = loadPage;
@@ -18,6 +18,8 @@
         vm.transition = transition;
         vm.changeItemsPerPage = changeItemsPerPage;
         vm.loadAll = loadAll;
+
+        vm.generateOffer = generateOffer;
 
         vm.availableItemsPerPage = [5, 10, 15, 20];
         vm.page = 1;
@@ -35,6 +37,10 @@
             }, onSuccess, onError);
         }
 
+        function generateOffer() {
+            Generator.generate();
+        }
+
         function onSuccess(data, headers){
             vm.error = false;
             vm.offers = data;
@@ -48,12 +54,6 @@
             vm.messageError = 'Problems with connection.'
         }
 
-        /*function transition () {
-            $state.transitionTo($state.$current, {
-                page: vm.page,
-                size:  vm.itemsPerPage,
-            });
-        }*/
 
         function changeItemsPerPage(){
             $state.transitionTo($state.$current, {
