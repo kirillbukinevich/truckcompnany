@@ -63,23 +63,26 @@ public class WaybillService {
         return waybillRepository.findByDriver(driver);
     }
 
-    public List<WaybillDTO> getWaybillByCompany (Company company){
+    public List<Waybill> getWaybillByCompany (Company company){
         log.debug("Get waybills for company with id: {}", company.getId());
-        return waybillRepository.findByCompany(company)
-            .stream()
-            .map(WaybillDTO::new)
-            .collect(Collectors.toList());
+        return waybillRepository.findByCompany(company);
     }
 
-    public Page<WaybillDTO> getPageWaybillByCompany(Pageable pageable, Company company){
-        log.debug("Get waybills for company with id: {}", company.getId());
-        return waybillRepository.findPageByCompany(company, pageable).map(WaybillDTO::new);
+
+    public Waybill getWaybillByRouteList(RouteList routeList){
+        log.debug("Get waybill for routelist with id: {}", routeList.getId());
+        return waybillRepository.findByRouteList(routeList).orElse(null);
     }
 
-    public Page<WaybillDTO> getPageWaybillByDispatcher(Pageable pageable, User user) {
+    public Page<Waybill> getPageWaybillByCompany(Pageable pageable, Company company){
+        log.debug("Get waybills for company with id: {}", company.getId());
+        return waybillRepository.findPageByCompany(company, pageable);
+    }
+
+    public Page<Waybill> getPageWaybillByDispatcher(Pageable pageable, User user) {
         log.debug("Get waybills by dispatcher with login: {}", user.getLogin());
 
-        return  waybillRepository.findPageByDispatcher(user, pageable).map(ManagedWaybillVM::new);
+        return  waybillRepository.findPageByDispatcher(user, pageable);
     }
 
     public List<WaybillDTO> getAllWaybills () {

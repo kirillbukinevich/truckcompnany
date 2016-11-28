@@ -75,7 +75,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
 
     @Override
     public Page<WaybillDTO> findWaybills(Pageable pageable) {
-        Page<WaybillDTO> pageWaybills = new PageImpl<>(emptyList());
+        Page<Waybill> pageWaybills = new PageImpl<>(emptyList());
 
         Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
 
@@ -90,6 +90,9 @@ public class DefaultWaybillFacade implements WaybillFacade {
             }
         }
 
-        return new PageImpl<WaybillDTO>(pageWaybills.getContent(), pageable, pageWaybills.getTotalElements());
+        return new PageImpl<>(pageWaybills.getContent()
+            .stream()
+            .map(WaybillDTO::new)
+            .collect(Collectors.toList()), pageable, pageWaybills.getTotalElements());
     }
 }

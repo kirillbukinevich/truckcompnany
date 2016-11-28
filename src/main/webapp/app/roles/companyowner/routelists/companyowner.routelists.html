@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-4">
             <button type="button" class="btn btn-success btn-sm"
-                    ng-click="vm.showModalReport()" ng-if="vm.routeLists.size != 0">
+                    ng-click="vm.downloadReport()" ng-if="vm.routeLists.size != 0">
                 <span class="glyphicon glyphicon glyphicon-list-alt"></span>&nbsp;Report
             </button>
         </div>
@@ -49,7 +49,7 @@ Show:
         <td>{{routeList.arrivalStorage.name}}</td>
         <td>{{routeList.truck.regNumber}}</td>
         <td>{{routeList.waybill.id}}</td>
-        <td> {{routeList.date | date:'yyyy-MM-dd'}} </td>
+        <td> {{routeList.creationDate | date:'yyyy-MM-dd'}} </td>
     </tr>
     </tbody>
 </table>
