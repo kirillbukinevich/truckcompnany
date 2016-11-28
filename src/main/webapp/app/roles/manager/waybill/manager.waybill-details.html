@@ -52,13 +52,26 @@
                 </dl>
             </div>
 
-            <div class="col-md-6">
-                <h4 class="text-center">Waybill goods</h4>
+            <div class="col-md-5">
+                <h4 class="text-center">Goods</h4>
+
                 <dl class="dl-horizontal">
                     <div ng-repeat="stuff in vm.waybill.goods">
-                        <dt>{{stuff.name}}:</dt>
-                        <dd>{{stuff.count}} units</dd>
+
+                        <div ng-if="vm.waybill.state != 'CHECKED'">
+                            <dt><span>{{stuff.name}}</span></dt>
+                            <dd>
+                                </span><input class="form-control input-sm" value="{{stuff.uncheckedNumber}}"></span>
+                            </dd>
+                        </div>
+
+                        <div ng-if="vm.waybill.state == 'CHECKED'">
+                            <dt><span>{{stuff.name}}:</span></dt>
+                            <dd>{{stuff.acceptedNumber}}</dd>
+                        </div>
+
                     </div>
+
                 </dl>
             </div>
         </div>
@@ -81,12 +94,16 @@
                 <div class="form-group">
                     <label for="checkDate" class="pull-left">At:</label>
                     <input type="date" id="checkDate" class="form-control" name="checkDate"
-                    ng-model="vm.waybill.dateChecked">
+                           ng-model="vm.waybill.dateChecked">
                 </div>
             </div>
         </div>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"
+                ng-click="vm.clear(); vm.changeWaybillState(0)">
+            <span class="glyphicon glyphicon-remove">&nbsp;Decline</span>
+        </button>
         <button type="button" class="btn btn-success" data-dismiss="modal"
-                ng-click="closeModalWaybillDetails(vm.waybill.id); vm.changeWaybillState()">
+                ng-click="closeModalWaybillDetails(vm.waybill.id); vm.changeWaybillState(1)">
             <span class="glyphicon glyphicon-ok">&nbsp;Confirm</span>
         </button>
     </form>

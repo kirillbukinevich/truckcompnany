@@ -14,9 +14,6 @@
     </div>
 </div>
 
-<div class="text">
-    Directions path length: {{vm.dist}} km
-</div>
 <form role="form" name="form">
     <div class="row">
         <div class="col-sm-1">
@@ -31,6 +28,9 @@
                 <label for="destination" class="control-label">Destination:</label>
                 <input type="text" id="destination" class="form-control" ng-change="calcDistance()"
                        ng-model="vm.waybill.routeList.arrivalStorage.address">
+            </div>
+            <div class="text">
+                <h4>Total distance: {{vm.dist}} km</h4>
             </div>
         </div>
         <div class="col-sm-1">

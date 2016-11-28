@@ -8,9 +8,9 @@
         .module('truckCompanyApp')
         .controller('ManagerRoutelistDirectionController', ManagerRoutelistDirectionController);
 
-    ManagerRoutelistDirectionController.$inject = ['$scope', '$stateParams', '$http', 'RouteList', 'NgMap', '$timeout'];
+    ManagerRoutelistDirectionController.$inject = ['$scope', '$stateParams', 'RouteList', 'NgMap', '$timeout', 'Checkpoint', 'Waybill'];
 
-    function ManagerRoutelistDirectionController($scope, $stateParams, $http, RouteList, NgMap, $timeout) {
+    function ManagerRoutelistDirectionController($scope, $stateParams, RouteList, NgMap, $timeout, Checkpoint, Waybill) {
         var vm = this;
 
         vm.getDistance = function getDistance() {
@@ -20,7 +20,7 @@
                     var strDist = value.distance.value;
                     vm.dist += strDist/1000;
                 });
-                vm.dist = vm.dist.toFixed(1);
+                vm.dist = parseInt(vm.dist);
                 console.log(vm.dist);
             });
         };
@@ -34,12 +34,10 @@
             $scope.render = true;
         }, 500);
 
-
-        $http.get('api/waybills/' + $stateParams.id).then(function (data) {
-            vm.waybill = data.data;
-            vm.checkpoints = $http.get('api/checkpoint/' + vm.waybill.routeList.id).then(function (checkpointArray) {
+        vm.waybill = Waybill.get({id: $stateParams.id}, function () {
+            vm.checkpoints = Checkpoint.query({id: vm.waybill.routeList.id}, function () {
                 var i = 0;
-                angular.forEach(checkpointArray.data, function (value) {
+                angular.forEach(vm.checkpoints, function (value) {
                     vm.wayPoints[i] = {location: value.name};
                     i++;
                 });
@@ -59,9 +57,11 @@
         };
 
         function confirmRoutelist() {
-            console.log(vm.waybill.routeList.state);
+            vm.getDistance();
             vm.waybill.routeList.state = 'DELIVERED';
-            RouteList.update(vm.waybill.routeList);
+            vm.waybill.routeList.distance = vm.dist;
+            console.log(vm.waybill);
+            Waybill.update(vm.waybill);
         }
     }
 })();

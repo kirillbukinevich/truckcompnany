@@ -22,12 +22,14 @@ public interface WaybillRepository extends JpaRepository<Waybill, Long> {
     @Query(value = "select distinct waybill from Waybill waybill left join fetch waybill.driver " +
         "left join fetch waybill.dispatcher " +
         "left join fetch waybill.manager " +
+        "left join fetch waybill.goods " +
         "left join fetch waybill.routeList ")
     List<Waybill> findAll();
 
     @Query(value = "select distinct waybill from Waybill waybill left join fetch waybill.driver " +
         "left join fetch waybill.dispatcher " +
         "left join fetch waybill.manager " +
+        "left join fetch waybill.goods " +
         "left join fetch waybill.routeList " +
         "where waybill.id = ?1")
     Optional <Waybill> findOneById(Long id);

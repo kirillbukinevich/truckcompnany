@@ -126,7 +126,7 @@ public class WaybillResource {
         Waybill existingWaybill = waybillRepository.findOne(managedWaybillVM.getId());
 
         if (existingWaybill == null)
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("waybillManagement", "waybilldontexist", "Waybill doesn't exist!")).body(null);
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("waybillManagement", "waybilldoesntexist", "Waybill doesn't exist!")).body(null);
 
         waybillService.updateWaybill(managedWaybillVM);
         return ResponseEntity.ok()
