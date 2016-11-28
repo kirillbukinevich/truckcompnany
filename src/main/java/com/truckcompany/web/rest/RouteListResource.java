@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,7 +56,11 @@ public class RouteListResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<ManagedRouteListVM>> getAllRouteList(Pageable pageable) throws URISyntaxException {
+    public ResponseEntity<List<ManagedRouteListVM>>
+                        getAllRouteList(Pageable pageable,
+                                        @RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime startDate,
+                                        @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime endDate)
+            throws URISyntaxException {
         log.debug("REST request get all RouteLists");
 
         Collection<SimpleGrantedAuthority> authorities =
@@ -69,7 +75,13 @@ public class RouteListResource {
             HttpHeaders headers = HeaderUtil.createAlert("routelist.getAll", null);
             return new ResponseEntity<List<ManagedRouteListVM>>(managedRouteLists, headers, HttpStatus.OK);
         } else {
-            Page<RouteListDTO> page = routeListFacade.findRouteLists(pageable);
+            Page<RouteListDTO> page;
+            if (startDate == null || endDate == null) {
+                page = routeListFacade.findRouteLists(pageable);
+            }
+            else{
+                page = routeListFacade.findRouteLists(pageable, startDate, endDate);
+            }
             List<ManagedRouteListVM> managedRouteLists = page.getContent().stream()
                 .map(ManagedRouteListVM::new)
                 .collect(Collectors.toList());

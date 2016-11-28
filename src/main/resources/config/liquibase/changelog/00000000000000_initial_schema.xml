@@ -114,9 +114,12 @@
             <column name="company_id" type="INT(11)">
                 <constraints nullable="false"/>
             </column>
-            <column name="date" type="TIMESTAMP">
+            <column name="creation_date" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
+            <column name="fuel_cost" type="INT(11)"/>
+            <column name="distance" type="INT(11)"/>
+
         </createTable>
 
         <createTable tableName="checkpoint">
