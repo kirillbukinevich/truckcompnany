@@ -100,6 +100,25 @@ public class DefaultRouteListFacade implements RouteListFacade {
         }
     }
 
+  /*  @Override
+    public List<RouteListDTO> findRouteLists(ZonedDateTime startDate, ZonedDateTime endDate) {
+
+        Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            log.debug("Get all routeLists for user \'{}\'", user.getLogin());
+            List<RouteListDTO> routeLists = emptyList();
+            if (isCurrentUserInRole("ROLE_COMPANYOWNER")) {
+                routeLists = routeListService
+                        .getPageRouteListsByCompanyAndCreationDateBetween(pageable, user.getCompany(), startDate, endDate);
+            }
+        }
+        return new PageImpl<RouteListDTO>(pageRouteLists.getContent().stream()
+                .map(s -> toCompanyOwnerDTO(s))
+                .collect(Collectors.toList()), pageable, pageRouteLists.getTotalElements());
+    }*/
+
     private RouteListDTO toCompanyOwnerDTO(RouteList routeList) {
         RouteListDTO baseDTO = new RouteListDTO(routeList.getId(), routeList.getCreationDate(),
             routeList.getLeavingDate(), routeList.getArrivalDate(), routeList.getState(),

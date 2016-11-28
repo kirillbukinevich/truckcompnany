@@ -1,19 +1,27 @@
 package com.truckcompany.web.rest;
 
 import com.truckcompany.service.CompanyOwnerStatisticsService;
+import com.truckcompany.service.RouteListService;
+import com.truckcompany.service.dto.RouteListDTO;
+import com.truckcompany.service.facade.RouteListFacade;
+import org.apache.commons.io.IOUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.*;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import java.io.OutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -29,6 +37,9 @@ public class CompanyOwnerStatisticsResource {
     @Inject
     private CompanyOwnerStatisticsService statisticsService;
 
+    @Inject
+    private RouteListFacade routeListFacade;
+
     @RequestMapping(value = "/companyowner/statistic/consumption", method = RequestMethod.GET)
     public ResponseEntity getConsumptionStatistics(){
         LOG.debug("REST get statistic from company owner");
@@ -38,16 +49,32 @@ public class CompanyOwnerStatisticsResource {
         return new ResponseEntity<>(stat, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/companyowner/statistic/xls/routelists", method = RequestMethod.GET)
-    public ResponseEntity getRouteListsReport(){
+    @RequestMapping(value = "/companyowner/statistic/xls/routelists",
+            method = RequestMethod.GET )
+    public ResponseEntity<ByteArrayResource> getRouteListsReport(HttpServletResponse response){
         LOG.debug("REST get route lists xls report from company owner");
 
-        byte[] report = statisticsService.getRouteListsReport(null, null);
+       /* File document = new File("C:\\vlad\\test3.xls");
 
-        ByteArrayResource byteArrayResource = new ByteArrayResource(report);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType("application/excel"));
-        return new ResponseEntity<>(byteArrayResource, headers,  HttpStatus.OK);
+        HttpHeaders header = new HttpHeaders();
+        header.setContentType(new MediaType("application", "xls"));
+        header.set("Content-Disposition",
+                "attachment; filename=test3.xls");
+        header.setContentLength(document.length());*/
+       ByteArrayResource byteResource = null;
+       try(Workbook workbook = statisticsService.getRouteListsReport(null, null)){
+           ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+           workbook.write(outputStream);
+           outputStream.flush();
+
+           byteResource = new ByteArrayResource(outputStream.toByteArray());
+           outputStream.close();
+
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
+        return new ResponseEntity<>(byteResource, HttpStatus.OK);
+        //List<RouteListDTO> routeListDTOs = routeListFacade.
     }
 
 

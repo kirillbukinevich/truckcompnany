@@ -48,35 +48,27 @@ public class CompanyOwnerStatisticsService {
         return result;
     }
 
-    public byte[] getRouteListsReport(ZonedDateTime fromDate, ZonedDateTime toDate){
-        ByteArrayOutputStream output  = new ByteArrayOutputStream();
-        try(Workbook book = new HSSFWorkbook()) {
-            Sheet sheet = book.createSheet("test");
+    public HSSFWorkbook getRouteListsReport(ZonedDateTime fromDate, ZonedDateTime toDate){
+        HSSFWorkbook book = new HSSFWorkbook() ;
+        Sheet sheet = book.createSheet("test");
 
-            Row row = sheet.createRow(0);
+        Row row = sheet.createRow(0);
 
-            Cell name = row.createCell(0);
-            name.setCellValue("Vlad");
+        Cell name = row.createCell(0);
+        name.setCellValue("Vlad");
 
-            Cell birthdate = row.createCell(1);
+        Cell birthdate = row.createCell(1);
 
-            DataFormat format = book.createDataFormat();
-            CellStyle dateStyle = book.createCellStyle();
-            dateStyle.setDataFormat(format.getFormat("dd.mm.yyyy"));
-            birthdate.setCellStyle(dateStyle);
+        DataFormat format = book.createDataFormat();
+        CellStyle dateStyle = book.createCellStyle();
+        dateStyle.setDataFormat(format.getFormat("dd.mm.yyyy"));
+        birthdate.setCellStyle(dateStyle);
 
-            birthdate.setCellValue(new Date(110, 10, 10));
+        birthdate.setCellValue(new Date(110, 10, 10));
 
-            sheet.autoSizeColumn(1);
+        sheet.autoSizeColumn(1);
 
-            book.write(output);
-
-
-        } catch (IOException e) {
-            log.warn("exception while writing xls", e);
-        }
-
-        return output.toByteArray();
+        return book;
     }
 
 }

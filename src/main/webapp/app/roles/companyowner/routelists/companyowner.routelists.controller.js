@@ -89,15 +89,16 @@
         function downloadReport(){
             $http({
                 method: 'GET',
-                url: '/api/companyowner/statistic/xls/routelists'
+                url: '/api/companyowner/statistic/xls/routelists',
+                responseType: 'arraybuffer'
             }).
-            success(function(data, status, headers, config) {
-                var anchor = angular.element('<a/>');
-                anchor.attr({
-                    href: 'data:attachment/xls;charset=utf-8,' + encodeURI(data),
-                    target: '_blank',
-                    download: 'routeListsReport.xls'
-                })[0].click();
+            success(function(data) {
+                var url = URL.createObjectURL(new Blob([data]));
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = 'routeListsReport.xls';
+                a.target = '_blank';
+                a.click();
 
             }).
             error(function(data, status, headers, config) {
