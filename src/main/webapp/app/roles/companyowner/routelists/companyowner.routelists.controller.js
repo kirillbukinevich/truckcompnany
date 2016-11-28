@@ -6,14 +6,15 @@
         .controller('CompanyownerRouteListsController', CompanyownerRouteListsController);
 
 
-    CompanyownerRouteListsController.$inject = ['RouteList', 'pagingParams', '$state', '$uibModal'];
+    CompanyownerRouteListsController.$inject = ['RouteList', 'pagingParams', '$state', '$http'];
 
-    function CompanyownerRouteListsController (RouteList, pagingParams, $state) {
+    function CompanyownerRouteListsController (RouteList, pagingParams, $state, $http) {
         var vm = this;
 
         vm.loadPage = loadPage;
         vm.transition = transition;
         vm.changeItemsPerPage = changeItemsPerPage;
+        vm.downloadReport = downloadReport;
 
         vm.itemsPerPage = pagingParams.size;
         vm.availableItemsPerPage = [5, 10, 15, 20];
@@ -82,6 +83,25 @@
             $state.transitionTo($state.$current, {
                 page: 1,
                 size:  vm.itemsPerPage,
+            });
+        }
+
+        function downloadReport(){
+            $http({
+                method: 'GET',
+                url: '/api/companyowner/statistic/xls/routelists'
+            }).
+            success(function(data, status, headers, config) {
+                var anchor = angular.element('<a/>');
+                anchor.attr({
+                    href: 'data:attachment/xls;charset=utf-8,' + encodeURI(data),
+                    target: '_blank',
+                    download: 'routeListsReport.xls'
+                })[0].click();
+
+            }).
+            error(function(data, status, headers, config) {
+                // handle error
             });
         }
 

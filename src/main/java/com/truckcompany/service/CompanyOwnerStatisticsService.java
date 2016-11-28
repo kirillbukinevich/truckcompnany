@@ -2,10 +2,17 @@ package com.truckcompany.service;
 
 import com.truckcompany.service.dto.RouteListDTO;
 import com.truckcompany.service.facade.RouteListFacade;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.hibernate.result.Output;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.io.*;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,7 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class CompanyOwnerStatisticsService {
-
+    private final Logger log = LoggerFactory.getLogger(CompanyOwnerStatisticsService.class);
 
     @Inject
     private RouteListFacade routeListFacade;
@@ -39,7 +46,37 @@ public class CompanyOwnerStatisticsService {
 
         Collections.sort(result, (o1, o2) -> o1.get(0).compareTo(o2.get(0)));
         return result;
+    }
 
+    public byte[] getRouteListsReport(ZonedDateTime fromDate, ZonedDateTime toDate){
+        ByteArrayOutputStream output  = new ByteArrayOutputStream();
+        try(Workbook book = new HSSFWorkbook()) {
+            Sheet sheet = book.createSheet("test");
+
+            Row row = sheet.createRow(0);
+
+            Cell name = row.createCell(0);
+            name.setCellValue("Vlad");
+
+            Cell birthdate = row.createCell(1);
+
+            DataFormat format = book.createDataFormat();
+            CellStyle dateStyle = book.createCellStyle();
+            dateStyle.setDataFormat(format.getFormat("dd.mm.yyyy"));
+            birthdate.setCellStyle(dateStyle);
+
+            birthdate.setCellValue(new Date(110, 10, 10));
+
+            sheet.autoSizeColumn(1);
+
+            book.write(output);
+
+
+        } catch (IOException e) {
+            log.warn("exception while writing xls", e);
+        }
+
+        return output.toByteArray();
     }
 
 }
