@@ -16,7 +16,7 @@
     </div>
     <div class="form-group">
         <label for="drivers">Driver</label>
-        <ui-select ng-model="vm.driver" title="Choose a driver" id = "drivers">
+        <ui-select ng-model="vm.driver" title="Choose a driver" id = "drivers" ng-required="true" name="driver">
             <ui-select-match>
                 <span ng-bind="($select.selected.firstName) + ' '+ ($select.selected.lastName)"></span>
             </ui-select-match>
@@ -29,19 +29,19 @@
 
     <div class="form-group">
         <label for="trucks">Truck</label>
-        <ui-select ng-model="vm.truck" title="Choose a truck" id = "trucks">
+        <ui-select ng-model="vm.truck" title="Choose a truck" id = "trucks" ng-required="true" name="truck">
             <ui-select-match>
-                <span ng-bind="$select.selected.regNumber"></span>
+                <span ng-bind="($select.selected.model) + ' ' + ($select.selected.regNumber)"></span>
             </ui-select-match>
 
             <ui-select-choices repeat="truck in (vm.trucks | filter: $select.search) track by truck.id">
-                <span ng-bind="truck.regNumber"></span>
+                <span ng-bind="truck.model + ' ' + truck.regNumber"></span>
             </ui-select-choices>
         </ui-select>
     </div>
 
     <div>
-        <div class="form-group"  ng-class="{'has-error' : (form.leaveDate.$dirty && form.leaveDate.$invalid) }">
+        <div class="form-group"  ng-class="{'has-error' : (form.leavingDate.$dirty && form.leavingDate.$invalid) }">
             <label class="col-sm-2 control-label">Leaving Date:</label>
             <div class="col-sm-10">
                 <p class="input-group">
@@ -58,6 +58,16 @@
                         <button type="button" class="btn btn-default" ng-click="vm.openCalendar($event, 'leavingPicker')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </p>
+                <div ng-show="form.leavingDate.$dirty && form.leavingDate.$invalid">
+                    <p class="help-block"
+                       ng-show="form.leavingDate.$error.required">
+                        Leaving Date is required.
+                    </p>
+                    <p class="help-block"
+                       ng-show="form.leavingDate.$error.invalid">
+                        Leaving Date is invalid.
+                    </p>
+                </div>
             </div>
         </div>
         <div class="form-group" ng-class="{'has-error' : (form.arrivalDate.$dirty && form.arrivalDate.$invalid) }">
@@ -85,14 +95,14 @@
                     </p>
                     <p class="help-block"
                        ng-show="form.arrivalDate.$error.invalid">
-                        Date is invalid.
+                        Arrival Date is invalid.
                     </p>
                 </div>
             </div>
         </div>
     </div>
     <div class="btn-group flex-btn-group-container pull-right">
-        <button type="submit" ng-disabled="form.$invalid" class="btn btn-success">Submit offer</button>
+            <button type="submit" ng-disabled="form.$invalid" class="btn btn-success">Submit offer</button>
         <a href="#/dispatcher/offer" class="btn btn-warning">Cancel</a>
     </div>
 </form>
