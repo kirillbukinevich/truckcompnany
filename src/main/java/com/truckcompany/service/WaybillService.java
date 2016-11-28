@@ -83,6 +83,11 @@ public class WaybillService {
         return waybillRepository.findByCompany(company);
     }
 
+    public Waybill getWaybillByRouteList(RouteList routeList){
+        log.debug("Get waybill for routelist with id: {}", routeList.getId());
+        return waybillRepository.findByRouteList(routeList).orElse(null);
+    }
+
     public Page<Waybill> getPageWaybillByCompany(Pageable pageable, Company company){
         log.debug("Get waybills for company with id: {}", company.getId());
         return waybillRepository.findPageByCompany(company, pageable);

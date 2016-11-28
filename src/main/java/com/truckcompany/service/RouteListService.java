@@ -51,6 +51,12 @@ public class RouteListService {
         return routeListRepository.findByCompany(company).orElse(Collections.emptyList());
     }
 
+    public List<RouteList> getRouteListsByCompanyAndCreationDateBetween(Company company, ZonedDateTime fromDate,
+                                                                        ZonedDateTime toDate){
+        return routeListRepository.findByCompanyAndCreationDateBetween(company, fromDate, toDate)
+            .orElse(Collections.emptyList());
+    }
+
     public Page<RouteList> getPageRouteListsByCompany(Pageable pageable, Company company){
         return routeListRepository.findPageByCompany(company, pageable);
     }

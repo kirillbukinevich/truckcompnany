@@ -15,5 +15,5 @@ public interface RouteListFacade {
 
     List<RouteListDTO> findRouteLists();
 
-    //List<RouteListDTO> findRouteLists(ZonedDateTime startDate, ZonedDateTime endDate);
+    List<RouteListDTO> findRouteLists(ZonedDateTime startDate, ZonedDateTime endDate);
 }

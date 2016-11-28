@@ -87,9 +87,9 @@ public class DefaultWaybillFacade implements WaybillFacade {
                 pageWaybills = waybillService.getPageWaybillByCompany(pageable, user.getCompany());
             }
         }
-        return new PageImpl<WaybillDTO>(pageWaybills.getContent()
-                .stream()
-                .map(WaybillDTO::new)
-                .collect(Collectors.toList()), pageable, pageWaybills.getTotalElements());
+        return new PageImpl<>(pageWaybills.getContent()
+            .stream()
+            .map(WaybillDTO::new)
+            .collect(Collectors.toList()), pageable, pageWaybills.getTotalElements());
     }
 }

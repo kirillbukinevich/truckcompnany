@@ -20,9 +20,9 @@
         vm.availableItemsPerPage = [5, 10, 15, 20];
         vm.page = 1;
 
-       vm.datePicker = {
-           startDate: null,
-           endDate: null
+        vm.datePicker = {
+            startDate: null,
+            endDate: null,
         };
 
         vm.datePickerOpts = {
@@ -43,7 +43,7 @@
                     vm.loadPage();
                 }
             },
-            max: moment()
+            maxDate: moment().endOf("day")
         };
 
         vm.loadPage();
@@ -90,6 +90,10 @@
             $http({
                 method: 'GET',
                 url: '/api/companyowner/statistic/xls/routelists',
+                params : {
+                    startDate: !!vm.datePicker.startDate? vm.datePicker.startDate.toISOString() : null,
+                    endDate: !!vm.datePicker.endDate? vm.datePicker.endDate.toISOString() : null
+                },
                 responseType: 'arraybuffer'
             }).
             success(function(data) {
@@ -99,7 +103,6 @@
                 a.download = 'routeListsReport.xls';
                 a.target = '_blank';
                 a.click();
-
             }).
             error(function(data, status, headers, config) {
                 // handle error

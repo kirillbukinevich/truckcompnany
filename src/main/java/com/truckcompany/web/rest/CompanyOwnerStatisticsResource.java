@@ -12,16 +12,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -50,31 +53,36 @@ public class CompanyOwnerStatisticsResource {
     }
 
     @RequestMapping(value = "/companyowner/statistic/xls/routelists",
-            method = RequestMethod.GET )
-    public ResponseEntity<ByteArrayResource> getRouteListsReport(HttpServletResponse response){
+        method = RequestMethod.GET )
+    public ResponseEntity<ByteArrayResource> getRouteListsReport(@RequestParam(value="startDate", required = false)
+                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                     ZonedDateTime startDate,
+                                                                 @RequestParam(value="endDate", required = false)
+                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                     ZonedDateTime endDate)
+    {
         LOG.debug("REST get route lists xls report from company owner");
 
-       /* File document = new File("C:\\vlad\\test3.xls");
+        ByteArrayResource byteResource = null;
+        Workbook workbook;
+        if (startDate== null || endDate == null){
+            workbook = statisticsService.getRouteListsReport();
+        }
+        else{
+            workbook = statisticsService.getRouteListsReport(startDate, endDate);
+        }
+        try{
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            outputStream.flush();
 
-        HttpHeaders header = new HttpHeaders();
-        header.setContentType(new MediaType("application", "xls"));
-        header.set("Content-Disposition",
-                "attachment; filename=test3.xls");
-        header.setContentLength(document.length());*/
-       ByteArrayResource byteResource = null;
-       try(Workbook workbook = statisticsService.getRouteListsReport(null, null)){
-           ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-           workbook.write(outputStream);
-           outputStream.flush();
+            byteResource = new ByteArrayResource(outputStream.toByteArray());
+            outputStream.close();
 
-           byteResource = new ByteArrayResource(outputStream.toByteArray());
-           outputStream.close();
-
-       } catch (IOException e) {
-           e.printStackTrace();
-       }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return new ResponseEntity<>(byteResource, HttpStatus.OK);
-        //List<RouteListDTO> routeListDTOs = routeListFacade.
     }
 
 

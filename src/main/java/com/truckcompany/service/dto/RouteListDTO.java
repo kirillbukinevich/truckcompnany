@@ -1,6 +1,7 @@
 package com.truckcompany.service.dto;
 
 import com.truckcompany.domain.RouteList;
+import com.truckcompany.domain.Waybill;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -58,6 +59,11 @@ public class RouteListDTO {
             new StorageDTO(routeList.getArrivalStorage()) : null;
 /*        this.waybill = routeList.getWaybill() != null ?
             new WaybillDTO(routeList.getWaybill(), this) : null;*/
+    }
+
+    public RouteListDTO(RouteList routeList, Waybill waybill){
+        this(routeList);
+        this.waybill = new WaybillDTO(waybill, this);
     }
 
     public RouteListDTO(RouteListDTO routeListDTO){

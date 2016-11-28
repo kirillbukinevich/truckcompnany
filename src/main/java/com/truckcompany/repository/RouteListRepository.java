@@ -35,6 +35,9 @@ public interface RouteListRepository extends JpaRepository <RouteList, Long> {
 
     Optional<List<RouteList>> findByCompany(Company company);
 
+    Optional<List<RouteList>> findByCompanyAndCreationDateBetween(Company company, ZonedDateTime fromDate,
+                                                                  ZonedDateTime toDate);
+
     Page<RouteList> findPageByCompany(Company company, Pageable pageable);
 
     Page<RouteList> findPageByCompanyAndCreationDateBetween(Company company, ZonedDateTime fromDate, ZonedDateTime toDate,
