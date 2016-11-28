@@ -28,6 +28,7 @@ import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * Created by Vladimir on 21.10.2016.
@@ -101,7 +102,13 @@ public class CompanyService {
         user.setCompany(company);
         user.setLogin(userFromForm.getLogin());
         user.setEmail(userFromForm.getEmail());
-        user.setActivationKey(passwordEncoder.encode(new Date().toString()).substring(0, 20));
+
+        //user.setActivationKey(passwordEncoder.encode(new Date().toString()).substring(0, 20));
+
+        user.setActivationKey(UUID.randomUUID().toString().replaceAll("-", EMPTY).substring(0,20));
+
+
+
         user.setLangKey("en");
         user.setActivated(true);
 
@@ -202,6 +209,8 @@ public class CompanyService {
             .map(authority -> true)
             .orElse(false);
     }
+
+
 
 
 }

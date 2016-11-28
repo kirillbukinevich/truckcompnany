@@ -6,6 +6,7 @@ import com.truckcompany.domain.Company;
 import com.truckcompany.domain.User;
 import com.truckcompany.repository.UserRepository;
 import com.truckcompany.security.AuthoritiesConstants;
+import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.MailService;
 import com.truckcompany.service.UserService;
 import com.truckcompany.service.util.UploadException;
@@ -35,6 +36,7 @@ import javax.servlet.http.Part;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.truckcompany.security.SecurityUtils.*;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 

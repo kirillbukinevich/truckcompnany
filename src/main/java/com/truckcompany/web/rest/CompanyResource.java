@@ -67,7 +67,6 @@ public class CompanyResource {
     private CompanyFacade companyFacade;
 
 
-    @Timed
     @Secured(SUPERADMIN)
     @RequestMapping(value = "/companies", method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ManagedCompanyVM>> getAllTruckingCompanies(Pageable pageable, HttpServletRequest request) throws URISyntaxException {
@@ -84,7 +83,6 @@ public class CompanyResource {
     }
 
 
-    @Timed
     @Secured(SUPERADMIN)
     @RequestMapping(value = "/companies/{id}", method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ManagedCompanyVM> getCompany(@PathVariable Long id) {
@@ -96,10 +94,7 @@ public class CompanyResource {
         return new ResponseEntity<ManagedCompanyVM>(new ManagedCompanyVM(company), OK);
     }
 
-    @RequestMapping(value = "/companies",
-        method = POST,
-        produces = APPLICATION_JSON_VALUE)
-    @Timed
+    @RequestMapping(value = "/companies", method = POST, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createTruckingCompany(@RequestBody ManagedCompanyVM managedCompanyVM, HttpServletRequest request) throws URISyntaxException {
         LOG.debug("REST request to save Company: {}", managedCompanyVM.getName());
 
@@ -123,10 +118,7 @@ public class CompanyResource {
             .body(newCompany);
     }
 
-    @RequestMapping(value = "/companies",
-        method = PUT,
-        produces = APPLICATION_JSON_VALUE)
-    @Timed
+    @RequestMapping(value = "/companies", method = PUT, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ManagedCompanyVM> updateUser(@RequestBody ManagedCompanyVM managedCompanyVM) throws URISyntaxException {
         LOG.debug("REST request to update Company : {}", managedCompanyVM);
 
@@ -155,10 +147,7 @@ public class CompanyResource {
     }
 
 
-    @RequestMapping(value = "/companies/{id}",
-        method = DELETE,
-        produces = APPLICATION_JSON_VALUE)
-    @Timed
+    @RequestMapping(value = "/companies/{id}", method = DELETE, produces = APPLICATION_JSON_VALUE)
     @Secured(SUPERADMIN)
     public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
         LOG.debug("REST request to delete Company: {}", id);
@@ -231,7 +220,7 @@ public class CompanyResource {
     public ResponseEntity<ManagedUserVM> getEmployee(@PathVariable Long id) {
         LOG.debug("REST request to get Employee : {}", id);
         User user = userService.getUserWithAuthorities(id);
-        if (user !=null){
+        if (user != null){
             return new ResponseEntity<ManagedUserVM>(new ManagedUserVM(user), OK);
         } else {
             return new ResponseEntity<>(NOT_FOUND);

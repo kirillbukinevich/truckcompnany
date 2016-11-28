@@ -35,9 +35,5 @@
                 default:  return "Anonymous role";
             }
         }
-
-
-
-
     }
 })();
