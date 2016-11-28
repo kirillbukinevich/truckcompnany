@@ -61,7 +61,7 @@ public class WaybillResource {
         if (authorities.contains(new SimpleGrantedAuthority("ROLE_DRIVER")) || authorities.contains(new SimpleGrantedAuthority("ROLE_MANAGER")) || authorities.contains(new SimpleGrantedAuthority("ROLE_DISPATCHER"))) {
             List<WaybillDTO> waybills = waybillFacade.findWaybills();
             HttpHeaders headers = HeaderUtil.createAlert("waybill.getAll", null);
-            return new ResponseEntity(waybills, headers, HttpStatus.OK);
+            return new ResponseEntity<>(waybills, headers, HttpStatus.OK);
         }
         else {
 

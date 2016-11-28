@@ -63,7 +63,6 @@ public class RouteListResource {
         if (authorities.contains(new SimpleGrantedAuthority("ROLE_MANAGER"))) {
             List<RouteListDTO> routeLists = routeListFacade.findRouteLists();
 
-            log.debug("LENGTH = {}", routeLists.size());
             List<ManagedRouteListVM> managedRouteLists = routeLists.stream().map(ManagedRouteListVM::new)
                 .collect(Collectors.toList());
 
