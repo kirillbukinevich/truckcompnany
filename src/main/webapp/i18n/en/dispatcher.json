@@ -1,0 +1,8 @@
+{
+    "dispatcher": {
+        "initialTitle": "Hello, Dispatcher!",
+        "waybills": "Waybills",
+        "confirm": "Confirm offer",
+        "offers": "Offers"
+    }
+}

@@ -46,8 +46,8 @@ public class Waybill implements Serializable {
     @Column(name = "date_checked")
     private ZonedDateTime dateChecked;
 
-    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn (name = "waybill_id")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Goods> goods;
 
     public Long getId() {

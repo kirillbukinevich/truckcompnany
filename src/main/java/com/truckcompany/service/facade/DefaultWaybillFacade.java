@@ -66,19 +66,22 @@ public class DefaultWaybillFacade implements WaybillFacade {
     public Page<WaybillDTO> findWaybills(Pageable pageable) {
         Page<Waybill> pageWaybills = new PageImpl<>(emptyList());
 
-        Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils
-                .getCurrentUserLogin());
+        Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
+
         if (optionalUser.isPresent()){
             User user = optionalUser.get();
 
             log.debug("Get all waybills for user \'{}\'", user.getLogin());
             if(isCurrentUserInRole("ROLE_COMPANYOWNER")){
                 pageWaybills = waybillService.getPageWaybillByCompany(pageable, user.getCompany());
+            } else if (isCurrentUserInRole("ROLE_DISPATCHER")){
+                pageWaybills = waybillService.getPageWaybillByDispatcher(pageable, user);
             }
         }
-        return new PageImpl<WaybillDTO>(pageWaybills.getContent()
-                .stream()
-                .map(WaybillDTO::new)
-                .collect(Collectors.toList()), pageable, pageWaybills.getTotalElements());
+
+        return new PageImpl<>(pageWaybills.getContent()
+            .stream()
+            .map(WaybillDTO::new)
+            .collect(Collectors.toList()), pageable, pageWaybills.getTotalElements());
     }
 }

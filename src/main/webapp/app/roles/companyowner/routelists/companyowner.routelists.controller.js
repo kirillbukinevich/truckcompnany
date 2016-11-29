@@ -6,22 +6,23 @@
         .controller('CompanyownerRouteListsController', CompanyownerRouteListsController);
 
 
-    CompanyownerRouteListsController.$inject = ['RouteList', 'pagingParams', '$state', '$uibModal'];
+    CompanyownerRouteListsController.$inject = ['RouteList', 'pagingParams', '$state', '$http'];
 
-    function CompanyownerRouteListsController (RouteList, pagingParams, $state) {
+    function CompanyownerRouteListsController (RouteList, pagingParams, $state, $http) {
         var vm = this;
 
         vm.loadPage = loadPage;
         vm.transition = transition;
         vm.changeItemsPerPage = changeItemsPerPage;
+        vm.downloadReport = downloadReport;
 
         vm.itemsPerPage = pagingParams.size;
         vm.availableItemsPerPage = [5, 10, 15, 20];
         vm.page = 1;
 
-       vm.datePicker = {
-           startDate: null,
-           endDate: null
+        vm.datePicker = {
+            startDate: null,
+            endDate: null,
         };
 
         vm.datePickerOpts = {
@@ -42,7 +43,7 @@
                     vm.loadPage();
                 }
             },
-            max: moment()
+            maxDate: moment().endOf("day")
         };
 
         vm.loadPage();
@@ -82,6 +83,29 @@
             $state.transitionTo($state.$current, {
                 page: 1,
                 size:  vm.itemsPerPage,
+            });
+        }
+
+        function downloadReport(){
+            $http({
+                method: 'GET',
+                url: '/api/companyowner/statistic/xls/routelists',
+                params : {
+                    startDate: !!vm.datePicker.startDate? vm.datePicker.startDate.toISOString() : null,
+                    endDate: !!vm.datePicker.endDate? vm.datePicker.endDate.toISOString() : null
+                },
+                responseType: 'arraybuffer'
+            }).
+            success(function(data) {
+                var url = URL.createObjectURL(new Blob([data]));
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = 'routeListsReport.xls';
+                a.target = '_blank';
+                a.click();
+            }).
+            error(function(data, status, headers, config) {
+                // handle error
             });
         }
 

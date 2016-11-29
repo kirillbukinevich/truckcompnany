@@ -3,18 +3,12 @@
     {{vm.messageError}}
 </div>
 
-
-
-<form>
+<form name="form">
     <div class="row row-margin">
 
         <div class="col-md-3">
             <div id="logo-company">
                 <img check-image-company ng-src="{{vm.imageSource}}"  alt="No image">
-                <!--
-                <div class="btn btn-default" ngf-select="vm.saveLogo($file)">Update company logo</div>
-                <div class="btn btn-default" ng-click="vm.deleteLogo()">Delete company logo</div>
-                -->
                 <div id="logo-action">
                     <a href="" ngf-select="vm.saveLogo($file)"><span class="glyphicon glyphicon-upload"></span>Upload logo</a>
                     <a href="" ng-click="vm.deleteLogo(vm.company.id)"><span class="glyphicon glyphicon-erase"></span>Delete logo</a>
@@ -23,20 +17,55 @@
         </div>
 
         <div class="col-md-9">
-            <div class="form-group">
-                <label for="name">NameCompany</label>
-                <input type="text" ng-model="vm.company.name" class="form-control" id="name" placeholder="Enter company name">
+            <div class="form-group" ng-class="{'has-error' : (form.name.$dirty && form.name.$invalid) }">
+                <label for="name" class="control-label">NameCompany</label>
+                <input type="text" name="name"
+                       ng-model="vm.company.name"
+                       class="form-control"
+                       id="name"
+                       placeholder="Enter company name"
+                       required ng-maxlength="50">
+                <div ng-show="form.name.$dirty && form.name.$invalid">
+                    <p class="help-block"
+                       ng-show="form.name.$error.required">
+                        Company name is required.
+                    </p>
+                    <p class="help-block"
+                       ng-show="form.name.$error.maxlength">
+                        Login must consist of less than 50 symbols.
+                    </p>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="login">Admin login:</label>
-                <input type="text" ng-model="vm.company.users[0].login" class="form-control" id="login" placeholder="Enter login">
+            <div class="form-group" ng-class="{'has-error' : (form.login.$dirty && form.login.$invalid) }">
+                <label for="login" class="control-label">Admin login:</label>
+                <input type="text"
+                       ng-model="vm.company.users[0].login" name="login"
+                       class="form-control"
+                       id="login"
+                       placeholder="Enter login"
+                       required check-valid-login disabled>
+                <div ng-show="form.login.$dirty && form.login.$invalid">
+                    <p class="help-block"
+                       ng-show="form.login.$error.required">
+                        Login is required.
+                    </p>
+                    <p class="help-block"
+                       ng-show="form.login.$error.maxlength">
+                        Login must consist of less than 50 symbols.
+                    </p>
+                    <p class="help-block"
+                       ng-show="form.login.$error.existinglogin">
+                        Login is existed.
+                    </p>
+                </div>
+
             </div>
             <div class="form-group">
                 <label for="email">Admin email:</label>
-                <input type="text" ng-model="vm.company.users[0].email" class="form-control" id="email" placeholder="Enter email">
+                <input type="text" ng-model="vm.company.users[0].email" class="form-control" id="email" placeholder="Enter email" disabled>
             </div>
-            <a href="" class="btn btn-default" ng-click="vm.update(vm.company.id)">Update</a>
+            <button class="btn btn-default" ng-click="vm.update(vm.company.id)">Update</button>
             <a href="#/superadmin/companies" class="btn btn-default">Cancel</a>
         </div>
     </div>

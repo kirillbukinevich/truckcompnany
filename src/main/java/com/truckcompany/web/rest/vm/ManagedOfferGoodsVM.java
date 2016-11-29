@@ -7,14 +7,16 @@ public class ManagedOfferGoodsVM {
 
     private String name;
 
-    private Integer count;
+    private Long count;
 
     private Long offerId;
+
+    private String type;
 
     public ManagedOfferGoodsVM() {
     }
 
-    public ManagedOfferGoodsVM(Long id, String name, Integer count, Long offerId) {
+    public ManagedOfferGoodsVM(Long id, String name, Long count, Long offerId) {
         this.id = id;
         this.name = name;
         this.count = count;
@@ -23,7 +25,7 @@ public class ManagedOfferGoodsVM {
 
     public ManagedOfferGoodsVM (OfferGoods offerGoods) {
         this.id = offerGoods.getId();
-        this.name = offerGoods.getGoods().getName();
+        this.name = offerGoods.getName();
         this.count = offerGoods.getCount();
         this.offerId = offerGoods.getOffer().getId();
     }
@@ -44,11 +46,11 @@ public class ManagedOfferGoodsVM {
         this.name = name;
     }
 
-    public Integer getCount() {
+    public Long getCount() {
         return count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 
@@ -58,5 +60,13 @@ public class ManagedOfferGoodsVM {
 
     public void setOfferId(Long offerId) {
         this.offerId = offerId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

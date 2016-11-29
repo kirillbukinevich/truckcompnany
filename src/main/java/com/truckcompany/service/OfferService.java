@@ -1,9 +1,6 @@
 package com.truckcompany.service;
 
-import com.truckcompany.domain.Goods;
-import com.truckcompany.domain.Offer;
-import com.truckcompany.domain.OfferGoods;
-import com.truckcompany.domain.User;
+import com.truckcompany.domain.*;
 import com.truckcompany.domain.enums.OfferState;
 import com.truckcompany.repository.*;
 import com.truckcompany.security.SecurityUtils;
@@ -17,8 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -52,16 +48,15 @@ public class OfferService {
                 offer.setLeavingStorage(storageRepository.getOne(managedOfferVM.getLeavingStorageId()));
                 offer.setArrivalStorage(storageRepository.getOne(managedOfferVM.getArrivalStorageId()));
                 offer.setCompany(companyRepository.getOne(managedOfferVM.getCompanyId()));
-                offer.setState(OfferState.valueOf(managedOfferVM.getState()));
+                offer.setState(OfferState.NEW);
                 offer.setOfferGoods(managedOfferVM.getOfferGoods()
                     .stream()
                     .map( o -> {
                         OfferGoods offerGoods = new OfferGoods();
-                        Goods goods = new Goods();
-                        goods.setName(o.getName());
 
-                        offerGoods.setGoods(goods);
+                        offerGoods.setName(o.getName());
                         offerGoods.setCount(o.getCount());
+                        offerGoods.setType(o.getType());
 
                         return  offerGoods;
                     }).collect(Collectors.toSet()));
@@ -79,7 +74,7 @@ public class OfferService {
         Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
 
         Page<OfferDTO> offers = offerRepository.findByCompany(user.get().getCompany(), pageable)
-            .map(this::convertToOfferDTO);
+            .map(OfferDTO::new);
 
         return offers;
     }
@@ -103,7 +98,33 @@ public class OfferService {
             return false;
     }
 
-    private OfferDTO convertToOfferDTO (Offer offer) {
+    public OfferDTO generateOffer () {
+        Offer offer = new Offer();
+        Random random = new Random();
+        User dispatcher = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+
+        List<Storage> storages = storageRepository.findByCompany(dispatcher.getCompany());
+
+        offer.setState(OfferState.NEW);
+        offer.setCompany(dispatcher.getCompany());
+        offer.setArrivalStorage(storages.get(random.nextInt(storages.size())));
+        offer.setLeavingStorage(storages.get(random.nextInt(storages.size())));
+
+        Set<OfferGoods> goodsSet = new HashSet<>();
+
+        for (int i = 0; i < 3; i++) {
+            OfferGoods goods = new OfferGoods();
+            goods.setName("Item_" + (i + 1));
+            goods.setCount((long)random.nextInt(50));
+            goods.setType("unit");
+
+            goodsSet.add(goods);
+        }
+
+        offer.setOfferGoods(goodsSet);
+
+        offer = offerRepository.save(offer);
+
         return new OfferDTO(offer);
     }
 }

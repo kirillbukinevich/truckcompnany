@@ -15,16 +15,18 @@ public class OfferGoods {
     @Column (name = "id")
     private Long id;
 
-    @OneToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn (name = "goods_id")
-    private Goods goods;
-
     @Column (name = "count")
-    private Integer count;
+    private Long count;
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "offer_id")
     private Offer offer;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "type")
+    private String type;
 
     public OfferGoods() {
     }
@@ -38,19 +40,11 @@ public class OfferGoods {
     }
 
 
-    public Goods getGoods() {
-        return goods;
-    }
-
-    public void setGoods(Goods goods) {
-        this.goods = goods;
-    }
-
-    public Integer getCount() {
+    public Long getCount() {
         return count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 
@@ -60,5 +54,25 @@ public class OfferGoods {
 
     public void setOffer(Offer offer) {
         this.offer = offer;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

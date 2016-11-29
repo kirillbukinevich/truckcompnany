@@ -5,6 +5,7 @@ import com.truckcompany.domain.User;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.RouteListService;
 import com.truckcompany.service.UserService;
+import com.truckcompany.service.WaybillService;
 import com.truckcompany.service.dto.RouteListDTO;
 import com.truckcompany.service.dto.StorageDTO;
 import com.truckcompany.service.dto.TruckDTO;
@@ -34,6 +35,9 @@ public class DefaultRouteListFacade implements RouteListFacade {
 
     @Inject
     private RouteListService routeListService;
+
+    @Inject
+    private WaybillService waybillService;
 
     @Inject
     private UserService userService;
@@ -88,16 +92,43 @@ public class DefaultRouteListFacade implements RouteListFacade {
 
             log.debug("Get all routeList for user \'{}\'", user.getLogin());
             List<RouteListDTO> routeList = emptyList();
-            if (isCurrentUserInRole("ROLE_MANAGER") || isCurrentUserInRole("ROLE_COMPANYOWNER")) {
+            if (isCurrentUserInRole("ROLE_MANAGER")) {
                 routeList = routeListService.getRouteListsByCompany(user.getCompany())
                     .stream()
                     .map(RouteListDTO::new)
+                    .collect(Collectors.toList());
+            }
+            else if(isCurrentUserInRole("ROLE_COMPANYOWNER")){
+                routeList = waybillService.getWaybillByCompany(user.getCompany())
+                    .stream()
+                    .map(s-> new RouteListDTO(s.getRouteList(),s))
                     .collect(Collectors.toList());
             }
             return routeList;
         } else {
             return emptyList();
         }
+    }
+
+    @Override
+    public List<RouteListDTO> findRouteLists(ZonedDateTime startDate, ZonedDateTime endDate) {
+
+        Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            log.debug("Get all routeLists for user \'{}\'", user.getLogin());
+            List<RouteListDTO> routeLists = emptyList();
+            if (isCurrentUserInRole("ROLE_COMPANYOWNER")) {
+                routeLists = routeListService
+                        .getRouteListsByCompanyAndCreationDateBetween(user.getCompany(), startDate, endDate)
+                    .stream()
+                    .map(s-> new RouteListDTO(s, waybillService.getWaybillByRouteList(s)))
+                    .collect(Collectors.toList());
+            }
+            return routeLists;
+        }
+        return emptyList();
     }
 
     private RouteListDTO toCompanyOwnerDTO(RouteList routeList) {

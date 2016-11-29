@@ -51,6 +51,12 @@ public class RouteListService {
         return routeListRepository.findByCompany(company).orElse(Collections.emptyList());
     }
 
+    public List<RouteList> getRouteListsByCompanyAndCreationDateBetween(Company company, ZonedDateTime fromDate,
+                                                                        ZonedDateTime toDate){
+        return routeListRepository.findByCompanyAndCreationDateBetween(company, fromDate, toDate)
+            .orElse(Collections.emptyList());
+    }
+
     public Page<RouteList> getPageRouteListsByCompany(Pageable pageable, Company company){
         return routeListRepository.findPageByCompany(company, pageable);
     }
@@ -87,6 +93,7 @@ public class RouteListService {
         routeList.setArrivalStorage(storageRepository.findOne(managedRouteListVM.getArrivalStorage().getId()));
         routeList.setTruck(truckRepository.findOne(managedRouteListVM.getTruck().getId()));
         routeList.setCompany(userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get().getCompany());
+        routeList.setState("TRANSPORTATION");
 
         routeListRepository.save(routeList);
         log.debug("Created Information for RouteList");
