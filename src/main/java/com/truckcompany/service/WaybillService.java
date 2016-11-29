@@ -151,7 +151,13 @@ public class WaybillService {
                 w.setManager(userRepository.findOneById(managedWaybillVM.getManager().getId()).get());
             }
             if (managedWaybillVM.getRouteList() != null) {
-                w.setRouteList(routeListRepository.getOne(managedWaybillVM.getRouteList().getId()));
+                w.getRouteList().setArrivalDate(managedWaybillVM.getRouteList().getArrivalDate());
+                w.getRouteList().setCreationDate(managedWaybillVM.getRouteList().getCreationDate());
+                w.getRouteList().setDistance(managedWaybillVM.getRouteList().getDistance());
+                w.getRouteList().setFuelCost(managedWaybillVM.getRouteList().getFuelCost());
+                w.getRouteList().setState(managedWaybillVM.getRouteList().getState());
+                w.getRouteList().getArrivalStorage().setAddress(managedWaybillVM.getRouteList().getArrivalStorage().getAddress());
+                w.getRouteList().getLeavingStorage().setAddress(managedWaybillVM.getRouteList().getLeavingStorage().getAddress());
             }
             waybillRepository.save(w);
             log.debug("Changed fields for Waybill id={}", w.getId());

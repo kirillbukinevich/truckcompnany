@@ -108,7 +108,7 @@
             <column name="arrival_storage_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="state" type="ENUM('TRANSPORTATION', 'DELIVERED')">
+            <column name="state" type="ENUM('UNCHECKED', 'TRANSPORTATION', 'DELIVERED')">
                 <constraints nullable="false"/>
             </column>
             <column name="company_id" type="INT(11)">

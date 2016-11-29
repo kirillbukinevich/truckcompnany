@@ -50,18 +50,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
                     .map(WaybillDTO::new)
                     .collect(Collectors.toList());
             }
-            else if(isCurrentUserInRole("ROLE_COMPANYOWNER")){
-                waybills = waybillService.getWaybillByCompany(user.getCompany())
-                    .stream()
-                    .map(WaybillDTO::new)
-                    .collect(Collectors.toList());
-            }
-            else if(isCurrentUserInRole("ROLE_MANAGER")){
-                waybills = waybillService.getAllWaybills()
-                    .stream()
-                    .map(WaybillDTO::new)
-                    .collect(Collectors.toList());
-            } else if (isCurrentUserInRole("ROLE_DISPATCHER")) {
+            else if(isCurrentUserInRole("ROLE_COMPANYOWNER") || isCurrentUserInRole("ROLE_MANAGER") || isCurrentUserInRole("ROLE_DISPATCHER")){
                 waybills = waybillService.getWaybillByCompany(user.getCompany())
                     .stream()
                     .map(WaybillDTO::new)
