@@ -112,45 +112,4 @@ public class TemplateService {
     }
 
 
-    @Scheduled(cron = "* * * * * ?")
-    public void test(){
-        log.debug("TEST: ");
-        testAsync();
-    }
-
-    @Async
-    public void testAsync(){
-        throw new RuntimeException();
-    }
-    public void sendBirthdayCards() {
-        ZonedDateTime now = ZonedDateTime.now();
-        log.debug("Send birthday card at {}", now);
-        List<Template> templates = templateRepository.findAll();
-        for (Template template : templates){
-            ZonedDateTime birthday = template.getBirthday();
-            if ((now.getDayOfMonth() == birthday.getDayOfMonth() && (now.getMonth() == birthday.getMonth()))) {
-                String content = template.getTemplate();
-                content = "<div style='background:#efefef;'>" + content;
-                content = content + "</div>";
-                log.debug(content);
-                try {
-                    mailService.sendBirthdayCard(template.getRecipient().getEmail(), template.getName(), content);
-                } catch (Throwable ex){
-                    log.debug("Exception ATTENTION");
-                }
-            }
-        }
-        /*templateRepository.findAll().stream().parallel().forEach(template -> {
-            ZonedDateTime birthday = template.getBirthday();
-            if ((now.getDayOfMonth() == birthday.getDayOfMonth() && (now.getMonth() == birthday.getMonth()))) {
-                try {
-                    mailService.sendBirthdayCard(template.getRecipient().getEmail(), template.getName(), template.getTemplate());
-                } catch (MailException ex) {
-                    log.debug("Error");
-                }
-            }
-        });*/
-
-    }
-
 }

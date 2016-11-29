@@ -39,7 +39,6 @@ public class AsyncConfiguration implements AsyncConfigurer {
 
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-       /*return new MyAsyncUncaughtExceptionHandler();*/
         return new SimpleAsyncUncaughtExceptionHandler();
     }
 }
