@@ -6,11 +6,13 @@ import com.truckcompany.domain.*;
 import com.truckcompany.domain.User;
 import com.truckcompany.domain.Waybill;
 
+import com.truckcompany.domain.enums.WaybillState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +40,11 @@ public interface WaybillRepository extends JpaRepository<Waybill, Long> {
     List<Waybill> findByDriver(User driver);
 
     List<Waybill> findByCompany(Company company);
+
+    List<Waybill> findByCompanyAndRouteListCreationDateBetween(Company company,
+                                                               ZonedDateTime fromDate, ZonedDateTime toDate);
+
+    List<Waybill> findByCompanyAndState(Company company, WaybillState state);
 
     Page<Waybill> findPageByCompany(Company company, Pageable pageable);
 

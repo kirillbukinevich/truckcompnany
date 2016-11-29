@@ -3,6 +3,7 @@ package com.truckcompany.service.facade;
 import com.truckcompany.domain.RouteList;
 import com.truckcompany.domain.User;
 import com.truckcompany.domain.Waybill;
+import com.truckcompany.domain.enums.WaybillState;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.UserService;
 import com.truckcompany.service.WaybillService;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,6 +69,49 @@ public class DefaultWaybillFacade implements WaybillFacade {
                     .map(WaybillDTO::new)
                     .collect(Collectors.toList());
             }
+            return waybills;
+        }else {
+            return emptyList();
+        }
+    }
+
+    @Override
+    public List<WaybillDTO> findWaybillsWithRouteListCreationDateBetween(ZonedDateTime fromDate, ZonedDateTime toDate) {
+        Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
+        if (optionalUser.isPresent()){
+            User user = optionalUser.get();
+
+            log.debug("Get all waybills for user \'{}\'", user.getLogin());
+            List<WaybillDTO> waybills = emptyList();
+            if(isCurrentUserInRole("ROLE_COMPANYOWNER")){
+                waybills = waybillService.getWaybillByCompanyAndRouteListCreationDateBetween(user.getCompany(), fromDate, toDate)
+                    .stream()
+                    .map(WaybillDTO::new)
+                    .collect(Collectors.toList());
+            }
+
+            return waybills;
+        }else {
+            return emptyList();
+        }
+    }
+
+    @Override
+    public List<WaybillDTO> findWaybillsWithState(WaybillState state) {
+        Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
+
+        if (optionalUser.isPresent()){
+            User user = optionalUser.get();
+
+            log.debug("Get waybills with state " + state.toString() +" for user \'{}\'", user.getLogin());
+            List<WaybillDTO> waybills = emptyList();
+            if(isCurrentUserInRole("ROLE_COMPANYOWNER")){
+                waybills = waybillService.getWaybillByCompanyAndState(user.getCompany(), state)
+                    .stream()
+                    .map(WaybillDTO::new)
+                    .collect(Collectors.toList());
+            }
+
             return waybills;
         }else {
             return emptyList();

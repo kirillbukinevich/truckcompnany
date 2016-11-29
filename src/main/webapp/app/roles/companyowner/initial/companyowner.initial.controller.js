@@ -6,19 +6,63 @@
         .module('truckCompanyApp')
         .controller('CompanyownerInitialController', CompanyownerInitialController);
 
-    CompanyownerInitialController.$inject = ['Principal', '$http'];
+    CompanyownerInitialController.$inject = ['Principal', '$http','$timeout', '$scope'];
 
-    function CompanyownerInitialController(Principal, $http) {
+    function CompanyownerInitialController(Principal, $http, $timeout, $scope) {
         var vm = this;
 
         vm.loadData = loadData;
+        vm.loadConsumptionData = loadConsumptionData;
+        vm.downloadConsumptionReport = downloadConsumptionReport;
+
+        vm.datePicker = {
+            startDate: null,
+            endDate: null,
+        };
+
+        vm.datePickerOpts = {
+            locale : {
+                format: "MMMM D, YYYY",
+                customRangeLabel: 'Custom range'
+            },
+            ranges: {
+                'Last week' : [moment().subtract(1, "weeks").startOf("week"),
+                    moment().subtract(1, "weeks").endOf("week")],
+                'Last month' : [moment().subtract(1, "months").startOf("month"),
+                    moment().subtract(1, "months").endOf("month")]
+            },
+            eventHandlers : {
+                'apply.daterangepicker' : function (ev, picker) {
+                    $('div[name="datepicker"] span').html(vm.datePicker.startDate.format('MMMM D, YYYY') + ' - '
+                        + vm.datePicker.endDate.format('MMMM D, YYYY'));
+                    vm.loadConsumptionData();
+                }
+            },
+            maxDate: moment().endOf("day"),
+            opens: 'left'
+        };
 
         vm.loadData();
 
+        // graph redrawing
+
+        $scope.render = false;
+        $timeout(function () {
+            $scope.render = true;
+        }, 500);
+
         function loadData() {
+            vm.loadConsumptionData();
+        }
+
+        function loadConsumptionData(){
             $http({
                 method: 'GET',
-                url: '/api/companyowner/statistic/consumption'
+                url: '/api/companyowner/statistic/consumption',
+                params: {
+                    startDate: !!vm.datePicker.startDate? vm.datePicker.startDate.toISOString() : null,
+                    endDate: !!vm.datePicker.endDate? vm.datePicker.endDate.toISOString() : null
+                }
             }).then(function successCallback(response) {
                 console.log("Data load successfully")
                 vm.consumptionChartData = response.data;
@@ -30,6 +74,29 @@
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
+            });
+        }
+
+        function downloadConsumptionReport(){
+            $http({
+                method: 'GET',
+                url: '/api/companyowner/statistic/xls/consumption',
+                params : {
+                    startDate: !!vm.datePicker.startDate? vm.datePicker.startDate.toISOString() : null,
+                    endDate: !!vm.datePicker.endDate? vm.datePicker.endDate.toISOString() : null
+                },
+                responseType: 'arraybuffer'
+            }).
+            success(function(data) {
+                var url = URL.createObjectURL(new Blob([data]));
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = 'consumptionReport.xls';
+                a.target = '_blank';
+                a.click();
+            }).
+            error(function(data, status, headers, config) {
+                // handle error
             });
         }
 
@@ -65,6 +132,7 @@
                 console.log(account);
             });
         };
+
 
 
     }

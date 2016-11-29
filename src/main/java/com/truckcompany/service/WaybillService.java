@@ -69,9 +69,15 @@ public class WaybillService {
     }
 
 
-    public Waybill getWaybillByRouteList(RouteList routeList){
-        log.debug("Get waybill for routelist with id: {}", routeList.getId());
-        return waybillRepository.findByRouteList(routeList).orElse(null);
+    public List<Waybill> getWaybillByCompanyAndRouteListCreationDateBetween(Company company, ZonedDateTime fromDate,
+                                                                      ZonedDateTime toDate){
+        log.debug("Get waybill for company with id: {}", company.getId());
+        return waybillRepository.findByCompanyAndRouteListCreationDateBetween(company, fromDate, toDate);
+    }
+
+    public List<Waybill> getWaybillByCompanyAndState(Company company, WaybillState state){
+        log.debug("Get waybill with state {} for company with id: {}", state.toString(), company.getId());
+        return waybillRepository.findByCompanyAndState(company, state);
     }
 
     public Page<Waybill> getPageWaybillByCompany(Pageable pageable, Company company){

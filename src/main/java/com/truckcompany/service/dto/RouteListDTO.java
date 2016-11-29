@@ -23,7 +23,7 @@ public class RouteListDTO {
 
     private StorageDTO arrivalStorage;
 
-    private WaybillDTO waybill;
+    //private WaybillDTO waybill;
 
     private String state;
 
@@ -61,10 +61,10 @@ public class RouteListDTO {
             new WaybillDTO(routeList.getWaybill(), this) : null;*/
     }
 
-    public RouteListDTO(RouteList routeList, Waybill waybill){
+    /*public RouteListDTO(RouteList routeList, Waybill waybill){
         this(routeList);
         this.waybill = new WaybillDTO(waybill, this);
-    }
+    }*/
 
     public RouteListDTO(RouteListDTO routeListDTO){
         this(
@@ -79,7 +79,7 @@ public class RouteListDTO {
         this.truck = routeListDTO.getTruck();
         this.leavingStorage = routeListDTO.getLeavingStorage();
         this.arrivalStorage = routeListDTO.getArrivalStorage();
-        this.waybill = routeListDTO.getWaybill();
+        //this.waybill = routeListDTO.getWaybill();
     }
 
     public RouteListDTO(){}
@@ -128,13 +128,13 @@ public class RouteListDTO {
         this.arrivalStorage = arrivalStorage;
     }
 
-    public WaybillDTO getWaybill() {
+   /* public WaybillDTO getWaybill() {
         return waybill;
     }
 
     public void setWaybill(WaybillDTO waybill) {
         this.waybill = waybill;
-    }
+    }*/
 
     public ZonedDateTime getCreationDate() {
         return creationDate;

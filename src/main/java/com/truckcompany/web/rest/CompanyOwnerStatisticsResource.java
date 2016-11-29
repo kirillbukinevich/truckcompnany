@@ -44,22 +44,78 @@ public class CompanyOwnerStatisticsResource {
     private RouteListFacade routeListFacade;
 
     @RequestMapping(value = "/companyowner/statistic/consumption", method = RequestMethod.GET)
-    public ResponseEntity getConsumptionStatistics(){
+    public ResponseEntity getConsumptionStatistics(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                           ZonedDateTime startDate,
+                                                   @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                           ZonedDateTime endDate){
         LOG.debug("REST get statistic from company owner");
 
-        List<List<Long>> stat = statisticsService.getConsumptionStatstics();
+        List<List<Long>> stat;
 
+        if (startDate == null || endDate == null){
+            stat = statisticsService.getConsumptionStatistics();
+        }
+        else{
+            stat = statisticsService.getConsumptionStatistics(startDate, endDate);
+        }
         return new ResponseEntity<>(stat, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/companyowner/statistic/loss", method = RequestMethod.GET)
+    public ResponseEntity getLossStatistics(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                       ZonedDateTime startDate,
+                                                   @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                       ZonedDateTime endDate){
+        LOG.debug("REST get loss statistic from company owner");
+
+        List<List<Long>> stat;
+
+        if (startDate == null || endDate == null){
+            stat = statisticsService.getLossStatistics();
+        }
+        else{
+            stat = statisticsService.getLossStatistics(startDate, endDate);
+        }
+        return new ResponseEntity<>(stat, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/companyowner/statistic/xls/consumption", method = RequestMethod.GET)
+    public ResponseEntity<ByteArrayResource> getConsumptionReport(@RequestParam(value="startDate", required = false)
+                                                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                          ZonedDateTime startDate,
+                                                                  @RequestParam(value="endDate", required = false)
+                                                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                          ZonedDateTime endDate){
+        LOG.debug("REST get consumption xls report from company owner");
+
+        ByteArrayResource byteResource = null;
+        Workbook workbook;
+        if (startDate== null || endDate == null){
+            workbook = statisticsService.getConsumptionReport();
+        }
+        else{
+            workbook = statisticsService.getConsumptionReport(startDate, endDate);
+        }
+        try{
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            outputStream.flush();
+
+            byteResource = new ByteArrayResource(outputStream.toByteArray());
+            outputStream.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(byteResource, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/companyowner/statistic/xls/routelists",
         method = RequestMethod.GET )
-    public ResponseEntity<ByteArrayResource> getRouteListsReport(@RequestParam(value="startDate", required = false)
-                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                                     ZonedDateTime startDate,
-                                                                 @RequestParam(value="endDate", required = false)
-                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                                     ZonedDateTime endDate)
+    public ResponseEntity<ByteArrayResource> getRouteListsReport(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                         ZonedDateTime startDate,
+                                                                 @RequestParam(value="endDate", required = false)   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                         ZonedDateTime endDate)
     {
         LOG.debug("REST get route lists xls report from company owner");
 
@@ -84,6 +140,8 @@ public class CompanyOwnerStatisticsResource {
         }
         return new ResponseEntity<>(byteResource, HttpStatus.OK);
     }
+
+
 
 
 }
