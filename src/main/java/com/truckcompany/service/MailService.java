@@ -7,6 +7,7 @@ import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -16,8 +17,11 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 
 
 import javax.inject.Inject;
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.Locale;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 /**
  * Service for sending e-mails.
@@ -64,6 +68,25 @@ public class MailService {
             log.warn("E-mail could not be sent to user '{}'", to, e);
         }
     }
+
+    @Async
+    public void sendBirthdayCard(String to, String subject, String content)  throws Exception {
+        log.debug("Send birthdaycard via email to {}");
+
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+
+            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, CharEncoding.UTF_8);
+            message.setTo(to);
+            message.setFrom(jHipsterProperties.getMail().getFrom());
+            message.setSubject(subject);
+            message.setText(content, true);
+            javaMailSender.send(mimeMessage);
+            log.debug("Sent e-mail to User '{}'", to);
+
+    }
+
+
 
     @Async
     public void sendActivationEmail(User user, String baseUrl) {

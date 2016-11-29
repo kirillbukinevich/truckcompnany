@@ -13,7 +13,6 @@
             <th>Registration date</th>
             <th>Dispatcher</th>
             <th>Driver</th>
-            <!--<th>Route list №</th>-->
             <th>State</th>
         </tr>
         </thead>
@@ -38,8 +37,8 @@
                             ng-click="vm.showModalWaybillDetails(waybill.id)" ng-if="waybill.state == 'CREATED'">
                         <span class="glyphicon glyphicon glyphicon-list-alt"></span>&nbsp;Handle
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm"
-                            ng-click="vm.showModalWaybillDetails(waybill.id)" ng-if="waybill.state == 'CHECKED'">
+                    <button type="button" class="btn btn-default btn-sm"
+                            ng-click="vm.showModalWaybillDetails(waybill.id)" ng-if="waybill.state == 'CHECKED' || waybill.state == 'DELIVERED'">
                         <span class="glyphicon glyphicon glyphicon-eye-open"></span>&nbsp;Details
                     </button>
                 </div>

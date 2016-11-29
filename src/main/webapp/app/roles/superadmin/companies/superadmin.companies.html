@@ -7,31 +7,30 @@
 <div ng-if="!vm.error">
     <div id="control-panel">
         <a href="#/superadmin/company/create" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Create</a>
-        <a href="" ng-click="vm.deleteSelectedCompany()" class="btn btn-admin"><span
-            class="glyphicon glyphicon-remove"></span>Delete</a>
+
     </div>
 
-    Show:
-    <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage" ng-change="vm.changeItemsPerPage()">
-    </select>
+    <div id="control-table">
+        <span class="select-show-title">Show:</span>
+        <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage"
+                ng-change="vm.changeItemsPerPage()" class="btn btn-default">
+        </select>
+    </div>
 
     <table class="table table-hover">
         <thead>
 
         <tr>
-            <th><input type="checkbox" ng-model="vm.checkedAll" ng-change="vm.changeStateCheckbox()"></th>
             <th>Name company</th>
             <th>Status</th>
             <th>Login</th>
             <th>Email</th>
-            <th></th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="company in vm.companies">
-            <td><input type="checkbox" ng-init="vm.selected[$index] = false" ng-model="vm.selected[$index]"></td>
             <td><a href="#/superadmin/companies/{{company.id}}">{{company.name}}</a></td>
-            <td class="text-align-center">
+            <td style="width:100px;">
                 <span ng-if="company.status == 'ACTIVE'" ng-click="vm.toggleStatus(company.id)"
                       class="label label-success">ACTIVE</span>
                 <span ng-if="company.status == 'DEACTIVATE'" ng-click="vm.toggleStatus(company.id)"
@@ -39,20 +38,17 @@
             </td>
             <td>{{company.users[0].login}}</td>
             <td>{{company.users[0].email}}</td>
-            <td>
-                <span ng-click="vm.deleteCompany(company.id)" class="glyphicon glyphicon-trash"></span>
-            </td>
         </tr>
         </tbody>
     </table>
 
-    <div class="text-center">
+    <div ng-if="vm.totalItems > vm.itemsPerPage ">
         <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
         <uib-pagination class="pagination-sm"
                         total-items="vm.totalItems"
-                        items-per-page = "vm.itemsPerPage"
-                        boundary-link-numbers = "true"
-                        rotate = "true"
+                        items-per-page="vm.itemsPerPage"
+                        boundary-link-numbers="true"
+                        rotate="true"
                         ng-model="vm.page"
                         ng-change="vm.transition()">
         </uib-pagination>

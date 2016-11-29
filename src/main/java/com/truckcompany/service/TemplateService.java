@@ -1,5 +1,6 @@
 package com.truckcompany.service;
 
+import com.sun.mail.util.MailConnectException;
 import com.truckcompany.domain.Template;
 import com.truckcompany.domain.User;
 import com.truckcompany.repository.TemplateRepository;
@@ -11,10 +12,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSendException;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -33,13 +39,15 @@ public class TemplateService {
     private UserRepository userRepository;
     @Inject
     private TemplateRepository templateRepository;
+    @Inject
+    private MailService mailService;
 
 
-    public Template getTemplate(long id){
+    public Template getTemplate(long id) {
         return templateRepository.findOneWithRecipientAndAdmin(id);
     }
 
-    public Page<Template> getTemplatesCreatedByCurrentAdmin(Pageable page){
+    public Page<Template> getTemplatesCreatedByCurrentAdmin(Pageable page) {
         if (!SecurityUtils.isCurrentUserInRole("ROLE_ADMIN")) return new PageImpl<Template>(Collections.emptyList());
 
         Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
@@ -48,7 +56,7 @@ public class TemplateService {
         return templateRepository.findByTemplateCreatedByAdmin(admin, page);
     }
 
-    public List<Template> getTemplatesCreatedByCurrentAdmin(){
+    public List<Template> getTemplatesCreatedByCurrentAdmin() {
         if (!SecurityUtils.isCurrentUserInRole("ROLE_ADMIN")) return Collections.emptyList();
 
         Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
@@ -57,7 +65,7 @@ public class TemplateService {
         return templateRepository.findByTemplateCreatedByAdmin(admin);
     }
 
-    public Template createTemplate(ManagedTemplateVM template){
+    public Template createTemplate(ManagedTemplateVM template) {
         Template newTemplate = new Template();
         newTemplate.setName(template.getName());
         newTemplate.setBirthday(template.getBirthday());
@@ -76,7 +84,7 @@ public class TemplateService {
         return newTemplate;
     }
 
-    public Template updateTemplate(ManagedTemplateVM templateVM){
+    public Template updateTemplate(ManagedTemplateVM templateVM) {
         Template template = templateRepository.findOne(templateVM.getId());
 
         template.setName(templateVM.getName());
@@ -97,10 +105,11 @@ public class TemplateService {
 
     }
 
-    public void deleteTemplates(Long[] idTemplates){
-        for (Long id : idTemplates){
+    public void deleteTemplates(Long[] idTemplates) {
+        for (Long id : idTemplates) {
             templateRepository.delete(id);
         }
     }
+
 
 }

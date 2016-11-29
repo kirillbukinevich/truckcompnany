@@ -62,7 +62,7 @@ public class WaybillResource {
         if (authorities.contains(new SimpleGrantedAuthority("ROLE_DRIVER")) || authorities.contains(new SimpleGrantedAuthority("ROLE_MANAGER"))) {
             List<WaybillDTO> waybills = waybillFacade.findWaybills();
             HttpHeaders headers = HeaderUtil.createAlert("waybill.getAll", null);
-            return new ResponseEntity(waybills, headers, HttpStatus.OK);
+            return new ResponseEntity<>(waybills, headers, HttpStatus.OK);
         }
         else if (authorities.contains(new SimpleGrantedAuthority("ROLE_DISPATCHER"))){
             Page<WaybillDTO> page = waybillFacade.findWaybills(pageable);
@@ -138,7 +138,7 @@ public class WaybillResource {
         Waybill existingWaybill = waybillRepository.findOne(managedWaybillVM.getId());
 
         if (existingWaybill == null)
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("waybillManagement", "waybilldontexist", "Waybill doesn't exist!")).body(null);
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("waybillManagement", "waybilldoesntexist", "Waybill doesn't exist!")).body(null);
 
         waybillService.updateWaybill(managedWaybillVM);
         return ResponseEntity.ok()
