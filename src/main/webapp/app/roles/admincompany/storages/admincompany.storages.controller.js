@@ -93,7 +93,6 @@
 
         vm.searchStorage = function (event) {
 
-            if (event.which === 13) {
                 if (vm.searchQuery.trim() == "") {
                     vm.isModeSearch = false;
                     Storage.query({
@@ -116,7 +115,7 @@
                         }
                     )
                 }
-            }
+
 
 
         }

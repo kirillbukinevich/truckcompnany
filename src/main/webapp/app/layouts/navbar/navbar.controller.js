@@ -28,6 +28,7 @@
         vm.collapseNavbar = collapseNavbar;
         vm.$state = $state;
 
+        getAccount();
 
 
         function getAccount() {

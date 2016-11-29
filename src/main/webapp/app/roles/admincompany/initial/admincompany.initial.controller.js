@@ -9,65 +9,36 @@
         .module('truckCompanyApp')
         .controller('AdmincompanyInitialController', AdmincompanyInitialController);
 
-    AdmincompanyInitialController.$inject = ['Principal', '$http'];
+    AdmincompanyInitialController.$inject = ['Principal', '$http', '$timeout', '$scope'];
 
-    function AdmincompanyInitialController(Principal, $http) {
+    function AdmincompanyInitialController(Principal, $http, $timeout, $scope) {
         var vm = this;
 
         vm.load = load;
         vm.load();
 
-        function load() {
-            $http({
-                method: 'GET',
-                url: '/api/admin/statistic'
-            }).then(function successCallback(response) {
-                console.log("Success")
-            }, function errorCallback(response) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
-            });
+        vm.getColorStyle = function(color){
+            return {
+                background: color,
+            }
         }
 
+
+
+
+
         var colors = Highcharts.getOptions().colors;
-        vm.categories = ['MSIE', 'Firefox', 'Chrome', 'Safari', 'Opera'];
-        vm.data = [{
-            y: 56.33,
-            color: colors[0],
-            name: "Dispatcher"
-        }, {
-            y: 10.38,
-            color: colors[1],
-            name: "Driver"
-        }, {
-            y: 24.03,
-            color: colors[2],
-            name: "Owner"
-        }, {
-            y: 4.77,
-            color: colors[3],
-            name: "Driver"
-        }, {
-            y: 0.91,
-            color: colors[4],
-            name: "Manager",
-            count: 5,
-
-        }, {
-            y: 0.2,
-            color: colors[5],
-
-        }];
 
 
-        vm.pie ={
+
+
+
+        vm.pie = {
             chart: {
                 type: 'pie',
-                margin: [15,15,15,15],
+                margin: [15, 15, 15, 15],
                 height: 180,
-
             },
-            title: 'Employee',
             tooltip: {
                 pointFormat: '{series.data.name} <b>{point.percentage:.1f}%</b>'
             },
@@ -75,7 +46,7 @@
                 pie: {
                     size: '100%',
                     slicedOffset: 0,
-                    innerSize:'50%',
+                    innerSize: '50%',
                     allowPointSelect: true,
                     cursor: 'pointer',
                     dataLabels: {
@@ -94,18 +65,21 @@
         };
 
 
-
-
-        vm.chartConfig = {
+        vm.chartConfigUserRole = {
             options: vm.pie,
+            title:" ",
             series: [{
-                data: vm.data,
+                data: [],
             }],
-
-            func: function (chart) {
-                //setup some logic for the chart
-            }
         };
+
+        vm.chartConfigTruckStatus = {
+            options: vm.pie,
+            title:" ",
+            series: [{
+                data: [],
+            }],
+        }
 
         vm.stackedBar = {
             chart: {
@@ -115,8 +89,8 @@
             xAxis: {
                 categories: ['Africa', 'America', 'Asia', 'Europe', 'Oceania'],
                 /*title: {
-                    text: null
-                }*/
+                 text: null
+                 }*/
             },
             yAxis: {
                 min: 0,
@@ -140,7 +114,7 @@
             }
         }
 
-        vm.chartConfigStackedBar = {
+        vm.chartConfigTruckModel = {
             options: vm.stackedBar,
             series: [{
                 data: [107, 31, 635, 203, 2]
@@ -148,19 +122,67 @@
         }
 
 
-
-
         getAccount();
 
         function getAccount() {
             Principal.identity().then(function (account) {
                 vm.account = account;
-                /*var role = (vm.account.authorities != undefined) ? vm.account.authorities[0] : '';
-                 vm.role = getNameRoleForUser(role);*/
                 console.log(account);
             });
         }
 
+        function load() {
+            $http({
+                method: 'GET',
+                url: '/api/admin/statistic'
+            }).then(function successCallback(response) {
+                vm.statistic = response.data;
+
+                console.log(vm.statistic);
+
+                vm.usersRole =getDataForPie(vm.statistic.statisticEmployeeRole, vm.statistic.totalEmployees);
+                vm.chartConfigUserRole.series = [{data: vm.usersRole}];
+
+                vm.truckStatus = getDataForPie(vm.statistic.statisticTruckStatus, vm.statistic.totalTrucks);
+                vm.chartConfigTruckStatus.series = [{data:  vm.truckStatus}]
+
+
+
+                vm.chartConfigTruckModel.series = [{data: getValue(vm.statistic.statisticTruckModel)}];
+                vm.chartConfigTruckModel.options.xAxis.categories = getKyes(vm.statistic.statisticTruckModel)
+                console.log(getKyes(vm.statistic.statisticTruckModel));
+
+                var chartTruckModel = vm.chartConfigTruckModel.getHighcharts();
+
+
+                console.log(vm.chartConfigTruckModel.getHighcharts())
+
+
+
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+            });
+        }
+
+
+
+        function getDataForPie(userStatistic, totalUser) {
+            var i = 0;
+            return Object.keys(userStatistic).map(key => ({
+                    name: key,
+                    color: colors[i++],
+                    y: userStatistic[key]*100/totalUser,
+                    count: userStatistic[key]
+                }));
+        }
+
+        function getKyes(object){
+            return Object.keys(object).map(key => key);
+        }
+        function getValue(object){
+            return Object.keys(object).map(key => object[key])
+        }
 
     }
 })();
