@@ -20,6 +20,17 @@
     -->
     <changeSet id="00000000000001" author="jhipster">
 
+        <createTable tableName="mail_error">
+            <column name="id" type="int" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="template_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_last_sending" type="date" />
+            <column name="cause" type="varchar(50)" />
+        </createTable>
+
         <createTable tableName="tc_company">
             <column name="id" type="int" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>

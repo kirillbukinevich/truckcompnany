@@ -1,8 +1,10 @@
 package com.truckcompany.service;
 
 import com.sun.mail.util.MailConnectException;
+import com.truckcompany.domain.MailError;
 import com.truckcompany.domain.Template;
 import com.truckcompany.domain.User;
+import com.truckcompany.repository.MailErrorRepository;
 import com.truckcompany.repository.TemplateRepository;
 import com.truckcompany.repository.UserRepository;
 import com.truckcompany.security.SecurityUtils;
@@ -41,6 +43,8 @@ public class TemplateService {
     private TemplateRepository templateRepository;
     @Inject
     private MailService mailService;
+    @Inject
+    private MailErrorRepository mailErrorRepository;
 
 
     public Template getTemplate(long id) {
@@ -109,6 +113,21 @@ public class TemplateService {
         for (Long id : idTemplates) {
             templateRepository.delete(id);
         }
+    }
+
+    @Scheduled(cron = "0 * * * * *")
+    public void sendBirtdayCards(){
+        log.debug("Sending of birthdaycard has started for {}", ZonedDateTime.now());
+        templateRepository.findTemplateByBirthdayToday().stream().parallel()
+            .forEach( template -> mailService.sendBirthdayCard(template));
+    }
+
+    public boolean sendBirthdayCardAgain(Long errorId){
+        MailError error = mailErrorRepository.findOneWithTemplateAndRecipients(errorId);
+        if (error == null) return false;
+        Template template = error.getTemplate();
+        log.debug("Sending of birthdayCard again for {}", template.getRecipient().getEmail());
+        return mailService.sendBirthdayCardOnce(template);
     }
 
 
