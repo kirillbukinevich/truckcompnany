@@ -69,6 +69,12 @@ public class TemplateResource {
     @Inject
     private MailErrorRepository mailErrorRepository;
 
+    @RequestMapping(value = "/templates/sendbirthdaycards", method = GET)
+    public ResponseEntity<Void> executeSendBirthdaycardNow(){
+        templateService.sendBirtdayCards();
+        return new ResponseEntity<Void>(OK);
+    }
+
     @RequestMapping(value = "/templates/errors", method = GET)
     public ResponseEntity<List<ManagedMailErrorVM>> getAllErrors() {
         List<MailError> mailErrors = mailErrorRepository.findAllWithTemplateAndRecipients();

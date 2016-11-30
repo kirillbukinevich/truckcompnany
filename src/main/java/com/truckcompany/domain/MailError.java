@@ -2,6 +2,8 @@ package com.truckcompany.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.truckcompany.domain.User;
+import com.truckcompany.domain.enums.CompanyStatus;
+import com.truckcompany.domain.enums.MailErrorStatus;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -28,6 +30,10 @@ public class MailError {
 
     @Column(name = "cause")
     private String cause;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "status")
+    private MailErrorStatus status;
 
     public Long getId() {
         return id;
@@ -59,6 +65,14 @@ public class MailError {
 
     public void setCause(String cause) {
         this.cause = cause;
+    }
+
+    public MailErrorStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(MailErrorStatus status) {
+        this.status = status;
     }
 }
 

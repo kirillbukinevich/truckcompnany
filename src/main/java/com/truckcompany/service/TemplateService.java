@@ -4,6 +4,7 @@ import com.sun.mail.util.MailConnectException;
 import com.truckcompany.domain.MailError;
 import com.truckcompany.domain.Template;
 import com.truckcompany.domain.User;
+import com.truckcompany.domain.enums.MailErrorStatus;
 import com.truckcompany.repository.MailErrorRepository;
 import com.truckcompany.repository.TemplateRepository;
 import com.truckcompany.repository.UserRepository;
@@ -115,7 +116,7 @@ public class TemplateService {
         }
     }
 
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 7 * * *")
     public void sendBirtdayCards(){
         log.debug("Sending of birthdaycard has started for {}", ZonedDateTime.now());
         templateRepository.findTemplateByBirthdayToday().stream().parallel()
@@ -127,7 +128,13 @@ public class TemplateService {
         if (error == null) return false;
         Template template = error.getTemplate();
         log.debug("Sending of birthdayCard again for {}", template.getRecipient().getEmail());
-        return mailService.sendBirthdayCardOnce(template);
+        boolean isSuccess =  mailService.sendBirthdayCardOnce(template);
+        if (isSuccess){
+            error.setStatus(MailErrorStatus.SUCCESS_MANUALLY);
+            mailErrorRepository.save(error);
+            return true;
+        }
+        return false;
     }
 
 

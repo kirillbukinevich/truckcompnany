@@ -5,6 +5,7 @@ import com.truckcompany.domain.MailError;
 import com.truckcompany.domain.Template;
 import com.truckcompany.domain.User;
 
+import com.truckcompany.domain.enums.MailErrorStatus;
 import com.truckcompany.repository.MailErrorRepository;
 import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
@@ -28,6 +29,8 @@ import java.util.Locale;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
+
+import static com.truckcompany.domain.enums.MailErrorStatus.*;
 
 /**
  * Service for sending e-mails.
@@ -83,6 +86,7 @@ public class MailService {
         MailError mailError = new MailError();
         mailError.setLastSending(ZonedDateTime.now());
         mailError.setTemplate(template);
+        mailError.setStatus(ERROR_AUTOMATICALLY);
         mailErrorRepository.save(mailError);
     }
 

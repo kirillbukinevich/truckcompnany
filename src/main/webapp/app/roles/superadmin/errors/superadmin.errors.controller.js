@@ -60,15 +60,31 @@
             vm.messageError = 'Problems with connection.'
         }
 
-        function sendAgain(idError) {
+        vm.sendEmails = function(){
+            $http({
+                method: "GET",
+                url: "/api/templates/sendbirthdaycards"
+            }).then(
+                function () {
+                    console.log("Task was executed");
+                }, function () {
+                    console.log("Error")
+                });
+        }
+
+        function sendAgain(idError, event) {
+           console.log(event.currentTarget)
+            event.currentTarget.setAttribute('disabled', 'disabled');
             $http({
                 method: "GET",
                 url: "/api/templates/sendagain/" + idError
             }).then(
                 function () {
                     console.log("Message send again success");
+                    loadPage();
                 }, function () {
-                    console.log("Error")
+                    console.log("Error");
+                    event.currentTarget.removeAttribute('disabled');
                 });
         }
 

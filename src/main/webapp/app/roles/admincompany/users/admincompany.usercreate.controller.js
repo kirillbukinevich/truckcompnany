@@ -30,6 +30,7 @@
         vm.messageError = '';
 
         function create(){
+            console.log(vm.user);
             $http({
                 method: 'POST',
                 url: '/api/company/employee',

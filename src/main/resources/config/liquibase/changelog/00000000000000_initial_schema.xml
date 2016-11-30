@@ -29,6 +29,8 @@
             </column>
             <column name="date_last_sending" type="date" />
             <column name="cause" type="varchar(50)" />
+            <column name="status" type="ENUM('ERROR_AUTOMATICALLY', 'SUCCESS_MANUALLY')" defaultValue="ERROR_AUTOMATICALLY">
+            </column>
         </createTable>
 
         <createTable tableName="tc_company">

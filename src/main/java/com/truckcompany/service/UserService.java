@@ -31,6 +31,8 @@ import javax.servlet.http.Part;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+
 /**
  * Service class for managing users.
  */
@@ -167,7 +169,7 @@ public class UserService {
         Company company = companyRepository.getOne(userAdmin.getCompany().getId());
         user.setCompany(company);
 
-        user.setActivationKey(passwordEncoder.encode(new Date().toString()).substring(0, 20));
+        user.setActivationKey(UUID.randomUUID().toString().replaceAll("-", EMPTY).substring(0,20));
         user.setActivated(true);
         userRepository.save(user);
         log.debug("Created Information for Employee: {}", user);

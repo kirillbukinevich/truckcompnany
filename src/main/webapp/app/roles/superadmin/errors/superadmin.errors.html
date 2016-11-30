@@ -6,7 +6,7 @@
 
 <div ng-if="!vm.error">
     <div id="control-panel">
-       <!-- <a href="#/superadmin/company/create" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Create</a>-->
+       <a ng-click="vm.sendEmails()" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Send emails now.</a>
 
     </div>
 
@@ -23,18 +23,20 @@
         <tr>
             <th>Recipient</th>
             <th>Error date</th>
-            <th>Cause</th>
+            <th>Status</th>
             <th></th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="error in vm.mailErrors">
             <td>{{error.template.recipient.email}}</td>
-            <td>{{error.lastSending | date:'dd MMMM'}}</td>
-            <td>{{error.cause}}</td>
+            <td>{{error.lastSending | date:'dd MMMM yyyy'}}</td>
+            <td>
+                <span class="label label-danger" ng-if = "error.status === 'ERROR_AUTOMATICALLY'">AUTOMATICALLY ERROR</span>
+                <span class="label label-success" ng-if = "error.status === 'SUCCESS_MANUALLY'">MANUALLY SUCCESS</span>
             <td>
                 <div class="btn-group flex-btn-group-container">
-                    <a ng-click="vm.sendAgain(error.id)" type="button" class="btn btn-success btn-sm ng-scope">Send again</a>
+                    <button ng-if = "error.status === 'ERROR_AUTOMATICALLY'" ng-click="vm.sendAgain(error.id, $event)" type="button" class="btn btn-success btn-sm ng-scope">Send again</button>
                     <a ng-click="vm.deleteError(error.id)" type="button" class="btn btn-danger btn-sm ng-scope">Delete</a>
                 </div>
 
