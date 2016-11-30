@@ -14,6 +14,11 @@
         var vm = this;
         vm.waybills = Waybill.query();
 
+        $scope.$on('waybillState', function (event, data) {
+            console.log(data);
+            vm.waybills[data.id - 1] = data;
+        });
+
         vm.showModalWaybillDetails = function (id) {
             vm.modalConfirmWaybill = $uibModal.open({
                 templateUrl: 'app/roles/manager/waybill/manager.waybill-details.html',

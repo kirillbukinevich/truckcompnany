@@ -109,18 +109,34 @@
         <div class="row">
             <div class="col-md-1"></div>
             <div class="col-md-4">
-                <div class="form-group">
+                <!--<div class="form-group">-->
                     <label for="manager" class="pull-left">Checked by:</label>
                     <input type="text" id="manager" class="form-control" name="confirmedBy"
                            ng-model="vm.fullName" readonly>
-                </div>
+                <!--</div>-->
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="checkDate" class="pull-left">At:</label>
-                    <input type="date" id="checkDate" class="form-control" name="checkDate"
-                           ng-model="vm.waybill.dateChecked">
+                    <div class="input-group" style="clear:both;">
+                        <input type="text"
+                               id="checkDate"
+                               name="checkDate"
+                               class="form-control"
+                               datetime-picker="dd MMM yyyy HH:mm"
+                               ng-model="vm.waybill.dateChecked"
+                               is-open="vm.dateCheckedPicker.open"
+                               enable-time="true"
+                               datepicker-options="vm.dateCheckedPicker.datepickerOptions"/>
+                        <span class="input-group-btn">
+                        <button type="button" class="btn btn-default"
+                                ng-click="vm.openCalendar($event, 'dateCheckedPicker')"><i
+                            class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </div>
+                    <!--<input type="date" id="checkDate" class="form-control" name="checkDate"-->
+                    <!--ng-model="vm.waybill.dateChecked">-->
                 </div>
             </div>
         </div>
