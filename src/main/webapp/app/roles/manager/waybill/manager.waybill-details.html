@@ -79,9 +79,9 @@
                             <div class="text-center">{{stuff.uncheckedNumber}}</div>
                         </td>
                         <td ng-if="vm.waybill.state != 'REJECTED'">
-                            <input ng-if="vm.waybill.state == 'CREATED'" ng-model="stuff.acceptedNumber" size="5"
-                                   class="form-control input-sm text-center"
-                                   value="{{stuff.uncheckedNumber}}">
+                            <input type="number" ng-if="vm.waybill.state == 'CREATED'" ng-model="stuff.acceptedNumber"
+                                   size="5" min="0" max="{{stuff.uncheckedNumber}}"
+                                   class="form-control input-sm text-center" value="{{stuff.uncheckedNumber}}">
                             <div ng-if="vm.waybill.state != 'CREATED'" class="text-center">
                                 {{stuff.acceptedNumber}}
                             </div>
@@ -119,8 +119,23 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="checkDate" class="pull-left">At:</label>
-                    <input type="date" id="checkDate" class="form-control" name="checkDate"
-                           ng-model="vm.waybill.dateChecked">
+                    <div class="input-group" style="clear:both;">
+                        <input type="text"
+                               id="checkDate"
+                               name="checkDate"
+                               class="form-control"
+                               datetime-picker="dd MMM yyyy HH:mm"
+                               ng-model="vm.waybill.dateChecked"
+                               is-open="vm.dateCheckedPicker.open"
+                               enable-time="true"
+                               datepicker-options="vm.dateCheckedPicker.datepickerOptions"/>
+                        <span class="input-group-btn">
+                        <button type="button" class="btn btn-default"
+                                ng-click="vm.openCalendar($event, 'dateCheckedPicker')"><i
+                            class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </div>
+
                 </div>
             </div>
         </div>
