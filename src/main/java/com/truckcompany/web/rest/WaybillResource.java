@@ -2,6 +2,7 @@ package com.truckcompany.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.Waybill;
+import com.truckcompany.domain.enums.WaybillState;
 import com.truckcompany.repository.WaybillRepository;
 import com.truckcompany.service.WaybillService;
 import com.truckcompany.service.dto.RouteListDTO;
@@ -136,7 +137,6 @@ public class WaybillResource {
     public ResponseEntity updateWaybill(@RequestBody ManagedWaybillVM managedWaybillVM) {
         log.debug("REST request to update Waybill : {}", managedWaybillVM);
         Waybill existingWaybill = waybillRepository.findOne(managedWaybillVM.getId());
-
         if (existingWaybill == null)
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("waybillManagement", "waybilldoesntexist", "Waybill doesn't exist!")).body(null);
 
@@ -145,5 +145,7 @@ public class WaybillResource {
             .headers(HeaderUtil.createAlert("userManagement.updated", managedWaybillVM.getId().toString()))
             .body(waybillService.getWaybillById(managedWaybillVM.getId()));
     }
+
+
 }
 
