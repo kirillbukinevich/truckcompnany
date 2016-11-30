@@ -14,6 +14,8 @@
         vm.loadData = loadData;
         vm.loadConsumptionData = loadConsumptionData;
         vm.downloadConsumptionReport = downloadConsumptionReport;
+        vm.loadLossDate = loadLossData;
+        vm.downloadLossReport = downloadLossReport;
 
         vm.datePicker = {
             startDate: null,
@@ -42,6 +44,10 @@
             opens: 'left'
         };
 
+        vm.lossDatePicker = {
+
+        };
+
         vm.loadData();
 
         // graph redrawing
@@ -53,6 +59,7 @@
 
         function loadData() {
             vm.loadConsumptionData();
+            vm.loadLossDate();
         }
 
         function loadConsumptionData(){
@@ -71,6 +78,27 @@
                     data: vm.consumptionChartData
                 });
                 console.log(vm.consumptionChartData);
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+            });
+        }
+
+        function loadLossData(){
+            $http({
+                method: 'GET',
+                url: '/api/companyowner/statistic/loss',
+                params: {
+                    startDate: !!vm.lossDatePicker.startDate? vm.lossDatePicker.startDate.toISOString() : null,
+                    endDate: !!vm.lossDatePicker.endDate? vm.lossDatePicker.endDate.toISOString() : null
+                }
+            }).then(function successCallback(response) {
+                vm.lossChartData = response.data;
+                vm.lossChartConfig.series.push({
+                    id: 1,
+                    data: vm.lossChartData
+                });
+                console.log('Data load: ' + vm.lossChartData);
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
@@ -100,6 +128,29 @@
             });
         }
 
+        function downloadLossReport() {
+            $http({
+                method: 'GET',
+                url: '/api/companyowner/statistic/xls/loss',
+                params : {
+                    startDate: !!vm.lossDatePicker.startDate? vm.lossDatePicker.startDate.toISOString() : null,
+                    endDate: !!vm.lossDatePicker.endDate? vm.lossDatePicker.endDate.toISOString() : null
+                },
+                responseType: 'arraybuffer'
+            }).
+            success(function(data) {
+                var url = URL.createObjectURL(new Blob([data]));
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = 'loss-report.xls';
+                a.target = '_blank';
+                a.click();
+            }).
+            error(function(data, status, headers, config) {
+                // handle error
+            });
+        }
+
 
         vm.commonChartConfig = {
             options: {
@@ -121,7 +172,28 @@
                 name: 'Consumption',
                 data: []
             }]
+        };
 
+        vm.lossChartConfig = {
+            options: {
+                chart: {
+                    type: 'areaspline'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    labels: {
+                        format: '{value:%e of %b}',
+                    }
+                }
+            },
+            title :{
+                text: "Loss"
+            },
+            series:[{
+                id: 1,
+               // name: 'Consumption',
+                data: []
+            }]
         };
 
         getAccount();

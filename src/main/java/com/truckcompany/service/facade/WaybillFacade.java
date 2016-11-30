@@ -17,4 +17,6 @@ public interface WaybillFacade {
     List<WaybillDTO> findWaybillsWithRouteListCreationDateBetween(ZonedDateTime fromDate, ZonedDateTime toDate);
 
     List<WaybillDTO> findWaybillsWithState(WaybillState state);
+
+    List<WaybillDTO> findWaybillsWithStateAndDateBetween(WaybillState state, ZonedDateTime fromDate, ZonedDateTime toDate);
 }

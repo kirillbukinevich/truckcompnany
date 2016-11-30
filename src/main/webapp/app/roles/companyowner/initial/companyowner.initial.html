@@ -1,25 +1,52 @@
 <h2 class="text-align-center">Welcome. You are logged as Company Owner for company <b>{{vm.account.company.name}}</b></h2>
 
-<div id="control-panel">
+<div>
+
+    <div>
+        <div class="row">
+            <div class="col-md-4">
+                <button type="button" class="btn btn-success btn-sm"
+                        ng-click="vm.downloadConsumptionReport()" ng-if="vm.consumptionChartDate.size != 0">
+                    <span class="glyphicon glyphicon glyphicon-list-alt"></span>&nbsp;Report
+                </button>
+            </div>
+
+            <div class="col pull-right" >
+                <div style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%"
+                     ng-model="vm.datePicker" options="vm.datePickerOpts" date-range-picker name="datepicker" >
+                    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                    <span></span> <b class="caret"></b>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <highchart id="commonChart" config="vm.commonChartConfig" ng-if="render"></highchart>
+    </div>
+
+</div>
+
+<div>
     <div class="row">
         <div class="col-md-4">
             <button type="button" class="btn btn-success btn-sm"
-                    ng-click="vm.downloadConsumptionReport()" ng-if="vm.consumptionChartDate.size != 0">
+                    ng-click="vm.downloadLossReport()" ng-if="vm.lossChartDate.size != 0">
                 <span class="glyphicon glyphicon glyphicon-list-alt"></span>&nbsp;Report
             </button>
         </div>
 
         <div class="col pull-right" >
             <div style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%"
-                 ng-model="vm.datePicker" options="vm.datePickerOpts" date-range-picker name="datepicker" >
+                 ng-model="vm.lossDatePicker" options="vm.lossDatePickerOpts" date-range-picker name="lossDatepicker" >
                 <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
                 <span></span> <b class="caret"></b>
             </div>
 
         </div>
     </div>
-</div>
-
-<div class="row">
-    <highchart id="commonChart" config="vm.commonChartConfig" ng-if="render"></highchart>
+    <div class="row">
+        <highchart id="lossChart" config="vm.lossChartConfig" ng-if="render"></highchart>
+    </div>
 </div>

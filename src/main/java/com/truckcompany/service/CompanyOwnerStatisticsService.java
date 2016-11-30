@@ -1,6 +1,8 @@
 package com.truckcompany.service;
 
+import com.truckcompany.domain.Waybill;
 import com.truckcompany.domain.enums.WaybillState;
+import com.truckcompany.service.dto.GoodsDTO;
 import com.truckcompany.service.dto.RouteListDTO;
 import com.truckcompany.service.dto.WaybillDTO;
 import com.truckcompany.service.facade.RouteListFacade;
@@ -17,6 +19,7 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -34,8 +37,6 @@ public class CompanyOwnerStatisticsService {
     @Inject
     private WaybillFacade waybillFacade;
 
-    /*@Inject
-    private Goods*/
 
     public List<List<Long>> getConsumptionStatistics(){
         List<RouteListDTO> routeListDTOs = routeListFacade.findRouteLists();
@@ -79,62 +80,25 @@ public class CompanyOwnerStatisticsService {
 
     public List<List<Long>> getLossStatistics(){
         List<WaybillDTO> waybills = waybillFacade.findWaybillsWithState(WaybillState.DELIVERED);
+        return createGraphLossData(waybills);
 
-       /* waybills.stream()
-            .map(WaybillDTO::getGo)*/
-        //List<RouteListDTO> routeListDTOs = routeListFacade.findRouteLists();
-/*
-        Map<Long, Long> map = routeListDTOs.stream()
-            .collect(Collectors.toMap(s-> s.getCreationDate().toInstant().toEpochMilli(),
-                s-> s.getTruck().getConsumption()*s.getFuelCost()*s.getDistance(),
-                (a,b) -> a+ b));
-
-        List<List<Long>> result = new ArrayList<>();
-        for (Map.Entry<Long, Long> entry : map.entrySet()){
-            ArrayList<Long> list = new ArrayList<>();
-            list.add(entry.getKey());
-            list.add(entry.getValue());
-            result.add(list);
-        }
-
-        Collections.sort(result, (o1, o2) -> o1.get(0).compareTo(o2.get(0)));
-        return result;*/
-        return null;
     }
 
     public List<List<Long>> getLossStatistics(ZonedDateTime fromDate, ZonedDateTime toDate){
-        /*List<RouteListDTO> routeListDTOs = routeListFacade.findRouteLists(fromDate, toDate);
-
-        Map<Long, Long> map = routeListDTOs.stream()
-            .collect(Collectors.toMap(s-> s.getCreationDate().toInstant().toEpochMilli(),
-                s-> s.getTruck().getConsumption()*s.getFuelCost()*s.getDistance(),
-                (a,b) -> a+ b));
-
-        List<List<Long>> result = new ArrayList<>();
-        for (Map.Entry<Long, Long> entry : map.entrySet()){
-            ArrayList<Long> list = new ArrayList<>();
-            list.add(entry.getKey());
-            list.add(entry.getValue());
-            result.add(list);
-        }
-
-        Collections.sort(result, (o1, o2) -> o1.get(0).compareTo(o2.get(0)));
-        return result;*/
-        return null;
+        List<WaybillDTO> waybills = waybillFacade.findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED,
+            fromDate, toDate);
+        return createGraphLossData(waybills);
     }
 
     public HSSFWorkbook getConsumptionReport(){
         List<List<Long>> statistics = getConsumptionStatistics();
         return createConsumptionReport(statistics);
-
     }
 
     public HSSFWorkbook getConsumptionReport(ZonedDateTime fromDate, ZonedDateTime toDate){
         List<List<Long>> statistics = getConsumptionStatistics(fromDate, toDate);
         return createConsumptionReport(statistics);
     }
-
-
 
     public HSSFWorkbook getRouteListsReport(ZonedDateTime fromDate, ZonedDateTime toDate){
         List<WaybillDTO> waybills = waybillFacade.findWaybillsWithRouteListCreationDateBetween(fromDate, toDate);
@@ -178,6 +142,11 @@ public class CompanyOwnerStatisticsService {
         setAutoSizeForRouteListReport(sheet, new int[]{1,2, 3,4,5,6,7});
 
         return book;
+    }
+
+    public HSSFWorkbook getLossReport(){
+        List<List<Long>> statistics = getLossStatistics();
+        return createLossReport(statistics);
     }
 
     private void createHeaderForRouteListReport(Sheet sheet){
@@ -297,6 +266,62 @@ public class CompanyOwnerStatisticsService {
 
         return book;
 
+    }
+
+    private List<List<Long>> createGraphLossData(List<WaybillDTO> waybills){
+        Function<WaybillDTO, Long> valueMapper = s -> s.getGoods().stream()
+            .mapToLong(goods -> goods.getAcceptedNumber() - goods.getDeliveredNumber())
+            .sum();
+
+        Map<Long, Long> map = waybills.stream()
+            .collect(Collectors.toMap(s -> s.getDate().toInstant().toEpochMilli(), valueMapper, (a,b) -> a +b));
+
+        List<List<Long>> result = new ArrayList<>();
+        for (Map.Entry<Long, Long> entry : map.entrySet()){
+            ArrayList<Long> list = new ArrayList<>();
+            list.add(entry.getKey());
+            list.add(entry.getValue());
+            result.add(list);
+        }
+
+        Collections.sort(result, (o1, o2) -> o1.get(0).compareTo(o2.get(0)));
+
+        return result;
+    }
+
+    private HSSFWorkbook createLossReport(List<List<Long>> statistics){
+        HSSFWorkbook book = new HSSFWorkbook();
+        Sheet sheet = book.createSheet("loss report");
+
+        DataFormat dataFormat = book.createDataFormat();
+        CellStyle dateStyle = book.createCellStyle();
+        dateStyle.setDataFormat(dataFormat.getFormat("dd.mm.yyyy"));
+
+        Row header = sheet.createRow(0);
+
+        Cell date = header.createCell(0);
+        date.setCellValue("Date");
+
+        Cell value = header.createCell(1);
+        value.setCellValue("Consumption amount");
+
+        int index = 1;
+
+        for (List<Long> record : statistics){
+            Row row = sheet.createRow(index++);
+
+            Cell dateCell = row.createCell(0);
+            dateCell.setCellStyle(dateStyle);
+            dateCell.setCellValue(GregorianCalendar.from(Instant.ofEpochMilli(record.get(0)).atZone(ZoneOffset.UTC)));
+
+            Cell valueCell = row.createCell(1);
+            valueCell.setCellValue(record.get(1));
+        }
+
+        sheet.autoSizeColumn(0);
+        sheet.autoSizeColumn(1);
+
+        return book;
     }
 
 }

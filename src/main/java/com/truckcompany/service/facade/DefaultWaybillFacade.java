@@ -108,6 +108,30 @@ public class DefaultWaybillFacade implements WaybillFacade {
     }
 
     @Override
+    public List<WaybillDTO> findWaybillsWithStateAndDateBetween(WaybillState state, ZonedDateTime fromDate, ZonedDateTime toDate) {
+        Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
+
+        if (optionalUser.isPresent()){
+            User user = optionalUser.get();
+
+            log.debug("Get waybills with state {}, date between {} and {} for user \'{}\'",state.toString(), fromDate,
+                toDate, user.getLogin());
+            List<WaybillDTO> waybills = emptyList();
+            if(isCurrentUserInRole("ROLE_COMPANYOWNER")){
+                waybills = waybillService.getWaybillByCompanyAndStateAndDateBetween(user.getCompany(), state,
+                    fromDate, toDate)
+                    .stream()
+                    .map(WaybillDTO::new)
+                    .collect(Collectors.toList());
+            }
+
+            return waybills;
+        }else {
+            return emptyList();
+        }
+    }
+
+    @Override
     public Page<WaybillDTO> findWaybills(Pageable pageable) {
         Page<Waybill> pageWaybills = new PageImpl<>(emptyList());
 

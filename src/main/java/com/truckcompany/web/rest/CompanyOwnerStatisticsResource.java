@@ -142,6 +142,38 @@ public class CompanyOwnerStatisticsResource {
     }
 
 
+    @RequestMapping(value = "/companyowner/statistic/xls/loss", method = RequestMethod.GET)
+    public ResponseEntity<ByteArrayResource> getLossReport(@RequestParam(value="startDate", required = false)
+                                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                      ZonedDateTime startDate,
+                                                                  @RequestParam(value="endDate", required = false)
+                                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                      ZonedDateTime endDate){
+        LOG.debug("REST get loss xls report from company owner");
+
+        ByteArrayResource byteResource = null;
+        Workbook workbook = null;
+        if (startDate== null || endDate == null){
+            workbook = statisticsService.getLossReport();
+        }
+        else{
+            //workbook = statisticsService.getConsumptionReport(startDate, endDate);
+        }
+        try{
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            outputStream.flush();
+
+            byteResource = new ByteArrayResource(outputStream.toByteArray());
+            outputStream.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(byteResource, HttpStatus.OK);
+    }
+
+
 
 
 }

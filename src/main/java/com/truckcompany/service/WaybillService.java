@@ -80,6 +80,13 @@ public class WaybillService {
         return waybillRepository.findByCompanyAndState(company, state);
     }
 
+    public List<Waybill> getWaybillByCompanyAndStateAndDateBetween(Company company, WaybillState state,
+                                                                   ZonedDateTime fromDate, ZonedDateTime toDate){
+        log.debug("Get waybill with state {}, date between {} and {} for company with id: {}", state.toString(),
+            fromDate, toDate, company.getId());
+        return waybillRepository.findByCompanyAndStateAndDateBetween(company, state, fromDate, toDate);
+    }
+
     public Page<Waybill> getPageWaybillByCompany(Pageable pageable, Company company){
         log.debug("Get waybills for company with id: {}", company.getId());
         return waybillRepository.findPageByCompany(company, pageable);
