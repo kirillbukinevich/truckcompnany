@@ -68,6 +68,7 @@ public class RouteListService {
             r.setArrivalStorage(storageRepository.getOne(managedRouteListVM.getArrivalStorage().getId()));
             r.setLeavingStorage(storageRepository.getOne(managedRouteListVM.getLeavingStorage().getId()));
             r.setTruck(truckRepository.getOne(managedRouteListVM.getTruck().getId()));
+            r.setState(managedRouteListVM.getState());
         });
     }
 
