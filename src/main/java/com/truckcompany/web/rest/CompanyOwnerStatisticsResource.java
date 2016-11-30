@@ -43,6 +43,7 @@ public class CompanyOwnerStatisticsResource {
     @Inject
     private RouteListFacade routeListFacade;
 
+/*
     @RequestMapping(value = "/companyowner/statistic/consumption", method = RequestMethod.GET)
     public ResponseEntity getConsumptionStatistics(){
         LOG.debug("REST get statistic from company owner");
@@ -51,6 +52,7 @@ public class CompanyOwnerStatisticsResource {
 
         return new ResponseEntity<>(stat, HttpStatus.OK);
     }
+*/
 
     @RequestMapping(value = "/companyowner/statistic/xls/routelists",
         method = RequestMethod.GET )

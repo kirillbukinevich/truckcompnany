@@ -36,6 +36,8 @@ public class Goods implements Serializable {
     @JoinColumn(name = "waybill_id", nullable = false)
     private Waybill waybill;
 
+    @Column(name = "price")
+    private Double price;
 
     public Integer getId() {
         return id;
@@ -97,5 +99,13 @@ public class Goods implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }

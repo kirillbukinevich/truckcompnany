@@ -117,7 +117,7 @@
             <column name="creation_date" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="fuel_cost" type="INT(11)"/>
+            <column name="fuel_cost" type="DECIMAL(8,2)"/>
             <column name="distance" type="INT(11)"/>
 
         </createTable>
@@ -152,11 +152,11 @@
             <column name="unchecked_number" type="varchar(45)"/>
             <column name="delivered_number" type="varchar(45)"/>
             <column name="type" type="varchar(45)"/>
-            <column name="state" type="ENUM('CHECKED', 'ACCEPTED','TRANSPORTATION','DELIVERED')">
+            <column name="state" type="ENUM('UNCHECKED', 'ACCEPTED','TRANSPORTATION','DELIVERED')">
                 <constraints nullable="false"/>
             </column>
-            <column name="waybill_id" type="int">
-            </column>
+            <column name="waybill_id" type="int"/>
+            <column name="price" type="DECIMAL(8,2)"/>
         </createTable>
 
 
@@ -170,7 +170,7 @@
             <column name="driver_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="state" type="ENUM('CHECKED', 'CREATED', 'DELIVERED')">
+            <column name="state" type="ENUM('CREATED', 'CHECKED', 'DELIVERED', 'REJECTED')">
                 <constraints nullable="false"/>
             </column>
             <column name="dispatcher_id" type="int">

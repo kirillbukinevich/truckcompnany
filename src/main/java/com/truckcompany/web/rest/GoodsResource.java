@@ -42,7 +42,7 @@ public class GoodsResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
-    @Secured(AuthoritiesConstants.USER)
+//    @Secured(AuthoritiesConstants.USER)
     public ResponseEntity<?> createGoods(@RequestBody GoodsVM goodsVM, HttpServletRequest request) throws URISyntaxException {
         log.debug("REST request to save Goods : {}", goodsVM);
         Goods newGoods = goodsService.createGoods(goodsVM);
@@ -55,7 +55,7 @@ public class GoodsResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
-    @Secured(AuthoritiesConstants.USER)
+//    @Secured(AuthoritiesConstants.USER)
     public ResponseEntity<List<GoodsVM>> getAllGoods(Pageable pageable) throws URISyntaxException {
         Page<Goods> page = goodsRepository.findAll(pageable);
         List<GoodsVM> goodsVMs = page.getContent().stream()
@@ -69,7 +69,7 @@ public class GoodsResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
-    @Secured(AuthoritiesConstants.USER)
+//    @Secured(AuthoritiesConstants.USER)
     public ResponseEntity<GoodsVM> getGoods(@PathVariable Integer id) {
         log.debug("REST request to get Goods : {}", id);
         return goodsService.getGoodsById(id)
@@ -82,20 +82,20 @@ public class GoodsResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
-    @Secured(AuthoritiesConstants.USER)
-    public ResponseEntity<GoodsVM> updateGoods(@RequestBody GoodsVM goodsVM) {
-        log.debug("REST request to update Goods : {}", goodsVM.getName());
-        goodsService.updateGoods(goodsVM.getId(), goodsVM.getName());
+//    @Secured(AuthoritiesConstants.USER)
+    public ResponseEntity<List<GoodsVM>> updateGoods(@RequestBody List<GoodsVM> goodsVM) {
+        log.debug("REST request to update {} Goods", goodsVM);
+        goodsService.updateGoods(goodsVM);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createAlert("goodsManagement.updated", goodsVM.getName()))
-            .body(new GoodsVM((goodsService.getGoodsById(goodsVM.getId()).get())));
+            .headers(HeaderUtil.createAlert("goodsManagement.updated", goodsVM.toString()))
+            .body(null);
     }
 
     @RequestMapping(value = "/goods/{id}",
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
-    @Secured(AuthoritiesConstants.USER)
+//    @Secured(AuthoritiesConstants.USER)
     public ResponseEntity<Void> deleteGoods(@PathVariable Integer id) {
         log.debug("REST request to delete Goods: {}", id);
         goodsService.deleteGoods(id);

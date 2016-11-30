@@ -30,10 +30,10 @@ public class RouteList implements Serializable {
     private ZonedDateTime arrivalDate;
 
     @Column(name="fuel_cost")
-    private int fuelCost;
+    private Double fuelCost;
 
     @Column(name="distance")
-    private int distance;
+    private Integer distance;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leaving_storage_id", nullable = false)
@@ -125,19 +125,19 @@ public class RouteList implements Serializable {
         this.state = state;
     }
 
-    public int getFuelCost() {
+    public Double getFuelCost() {
         return fuelCost;
     }
 
-    public void setFuelCost(int fuelCost) {
+    public void setFuelCost(Double fuelCost) {
         this.fuelCost = fuelCost;
     }
 
-    public int getDistance() {
+    public Integer getDistance() {
         return distance;
     }
 
-    public void setDistance(int distance) {
+    public void setDistance(Integer distance) {
         this.distance = distance;
     }
 }
