@@ -22,10 +22,7 @@ public class GoodsDTO {
     public GoodsDTO() {
     }
 
-    public GoodsDTO(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+
 
     public GoodsDTO(Integer id, String name, Long uncheckedNumber, Long acceptedNumber, Long deliveredNumber, String state, WaybillDTO waybillDTO) {
         this.id = id;
@@ -38,7 +35,15 @@ public class GoodsDTO {
     }
 
     public GoodsDTO(Goods goods) {
-        this(goods.getId(), goods.getName());
+        this(goods.getId(), goods.getName(),goods.getUncheckedNumber(),goods.getAcceptedNumber(),
+            goods.getDeliveredNumber(),goods.getState(),null);
+//            new WaybillDTO(goods.getWaybill()));
+    }
+
+    public GoodsDTO(GoodsDTO goods) {
+        this(goods.getId(), goods.getName(),goods.getUncheckedNumber(),goods.getAcceptedNumber(),
+            goods.getDeliveredNumber(),goods.getState(),
+            goods.getWaybillDTO());
     }
 
     public Integer getId() {

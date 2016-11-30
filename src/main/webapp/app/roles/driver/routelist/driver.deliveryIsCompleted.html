@@ -1,1 +1,25 @@
-<h1 style="text-align:center">Delivery is completed</h1>
+<div ng-if="vm.routeList.state === 'TRANSPORTATION'">
+
+    <h1 style="text-align:center">Delivery is completed</h1>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th><p>name</p></th>
+            <th><p>accepted number</p></th>
+            <th><p>delivered number</p></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="good in vm.goods1">
+            <td><p>{{good.name}}</p></td>
+            <td><p>{{good.acceptedNumber}}</p></td>
+            <td><input type="text" ng-model="good.deliveredNumber" name="deliveredNumber" class="form-control"
+                       id="deliveredNumber"
+                       placeholder="delivered number" required ng-maxlength="20"></td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="" class="btn btn-default" ng-click="vm.update()">Update</a>
+    <a href="#/driver/complete" class="btn btn-default">Cancel</a>
+</div>

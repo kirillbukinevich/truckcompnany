@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,9 +44,13 @@ public class GoodsService {
         return newGoods;
     }
 
-    public void updateGoods(Integer id, String name) {
-        goodsRepository.findOneById(id).ifPresent(goods -> {
-            goods.setName(name);
+    public void updateGoods(GoodsVM goodsVM) {
+        goodsRepository.findOneById(goodsVM.getId()).ifPresent(goods -> {
+            goods.setName(goodsVM.getName());
+            goods.setAcceptedNumber(goodsVM.getAcceptedNumber());
+            goods.setDeliveredNumber(goodsVM.getDeliveredNumber());
+            goods.setUncheckedNumber(goodsVM.getUncheckedNumber());
+            goods.setState(goodsVM.getState());
             log.debug("Changed Information for Goods: {}", goods);
         });
     }
@@ -55,5 +60,9 @@ public class GoodsService {
             goodsRepository.delete(goods);
             log.debug("Deleted Goods: {}", goods);
         });
+    }
+
+    public List<Goods> getGoodsByWaybill(Long waybillId) {
+        return goodsRepository.findByWaybillId(waybillId);
     }
 }

@@ -96,6 +96,7 @@ public class RouteListResource {
         routeListDTO.setArrivalStorage(new StorageDTO(routeList.getArrivalStorage()));
         routeListDTO.setLeavingStorage(new StorageDTO(routeList.getLeavingStorage()));
         routeListDTO.setTruck(new TruckDTO(routeList.getTruck()));
+        routeListDTO.setState(routeList.getState());
         return new ResponseEntity<>(new ManagedRouteListVM(routeListDTO), HttpStatus.OK);
     }
 
@@ -128,13 +129,13 @@ public class RouteListResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity updateWaybill(@RequestBody ManagedRouteListVM managedRouteListVM) {
-        log.debug("REST request to update Waybill : {}", managedRouteListVM);
-        RouteList existingWaybill = routeListRepository.findOne(managedRouteListVM.getId());
+    public ResponseEntity updateRouteList(@RequestBody ManagedRouteListVM managedRouteListVM) {
+        log.debug("REST request to update RouteList : {}", managedRouteListVM);
+        RouteList existingRouteList = routeListRepository.findOne(managedRouteListVM.getId());
 
-        if (existingWaybill == null)
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("routelistManagement", "waybilldontexist", "Waybill doesn't exist!")).body(null);
-
+        if (existingRouteList == null) {
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("routelistManagement", "routeListdon'texist", "Waybill doesn't exist!")).body(null);
+        }
         routeListService.updateRouteList(managedRouteListVM);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createAlert("userManagement.updated", managedRouteListVM.getId().toString()))

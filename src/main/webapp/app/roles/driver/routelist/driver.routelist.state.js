@@ -11,7 +11,7 @@
         $stateProvider
             .state('driver.routelist', {
                     parent: 'driver',
-                    url: '/driver/waybills', /*'/activate?key',*/
+                    url: '/driver/routelist', /*'/activate?key',*/
 
                     data: {
                         authorities: ["ROLE_DRIVER"],
