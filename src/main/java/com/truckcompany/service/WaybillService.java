@@ -121,7 +121,7 @@ public class WaybillService {
                 goods.setName(g.getName());
                 goods.setUncheckedNumber(g.getCount());
                 goods.setType(g.getType());
-                goods.setState("TRANSPORTATION");
+                goods.setState("UNCHECKED");
 
                 return goods;
             }).collect(Collectors.toSet());

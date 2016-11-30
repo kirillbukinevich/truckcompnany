@@ -28,6 +28,7 @@ public class ManagedOfferGoodsVM {
         this.name = offerGoods.getName();
         this.count = offerGoods.getCount();
         this.offerId = offerGoods.getOffer().getId();
+        this.type = offerGoods.getType();
     }
 
     public Long getId() {

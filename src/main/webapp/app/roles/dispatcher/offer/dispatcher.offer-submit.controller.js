@@ -28,6 +28,8 @@
 
         function createWaybill() {
             console.log("Create new Waybill");
+            vm.offer.state = "ACCEPTED";
+
             vm.saveObj = {
                 driver: vm.driver,
                 offer: vm.offer,
@@ -44,9 +46,6 @@
             Waybill.save(vm.saveObj,
                 function () {
                     $state.go('dispatcher.offer');
-
-                    vm.offer.state = "ACCEPTED";
-                    Offer.update(vm.offer);
                 },
                 function (resp) {
                     vm.error = true;
