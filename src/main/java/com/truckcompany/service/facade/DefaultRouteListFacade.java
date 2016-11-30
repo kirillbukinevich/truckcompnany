@@ -99,9 +99,9 @@ public class DefaultRouteListFacade implements RouteListFacade {
                     .collect(Collectors.toList());
             }
             else if(isCurrentUserInRole("ROLE_COMPANYOWNER")){
-                routeList = waybillService.getWaybillByCompany(user.getCompany())
+                routeList = routeListService.getRouteListsByCompany(user.getCompany())
                     .stream()
-                    .map(s-> new RouteListDTO(s.getRouteList(),s))
+                    .map(RouteListDTO::new)
                     .collect(Collectors.toList());
             }
             return routeList;
@@ -123,7 +123,7 @@ public class DefaultRouteListFacade implements RouteListFacade {
                 routeLists = routeListService
                         .getRouteListsByCompanyAndCreationDateBetween(user.getCompany(), startDate, endDate)
                     .stream()
-                    .map(s-> new RouteListDTO(s, waybillService.getWaybillByRouteList(s)))
+                    .map(RouteListDTO::new)
                     .collect(Collectors.toList());
             }
             return routeLists;
@@ -138,9 +138,9 @@ public class DefaultRouteListFacade implements RouteListFacade {
         baseDTO.setLeavingStorage(new StorageDTO(routeList.getLeavingStorage()));
         baseDTO.setArrivalStorage(new StorageDTO(routeList.getArrivalStorage()));
         baseDTO.setTruck(new TruckDTO(routeList.getTruck()));
-        baseDTO.setWaybill(routeList.getWaybill() != null ?
+       /* baseDTO.setWaybill(routeList.getWaybill() != null ?
             new WaybillDTO(routeList.getWaybill().getId(), routeList.getWaybill().getDate(),
-                routeList.getWaybill().getState()) : null);
+                routeList.getWaybill().getState()) : null);*/
         return baseDTO;
     }
 

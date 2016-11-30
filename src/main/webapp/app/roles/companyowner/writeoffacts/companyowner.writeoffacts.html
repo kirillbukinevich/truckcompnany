@@ -3,14 +3,14 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Date</th>
-        <th>Count</th>
+        <th>waybill id</th>
+        <th>waybill date</th>
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="writeoffact in vm.writeoffacts">
-        <td>{{writeoffact.date}}</td>
-        <td>{{writeoffact.count}}</td>
+    <tr ng-repeat="waybill in vm.waybills">
+        <td>{{waybill.id}}</td>
+        <td>{{waybill.date}}</td>
     </tr>
     </tbody>
 </table>
