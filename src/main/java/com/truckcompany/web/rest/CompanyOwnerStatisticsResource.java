@@ -43,6 +43,7 @@ public class CompanyOwnerStatisticsResource {
     @Inject
     private RouteListFacade routeListFacade;
 
+/*
     @RequestMapping(value = "/companyowner/statistic/consumption", method = RequestMethod.GET)
     public ResponseEntity getConsumptionStatistics(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                                            ZonedDateTime startDate,
@@ -78,6 +79,7 @@ public class CompanyOwnerStatisticsResource {
         }
         return new ResponseEntity<>(stat, HttpStatus.OK);
     }
+*/
 
     @RequestMapping(value = "/companyowner/statistic/xls/consumption", method = RequestMethod.GET)
     public ResponseEntity<ByteArrayResource> getConsumptionReport(@RequestParam(value="startDate", required = false)

@@ -8,9 +8,9 @@
         .module('truckCompanyApp')
         .controller('ManagerWaybillDetailsController', ManagerWaybillDetailsController);
 
-    ManagerWaybillDetailsController.$inject = ['Principal', 'entity', '$uibModalInstance', '$scope', 'Waybill'];
+    ManagerWaybillDetailsController.$inject = ['Principal', 'entity', '$uibModalInstance', 'Waybill', '$http'];
 
-    function ManagerWaybillDetailsController(Principal, entity, $uibModalInstance, $scope, Waybill) {
+    function ManagerWaybillDetailsController(Principal, entity, $uibModalInstance, Waybill, $http) {
         var vm = this;
 
         vm.clear = clear;
@@ -33,10 +33,14 @@
             if (id == 1) {
                 vm.waybill.state = 'CHECKED';
             } else {
-                vm.waybill.state = 'DELIVERED';
+                vm.waybill.state = 'REJECTED';
             }
+            angular.forEach(vm.waybill.goods, function (value) {
+                value.state = 'ACCEPTED';
+            });
+            $http.put('/api/goods', vm.waybill.goods);
             Waybill.update(vm.waybill);
-            console.log(vm.waybill);
+            console.log(vm.waybill.goods);
         }
 
         function clear() {

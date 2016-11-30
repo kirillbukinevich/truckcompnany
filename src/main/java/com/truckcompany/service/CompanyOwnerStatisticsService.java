@@ -1,8 +1,11 @@
 package com.truckcompany.service;
 
+
 import com.truckcompany.domain.Waybill;
 import com.truckcompany.domain.enums.WaybillState;
 import com.truckcompany.service.dto.GoodsDTO;
+
+
 import com.truckcompany.service.dto.RouteListDTO;
 import com.truckcompany.service.dto.WaybillDTO;
 import com.truckcompany.service.facade.RouteListFacade;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -38,18 +42,22 @@ public class CompanyOwnerStatisticsService {
     private WaybillFacade waybillFacade;
 
 
-    public List<List<Long>> getConsumptionStatistics(){
+
+       // public List<List<Long>> getConsumptionStatistics(){
+
+    public List<List<Double>> getConsumptionStatistics(){
+
         List<RouteListDTO> routeListDTOs = routeListFacade.findRouteLists();
 
-        Map<Long, Long> map = routeListDTOs.stream()
+        Map<Long, Double> map = routeListDTOs.stream()
             .collect(Collectors.toMap(s-> s.getCreationDate().toInstant().toEpochMilli(),
                 s-> s.getTruck().getConsumption()*s.getFuelCost()*s.getDistance(),
                 (a,b) -> a+ b));
 
-        List<List<Long>> result = new ArrayList<>();
-        for (Map.Entry<Long, Long> entry : map.entrySet()){
-            ArrayList<Long> list = new ArrayList<>();
-            list.add(entry.getKey());
+        List<List<Double>> result = new ArrayList<>();
+        for (Map.Entry<Long, Double> entry : map.entrySet()){
+            ArrayList<Double> list = new ArrayList<>();
+            list.add(Double.valueOf(entry.getKey()));
             list.add(entry.getValue());
             result.add(list);
         }
@@ -58,18 +66,18 @@ public class CompanyOwnerStatisticsService {
         return result;
     }
 
-    public List<List<Long>> getConsumptionStatistics(ZonedDateTime fromDate, ZonedDateTime toDate){
+    public List<List<Double>> getConsumptionStatistics(ZonedDateTime fromDate, ZonedDateTime toDate){
         List<RouteListDTO> routeListDTOs = routeListFacade.findRouteLists(fromDate, toDate);
 
-        Map<Long, Long> map = routeListDTOs.stream()
+        Map<Long, Double> map = routeListDTOs.stream()
             .collect(Collectors.toMap(s-> s.getCreationDate().toInstant().toEpochMilli(),
                 s-> s.getTruck().getConsumption()*s.getFuelCost()*s.getDistance(),
                 (a,b) -> a+ b));
 
-        List<List<Long>> result = new ArrayList<>();
-        for (Map.Entry<Long, Long> entry : map.entrySet()){
-            ArrayList<Long> list = new ArrayList<>();
-            list.add(entry.getKey());
+        List<List<Double>> result = new ArrayList<>();
+        for (Map.Entry<Long, Double> entry : map.entrySet()){
+            ArrayList<Double> list = new ArrayList<>();
+            list.add(Double.valueOf(entry.getKey()));
             list.add(entry.getValue());
             result.add(list);
         }
@@ -91,12 +99,12 @@ public class CompanyOwnerStatisticsService {
     }
 
     public HSSFWorkbook getConsumptionReport(){
-        List<List<Long>> statistics = getConsumptionStatistics();
+        List<List<Double>> statistics = getConsumptionStatistics();
         return createConsumptionReport(statistics);
     }
 
     public HSSFWorkbook getConsumptionReport(ZonedDateTime fromDate, ZonedDateTime toDate){
-        List<List<Long>> statistics = getConsumptionStatistics(fromDate, toDate);
+        List<List<Double>> statistics = getConsumptionStatistics(fromDate, toDate);
         return createConsumptionReport(statistics);
     }
 
@@ -232,7 +240,7 @@ public class CompanyOwnerStatisticsService {
         }
     }
 
-    private HSSFWorkbook createConsumptionReport(List<List<Long>> statistics){
+    private HSSFWorkbook createConsumptionReport(List<List<Double>> statistics){
         HSSFWorkbook book = new HSSFWorkbook();
         Sheet sheet = book.createSheet("consumption report");
 
@@ -250,12 +258,13 @@ public class CompanyOwnerStatisticsService {
 
         int index = 1;
 
-        for (List<Long> record : statistics){
+        for (List<Double> record : statistics){
             Row row = sheet.createRow(index++);
 
             Cell dateCell = row.createCell(0);
             dateCell.setCellStyle(dateStyle);
-            dateCell.setCellValue(GregorianCalendar.from(Instant.ofEpochMilli(record.get(0)).atZone(ZoneOffset.UTC)));
+            dateCell.setCellValue(GregorianCalendar.from(Instant.ofEpochMilli((record.get(0).longValue()))
+                .atZone(ZoneOffset.UTC)));
 
             Cell valueCell = row.createCell(1);
             valueCell.setCellValue(record.get(1));
