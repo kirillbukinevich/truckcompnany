@@ -22,8 +22,6 @@
                 vm.checkpoints = Checkpoint.query({id: value.routeList.id}, function () {
                     var i = 0;
                     angular.forEach(vm.checkpoints, function (value) {
-                        console.log(value);
-                        console.log("!!!!!" + " " + value.name);
                         vm.checkpointNames[i] = {location: value.name, stopover: true};
                         i++;
                         // {location: 'ozarichi', stopover: true}
@@ -39,7 +37,6 @@
 
         vm.markDate = markDate;
         vm.travelMode = 'DRIVING';
-        console.log(vm.waybills);
         function markDate(id) {
             for (var i = 0; vm.checkpoints.length; i++) {
                 if (vm.checkpoints[i].id == id) {
@@ -91,7 +88,6 @@
         }
         vm.update = function () {
             for (var i in vm.goods1) {
-                console.log("HERE2: " + vm.goods1[i]);
 
                 if(vm.goods1[i] != true) {
                     vm.goods1[i].state = "DELIVERED";
@@ -106,14 +102,13 @@
                 });
             }
             vm.routeList.state = "DELIVERED";
+            vm.routeList.arrivalDate = Date.now();
             $http({
                 method: 'PUT',
                 url: '/api/routelists',
                 data: vm.routeList
             });
-
             $location.path('/driver/routelist');
         };
      }
-
 })();
