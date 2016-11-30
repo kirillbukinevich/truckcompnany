@@ -85,7 +85,7 @@ public class OfferService {
         return offer;
     }
 
-    public boolean updateOfferState(ManagedOfferVM managedOfferVM) {
+    public boolean updateOfferState(OfferDTO managedOfferVM) {
         Offer offer = offerRepository.getOne(managedOfferVM.getId());
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
 
