@@ -2,7 +2,6 @@ package com.truckcompany.service;
 
 import com.truckcompany.domain.Goods;
 import com.truckcompany.repository.GoodsRepository;
-import com.truckcompany.service.dto.GoodsDTO;
 import com.truckcompany.web.rest.vm.GoodsVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,5 +64,9 @@ public class GoodsService {
             goodsRepository.delete(goods);
             log.debug("Deleted Goods: {}", goods);
         });
+    }
+
+    public List<Goods> getGoodsByWaybill(Long waybillId) {
+        return goodsRepository.findByWaybillId(waybillId);
     }
 }

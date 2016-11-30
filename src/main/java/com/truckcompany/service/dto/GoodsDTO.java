@@ -25,7 +25,7 @@ public class GoodsDTO {
         this.name = name;
     }
 
-    public GoodsDTO(Integer id, String name, Long uncheckedNumber, Long acceptedNumber, Long deliveredNumber, String state, String type, Double price) {
+    public GoodsDTO(Integer id, String name, Long uncheckedNumber, Long acceptedNumber, Long deliveredNumber, String state, String type, Double price, WaybillDTO waybillDTO) {
         this.id = id;
         this.name = name;
         this.uncheckedNumber = uncheckedNumber;
@@ -34,10 +34,17 @@ public class GoodsDTO {
         this.state = state;
         this.type = type;
         this.price = price;
+        this.waybillDTO = waybillDTO;
     }
 
     public GoodsDTO(Goods goods) {
-        this(goods.getId(), goods.getName(), goods.getUncheckedNumber(), goods.getAcceptedNumber(), goods.getDeliveredNumber(), goods.getState(), goods.getType(), goods.getPrice());
+        this(goods.getId(), goods.getName(), goods.getUncheckedNumber(), goods.getAcceptedNumber(), goods.getDeliveredNumber(), goods.getState(), goods.getType(), goods.getPrice(), null);
+    }
+
+    public GoodsDTO(GoodsDTO goods) {
+        this(goods.getId(), goods.getName(),goods.getUncheckedNumber(),goods.getAcceptedNumber(),
+            goods.getDeliveredNumber(),goods.getState(), goods.getType(), goods.getPrice(),
+            goods.getWaybillDTO());
     }
 
     public Integer getId() {

@@ -11,4 +11,8 @@ public class GoodsVM extends GoodsDTO {
     public GoodsVM(Goods goods) {
         super(goods);
     }
+
+    public GoodsVM(GoodsDTO goodsDTO) {
+        super(goodsDTO);
+    }
 }
