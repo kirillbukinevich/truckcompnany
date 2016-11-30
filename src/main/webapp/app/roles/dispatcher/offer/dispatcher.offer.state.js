@@ -18,7 +18,7 @@
 
                     data: {
                         authorities: ["ROLE_DISPATCHER"],
-                        pageTitle: 'activate.title'
+                        pageTitle: 'dispatcher.offers'
                     },
                     views: {
                         'page@roles': {
@@ -47,7 +47,7 @@
             )
             .state('dispatcher.offer-details', {
                 parent: 'dispatcher.offer',
-                url: '/details/{id}',
+                url: '/{id}/details',
                 data: {
                     authorities: ['ROLE_DISPATCHER']
                 },
@@ -72,11 +72,11 @@
             })
             .state('dispatcher.offer-submit', {
                 parent: 'dispatcher.offer',
-                url: '/submit/{id}', /*'/activate?key',*/
+                url: '/{id}/submit', /*'/activate?key',*/
 
                 data: {
                     authorities: ["ROLE_DISPATCHER"],
-                    pageTitle: 'activate.title'
+                    pageTitle: 'dispatcher.confirm'
                 },
                 views: {
                     'page@roles': {
@@ -87,7 +87,7 @@
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('activate');
+                        $translatePartialLoader.addPart('dispatcher');
                         return $translate.refresh();
                     }]
                 }

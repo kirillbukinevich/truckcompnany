@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.time.ZonedDateTime;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,9 +51,21 @@ public class RouteListService {
         return routeListRepository.findByCompany(company).orElse(Collections.emptyList());
     }
 
+    public List<RouteList> getRouteListsByCompanyAndCreationDateBetween(Company company, ZonedDateTime fromDate,
+                                                                        ZonedDateTime toDate){
+        return routeListRepository.findByCompanyAndCreationDateBetween(company, fromDate, toDate)
+            .orElse(Collections.emptyList());
+    }
+
     public Page<RouteList> getPageRouteListsByCompany(Pageable pageable, Company company){
         return routeListRepository.findPageByCompany(company, pageable);
     }
+
+    public Page<RouteList> getPageRouteListsByCompanyAndCreationDateBetween(Pageable pageable, Company company,
+                                                                            ZonedDateTime fromDate, ZonedDateTime toDate){
+        return routeListRepository.findPageByCompanyAndCreationDateBetween(company, fromDate, toDate, pageable);
+    }
+
 
     public void deleteRouteList (Long id) {
         RouteList waybill = routeListRepository.findOne(id);
@@ -80,6 +94,7 @@ public class RouteListService {
         routeList.setArrivalStorage(storageRepository.findOne(managedRouteListVM.getArrivalStorage().getId()));
         routeList.setTruck(truckRepository.findOne(managedRouteListVM.getTruck().getId()));
         routeList.setCompany(userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get().getCompany());
+        routeList.setState("TRANSPORTATION");
 
         routeListRepository.save(routeList);
         log.debug("Created Information for RouteList");

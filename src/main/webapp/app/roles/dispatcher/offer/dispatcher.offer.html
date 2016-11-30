@@ -3,6 +3,8 @@ Show:
 <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage" ng-change="vm.changeItemsPerPage()">
 </select>
 
+<button type="button" ng-click="vm.generateOffer()" class="btn btn-info btn-sm">Generate offer</button>
+
 <table class="table table-striped table-condensed">
     <thead>
         <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
@@ -28,11 +30,11 @@ Show:
 
             <td class="text-right">
                 <div class="btn-group flex-btn-group-container">
-                    <a href="#/dispatcher/offer/submit/{{offer.id}}" type="button" class="btn btn-success btn-sm" ng-if = "offer.state == 'NEW'">
+                    <a href="#/dispatcher/offer/{{offer.id}}/submit" type="button" class="btn btn-success btn-sm" ng-if = "offer.state == 'NEW'">
                         <span class="glyphicon glyphicon-ok"></span>&nbsp;Accept</a>
                     <button ng-click="vm.cancelOffer(offer)" type="button" class="btn btn-danger btn-sm" ng-if = "offer.state == 'NEW'">
                         <span class="glyphicon glyphicon-remove-sign"></span>&nbsp;Cancel</button>
-                    <a href="#/dispatcher/offer/details/{{offer.id}}" type="button" class="btn btn-info btn-sm">
+                    <a href="#/dispatcher/offer/{{offer.id}}/details" type="button" class="btn btn-info btn-sm">
                         <span class="glyphicon glyphicon glyphicon-eye-open"></span>&nbsp;Details</a>
                 </div>
             </td>

@@ -5,6 +5,7 @@ import com.truckcompany.domain.User;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.RouteListService;
 import com.truckcompany.service.UserService;
+import com.truckcompany.service.WaybillService;
 import com.truckcompany.service.dto.RouteListDTO;
 import com.truckcompany.service.dto.StorageDTO;
 import com.truckcompany.service.dto.TruckDTO;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,6 +35,9 @@ public class DefaultRouteListFacade implements RouteListFacade {
 
     @Inject
     private RouteListService routeListService;
+
+    @Inject
+    private WaybillService waybillService;
 
     @Inject
     private UserService userService;
@@ -58,6 +64,27 @@ public class DefaultRouteListFacade implements RouteListFacade {
     }
 
     @Override
+    public Page<RouteListDTO> findRouteLists(Pageable pageable, ZonedDateTime startDate, ZonedDateTime endDate){
+        Page<RouteList> pageRouteLists = new PageImpl<>(emptyList());
+
+        Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            log.debug("Get all routeLists for user \'{}\'", user.getLogin());
+
+            if (isCurrentUserInRole("ROLE_COMPANYOWNER")) {
+                pageRouteLists = routeListService
+                    .getPageRouteListsByCompanyAndCreationDateBetween(pageable, user.getCompany(), startDate, endDate);
+            }
+        }
+        return new PageImpl<RouteListDTO>(pageRouteLists.getContent().stream()
+            .map(s -> toCompanyOwnerDTO(s))
+            .collect(Collectors.toList()), pageable, pageRouteLists.getTotalElements());
+
+    }
+
+    @Override
     public List<RouteListDTO> findRouteLists() {
         Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
         if (optionalUser.isPresent()) {
@@ -71,15 +98,43 @@ public class DefaultRouteListFacade implements RouteListFacade {
                     .map(RouteListDTO::new)
                     .collect(Collectors.toList());
             }
+            else if(isCurrentUserInRole("ROLE_COMPANYOWNER")){
+                routeList = waybillService.getWaybillByCompany(user.getCompany())
+                    .stream()
+                    .map(s-> new RouteListDTO(s.getRouteList(),s))
+                    .collect(Collectors.toList());
+            }
             return routeList;
         } else {
             return emptyList();
         }
     }
 
+    @Override
+    public List<RouteListDTO> findRouteLists(ZonedDateTime startDate, ZonedDateTime endDate) {
+
+        Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            log.debug("Get all routeLists for user \'{}\'", user.getLogin());
+            List<RouteListDTO> routeLists = emptyList();
+            if (isCurrentUserInRole("ROLE_COMPANYOWNER")) {
+                routeLists = routeListService
+                        .getRouteListsByCompanyAndCreationDateBetween(user.getCompany(), startDate, endDate)
+                    .stream()
+                    .map(s-> new RouteListDTO(s, waybillService.getWaybillByRouteList(s)))
+                    .collect(Collectors.toList());
+            }
+            return routeLists;
+        }
+        return emptyList();
+    }
+
     private RouteListDTO toCompanyOwnerDTO(RouteList routeList) {
-        RouteListDTO baseDTO = new RouteListDTO(routeList.getId(), routeList.getDate(),
-            routeList.getLeavingDate(), routeList.getArrivalDate(), routeList.getState());
+        RouteListDTO baseDTO = new RouteListDTO(routeList.getId(), routeList.getCreationDate(),
+            routeList.getLeavingDate(), routeList.getArrivalDate(), routeList.getState(),
+            routeList.getFuelCost(), routeList.getDistance());
         baseDTO.setLeavingStorage(new StorageDTO(routeList.getLeavingStorage()));
         baseDTO.setArrivalStorage(new StorageDTO(routeList.getArrivalStorage()));
         baseDTO.setTruck(new TruckDTO(routeList.getTruck()));

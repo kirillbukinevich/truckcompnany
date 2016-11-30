@@ -18,8 +18,8 @@
         vm.trucks = Truck.query();
         vm.createWaybill = createWaybill;
 
-        vm.driver = {};
-        vm.truck = {};
+        vm.driver;
+        vm.truck;
         vm.saveObj = {};
         vm.dt = {};
         vm.arrivalDate = {};
@@ -43,18 +43,16 @@
 
             Waybill.save(vm.saveObj,
                 function () {
-                    console.log("Create new Waybill");
                     $state.go('dispatcher.offer');
+
+                    vm.offer.state = "ACCEPTED";
+                    Offer.update(vm.offer);
                 },
                 function (resp) {
                     vm.error = true;
-                    vm.messageError = 'You don\'t fill all fields.';
+                    vm.messageError = 'Error on server side. Please, try later.';
                 }
             );
-
-            vm.offer.state = "ACCEPTED";
-            Offer.update(vm.offer);
-
         }
 
         //**==========TimePicker===================

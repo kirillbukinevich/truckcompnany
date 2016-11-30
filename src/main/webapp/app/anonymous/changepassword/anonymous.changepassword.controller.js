@@ -8,12 +8,15 @@
         .module('truckCompanyApp')
         .controller('ChangePassword', ChangePassword);
 
-    ChangePassword.$inject = ['$stateParams','$http'];
+    ChangePassword.$inject = ['$stateParams','$http', 'Auth'];
 
-    function ChangePassword ($stateParams, $http) {
+    function ChangePassword ($stateParams, $http, Auth) {
         var vm = this;
         vm.changePassword = changePassword;
         vm.key = $stateParams.key;
+
+        Auth.logout();
+
 
         $http({
             method: 'GET',
@@ -36,7 +39,7 @@
                     newPassword: vm.password,
                 }
             }).then(function successCallback(response) {
-               console.log("Evrethisn is good. Password was changed.")
+               console.log("Evrethisn is good. Password was changed.");
             }, function errorCallback(response) {
 
             });

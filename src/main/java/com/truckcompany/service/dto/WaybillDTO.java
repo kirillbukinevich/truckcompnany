@@ -2,8 +2,12 @@ package com.truckcompany.service.dto;
 
 import com.truckcompany.domain.Waybill;
 import com.truckcompany.domain.enums.WaybillState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -29,7 +33,9 @@ public class WaybillDTO {
 
     private OfferDTO offer;
 
-    public WaybillDTO(Long id, ZonedDateTime date, UserDTO driver, WaybillState state, UserDTO dispatcher, UserDTO manager, ZonedDateTime dateChecked) {
+    private Set<GoodsDTO> goods;
+
+    public WaybillDTO(Long id, ZonedDateTime date, UserDTO driver, WaybillState state, UserDTO dispatcher, UserDTO manager, ZonedDateTime dateChecked, Set<GoodsDTO> goods) {
         this.id = id;
         this.date = date;
         this.driver = driver;
@@ -37,6 +43,7 @@ public class WaybillDTO {
         this.dispatcher = dispatcher;
         this.manager = manager;
         this.dateChecked = dateChecked;
+        this.goods = goods;
     }
 
     public WaybillDTO(Long id, ZonedDateTime date, UserDTO driver, WaybillState state, UserDTO dispatcher) {
@@ -62,7 +69,6 @@ public class WaybillDTO {
         this.routeList = routeList;
     }
 
-
     public WaybillDTO(Waybill waybill) {
         this(waybill.getId(), waybill.getDate(), waybill.getState());
         this.dispatcher = waybill.getDispatcher() != null ? new UserDTO(waybill.getDispatcher()) : null;
@@ -70,6 +76,9 @@ public class WaybillDTO {
         this.routeList = new RouteListDTO(waybill.getRouteList());
         this.manager = waybill.getManager() == null ? null : new UserDTO(waybill.getManager());
         this.dateChecked = waybill.getDateChecked();
+        this.goods = waybill.getGoods().stream()
+            .map(GoodsDTO::new)
+            .collect(Collectors.toSet());
 
         //this.offer = new OfferDTO(waybill.getOffer);
     }
@@ -154,7 +163,13 @@ public class WaybillDTO {
         this.offer = offer;
     }
 
+    public Set<GoodsDTO> getGoods() {
+        return goods;
+    }
 
+    public void setGoods(Set<GoodsDTO> goods) {
+        this.goods = goods;
+    }
 
     @Override
     public String toString() {

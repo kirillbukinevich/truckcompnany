@@ -8,15 +8,14 @@
         .module('truckCompanyApp')
         .controller('ManagerWaybillDetailsController', ManagerWaybillDetailsController);
 
-    ManagerWaybillDetailsController.$inject = ['Principal', 'entity', 'Waybill', '$uibModalInstance'];
+    ManagerWaybillDetailsController.$inject = ['Principal', 'entity', '$uibModalInstance', '$scope', 'Waybill'];
 
-    function ManagerWaybillDetailsController(Principal, entity, Waybill, $uibModalInstance) {
+    function ManagerWaybillDetailsController(Principal, entity, $uibModalInstance, $scope, Waybill) {
         var vm = this;
 
         vm.clear = clear;
         vm.waybill = entity;
         vm.changeWaybillState = changeWaybillState;
-
         getAccount();
 
         console.log(vm.waybill);
@@ -27,12 +26,17 @@
             });
         }
 
-        function changeWaybillState() {
+        function changeWaybillState(id) {
             vm.waybill.manager = vm.account;
             vm.waybill.routeList = null;
             vm.waybill.writeOffAct = null;
-            vm.waybill.state = 'CHECKED';
+            if (id == 1) {
+                vm.waybill.state = 'CHECKED';
+            } else {
+                vm.waybill.state = 'DELIVERED';
+            }
             Waybill.update(vm.waybill);
+            console.log(vm.waybill);
         }
 
         function clear() {

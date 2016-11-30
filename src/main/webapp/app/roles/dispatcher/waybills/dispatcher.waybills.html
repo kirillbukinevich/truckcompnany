@@ -1,4 +1,8 @@
-<h1>Waybills</h1>
+<h1>Your Waybills</h1>
+
+Show:
+<select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage" ng-change="vm.changeItemsPerPage()">
+</select>
 
 <table class="table">
     <thead>
@@ -22,10 +26,22 @@
             <span ng-if = "waybill.state == 'CHECKED'" class="label label-primary" >CHECKED</span>
         </td>
         <td>
-            <a type="button" class="btn btn-primary btn-xs" href="#/dispatcher/waybills/details/{{waybill.id}}">
+            <a type="button" class="btn btn-primary btn-xs" href="#/dispatcher/waybills/{{waybill.id}}/details">
                 <span class="glyphicon glyphicon-eye-open">&nbsp;Details</span>
             </a>
         </td>
     </tr>
     </tbody>
 </table>
+
+<div class="text-center">
+    <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+    <uib-pagination class="pagination-sm"
+                    total-items="vm.totalItems"
+                    items-per-page = "vm.itemsPerPage"
+                    boundary-link-numbers = "true"
+                    rotate = "true"
+                    ng-model="vm.page"
+                    ng-change="vm.transition()">
+    </uib-pagination>
+</div>
