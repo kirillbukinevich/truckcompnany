@@ -1,7 +1,6 @@
 package com.truckcompany.service.dto;
 
 import com.truckcompany.domain.Goods;
-import com.truckcompany.domain.Waybill;
 
 /**
  * A DTO representing a goods.
@@ -15,34 +14,36 @@ public class GoodsDTO {
     private Long deliveredNumber;
     private String state;
     private WaybillDTO waybillDTO;
-
-
-
+    private String type;
+    private Double price;
 
     public GoodsDTO() {
     }
 
+    public GoodsDTO(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
-
-    public GoodsDTO(Integer id, String name, Long uncheckedNumber, Long acceptedNumber, Long deliveredNumber, String state, WaybillDTO waybillDTO) {
+    public GoodsDTO(Integer id, String name, Long uncheckedNumber, Long acceptedNumber, Long deliveredNumber, String state, String type, Double price, WaybillDTO waybillDTO) {
         this.id = id;
         this.name = name;
         this.uncheckedNumber = uncheckedNumber;
         this.acceptedNumber = acceptedNumber;
         this.deliveredNumber = deliveredNumber;
         this.state = state;
+        this.type = type;
+        this.price = price;
         this.waybillDTO = waybillDTO;
     }
 
     public GoodsDTO(Goods goods) {
-        this(goods.getId(), goods.getName(),goods.getUncheckedNumber(),goods.getAcceptedNumber(),
-            goods.getDeliveredNumber(),goods.getState(),null);
-//            new WaybillDTO(goods.getWaybill()));
+        this(goods.getId(), goods.getName(), goods.getUncheckedNumber(), goods.getAcceptedNumber(), goods.getDeliveredNumber(), goods.getState(), goods.getType(), goods.getPrice(), null);
     }
 
     public GoodsDTO(GoodsDTO goods) {
         this(goods.getId(), goods.getName(),goods.getUncheckedNumber(),goods.getAcceptedNumber(),
-            goods.getDeliveredNumber(),goods.getState(),
+            goods.getDeliveredNumber(),goods.getState(), goods.getType(), goods.getPrice(),
             goods.getWaybillDTO());
     }
 
@@ -100,6 +101,22 @@ public class GoodsDTO {
 
     public void setUncheckedNumber(Long uncheckedNumber) {
         this.uncheckedNumber = uncheckedNumber;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     @Override

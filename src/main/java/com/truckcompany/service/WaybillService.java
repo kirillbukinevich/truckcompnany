@@ -4,6 +4,7 @@ import com.truckcompany.domain.*;
 import com.truckcompany.domain.enums.WaybillState;
 import com.truckcompany.repository.*;
 import com.truckcompany.security.SecurityUtils;
+import com.truckcompany.service.dto.GoodsDTO;
 import com.truckcompany.service.dto.WaybillDTO;
 import com.truckcompany.web.rest.vm.ManagedRouteListVM;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
@@ -147,6 +148,7 @@ public class WaybillService {
             w.setDate(managedWaybillVM.getDate());
             w.setState(managedWaybillVM.getState());
             w.setDateChecked(managedWaybillVM.getDateChecked());
+
             if (managedWaybillVM.getManager() != null) {
                 w.setManager(userRepository.findOneById(managedWaybillVM.getManager().getId()).get());
             }

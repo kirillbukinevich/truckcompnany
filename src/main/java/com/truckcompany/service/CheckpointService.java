@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -32,30 +33,37 @@ public class CheckpointService {
     private UserRepository userRepository;
 
 
-    public List<Checkpoint> getCheckpoints(Long routeListId){
+    public List<Checkpoint> getCheckpoints(Long routeListId) {
         RouteList routeList = new RouteList();
         routeList.setId(routeListId);
         return checkpointRepository.findByRouteList(routeList);
     }
 
-    public Checkpoint createCheckpoint(ManagedCheckPointVM checkPointVM){
-        Checkpoint checkpoint = new Checkpoint();
-        checkpoint.setName(checkPointVM.getName());
-        checkpoint.setRouteList(checkPointVM.getRouteList());
-        checkpointRepository.save(checkpoint);
-        log.debug("Created Information for Checkpoint: {}", checkpoint);
-        return checkpoint;
+    public List<Checkpoint> createCheckpoints(List<Checkpoint> checkpoints, RouteList routeList) {
+        List<Checkpoint> checkpointList = new ArrayList<>();
+        for(Checkpoint vm: checkpoints) {
+            Checkpoint checkpoint = new Checkpoint();
+            checkpoint.setName(vm.getName());
+            checkpoint.setRouteList(routeList);
+            checkpointRepository.save(checkpoint);
+            checkpointList.add(checkpoint);
+        }
+        log.debug("Created Information for {} Checkpoints", checkpointList.size());
+        return checkpointList;
     }
 
-    public void  updateCheckpointByManager(Long id,String name){
-        checkpointRepository.findOneById(id).ifPresent(checkpoint -> {
-            checkpoint.setName(name);
-            log.debug("Changed Information for Checkpoint with id: {} by manager", checkpoint.getId());
-        });
+    public void updateCheckpoints(List<ManagedCheckPointVM> checkPointVM) {
+        for (ManagedCheckPointVM vm : checkPointVM) {
+            checkpointRepository.findOneById(vm.getId()).ifPresent(checkpoint -> {
+                checkpoint.setName(vm.getName());
+                checkpoint.setRouteList(vm.getRouteList());
+                log.debug("Changed Information for Checkpoint with id: {} by manager", checkpoint.getId());
+            });
+        }
     }
 
 
-    public void deleteCheckPoint(Long id){
+    public void deleteCheckPoint(Long id) {
         checkpointRepository.findOneById(id).ifPresent(checkpoint -> {
             checkpointRepository.delete(checkpoint);
             log.debug("Deleted Checkpoint: {}", checkpoint);
@@ -63,7 +71,7 @@ public class CheckpointService {
     }
 
 
-    public void deleteAllCheckpoint(RouteList routeList){
+    public void deleteAllCheckpoint(RouteList routeList) {
         checkpointRepository.deleteAllInBatchByRouteList(routeList);
         log.debug("Deleted all checkpoint routeList id: {}", routeList.getId());
 

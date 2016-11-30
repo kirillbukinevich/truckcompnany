@@ -27,12 +27,12 @@ public class RouteListDTO {
 
     private String state;
 
-    private int fuelCost;
+    private Double fuelCost;
 
-    private int distance;
+    private Integer distance;
 
     public RouteListDTO(Long id, ZonedDateTime date,
-                        ZonedDateTime leavingDate, ZonedDateTime arrivalDate, String state, int fuelCost, int distance){
+                        ZonedDateTime leavingDate, ZonedDateTime arrivalDate, String state, Double fuelCost, Integer distance){
         this.id = id;
         this.creationDate = date;
         this.leavingDate = leavingDate;
@@ -168,19 +168,19 @@ public class RouteListDTO {
         this.arrivalDate = arrivalDate;
     }
 
-    public int getFuelCost() {
+    public Double getFuelCost() {
         return fuelCost;
     }
 
-    public void setFuelCost(int fuelCost) {
+    public void setFuelCost(Double fuelCost) {
         this.fuelCost = fuelCost;
     }
 
-    public int getDistance() {
+    public Integer getDistance() {
         return distance;
     }
 
-    public void setDistance(int distance) {
+    public void setDistance(Integer distance) {
         this.distance = distance;
     }
 }

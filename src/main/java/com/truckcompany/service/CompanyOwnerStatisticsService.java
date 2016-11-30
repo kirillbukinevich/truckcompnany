@@ -1,20 +1,16 @@
 package com.truckcompany.service;
 
-import com.truckcompany.domain.Waybill;
 import com.truckcompany.service.dto.RouteListDTO;
-import com.truckcompany.service.dto.WaybillDTO;
 import com.truckcompany.service.facade.RouteListFacade;
 import com.truckcompany.service.facade.WaybillFacade;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
-import org.hibernate.result.Output;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.io.*;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,7 +30,7 @@ public class CompanyOwnerStatisticsService {
     @Inject
     private WaybillFacade waybillFacade;
 
-    public List<List<Long>> getConsumptionStatstics(){
+/*    public List<List<Long>> getConsumptionStatstics(){
         List<RouteListDTO> routeListDTOs = routeListFacade.findRouteLists();
 
         Map<Long, Long> map = routeListDTOs.stream()
@@ -52,7 +48,7 @@ public class CompanyOwnerStatisticsService {
 
         Collections.sort(result, (o1, o2) -> o1.get(0).compareTo(o2.get(0)));
         return result;
-    }
+    }*/
 
     public HSSFWorkbook getRouteListsReport(ZonedDateTime fromDate, ZonedDateTime toDate){
         List<RouteListDTO> routeLists = routeListFacade.findRouteLists(fromDate, toDate);

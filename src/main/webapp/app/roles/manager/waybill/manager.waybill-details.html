@@ -36,14 +36,17 @@
 
                     <dt><span>State:</span></dt>
                     <dd>
-                        <span ng-if="vm.waybill.state == 'CREATED'" class="label label-info"><span
-                            class="glyphicon glyphicon-transfer"></span>&nbsp;CREATED</span>
-                        <span ng-if="vm.waybill.state == 'CHECKED'" class="label label-primary"><span
-                            class="glyphicon glyphicon-ok"></span>&nbsp;CHECKED</span>
-                        <span ng-if="vm.waybill.state == 'DELIVERED'" class="label label-success">DELIVERED</span>
+                        <span ng-if="vm.waybill.state == 'CREATED'" class="label label-info">
+                            <span class="glyphicon glyphicon-plus"></span>&nbsp;CREATED</span>
+                        <span ng-if="vm.waybill.state == 'CHECKED'" class="label label-primary">
+                            <span class="glyphicon glyphicon-transfer"></span>&nbsp;CHECKED</span>
+                        <span ng-if="vm.waybill.state == 'DELIVERED'" class="label label-success">
+                            <span class="glyphicon glyphicon-ok"></span>&nbsp;DELIVERED</span>
+                        <span ng-if="vm.waybill.state == 'REJECTED'" class="label label-danger">
+                            <span class="glyphicon glyphicon-remove"></span>&nbsp;REJECTED</span>
                     </dd>
 
-                    <div ng-if="vm.waybill.state == 'CHECKED'">
+                    <div ng-if="vm.waybill.state != 'CREATED'">
                         <dt><span>Checked by:</span></dt>
                         <dd><span><b>{{vm.waybill.manager.firstName}} {{vm.waybill.manager.lastName}}</b></span> at
                             {{vm.waybill.dateChecked | date:'dd/MM/yy HH:mm'}}
@@ -52,32 +55,55 @@
                 </dl>
             </div>
 
+
+            <!-------------- GOODS INFO --------------->
             <div class="col-md-5">
                 <h4 class="text-center">Goods</h4>
 
-                <dl class="dl-horizontal">
-                    <div ng-repeat="stuff in vm.waybill.goods">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Unchecked</th>
+                        <th ng-if="vm.waybill.state != 'REJECTED'" class="text-center">Confirmed</th>
+                        <th ng-if="vm.waybill.state != 'REJECTED'" class="text-center">$ Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
-                        <div ng-if="vm.waybill.state != 'CHECKED'">
-                            <dt><span>{{stuff.name}}</span></dt>
-                            <dd>
-                                </span><input class="form-control input-sm" value="{{stuff.uncheckedNumber}}"></span>
-                            </dd>
-                        </div>
+                    <tr ng-repeat="stuff in vm.waybill.goods">
+                        <td>{{stuff.name}}
+                            <div>({{stuff.type}})</div>
+                        </td>
+                        <td>
+                            <div class="text-center">{{stuff.uncheckedNumber}}</div>
+                        </td>
+                        <td ng-if="vm.waybill.state != 'REJECTED'">
+                            <input ng-if="vm.waybill.state == 'CREATED'" ng-model="stuff.acceptedNumber" size="5"
+                                   class="form-control input-sm text-center"
+                                   value="{{stuff.uncheckedNumber}}">
+                            <div ng-if="vm.waybill.state != 'CREATED'" class="text-center">
+                                {{stuff.acceptedNumber}}
+                            </div>
+                        </td>
+                        <td ng-if="vm.waybill.state != 'REJECTED'">
+                            <div class="text-center">
+                                <span ng-if="stuff.state != 'UNCHECKED'">{{stuff.price}}</span>
+                                <input ng-if="stuff.state == 'UNCHECKED'" ng-model="stuff.price" size="5"
+                                       class="form-control input-sm text-center">
+                            </div>
+                        </td>
+                    </tr>
 
-                        <div ng-if="vm.waybill.state == 'CHECKED'">
-                            <dt><span>{{stuff.name}}:</span></dt>
-                            <dd>{{stuff.acceptedNumber}}</dd>
-                        </div>
-
-                    </div>
-
-                </dl>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
 
+
+<!--------------------- FOOTER -------------------------->
 <div ng-if="vm.waybill.state == 'CREATED'" class="modal-footer">
     <form name="submitWaybillForm">
         <div class="row">
@@ -100,7 +126,7 @@
         </div>
         <button type="button" class="btn btn-danger" data-dismiss="modal"
                 ng-click="vm.clear(); vm.changeWaybillState(0)">
-            <span class="glyphicon glyphicon-remove">&nbsp;Decline</span>
+            <span class="glyphicon glyphicon-remove">&nbsp;Reject</span>
         </button>
         <button type="button" class="btn btn-success" data-dismiss="modal"
                 ng-click="closeModalWaybillDetails(vm.waybill.id); vm.changeWaybillState(1)">
