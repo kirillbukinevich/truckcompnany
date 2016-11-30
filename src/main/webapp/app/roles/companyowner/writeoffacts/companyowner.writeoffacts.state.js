@@ -18,8 +18,8 @@
                     pageTitle: 'activate.title'
                 },
                 views: {
-                    'page@companyowner': {
-                        templateUrl: 'app/companyowner/writeoffacts/companyowner.writeoffacts.html',
+                    'page@roles': {
+                        templateUrl: 'app/roles/companyowner/writeoffacts/companyowner.writeoffacts.html',
                         controller: 'CompanyownerWriteOffActsController',
                         controllerAs: 'vm'
                     }

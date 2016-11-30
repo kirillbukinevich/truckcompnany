@@ -132,6 +132,28 @@ public class DefaultWaybillFacade implements WaybillFacade {
     }
 
     @Override
+    public Page<WaybillDTO> findWaybillWithStolenGoods(Pageable page) {
+        Page<Waybill> pageWaybills = new PageImpl<>(emptyList());
+
+        Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            log.debug("Get all waybills with stolen goods for user \'{}\'", user.getLogin());
+            if (isCurrentUserInRole("ROLE_COMPANYOWNER")) {
+                pageWaybills = waybillService.getPageWaybillByCompanyAndWithStolenGoods(page, user.getCompany());
+            }
+
+        }
+        return new PageImpl<>(pageWaybills.getContent()
+            .stream()
+            .map(WaybillDTO::new)
+            .collect(Collectors.toList()), page, pageWaybills.getTotalElements());
+    }
+
+
+    @Override
     public Page<WaybillDTO> findWaybills(Pageable pageable) {
         Page<Waybill> pageWaybills = new PageImpl<>(emptyList());
 

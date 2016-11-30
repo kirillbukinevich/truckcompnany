@@ -43,7 +43,7 @@ public class CompanyOwnerStatisticsResource {
     @Inject
     private RouteListFacade routeListFacade;
 
-/*
+
     @RequestMapping(value = "/companyowner/statistic/consumption", method = RequestMethod.GET)
     public ResponseEntity getConsumptionStatistics(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                                            ZonedDateTime startDate,
@@ -51,7 +51,7 @@ public class CompanyOwnerStatisticsResource {
                                                            ZonedDateTime endDate){
         LOG.debug("REST get statistic from company owner");
 
-        List<List<Long>> stat;
+        List<List<Double>> stat;
 
         if (startDate == null || endDate == null){
             stat = statisticsService.getConsumptionStatistics();
@@ -69,7 +69,7 @@ public class CompanyOwnerStatisticsResource {
                                                        ZonedDateTime endDate){
         LOG.debug("REST get loss statistic from company owner");
 
-        List<List<Long>> stat;
+        List<List<Double>> stat;
 
         if (startDate == null || endDate == null){
             stat = statisticsService.getLossStatistics();
@@ -79,7 +79,7 @@ public class CompanyOwnerStatisticsResource {
         }
         return new ResponseEntity<>(stat, HttpStatus.OK);
     }
-*/
+
 
     @RequestMapping(value = "/companyowner/statistic/xls/consumption", method = RequestMethod.GET)
     public ResponseEntity<ByteArrayResource> getConsumptionReport(@RequestParam(value="startDate", required = false)
@@ -145,11 +145,9 @@ public class CompanyOwnerStatisticsResource {
 
 
     @RequestMapping(value = "/companyowner/statistic/xls/loss", method = RequestMethod.GET)
-    public ResponseEntity<ByteArrayResource> getLossReport(@RequestParam(value="startDate", required = false)
-                                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    public ResponseEntity<ByteArrayResource> getLossReport(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                                                       ZonedDateTime startDate,
-                                                                  @RequestParam(value="endDate", required = false)
-                                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                  @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                                                       ZonedDateTime endDate){
         LOG.debug("REST get loss xls report from company owner");
 
@@ -159,7 +157,7 @@ public class CompanyOwnerStatisticsResource {
             workbook = statisticsService.getLossReport();
         }
         else{
-            //workbook = statisticsService.getConsumptionReport(startDate, endDate);
+            workbook = statisticsService.getLossReport(startDate, endDate);
         }
         try{
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

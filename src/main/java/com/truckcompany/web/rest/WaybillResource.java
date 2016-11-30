@@ -88,6 +88,25 @@ public class WaybillResource {
         }
     }
 
+    @RequestMapping(value = "/waybills/with_stolen_goods",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List> getWaybillsWithStolenGoods(Pageable pageable) throws URISyntaxException {
+        log.debug("REST request get all Waybills with stolen goods");
+
+        Page<WaybillDTO> page = waybillFacade.findWaybillWithStolenGoods(pageable);
+
+        List<ManagedWaybillVM> managedWaybillVMs = page.getContent().stream()
+            .map(ManagedWaybillVM::new)
+            .collect(Collectors.toList());
+
+        HttpHeaders headers = generatePaginationHttpHeaders(page, "/api/waybills");
+
+        return new ResponseEntity(managedWaybillVMs, headers, HttpStatus.OK);
+
+    }
+
 
     @RequestMapping(value = "/waybills/{id}",
         method = RequestMethod.GET,

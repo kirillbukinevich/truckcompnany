@@ -11,16 +11,15 @@ import com.truckcompany.web.rest.vm.ManagedWaybillVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -69,9 +68,29 @@ public class WaybillService {
         return waybillRepository.findByCompany(company);
     }
 
+    public Page<Waybill> getPageWaybillByCompanyAndWithStolenGoods(Pageable pageable, Company company){
+        log.debug("Get waybills with stolen goods and company with id: {}", company.getId());
+        List<Waybill> waybills = waybillRepository.findByCompanyAndState(company, WaybillState.DELIVERED);
+        int total = waybills.size();
+        waybills = waybills
+            .stream()
+            .filter(waybill -> waybill.getGoods()
+                .stream()
+                .anyMatch(
+                    goods -> goods.getDeliveredNumber() != null &&
+                        !Objects.equals(goods.getDeliveredNumber(), goods.getAcceptedNumber())
+                )
+            )
+            .skip(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .collect(Collectors.toList());
+
+        return new PageImpl<>(waybills, pageable, total);
+    }
+
 
     public List<Waybill> getWaybillByCompanyAndRouteListCreationDateBetween(Company company, ZonedDateTime fromDate,
-                                                                      ZonedDateTime toDate){
+                                                                            ZonedDateTime toDate){
         log.debug("Get waybill for company with id: {}", company.getId());
         return waybillRepository.findByCompanyAndRouteListCreationDateBetween(company, fromDate, toDate);
     }

@@ -23,7 +23,9 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.function.DoublePredicate;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -86,13 +88,13 @@ public class CompanyOwnerStatisticsService {
         return result;
     }
 
-    public List<List<Long>> getLossStatistics(){
+    public List<List<Double>> getLossStatistics(){
         List<WaybillDTO> waybills = waybillFacade.findWaybillsWithState(WaybillState.DELIVERED);
         return createGraphLossData(waybills);
 
     }
 
-    public List<List<Long>> getLossStatistics(ZonedDateTime fromDate, ZonedDateTime toDate){
+    public List<List<Double>> getLossStatistics(ZonedDateTime fromDate, ZonedDateTime toDate){
         List<WaybillDTO> waybills = waybillFacade.findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED,
             fromDate, toDate);
         return createGraphLossData(waybills);
@@ -153,7 +155,12 @@ public class CompanyOwnerStatisticsService {
     }
 
     public HSSFWorkbook getLossReport(){
-        List<List<Long>> statistics = getLossStatistics();
+        List<List<Double>> statistics = getLossStatistics();
+        return createLossReport(statistics);
+    }
+
+    public HSSFWorkbook getLossReport(ZonedDateTime fromDate, ZonedDateTime toDate){
+        List<List<Double>> statistics = getLossStatistics(fromDate, toDate);
         return createLossReport(statistics);
     }
 
@@ -277,18 +284,20 @@ public class CompanyOwnerStatisticsService {
 
     }
 
-    private List<List<Long>> createGraphLossData(List<WaybillDTO> waybills){
-        Function<WaybillDTO, Long> valueMapper = s -> s.getGoods().stream()
-            .mapToLong(goods -> goods.getAcceptedNumber() - goods.getDeliveredNumber())
+    private List<List<Double>> createGraphLossData(List<WaybillDTO> waybills){
+
+        Function<WaybillDTO, Double> valueMapper = s -> s.getGoods().stream()
+            .filter(goodsDTO -> goodsDTO.getDeliveredNumber() != null)
+            .mapToDouble(goods -> (goods.getAcceptedNumber() - goods.getDeliveredNumber())*goods.getPrice())
             .sum();
 
-        Map<Long, Long> map = waybills.stream()
+        Map<Long, Double> map = waybills.stream()
             .collect(Collectors.toMap(s -> s.getDate().toInstant().toEpochMilli(), valueMapper, (a,b) -> a +b));
 
-        List<List<Long>> result = new ArrayList<>();
-        for (Map.Entry<Long, Long> entry : map.entrySet()){
-            ArrayList<Long> list = new ArrayList<>();
-            list.add(entry.getKey());
+        List<List<Double>> result = new ArrayList<>();
+        for (Map.Entry<Long, Double> entry : map.entrySet()){
+            ArrayList<Double> list = new ArrayList<>();
+            list.add(Double.valueOf(entry.getKey()));
             list.add(entry.getValue());
             result.add(list);
         }
@@ -298,7 +307,7 @@ public class CompanyOwnerStatisticsService {
         return result;
     }
 
-    private HSSFWorkbook createLossReport(List<List<Long>> statistics){
+    private HSSFWorkbook createLossReport(List<List<Double>> statistics){
         HSSFWorkbook book = new HSSFWorkbook();
         Sheet sheet = book.createSheet("loss report");
 
@@ -316,12 +325,12 @@ public class CompanyOwnerStatisticsService {
 
         int index = 1;
 
-        for (List<Long> record : statistics){
+        for (List<Double> record : statistics){
             Row row = sheet.createRow(index++);
 
             Cell dateCell = row.createCell(0);
             dateCell.setCellStyle(dateStyle);
-            dateCell.setCellValue(GregorianCalendar.from(Instant.ofEpochMilli(record.get(0)).atZone(ZoneOffset.UTC)));
+            dateCell.setCellValue(GregorianCalendar.from(Instant.ofEpochMilli(record.get(0).longValue()).atZone(ZoneOffset.UTC)));
 
             Cell valueCell = row.createCell(1);
             valueCell.setCellValue(record.get(1));

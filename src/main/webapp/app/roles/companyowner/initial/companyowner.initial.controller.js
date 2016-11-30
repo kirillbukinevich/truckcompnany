@@ -14,12 +14,12 @@
         vm.loadData = loadData;
         vm.loadConsumptionData = loadConsumptionData;
         vm.downloadConsumptionReport = downloadConsumptionReport;
-        vm.loadLossDate = loadLossData;
+        vm.loadLossData = loadLossData;
         vm.downloadLossReport = downloadLossReport;
 
         vm.datePicker = {
             startDate: null,
-            endDate: null,
+            endDate: null
         };
 
         vm.datePickerOpts = {
@@ -45,7 +45,30 @@
         };
 
         vm.lossDatePicker = {
+            startDate: null,
+            endDate: null
+        };
 
+        vm.lossDatePickerOpts = {
+            locale : {
+                format: "MMMM D, YYYY",
+                customRangeLabel: 'Custom range'
+            },
+            ranges: {
+                'Last week' : [moment().subtract(1, "weeks").startOf("week"),
+                    moment().subtract(1, "weeks").endOf("week")],
+                'Last month' : [moment().subtract(1, "months").startOf("month"),
+                    moment().subtract(1, "months").endOf("month")]
+            },
+            eventHandlers : {
+                'apply.daterangepicker' : function (ev, picker) {
+                    $('div[name="lossDatepicker"] span').html(vm.lossDatePicker.startDate.format('MMMM D, YYYY') + ' - '
+                        + vm.lossDatePicker.endDate.format('MMMM D, YYYY'));
+                    vm.loadLossData();
+                }
+            },
+            maxDate: moment().endOf("day"),
+            opens: 'left'
         };
 
         vm.loadData();
@@ -59,7 +82,7 @@
 
         function loadData() {
             vm.loadConsumptionData();
-            vm.loadLossDate();
+            vm.loadLossData();
         }
 
         function loadConsumptionData(){
