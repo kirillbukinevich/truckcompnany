@@ -79,9 +79,9 @@
                             <div class="text-center">{{stuff.uncheckedNumber}}</div>
                         </td>
                         <td ng-if="vm.waybill.state != 'REJECTED'">
-                            <input ng-if="vm.waybill.state == 'CREATED'" ng-model="stuff.acceptedNumber" size="5"
-                                   class="form-control input-sm text-center"
-                                   value="{{stuff.uncheckedNumber}}">
+                            <input type="number" ng-if="vm.waybill.state == 'CREATED'" ng-model="stuff.acceptedNumber"
+                                   size="5" min="0" max="{{stuff.uncheckedNumber}}"
+                                   class="form-control input-sm text-center" value="{{stuff.uncheckedNumber}}">
                             <div ng-if="vm.waybill.state != 'CREATED'" class="text-center">
                                 {{stuff.acceptedNumber}}
                             </div>
@@ -109,11 +109,11 @@
         <div class="row">
             <div class="col-md-1"></div>
             <div class="col-md-4">
-                <!--<div class="form-group">-->
+                <div class="form-group">
                     <label for="manager" class="pull-left">Checked by:</label>
                     <input type="text" id="manager" class="form-control" name="confirmedBy"
                            ng-model="vm.fullName" readonly>
-                <!--</div>-->
+                </div>
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-4">
@@ -135,8 +135,7 @@
                             class="glyphicon glyphicon-calendar"></i></button>
                         </span>
                     </div>
-                    <!--<input type="date" id="checkDate" class="form-control" name="checkDate"-->
-                    <!--ng-model="vm.waybill.dateChecked">-->
+
                 </div>
             </div>
         </div>
