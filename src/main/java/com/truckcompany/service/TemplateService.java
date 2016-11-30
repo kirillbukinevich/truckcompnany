@@ -1,9 +1,7 @@
 package com.truckcompany.service;
 
 import com.sun.mail.util.MailConnectException;
-import com.truckcompany.domain.MailError;
-import com.truckcompany.domain.Template;
-import com.truckcompany.domain.User;
+import com.truckcompany.domain.*;
 import com.truckcompany.domain.enums.MailErrorStatus;
 import com.truckcompany.repository.MailErrorRepository;
 import com.truckcompany.repository.TemplateRepository;
@@ -135,6 +133,15 @@ public class TemplateService {
             return true;
         }
         return false;
+    }
+
+    public void deleteMailErrors(Long[] idErrors){
+        Arrays.stream(idErrors).forEach(id -> {
+            MailError error = mailErrorRepository.findOne(id);
+            if (error != null) {
+               mailErrorRepository.delete(error);
+            };
+        });
     }
 
 

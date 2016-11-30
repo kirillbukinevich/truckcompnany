@@ -93,6 +93,12 @@ public class TemplateResource {
             return new ResponseEntity(BAD_REQUEST);
         }
     }
+    @RequestMapping(value = "/templates/errors/deleteArray", method = POST)
+    public ResponseEntity<Void> deleteErrors(@RequestBody Long[] idList){
+        LOG.debug("REST request to delete list of errors {}" ,idList);
+        templateService.deleteMailErrors(idList);
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert("storages.deleted", "null")).build();
+    }
 
     @RequestMapping(value = "/templates/sendagain/{errorId}", method = GET)
     public ResponseEntity sendEmailAgain(@PathVariable Long errorId) {

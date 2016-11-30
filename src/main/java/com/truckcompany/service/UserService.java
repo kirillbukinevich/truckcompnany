@@ -197,6 +197,7 @@ public class UserService {
         user.setFlat(managedUserVM.getFlat());
         user.setPassport(managedUserVM.getPassport());
         user.setBirthDate(managedUserVM.getBirthDate());
+        log.debug("ATTENTION: from front {}; in back: {}", managedUserVM.getBirthDate(), user.getBirthDate());
         if (managedUserVM.getLangKey() == null) {
             user.setLangKey("en"); // default language
         } else {
