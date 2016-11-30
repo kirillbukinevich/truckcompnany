@@ -15,12 +15,16 @@
     </changeSet>
 
 
-    <changeSet id="00000000000009" author="bukinevich">
+    <changeSet id="00000000000010" author="topolev">
 
         <loadData encoding="UTF-8"
-                  file="config/liquibase/checkpoint.csv"
+                  file="config/liquibase/templates.csv"
                   separator=";"
-                  tableName="checkpoint"/>
+                  tableName="template"/>
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/errors.csv"
+                  separator=";"
+                  tableName="mail_error"/>
 
     </changeSet>
 </databaseChangeLog>

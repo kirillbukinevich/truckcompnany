@@ -29,4 +29,8 @@ public interface TemplateRepository extends JpaRepository<Template, Long> {
         "left join fetch template.recipient left join fetch template.admin where template.admin = ?1",
         countQuery = "select count(template) from Template template left join template.admin  where template.admin =?1")
     Page<Template> findByTemplateCreatedByAdmin(User admin, Pageable page);
+
+    @Query(value = "select distinct template from Template template left join fetch template.recipient where " +
+        "day(template.birthday) = day(current_date()) and month(template.birthday) = month(current_date())")
+    List<Template> findTemplateByBirthdayToday();
 }

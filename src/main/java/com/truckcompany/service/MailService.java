@@ -1,12 +1,17 @@
 package com.truckcompany.service;
 
 import com.truckcompany.config.JHipsterProperties;
+import com.truckcompany.domain.MailError;
+import com.truckcompany.domain.Template;
 import com.truckcompany.domain.User;
 
+import com.truckcompany.domain.enums.MailErrorStatus;
+import com.truckcompany.repository.MailErrorRepository;
 import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -19,9 +24,13 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.time.ZonedDateTime;
 import java.util.Locale;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+
+import static com.truckcompany.domain.enums.MailErrorStatus.*;
 
 /**
  * Service for sending e-mails.
@@ -69,23 +78,70 @@ public class MailService {
         }
     }
 
-    @Async
-    public void sendBirthdayCard(String to, String subject, String content)  throws Exception {
-        log.debug("Send birthdaycard via email to {}");
 
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+    @Inject
+    private MailErrorRepository mailErrorRepository;
 
-
-            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, CharEncoding.UTF_8);
-            message.setTo(to);
-            message.setFrom(jHipsterProperties.getMail().getFrom());
-            message.setSubject(subject);
-            message.setText(content, true);
-            javaMailSender.send(mimeMessage);
-            log.debug("Sent e-mail to User '{}'", to);
-
+    private void saveErrorDuringSendingBirthdayCard(Template template){
+        MailError mailError = new MailError();
+        mailError.setLastSending(ZonedDateTime.now());
+        mailError.setTemplate(template);
+        mailError.setStatus(ERROR_AUTOMATICALLY);
+        mailErrorRepository.save(mailError);
     }
 
+    private MimeMessage createMimeMessage(Template template) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, CharEncoding.UTF_8);
+        message.setTo(template.getRecipient().getEmail());
+        message.setFrom(jHipsterProperties.getMail().getFrom());
+        message.setSubject(template.getName());
+        message.setText(template.getTemplate(), true);
+        return mimeMessage;
+    }
+
+    @Async
+    public void sendBirthdayCard(Template template) {
+        log.debug("Send birthdaycard via email to {}");
+
+        int numberAttemptsToSend = 0;
+        try {
+            MimeMessage mimeMessage = createMimeMessage(template);
+
+            boolean isSuccessSent = false;
+
+            while (!isSuccessSent && numberAttemptsToSend <= 5) {
+                try {
+                    javaMailSender.send(mimeMessage);
+                    isSuccessSent = true;
+                } catch (Throwable ex) {
+                    log.debug("Birthday card could not be sent to {}. Attempt #{}", template.getRecipient().getEmail(), numberAttemptsToSend);
+                    numberAttemptsToSend++;
+                    TimeUnit.SECONDS.sleep(5);
+                }
+            }
+            if (isSuccessSent) {
+                log.debug("Birthday card was sent success to {}.", template.getRecipient().getEmail());
+            } else{
+                log.debug("Message isn't delivered to {}. Number of attempts is more that 5.", template.getRecipient().getEmail());
+                saveErrorDuringSendingBirthdayCard(template);
+            }
+        } catch (MessagingException | InterruptedException e) {
+            log.debug("Message isn't delivered to {}. Cannot create Mime message.", template.getRecipient().getEmail());
+            saveErrorDuringSendingBirthdayCard(template);
+
+        }
+    }
+
+    public boolean sendBirthdayCardOnce(Template template){
+        log.debug("Send birthdaycard via email to {}");
+        try {
+            javaMailSender.send(createMimeMessage(template));
+            return true;
+        } catch (Throwable  e){
+            return false;
+        }
+    }
 
 
     @Async
