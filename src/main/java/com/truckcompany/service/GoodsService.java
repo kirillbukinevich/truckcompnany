@@ -46,15 +46,15 @@ public class GoodsService {
     }
 
     public void updateGoods(List<GoodsVM> goodsList) {
-        for(GoodsVM dto: goodsList) {
-            goodsRepository.findOneById(dto.getId()).ifPresent(goods -> {
-                goods.setName(dto.getName());
-                goods.setAcceptedNumber(dto.getAcceptedNumber());
-                goods.setUncheckedNumber(dto.getUncheckedNumber());
-                goods.setDeliveredNumber(dto.getDeliveredNumber());
-                goods.setType(dto.getType());
-                goods.setState(dto.getState());
-                goods.setPrice(dto.getPrice());
+        for(GoodsVM vm: goodsList) {
+            goodsRepository.findOneById(vm.getId()).ifPresent(goods -> {
+                goods.setName(vm.getName());
+                goods.setAcceptedNumber(vm.getAcceptedNumber());
+                goods.setUncheckedNumber(vm.getUncheckedNumber());
+                goods.setDeliveredNumber(vm.getDeliveredNumber());
+                goods.setType(vm.getType());
+                goods.setState(vm.getState());
+                goods.setPrice(vm.getPrice());
                 log.debug("Changed Information for Goods: {}", goods);
             });
         }

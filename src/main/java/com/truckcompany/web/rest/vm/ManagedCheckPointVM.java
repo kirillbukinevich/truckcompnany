@@ -6,7 +6,8 @@ import com.truckcompany.service.dto.CheckpointDTO;
 
 import java.util.Date;
 
-public class ManagedCheckPointVM extends CheckpointDTO{
+public class ManagedCheckPointVM extends CheckpointDTO {
+
     public ManagedCheckPointVM(Long id, String name, Date checkDate, RouteList routeList) {
         super(id, name, checkDate, routeList);
     }

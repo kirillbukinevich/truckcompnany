@@ -1,6 +1,7 @@
 package com.truckcompany.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.truckcompany.domain.enums.WaybillState;
 
 import javax.persistence.*;
@@ -37,6 +38,7 @@ public class Waybill implements Serializable {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "route_list_id", nullable = false)
+    @JsonManagedReference
     private RouteList routeList;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

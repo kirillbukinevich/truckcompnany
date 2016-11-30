@@ -30,7 +30,14 @@
                        ng-model="vm.waybill.routeList.arrivalStorage.address">
             </div>
             <div class="text">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="fuelCost">Fuel cost $:</label>
+                        <input ng-model="vm.waybill.routeList.fuelCost" type="text" id="fuelCost" class="form-control">
+                    </div>
+                </form>
                 <h4>Total distance: {{vm.dist}} km</h4>
+
             </div>
         </div>
         <div class="col-sm-1">
@@ -42,12 +49,17 @@
                     <input class="form-control" type="text" ng-model="wayPoint.location" name="''"
                            ng-change="calcDistance()"
                            placeholder="Enter checkpoint">
-                    <button class="btn-small btn-danger" ng-show="$last" ng-click="removeWayPoint()"><span
+                    <button ng-if="vm.waybill.routeList.state == 'UNCHECKED'"
+                            class="btn-small btn-danger" ng-show="$last" ng-click="removeWayPoint()"><span
                         class="glyphicon glyphicon-minus"></span></button>
                 </div>
             </fieldset>
-            <button class="btn btn-default" ng-click="addNewWayPoint()">Add waypoints</button>
+            <button ng-if="vm.waybill.routeList.state == 'UNCHECKED'" class="btn btn-default"
+                    ng-click="addNewWayPoint()">Add waypoints
+            </button>
         </div>
     </div>
-    <button class="btn btn-success pull-right" ng-click="vm.confirmRoutelist()">Confirm</button>
+    <button ng-if="vm.waybill.routeList.state == 'UNCHECKED'" class="btn btn-success pull-right"
+            ng-click="vm.confirmRoutelist()">Confirm
+    </button>
 </form>

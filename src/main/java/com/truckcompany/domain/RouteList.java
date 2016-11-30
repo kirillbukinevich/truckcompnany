@@ -1,5 +1,7 @@
 package com.truckcompany.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -43,7 +45,7 @@ public class RouteList implements Serializable {
     @JoinColumn(name = "arrival_storage_id", nullable = false)
     private Storage arrivalStorage;
 
-
+    @JsonBackReference
     @OneToOne(mappedBy = "routeList", fetch = FetchType.LAZY)
     private Waybill waybill;
 

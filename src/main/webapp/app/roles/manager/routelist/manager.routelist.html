@@ -25,13 +25,18 @@
             <td>{{routelist.truck.regNumber}}</td>
             <td>{{routelist.leavingDate | date:"dd/MM/yy HH:mm"}}</td>
             <td>{{routelist.arrivalDate | date:"dd/MM/yy HH:mm"}}</td>
-            <td><a href="#/manager/routelist-for-waybill/{{routelist.id}}">{{routelist.leavingStorage.address}}<span class="glyphicon glyphicon-arrow-right"></span>
+            <td><a href="#/manager/routelist-for-waybill/{{routelist.id}}">{{routelist.leavingStorage.address}}<span
+                class="glyphicon glyphicon-arrow-right"></span>
                 {{routelist.arrivalStorage.address}}
             </a>
             </td>
             <td>
-                <span ng-if="routelist.state == 'TRANSPORTATION'" class="label label-info">{{routelist.state}}</span>
-                <span ng-if="routelist.state == 'DELIVERED'" class="label label-success">{{routelist.state}}</span>
+                <span ng-if="routelist.state == 'UNCHECKED'" class="label label-info">
+                    <span class="glyphicon glyphicon-plus"></span>&nbsp;{{routelist.state}}</span>
+                <span ng-if="routelist.state == 'TRANSPORTATION'" class="label label-primary">
+                    <span class="glyphicon glyphicon-transfer"></span>&nbsp;{{routelist.state}}</span>
+                <span ng-if="routelist.state == 'DELIVERED'" class="label label-success">
+                    <span class="glyphicon glyphicon-ok"></span>&nbsp;{{routelist.state}}</span>
             </td>
         </tr>
         </tbody>
