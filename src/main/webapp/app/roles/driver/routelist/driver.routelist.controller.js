@@ -13,8 +13,10 @@
         vm.checkpoints = [];
         vm.goods1 = [];
         vm.checkpointNames = [];
+        vm.imageWaypoints = [];
         vm.waybills = Waybill.query(function () {
             angular.forEach(vm.waybills, function (value) {
+                console.log("imageWaypoints: " + vm.imageWaypoints);
                 RouteList.get({id: value.routeList.id}, function (result) {
                     vm.routeList = result;
                     console.log(vm.routeList);
@@ -23,6 +25,8 @@
                     var i = 0;
                     angular.forEach(vm.checkpoints, function (value) {
                         vm.checkpointNames[i] = {location: value.name, stopover: true};
+                        vm.imageWaypoints[i] = {position: vm.checkpoints[i].name,
+                            image: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'};
                         i++;
                         // {location: 'ozarichi', stopover: true}
                     });
@@ -54,6 +58,8 @@
                             for (var j in vm.checkpoints) {
                                 if (vm.checkpoints[j].id == id) {
                                     vm.checkpoints[j].checkDate = dateTime;
+                                    vm.imageWaypoints[j] = {position: vm.checkpoints[j].name,
+                                        image: 'http://inspire.ecoachmanager.com/images/32x32/accept_item.png'};
                                 }
                             }
                             checkLastCheckpoint(index);
@@ -92,15 +98,16 @@
                 if(vm.goods1[i] != true) {
                     vm.goods1[i].state = "DELIVERED";
                 }
+            }
                 $http({
                     method: 'PUT',
                     url: '/api/goods',
-                    data: vm.goods1[i]
+                    data: vm.goods1
                 }).then(function successCallback(response) {
                     console.log("date changed");
 
                 });
-            }
+
             vm.routeList.state = "DELIVERED";
             vm.routeList.arrivalDate = Date.now();
             $http({
@@ -110,5 +117,9 @@
             });
             $location.path('/driver/routelist');
         };
-     }
+
+        // vm.click1 = function (name) {
+        //
+        // }
+    }
 })();
