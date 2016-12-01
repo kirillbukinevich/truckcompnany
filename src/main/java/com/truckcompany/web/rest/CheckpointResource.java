@@ -48,9 +48,7 @@ public class CheckpointResource {
         log.debug("REST request get all Checkpoints");
 
         List<Checkpoint> checkpoints = Collections.emptyList();
-        System.out.println("HERE---------" + routeListId);
         checkpoints = checkpointService.getCheckpoints(routeListId);
-        System.out.println(checkpoints);
         for (Checkpoint checkpoint : checkpoints) {
             checkpoint.setRouteList(null);
         }
