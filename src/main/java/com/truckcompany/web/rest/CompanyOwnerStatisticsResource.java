@@ -62,6 +62,42 @@ public class CompanyOwnerStatisticsResource {
         return new ResponseEntity<>(stat, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/companyowner/statistic/income", method = RequestMethod.GET)
+    public ResponseEntity getIncomeStatistics(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                ZonedDateTime startDate,
+                                            @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                ZonedDateTime endDate){
+        LOG.debug("REST get income statistic from company owner");
+
+        List<List<Double>> stat;
+
+        if (startDate == null || endDate == null){
+            stat = statisticsService.getIncomeStatistics();
+        }
+        else{
+            stat = statisticsService.getIncomeStatistics(startDate, endDate);
+        }
+        return new ResponseEntity<>(stat, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/companyowner/statistic/profit", method = RequestMethod.GET)
+    public ResponseEntity getProfitStatistics(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                  ZonedDateTime startDate,
+                                              @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                  ZonedDateTime endDate){
+        LOG.debug("REST get income statistic from company owner");
+
+        List<List<Double>> stat;
+
+        if (startDate == null || endDate == null){
+            stat = statisticsService.getProfitStatistics();
+        }
+        else{
+            stat = statisticsService.getProfitStatistics(startDate, endDate);
+        }
+        return new ResponseEntity<>(stat, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/companyowner/statistic/loss", method = RequestMethod.GET)
     public ResponseEntity getLossStatistics(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                                        ZonedDateTime startDate,

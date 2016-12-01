@@ -27,6 +27,7 @@ import java.util.function.DoublePredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by Vlad Momotov on 24.11.2016.
@@ -44,48 +45,84 @@ public class CompanyOwnerStatisticsService {
     private WaybillFacade waybillFacade;
 
 
-
-       // public List<List<Long>> getConsumptionStatistics(){
-
     public List<List<Double>> getConsumptionStatistics(){
+        List<WaybillDTO> waybills = waybillFacade.findWaybillsWithState(WaybillState.DELIVERED);
 
-        List<RouteListDTO> routeListDTOs = routeListFacade.findRouteLists();
+        Map<Long, Double> map = getConsumptionDataMap(waybills);
 
-        Map<Long, Double> map = routeListDTOs.stream()
-            .collect(Collectors.toMap(s-> s.getCreationDate().toInstant().toEpochMilli(),
-                s-> s.getTruck().getConsumption()*s.getFuelCost()*s.getDistance(),
-                (a,b) -> a+ b));
-
-        List<List<Double>> result = new ArrayList<>();
-        for (Map.Entry<Long, Double> entry : map.entrySet()){
-            ArrayList<Double> list = new ArrayList<>();
-            list.add(Double.valueOf(entry.getKey()));
-            list.add(entry.getValue());
-            result.add(list);
-        }
-
+        List<List<Double>> result = convertToConvenientForGraphView(map);
         Collections.sort(result, (o1, o2) -> o1.get(0).compareTo(o2.get(0)));
         return result;
     }
 
     public List<List<Double>> getConsumptionStatistics(ZonedDateTime fromDate, ZonedDateTime toDate){
-        List<RouteListDTO> routeListDTOs = routeListFacade.findRouteLists(fromDate, toDate);
+        List<WaybillDTO> waybills = waybillFacade
+            .findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED, fromDate, toDate);
 
-        Map<Long, Double> map = routeListDTOs.stream()
-            .collect(Collectors.toMap(s-> s.getCreationDate().toInstant().toEpochMilli(),
-                s-> s.getTruck().getConsumption()*s.getFuelCost()*s.getDistance(),
-                (a,b) -> a+ b));
+        Map<Long, Double> map = getConsumptionDataMap(waybills);
 
-        List<List<Double>> result = new ArrayList<>();
-        for (Map.Entry<Long, Double> entry : map.entrySet()){
-            ArrayList<Double> list = new ArrayList<>();
-            list.add(Double.valueOf(entry.getKey()));
-            list.add(entry.getValue());
-            result.add(list);
-        }
-
+        List<List<Double>> result = convertToConvenientForGraphView(map);
         Collections.sort(result, (o1, o2) -> o1.get(0).compareTo(o2.get(0)));
         return result;
+    }
+
+    public List<List<Double>> getIncomeStatistics(){
+        List<WaybillDTO> waybills = waybillFacade.findWaybillsWithState(WaybillState.DELIVERED);
+        double percent = 1.4;
+
+        Map<Long, Double> map = waybills.stream() // @todo add percent of consumption!!
+            .collect(Collectors.toMap(s-> s.getDate().toInstant().toEpochMilli(),
+                s-> s.getRouteList().getTruck().getConsumption()*s.getRouteList().getFuelCost()
+                    *s.getRouteList().getDistance()*percent,
+                (a,b) -> a+ b));
+
+        List<List<Double>> arrayForGraph = convertToConvenientForGraphView(map);
+
+
+        Collections.sort(arrayForGraph, (o1, o2) -> o1.get(0).compareTo(o2.get(0)));
+        return arrayForGraph;
+    }
+
+    public List<List<Double>> getIncomeStatistics(ZonedDateTime fromDate, ZonedDateTime toDate){
+        List<WaybillDTO> waybills = waybillFacade
+            .findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED, fromDate, toDate);
+        double percent = 1.4;
+
+        Map<Long, Double> map = waybills.stream() // @todo add percent of consumption!!
+            .collect(Collectors.toMap(s-> s.getDate().toInstant().toEpochMilli(),
+                s-> s.getRouteList().getTruck().getConsumption()*s.getRouteList().getFuelCost()
+                    *s.getRouteList().getDistance()*percent,
+                (a,b) -> a+ b));
+
+        List<List<Double>> arrayForGraph = convertToConvenientForGraphView(map);
+
+
+        Collections.sort(arrayForGraph, (o1, o2) -> o1.get(0).compareTo(o2.get(0)));
+        return arrayForGraph;
+    }
+
+    public List<List<Double>> getProfitStatistics(){
+        List<WaybillDTO> waybills = waybillFacade.findWaybillsWithState(WaybillState.DELIVERED);
+
+        Map<Long, Double> profit = getProfitDataMap(waybills);
+
+        List<List<Double>> arrayForGraph = convertToConvenientForGraphView(profit);
+
+        Collections.sort(arrayForGraph, (o1, o2) -> o1.get(0).compareTo(o2.get(0)));
+        return arrayForGraph;
+    }
+
+    public List<List<Double>> getProfitStatistics(ZonedDateTime fromDate, ZonedDateTime toDate){
+        List<WaybillDTO> waybills = waybillFacade
+            .findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED, fromDate, toDate);
+
+
+        Map<Long, Double> profit = getProfitDataMap(waybills);
+
+        List<List<Double>> arrayForGraph = convertToConvenientForGraphView(profit);
+
+        Collections.sort(arrayForGraph, (o1, o2) -> o1.get(0).compareTo(o2.get(0)));
+        return arrayForGraph;
     }
 
     public List<List<Double>> getLossStatistics(){
@@ -286,21 +323,8 @@ public class CompanyOwnerStatisticsService {
 
     private List<List<Double>> createGraphLossData(List<WaybillDTO> waybills){
 
-        Function<WaybillDTO, Double> valueMapper = s -> s.getGoods().stream()
-            .filter(goodsDTO -> goodsDTO.getDeliveredNumber() != null)
-            .mapToDouble(goods -> (goods.getAcceptedNumber() - goods.getDeliveredNumber())*goods.getPrice())
-            .sum();
-
-        Map<Long, Double> map = waybills.stream()
-            .collect(Collectors.toMap(s -> s.getDate().toInstant().toEpochMilli(), valueMapper, (a,b) -> a +b));
-
-        List<List<Double>> result = new ArrayList<>();
-        for (Map.Entry<Long, Double> entry : map.entrySet()){
-            ArrayList<Double> list = new ArrayList<>();
-            list.add(Double.valueOf(entry.getKey()));
-            list.add(entry.getValue());
-            result.add(list);
-        }
+        Map<Long,Double> map = getLossDataMap(waybills);
+        List<List<Double>> result = convertToConvenientForGraphView(map);
 
         Collections.sort(result, (o1, o2) -> o1.get(0).compareTo(o2.get(0)));
 
@@ -340,6 +364,62 @@ public class CompanyOwnerStatisticsService {
         sheet.autoSizeColumn(1);
 
         return book;
+    }
+
+    private List<List<Double>> convertToConvenientForGraphView(Map<Long, Double> map){
+        List<List<Double>> result = new ArrayList<>();
+        for (Map.Entry<Long, Double> entry : map.entrySet()){
+            ArrayList<Double> list = new ArrayList<>();
+            list.add(Double.valueOf(entry.getKey()));
+            list.add(entry.getValue());
+            result.add(list);
+        }
+        return result;
+    }
+
+    private Map<Long, Double> getLossDataMap(List<WaybillDTO> waybills){
+        Function<WaybillDTO, Double> valueMapper = s -> s.getGoods().stream()
+            .filter(goodsDTO -> goodsDTO.getDeliveredNumber() != null)
+            .mapToDouble(goods -> (goods.getAcceptedNumber() - goods.getDeliveredNumber())*goods.getPrice())
+            .sum();
+
+        Map<Long, Double> map = waybills.stream()
+            .collect(Collectors.toMap(s -> s.getDate().toInstant().toEpochMilli(), valueMapper, (a,b) -> a +b));
+
+        return map;
+    }
+
+    private Map<Long, Double> getConsumptionDataMap(List<WaybillDTO> waybills){
+        Map<Long, Double> map = waybills.stream()
+            .collect(Collectors.toMap(s-> s.getDate().toInstant().toEpochMilli(),
+                s-> s.getRouteList().getTruck().getConsumption()*s.getRouteList().getFuelCost()
+                    *s.getRouteList().getDistance(),
+                (a,b) -> a+ b));
+        return map;
+    }
+
+    private Map<Long, Double> getProfitDataMap(List<WaybillDTO> waybills){
+        double percent = 0.4;
+
+        // profit without loss;
+        Map<Long, Double> profitMap = waybills.stream() // @todo add percent of consumption!!
+            .collect(Collectors.toMap(s-> s.getDate().toInstant().toEpochMilli(),
+                s-> s.getRouteList().getTruck().getConsumption()*s.getRouteList().getFuelCost()
+                    *s.getRouteList().getDistance()*percent ,
+                (a,b) -> a+ b));
+
+        // loss
+        Map<Long,Double> lossMap = getLossDataMap(waybills);
+
+        Set<Long> dates = new HashSet<> (profitMap.keySet());
+        dates.addAll(lossMap.keySet());
+
+        Map<Long, Double> profit = Stream.concat(profitMap.keySet().stream(), lossMap.keySet().stream())
+            .distinct()
+            .collect(Collectors.toMap(k -> k, k-> profitMap.getOrDefault(k, (double) 0) - lossMap.getOrDefault(k, (double) 0)));
+
+        return profit;
+
     }
 
 }

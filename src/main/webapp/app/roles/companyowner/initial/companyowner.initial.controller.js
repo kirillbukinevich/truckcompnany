@@ -16,6 +16,8 @@
         vm.downloadConsumptionReport = downloadConsumptionReport;
         vm.loadLossData = loadLossData;
         vm.downloadLossReport = downloadLossReport;
+        vm.loadIncomeData = loadIncomeData;
+        vm.loadProfitData = loadProfitData;
 
         vm.datePicker = {
             startDate: null,
@@ -35,9 +37,11 @@
             },
             eventHandlers : {
                 'apply.daterangepicker' : function (ev, picker) {
-                    $('div[name="datepicker"] span').html(vm.datePicker.startDate.format('MMMM D, YYYY') + ' - '
+                    $('span[name="datepicker"] span').html(vm.datePicker.startDate.format('MMMM D, YYYY') + ' - '
                         + vm.datePicker.endDate.format('MMMM D, YYYY'));
                     vm.loadConsumptionData();
+                    vm.loadIncomeData();
+                    vm.loadProfitData();
                 }
             },
             maxDate: moment().endOf("day"),
@@ -83,6 +87,8 @@
         function loadData() {
             vm.loadConsumptionData();
             vm.loadLossData();
+            vm.loadIncomeData();
+            vm.loadProfitData();
         }
 
         function loadConsumptionData(){
@@ -121,10 +127,50 @@
                     id: 1,
                     data: vm.lossChartData
                 });
-                console.log('Data load: ' + vm.lossChartData);
+                console.log('Loss data load: ' + vm.lossChartData);
+            }, function errorCallback(response) {
+                console.log('Loss data wasn\'t load: ' + response.statusText);
+            });
+        }
+
+        function loadIncomeData() {
+            $http({
+                method: 'GET',
+                url: '/api/companyowner/statistic/income',
+                params: {
+                    startDate: !!vm.datePicker.startDate? vm.datePicker.startDate.toISOString() : null,
+                    endDate: !!vm.datePicker.endDate? vm.datePicker.endDate.toISOString() : null
+                }
+            }).then(function successCallback(response) {
+                // vm.lossChartData = response.data;
+                vm.commonChartConfig.series.push({
+                    id: 2,
+                    data: response.data
+                });
+                console.log('Data load: ' + response.data);
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
+            });
+        }
+
+        function loadProfitData() {
+            $http({
+                method: 'GET',
+                url: '/api/companyowner/statistic/profit',
+                params: {
+                    startDate: !!vm.datePicker.startDate? vm.datePicker.startDate.toISOString() : null,
+                    endDate: !!vm.datePicker.endDate? vm.datePicker.endDate.toISOString() : null
+                }
+            }).then(function successCallback(response) {
+                // vm.lossChartData = response.data;
+                vm.commonChartConfig.series.push({
+                    id: 3,
+                    data: response.data
+                });
+                console.log('Profit data load: ' + response.data);
+            }, function errorCallback(response) {
+                console.log('Profit data wasn\'t load: ' + response.statusText);
             });
         }
 
@@ -177,9 +223,6 @@
 
         vm.commonChartConfig = {
             options: {
-                chart: {
-                    type: 'areaspline'
-                },
                 xAxis: {
                     type: 'datetime',
                     labels: {
@@ -188,13 +231,29 @@
                 }
             },
             title :{
-                text: "Month statistics"
+                text: ''
             },
-            series:[{
-                id: 1,
-                name: 'Consumption',
-                data: []
-            }]
+            series:[
+                {
+                    id: 1,
+                    name: 'Consumption',
+                    type: 'column',
+                    data: []
+                },
+                {
+                    id: 2,
+                    name: 'Income',
+                    type: 'column',
+                    data: []
+                },
+                {
+                    id: 3,
+                    name: 'Profit',
+                    data: []
+                }
+
+
+            ]
         };
 
         vm.lossChartConfig = {
@@ -214,7 +273,7 @@
             },
             series:[{
                 id: 1,
-               // name: 'Consumption',
+                // name: 'Consumption',
                 data: []
             }]
         };
