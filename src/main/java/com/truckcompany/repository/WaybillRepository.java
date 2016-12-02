@@ -6,6 +6,7 @@ import com.truckcompany.domain.*;
 import com.truckcompany.domain.User;
 import com.truckcompany.domain.Waybill;
 
+import com.truckcompany.domain.enums.WaybillState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -36,8 +37,8 @@ public interface WaybillRepository extends JpaRepository<Waybill, Long> {
 
     @Query(value = "select distinct waybill from Waybill as waybill " +
         "left join fetch waybill.driver " +
-        "where waybill.driver=?1")
-    List<Waybill> findByDriver(User driver);
+        "where waybill.driver=?1 and waybill.state=?2")
+    List<Waybill> findByDriver(User driver, WaybillState waybillState);
 
     List<Waybill> findByCompany(Company company);
 

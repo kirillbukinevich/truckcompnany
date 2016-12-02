@@ -148,11 +148,11 @@
             <column name="name" type="varchar(45)">
                 <constraints nullable="false"/>
             </column>
-            <column name="accepted_number" type="varchar(45)"/>
             <column name="unchecked_number" type="varchar(45)"/>
+            <column name="accepted_number" type="varchar(45)"/>
             <column name="delivered_number" type="varchar(45)"/>
             <column name="type" type="varchar(45)"/>
-            <column name="state" type="ENUM('UNCHECKED', 'ACCEPTED','TRANSPORTATION','DELIVERED')">
+            <column name="state" type="ENUM('UNCHECKED', 'ACCEPTED','TRANSPORTATION','UNCHECKED_DELIVERED','DELIVERED')">
                 <constraints nullable="false"/>
             </column>
             <column name="waybill_id" type="int"/>

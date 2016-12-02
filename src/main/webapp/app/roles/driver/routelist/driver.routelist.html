@@ -23,7 +23,7 @@
         destination="{{vm.routeList.arrivalStorage.address}}">
     </directions>
         <div ng-repeat="imageWaypoint in vm.imageWaypoints">
-        <custom-marker position="{{imageWaypoint.position}}" on-click="vm.click1()">
+        <custom-marker position="{{imageWaypoint.position}}">
         <div>
             <img src="{{imageWaypoint.image}}"/>
         </div>
@@ -31,9 +31,6 @@
     </div>
     </ng-map>
     <div ng-include src="'app/roles/driver/routelist/driver.checkpoint.html'"></div>
-    </div>
-    <div ng-if="waybill.state != 'CHECKED'">
-         <h1 style="text-align:center">You don't have task now</h1>
     </div>
 </span>
 <div ng-show="!vm.waybills.length">
