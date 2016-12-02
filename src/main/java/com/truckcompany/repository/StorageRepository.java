@@ -36,4 +36,6 @@ public interface StorageRepository extends JpaRepository<Storage, Long> {
 
     @Query(value = "select distinct storage from Storage storage left join fetch storage.company where storage.id = ?1")
     Storage findByIdWithCompany(Long id);
+
+    List<Storage> findByCompany(Company company);
 }

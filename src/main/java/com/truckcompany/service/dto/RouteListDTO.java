@@ -1,11 +1,8 @@
 package com.truckcompany.service.dto;
 
 import com.truckcompany.domain.RouteList;
-import com.truckcompany.domain.Storage;
-import com.truckcompany.domain.Truck;
 import com.truckcompany.domain.Waybill;
 
-import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -14,7 +11,7 @@ public class RouteListDTO {
 
     private Long id;
 
-    private ZonedDateTime date;
+    private ZonedDateTime creationDate;
 
     private TruckDTO truck;
 
@@ -30,22 +27,30 @@ public class RouteListDTO {
 
     private String state;
 
+    private Double fuelCost;
+
+    private Integer distance;
+
     public RouteListDTO(Long id, ZonedDateTime date,
-                        ZonedDateTime leavingDate, ZonedDateTime arrivalDate, String state){
+                        ZonedDateTime leavingDate, ZonedDateTime arrivalDate, String state, Double fuelCost, Integer distance){
         this.id = id;
-        this.date = date;
+        this.creationDate = date;
         this.leavingDate = leavingDate;
         this.arrivalDate = arrivalDate;
         this.state = state;
+        this.fuelCost = fuelCost;
+        this.distance = distance;
     }
 
     public RouteListDTO(RouteList routeList){
         this(
             routeList.getId(),
-            routeList.getDate(),
+            routeList.getCreationDate(),
             routeList.getLeavingDate(),
             routeList.getArrivalDate(),
-            routeList.getState()
+            routeList.getState(),
+            routeList.getFuelCost(),
+            routeList.getDistance()
         );
         this.truck = routeList.getTruck() != null ? new TruckDTO(routeList.getTruck()) : null;
         this.leavingStorage = routeList.getLeavingStorage() != null ?
@@ -56,13 +61,20 @@ public class RouteListDTO {
             new WaybillDTO(routeList.getWaybill(), this) : null;*/
     }
 
+    public RouteListDTO(RouteList routeList, Waybill waybill){
+        this(routeList);
+        this.waybill = new WaybillDTO(waybill, this);
+    }
+
     public RouteListDTO(RouteListDTO routeListDTO){
         this(
             routeListDTO.getId(),
-            routeListDTO.getDate(),
+            routeListDTO.getCreationDate(),
             routeListDTO.getLeavingDate(),
             routeListDTO.getArrivalDate(),
-            routeListDTO.getState()
+            routeListDTO.getState(),
+            routeListDTO.getFuelCost(),
+            routeListDTO.getDistance()
         );
         this.truck = routeListDTO.getTruck();
         this.leavingStorage = routeListDTO.getLeavingStorage();
@@ -124,12 +136,12 @@ public class RouteListDTO {
         this.waybill = waybill;
     }
 
-    public ZonedDateTime getDate() {
-        return date;
+    public ZonedDateTime getCreationDate() {
+        return creationDate;
     }
 
-    public void setDate(ZonedDateTime date) {
-        this.date = date;
+    public void setCreationDate(ZonedDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
     public String getState() {
@@ -154,5 +166,21 @@ public class RouteListDTO {
 
     public void setArrivalZonedDate(ZonedDateTime arrivalDate) {
         this.arrivalDate = arrivalDate;
+    }
+
+    public Double getFuelCost() {
+        return fuelCost;
+    }
+
+    public void setFuelCost(Double fuelCost) {
+        this.fuelCost = fuelCost;
+    }
+
+    public Integer getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Integer distance) {
+        this.distance = distance;
     }
 }

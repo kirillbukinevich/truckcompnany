@@ -17,7 +17,7 @@
 
             data: {
                 authorities: ['ROLE_DISPATCHER'],
-                pageTitle: 'activate.title'
+                pageTitle: 'dispatcher.initialTitle'
             },
             views: {
                 'page@roles': {
@@ -26,7 +26,7 @@
             },
             resolve: {
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                    $translatePartialLoader.addPart('activate');
+                    $translatePartialLoader.addPart('dispatcher');
                     return $translate.refresh();
                 }]
             }

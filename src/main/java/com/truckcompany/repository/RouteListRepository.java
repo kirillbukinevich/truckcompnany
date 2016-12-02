@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,5 +35,11 @@ public interface RouteListRepository extends JpaRepository <RouteList, Long> {
 
     Optional<List<RouteList>> findByCompany(Company company);
 
+    Optional<List<RouteList>> findByCompanyAndCreationDateBetween(Company company, ZonedDateTime fromDate,
+                                                                  ZonedDateTime toDate);
+
     Page<RouteList> findPageByCompany(Company company, Pageable pageable);
+
+    Page<RouteList> findPageByCompanyAndCreationDateBetween(Company company, ZonedDateTime fromDate, ZonedDateTime toDate,
+                                                            Pageable pageable);
 }

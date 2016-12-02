@@ -23,6 +23,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -96,4 +97,20 @@ public class OfferResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("offer", "accessDenied", "Access denied!")).body(null);
     }
 
+    @RequestMapping (value = "/offers/generate",
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    @Secured(AuthoritiesConstants.DISPATCHER)
+    public ResponseEntity<OfferDTO> generateOffer ()  throws URISyntaxException {
+        log.debug("REST request get all Offers");
+
+        OfferDTO offer = offerService.generateOffer();
+
+        HttpHeaders headers = HeaderUtil.createAlert("offers.generateOffer", offer.getId().toString());
+
+        return ResponseEntity.created(new URI("/api/offers/" + offer.getId()))
+            .headers(headers)
+            .body(offer);
+    }
 }

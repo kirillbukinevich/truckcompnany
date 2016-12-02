@@ -3,10 +3,13 @@ package com.truckcompany.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.Checkpoint;
+import com.truckcompany.domain.RouteList;
 import com.truckcompany.domain.User;
 import com.truckcompany.repository.CheckpointRepository;
+import com.truckcompany.security.AuthoritiesConstants;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.CheckpointService;
+import com.truckcompany.service.RouteListService;
 import com.truckcompany.service.UserService;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import com.truckcompany.web.rest.vm.ManagedCheckPointVM;
@@ -16,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -35,34 +39,47 @@ public class CheckpointResource {
     private CheckpointService checkpointService;
 
     @Inject
-    private UserService userService;
+    private RouteListService routeListService;
 
 
     @RequestMapping(value = "/checkpoint/{routeListId}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Checkpoint>> getAllCheckPoints(@PathVariable Long routeListId)throws URISyntaxException{
+    @Secured({AuthoritiesConstants.DRIVER,AuthoritiesConstants.MANAGER})
+    public ResponseEntity<List<Checkpoint>> getAllCheckPoints(@PathVariable Long routeListId) throws URISyntaxException {
         log.debug("REST request get all Checkpoints");
 
         List<Checkpoint> checkpoints = Collections.emptyList();
-        System.out.println("HERE---------" + routeListId);
         checkpoints = checkpointService.getCheckpoints(routeListId);
-        System.out.println(checkpoints);
-        for (Checkpoint checkpoint : checkpoints){
+        for (Checkpoint checkpoint : checkpoints) {
             checkpoint.setRouteList(null);
         }
         List<ManagedCheckPointVM> managedCheckPointVMs = checkpoints.stream()
             .map(ManagedCheckPointVM::new)
             .collect(Collectors.toList());
-        HttpHeaders headers = HeaderUtil.createAlert("checkpoint.getAll",null);
-        return new ResponseEntity(managedCheckPointVMs,headers, HttpStatus.OK);
+        HttpHeaders headers = HeaderUtil.createAlert("checkpoint.getAll", null);
+        return new ResponseEntity(managedCheckPointVMs, headers, HttpStatus.OK);
     }
 
+    @Secured({AuthoritiesConstants.DRIVER})
     @RequestMapping(value = "/checkpoint_mark_date/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public void markDate(@PathVariable Long id){
+    public void markDate(@PathVariable Long id) {
         checkpointService.markDate(id);
     }
 
+
+    @RequestMapping(value = "/checkpoints/{routeListId}",
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @Timed
+    public ResponseEntity<List<Checkpoint>> createCheckpoints(@RequestBody List<Checkpoint> checkpoints,
+                                                              @PathVariable Long routeListId) {
+        log.debug("REST request to create {} Checkpoints", checkpoints.size());
+        RouteList routeList = routeListService.getRouteListById(routeListId);
+        List<Checkpoint> checkpointList = checkpointService.createCheckpoints(checkpoints, routeList);
+        HttpHeaders headers = HeaderUtil.createAlert("checkpoints.created", null);
+        return new ResponseEntity<>(checkpointList, headers, HttpStatus.OK);
+    }
 }

@@ -31,11 +31,11 @@
     "swagger-ui": "2.1.5",
     "ngImgCrop": "0.3.2",
     "angular-ckeditor": "1.0.3",
-    "angular-ui-select" : "0.19.6",
+    "angular-ui-select": "0.19.6",
     "angular-animate": "1.5.8",
-    "highcharts-ng":"0.0.13",
-    "highcharts": "5.0.3"
-
+    "highcharts-ng": "0.0.13",
+    "highcharts": "5.0.3",
+    "angular-daterangepicker": "^0.2.2"
   },
   "devDependencies": {
     "angular-mocks": "1.5.8"

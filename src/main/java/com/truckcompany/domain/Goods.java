@@ -25,6 +25,9 @@ public class Goods implements Serializable {
     @Column(name = "delivered_number")
     private Long deliveredNumber;
 
+    @Column(name = "type")
+    private String type;
+
 
     @Column(name = "state")
     private String state;
@@ -33,6 +36,8 @@ public class Goods implements Serializable {
     @JoinColumn(name = "waybill_id", nullable = false)
     private Waybill waybill;
 
+    @Column(name = "price")
+    private Double price;
 
     public Integer getId() {
         return id;
@@ -86,5 +91,21 @@ public class Goods implements Serializable {
 
     public void setUncheckedNumber(Long uncheckedNumber) {
         this.uncheckedNumber = uncheckedNumber;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }

@@ -6,6 +6,7 @@ import com.truckcompany.domain.*;
 import com.truckcompany.domain.User;
 import com.truckcompany.domain.Waybill;
 
+import com.truckcompany.domain.enums.WaybillState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,22 +23,28 @@ public interface WaybillRepository extends JpaRepository<Waybill, Long> {
     @Query(value = "select distinct waybill from Waybill waybill left join fetch waybill.driver " +
         "left join fetch waybill.dispatcher " +
         "left join fetch waybill.manager " +
+        "left join fetch waybill.goods " +
         "left join fetch waybill.routeList ")
     List<Waybill> findAll();
 
     @Query(value = "select distinct waybill from Waybill waybill left join fetch waybill.driver " +
         "left join fetch waybill.dispatcher " +
         "left join fetch waybill.manager " +
+        "left join fetch waybill.goods " +
         "left join fetch waybill.routeList " +
         "where waybill.id = ?1")
     Optional <Waybill> findOneById(Long id);
 
     @Query(value = "select distinct waybill from Waybill as waybill " +
         "left join fetch waybill.driver " +
-        "where waybill.driver=?1")
-    List<Waybill> findByDriver(User driver);
+        "where waybill.driver=?1 and waybill.state=?2")
+    List<Waybill> findByDriver(User driver, WaybillState waybillState);
 
     List<Waybill> findByCompany(Company company);
 
     Page<Waybill> findPageByCompany(Company company, Pageable pageable);
+
+    Optional<Waybill> findByRouteList(RouteList routeList);
+
+    Page<Waybill> findPageByDispatcher(User dispatcher, Pageable pageable);
 }

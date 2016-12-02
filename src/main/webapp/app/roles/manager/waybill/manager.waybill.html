@@ -13,7 +13,6 @@
             <th>Registration date</th>
             <th>Dispatcher</th>
             <th>Driver</th>
-            <!--<th>Route list №</th>-->
             <th>State</th>
         </tr>
         </thead>
@@ -23,23 +22,27 @@
                 <div class="text-center">{{waybill.id}}</div>
             </td>
             <td>{{waybill.date | date:"dd/MM/yy HH:mm"}}</td>
-            <td>{{waybill.dispatcher.firstName}}</td>
+            <td>{{waybill.dispatcher.firstName}} {{waybill.dispatcher.lastName}}</td>
             <td>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</td>
             <td>
                 <span ng-if="waybill.state == 'CREATED'" class="label label-info">
-                    <span class="glyphicon glyphicon-transfer"></span>&nbsp;CREATED</span>
+                    <span class="glyphicon glyphicon-plus"></span>&nbsp;CREATED</span>
                 <span ng-if="waybill.state == 'CHECKED'" class="label label-primary">
-                    <span class="glyphicon glyphicon-ok"></span>&nbsp;CHECKED</span>
-                <span ng-if="waybill.state == 'DELIVERED'" class="label label-success">DELIVERED</span>
+                    <span class="glyphicon glyphicon-transfer"></span>&nbsp;CHECKED</span>
+                <span ng-if="waybill.state == 'DELIVERED'" class="label label-success">
+                    <span class="glyphicon glyphicon-ok"></span>&nbsp;DELIVERED</span>
+                <span ng-if="waybill.state == 'REJECTED'" class="label label-danger">
+                   <span class="glyphicon glyphicon-remove"></span>&nbsp;REJECTED</span>
             </td>
             <td class="text-right">
                 <div class="btn-group flex-btn-group-container">
-                    <button type="button" class="btn btn-success btn-sm"
+                    <button type="button" class="btn btn-info btn-sm"
                             ng-click="vm.showModalWaybillDetails(waybill.id)" ng-if="waybill.state == 'CREATED'">
                         <span class="glyphicon glyphicon glyphicon-list-alt"></span>&nbsp;Handle
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm"
-                            ng-click="vm.showModalWaybillDetails(waybill.id)" ng-if="waybill.state == 'CHECKED'">
+                    <button type="button" class="btn btn-default btn-sm"
+                            ng-click="vm.showModalWaybillDetails(waybill.id)"
+                            ng-if="waybill.state != 'CREATED'">
                         <span class="glyphicon glyphicon glyphicon-eye-open"></span>&nbsp;Details
                     </button>
                 </div>

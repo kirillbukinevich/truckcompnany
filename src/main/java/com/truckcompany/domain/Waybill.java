@@ -1,6 +1,7 @@
 package com.truckcompany.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.truckcompany.domain.enums.WaybillState;
 
 import javax.persistence.*;
@@ -37,6 +38,7 @@ public class Waybill implements Serializable {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "route_list_id", nullable = false)
+    @JsonManagedReference
     private RouteList routeList;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -45,6 +47,10 @@ public class Waybill implements Serializable {
 
     @Column(name = "date_checked")
     private ZonedDateTime dateChecked;
+
+    @JoinColumn (name = "waybill_id")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Goods> goods;
 
     public Long getId() {
         return id;
@@ -124,5 +130,13 @@ public class Waybill implements Serializable {
 
     public void setManager(User manager) {
         this.manager = manager;
+    }
+
+    public Set<Goods> getGoods() {
+        return goods;
+    }
+
+    public void setGoods(Set<Goods> goods) {
+        this.goods = goods;
     }
 }

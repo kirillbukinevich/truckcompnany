@@ -47,7 +47,10 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
 
-            <column name="goods_id" type="int">
+            <column name="name" type="varchar(50)">
+            </column>
+
+            <column name="type" type="varchar(50)">
             </column>
 
             <column name="count" type="int">
@@ -80,12 +83,6 @@
                                  constraintName="offer_goods"
                                  referencedColumnNames="id"
                                  referencedTableName="offer"/>
-
-        <addForeignKeyConstraint baseColumnNames="goods_id"
-                                 baseTableName="offer_goods"
-                                 constraintName="offer_goods_to_goods"
-                                 referencedColumnNames="id"
-                                 referencedTableName="goods"/>
 
         <loadData encoding="UTF-8"
                   file="config/liquibase/offer.csv"

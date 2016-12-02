@@ -6,27 +6,55 @@
         .controller('CompanyownerRouteListsController', CompanyownerRouteListsController);
 
 
-    CompanyownerRouteListsController.$inject = ['RouteList', 'pagingParams', '$state'];
+    CompanyownerRouteListsController.$inject = ['RouteList', 'pagingParams', '$state', '$http'];
 
-    function CompanyownerRouteListsController (RouteList, pagingParams, $state) {
+    function CompanyownerRouteListsController (RouteList, pagingParams, $state, $http) {
         var vm = this;
 
         vm.loadPage = loadPage;
         vm.transition = transition;
         vm.changeItemsPerPage = changeItemsPerPage;
+        vm.downloadReport = downloadReport;
 
         vm.itemsPerPage = pagingParams.size;
         vm.availableItemsPerPage = [5, 10, 15, 20];
         vm.page = 1;
 
-        vm.loadPage();
+        vm.datePicker = {
+            startDate: null,
+            endDate: null,
+        };
 
+        vm.datePickerOpts = {
+            locale : {
+                format: "MMMM D, YYYY",
+                customRangeLabel: 'Custom range'
+            },
+            ranges: {
+                'Last week' : [moment().subtract(1, "weeks").startOf("week"),
+                    moment().subtract(1, "weeks").endOf("week")],
+                'Last month' : [moment().subtract(1, "months").startOf("month"),
+                    moment().subtract(1, "months").endOf("month")]
+            },
+            eventHandlers : {
+                'apply.daterangepicker' : function (ev, picker) {
+                    $('div[name="datepicker"] span').html(vm.datePicker.startDate.format('MMMM D, YYYY') + ' - '
+                        + vm.datePicker.endDate.format('MMMM D, YYYY'));
+                    vm.loadPage();
+                }
+            },
+            maxDate: moment().endOf("day")
+        };
+
+        vm.loadPage();
 
 
         function loadPage() {
             RouteList.query({
                 page: pagingParams.page - 1,
                 size: vm.itemsPerPage,
+                startDate: !!vm.datePicker.startDate? vm.datePicker.startDate.toISOString() : null,
+                endDate: !!vm.datePicker.endDate? vm.datePicker.endDate.toISOString() : null
             }, onSuccess, onError);
         }
 
@@ -43,6 +71,7 @@
             vm.messageError = 'Problems with connection.'
         }
 
+
         function transition () {
             $state.transitionTo($state.$current, {
                 page: vm.page,
@@ -54,6 +83,29 @@
             $state.transitionTo($state.$current, {
                 page: 1,
                 size:  vm.itemsPerPage,
+            });
+        }
+
+        function downloadReport(){
+            $http({
+                method: 'GET',
+                url: '/api/companyowner/statistic/xls/routelists',
+                params : {
+                    startDate: !!vm.datePicker.startDate? vm.datePicker.startDate.toISOString() : null,
+                    endDate: !!vm.datePicker.endDate? vm.datePicker.endDate.toISOString() : null
+                },
+                responseType: 'arraybuffer'
+            }).
+            success(function(data) {
+                var url = URL.createObjectURL(new Blob([data]));
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = 'routeListsReport.xls';
+                a.target = '_blank';
+                a.click();
+            }).
+            error(function(data, status, headers, config) {
+                // handle error
             });
         }
 

@@ -3,6 +3,7 @@ package com.truckcompany.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.RouteList;
 import com.truckcompany.repository.RouteListRepository;
+import com.truckcompany.security.AuthoritiesConstants;
 import com.truckcompany.service.RouteListService;
 import com.truckcompany.service.dto.RouteListDTO;
 import com.truckcompany.service.dto.StorageDTO;
@@ -14,10 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,7 +58,11 @@ public class RouteListResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<ManagedRouteListVM>> getAllRouteList(Pageable pageable) throws URISyntaxException {
+    public ResponseEntity<List<ManagedRouteListVM>>
+                        getAllRouteList(Pageable pageable,
+                                        @RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime startDate,
+                                        @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime endDate)
+            throws URISyntaxException {
         log.debug("REST request get all RouteLists");
 
         Collection<SimpleGrantedAuthority> authorities =
@@ -63,14 +71,19 @@ public class RouteListResource {
         if (authorities.contains(new SimpleGrantedAuthority("ROLE_MANAGER"))) {
             List<RouteListDTO> routeLists = routeListFacade.findRouteLists();
 
-            log.debug("LENGTH = {}", routeLists.size());
             List<ManagedRouteListVM> managedRouteLists = routeLists.stream().map(ManagedRouteListVM::new)
                 .collect(Collectors.toList());
 
             HttpHeaders headers = HeaderUtil.createAlert("routelist.getAll", null);
             return new ResponseEntity<List<ManagedRouteListVM>>(managedRouteLists, headers, HttpStatus.OK);
         } else {
-            Page<RouteListDTO> page = routeListFacade.findRouteLists(pageable);
+            Page<RouteListDTO> page;
+            if (startDate == null || endDate == null) {
+                page = routeListFacade.findRouteLists(pageable);
+            }
+            else{
+                page = routeListFacade.findRouteLists(pageable, startDate, endDate);
+            }
             List<ManagedRouteListVM> managedRouteLists = page.getContent().stream()
                 .map(ManagedRouteListVM::new)
                 .collect(Collectors.toList());
@@ -84,6 +97,7 @@ public class RouteListResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured({AuthoritiesConstants.DRIVER})
     public ResponseEntity<ManagedRouteListVM> getRouteList(@PathVariable Long id) {
         log.debug("REST request to get RouteList : {}", id);
 
@@ -129,6 +143,7 @@ public class RouteListResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured({AuthoritiesConstants.DRIVER})
     public ResponseEntity updateRouteList(@RequestBody ManagedRouteListVM managedRouteListVM) {
         log.debug("REST request to update RouteList : {}", managedRouteListVM);
         RouteList existingRouteList = routeListRepository.findOne(managedRouteListVM.getId());

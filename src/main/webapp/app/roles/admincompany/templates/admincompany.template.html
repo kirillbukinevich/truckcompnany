@@ -75,6 +75,7 @@
 
 
     <div ckeditor="vm.options" ng-model="vm.template.template" ready="vm.onReady()"></div>
-    <a href="" id="save-template" class="btn btn-default" ng-click="vm.uploadTemplate()"  ng-disabled="form.$invalid || !vm.isValidDate">Upload template</a>
+    <button id="save-template" class="btn btn-default" ng-click="vm.uploadTemplate()"  ng-disabled="form.$invalid || !vm.isValidDate">Upload template</button>
+    <a href="/#/admincompany/templates/page&size" class="btn btn-default">Cancel</a>
 </form>
 
