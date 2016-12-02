@@ -17,7 +17,7 @@
 
             data: {
                 authorities: ['ROLE_MANAGER'],
-                pageTitle: 'TruckCompany'
+                pageTitle: 'manager.initialTitle'
             },
             view: {
                 'page@roles': {
@@ -26,7 +26,7 @@
             },
             resolve: {
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                    //$translatePartialLoader.addPart('manager');
+                    $translatePartialLoader.addPart('manager');
                     return $translate.refresh();
                 }]
             }

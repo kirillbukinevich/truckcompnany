@@ -18,7 +18,7 @@
 
                     data: {
                         authorities: ["ROLE_MANAGER"],
-                        pageTitle: 'activate.title'
+                        pageTitle: 'manger.routelist'
                     },
                     views: {
                         'page@roles': {

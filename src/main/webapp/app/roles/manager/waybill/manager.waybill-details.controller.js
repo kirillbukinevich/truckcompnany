@@ -45,7 +45,6 @@
         }
 
         function clear() {
-
             $uibModalInstance.close();
         }
 
