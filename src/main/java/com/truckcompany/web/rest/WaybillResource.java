@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.Waybill;
 import com.truckcompany.domain.enums.WaybillState;
 import com.truckcompany.repository.WaybillRepository;
+import com.truckcompany.security.AuthoritiesConstants;
 import com.truckcompany.service.WaybillService;
 import com.truckcompany.service.dto.WaybillDTO;
 import com.truckcompany.service.facade.WaybillFacade;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +55,7 @@ public class WaybillResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured({AuthoritiesConstants.DRIVER,AuthoritiesConstants.DISPATCHER})
     public ResponseEntity<List> getWaybills(Pageable pageable) throws URISyntaxException {
         log.debug("REST request get all Waybills");
         Collection<SimpleGrantedAuthority> authorities =
@@ -132,6 +135,7 @@ public class WaybillResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured(AuthoritiesConstants.DRIVER)
     public ResponseEntity updateWaybill(@RequestBody ManagedWaybillVM managedWaybillVM) {
         log.debug("REST request to update Waybill : {}", managedWaybillVM);
         Waybill existingWaybill = waybillRepository.findOne(managedWaybillVM.getId());
