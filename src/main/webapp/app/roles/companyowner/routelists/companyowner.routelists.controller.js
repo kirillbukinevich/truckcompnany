@@ -43,7 +43,8 @@
                     vm.loadPage();
                 }
             },
-            maxDate: moment().endOf("day")
+            maxDate: moment().endOf("day"),
+            opens: 'left'
         };
 
         vm.loadPage();

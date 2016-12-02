@@ -11,16 +11,15 @@ import com.truckcompany.web.rest.vm.ManagedWaybillVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -69,10 +68,43 @@ public class WaybillService {
         return waybillRepository.findByCompany(company);
     }
 
+    public Page<Waybill> getPageWaybillByCompanyAndWithStolenGoods(Pageable pageable, Company company){
+        log.debug("Get waybills with stolen goods and company with id: {}", company.getId());
+        List<Waybill> waybills = waybillRepository.findByCompanyAndState(company, WaybillState.DELIVERED);
+        int total = waybills.size();
+        waybills = waybills
+            .stream()
+            .filter(waybill -> waybill.getGoods()
+                .stream()
+                .anyMatch(
+                    goods -> goods.getDeliveredNumber() != null &&
+                        !Objects.equals(goods.getDeliveredNumber(), goods.getAcceptedNumber())
+                )
+            )
+            .skip(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .collect(Collectors.toList());
 
-    public Waybill getWaybillByRouteList(RouteList routeList){
-        log.debug("Get waybill for routelist with id: {}", routeList.getId());
-        return waybillRepository.findByRouteList(routeList).orElse(null);
+        return new PageImpl<>(waybills, pageable, total);
+    }
+
+
+    public List<Waybill> getWaybillByCompanyAndRouteListCreationDateBetween(Company company, ZonedDateTime fromDate,
+                                                                            ZonedDateTime toDate){
+        log.debug("Get waybill for company with id: {}", company.getId());
+        return waybillRepository.findByCompanyAndRouteListCreationDateBetween(company, fromDate, toDate);
+    }
+
+    public List<Waybill> getWaybillByCompanyAndState(Company company, WaybillState state){
+        log.debug("Get waybill with state {} for company with id: {}", state.toString(), company.getId());
+        return waybillRepository.findByCompanyAndState(company, state);
+    }
+
+    public List<Waybill> getWaybillByCompanyAndStateAndDateBetween(Company company, WaybillState state,
+                                                                   ZonedDateTime fromDate, ZonedDateTime toDate){
+        log.debug("Get waybill with state {}, date between {} and {} for company with id: {}", state.toString(),
+            fromDate, toDate, company.getId());
+        return waybillRepository.findByCompanyAndStateAndDateBetween(company, state, fromDate, toDate);
     }
 
     public Page<Waybill> getPageWaybillByCompany(Pageable pageable, Company company){
@@ -121,7 +153,7 @@ public class WaybillService {
                 goods.setName(g.getName());
                 goods.setUncheckedNumber(g.getCount());
                 goods.setType(g.getType());
-                goods.setState("TRANSPORTATION");
+                goods.setState("UNCHECKED");
 
                 return goods;
             }).collect(Collectors.toSet());

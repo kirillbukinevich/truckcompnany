@@ -1,0 +1,66 @@
+<h1>Errors which occured during sending of birthday cards.</h1>
+
+<div ng-if="vm.error" class="alert alert-danger" role="alert">
+    {{vm.messageError}}
+</div>
+
+<div ng-if="!vm.error">
+    <div id="control-panel">
+       <a ng-click="vm.sendEmails()" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Send emails now.</a>
+        <a ng-click="vm.showModalDeleteErrors()" class="btn btn-admin"><span class="glyphicon glyphicon-trash"></span>Delete errors.</a>
+
+    </div>
+<!--
+    <div id="control-table">
+        <span class="select-show-title">Show:</span>
+        <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage"
+                ng-change="vm.changeItemsPerPage()" class="btn btn-default">
+        </select>
+    </div>-->
+
+    <table class="table table-hover">
+        <thead>
+
+        <tr>
+            <th class="table-checkbox"><input type="checkbox" ng-model="vm.checkedAll"
+                                              ng-change="vm.changeStateCheckbox()"></th>
+            <th>Recipient</th>
+            <th>Error date</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="error in vm.mailErrors" ng-class="{'selected' : vm.selected[$index]}">
+            <td><input type="checkbox" ng-init="vm.selected[$index] = false" ng-model="vm.selected[$index]">
+            <td>{{error.template.recipient.email}}</td>
+            <td>{{error.lastSending | date:'dd MMMM yyyy'}}</td>
+            <td>
+                <span class="label label-danger" ng-if = "error.status === 'ERROR_AUTOMATICALLY'">AUTOMATICALLY ERROR</span>
+                <span class="label label-success" ng-if = "error.status === 'SUCCESS_MANUALLY'">MANUALLY SUCCESS</span>
+            <td>
+                <div class="btn-group flex-btn-group-container">
+                    <button ng-if = "error.status === 'ERROR_AUTOMATICALLY'" ng-click="vm.sendAgain(error.id, $event)" type="button" class="btn btn-success btn-sm ng-scope">Send again</button>
+                    <a ng-click="vm.showModalDeleteError(error)" type="button" class="btn btn-danger btn-sm ng-scope">Delete</a>
+                </div>
+
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+<!--
+    <div ng-if="vm.totalItems > vm.itemsPerPage ">
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+        <uib-pagination class="pagination-sm"
+                        total-items="vm.totalItems"
+                        items-per-page="vm.itemsPerPage"
+                        boundary-link-numbers="true"
+                        rotate="true"
+                        ng-model="vm.page"
+                        ng-change="vm.transition()">
+        </uib-pagination>
+    </div>-->
+
+</div>
+

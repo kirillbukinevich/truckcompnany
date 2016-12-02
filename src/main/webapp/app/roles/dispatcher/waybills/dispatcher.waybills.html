@@ -24,6 +24,7 @@ Show:
             <span ng-if = "waybill.state == 'CREATED'" class="label label-info" >CREATED</span>
             <span ng-if = "waybill.state == 'DELIVERED'" class="label label-success" >DELIVERED</span>
             <span ng-if = "waybill.state == 'CHECKED'" class="label label-primary" >CHECKED</span>
+            <span ng-if = "waybill.state == 'REJECTED'" class="label label-warning" >REJECTED</span>
         </td>
         <td>
             <a type="button" class="btn btn-primary btn-xs" href="#/dispatcher/waybills/{{waybill.id}}/details">

@@ -43,6 +43,7 @@ public class TemplateDTO {
     }
 
     public TemplateDTO(Long id, String name, ZonedDateTime birthday, String template, String background, User recipient, User admin) {
+
         this.id = id;
         this.name = name;
         this.birthday = birthday;

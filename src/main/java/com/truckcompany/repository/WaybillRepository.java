@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +43,17 @@ public interface WaybillRepository extends JpaRepository<Waybill, Long> {
 
     List<Waybill> findByCompany(Company company);
 
+    List<Waybill> findByCompanyAndRouteListCreationDateBetween(Company company,
+                                                               ZonedDateTime fromDate, ZonedDateTime toDate);
+
+    List<Waybill> findByCompanyAndState(Company company, WaybillState state);
+
+    List<Waybill> findByCompanyAndStateAndDateBetween(Company company, WaybillState state,
+                                                      ZonedDateTime fromDate, ZonedDateTime toDate);
+
     Page<Waybill> findPageByCompany(Company company, Pageable pageable);
+
+    Page<Waybill> findPageByCompanyAndState(Company company, WaybillState state, Pageable pageable);
 
     Optional<Waybill> findByRouteList(RouteList routeList);
 
