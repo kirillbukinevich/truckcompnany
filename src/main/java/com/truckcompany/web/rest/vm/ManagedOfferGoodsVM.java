@@ -13,6 +13,8 @@ public class ManagedOfferGoodsVM {
 
     private String type;
 
+    private Double price;
+
     public ManagedOfferGoodsVM() {
     }
 
@@ -29,6 +31,7 @@ public class ManagedOfferGoodsVM {
         this.count = offerGoods.getCount();
         this.offerId = offerGoods.getOffer().getId();
         this.type = offerGoods.getType();
+        this.price = offerGoods.getPrice();
     }
 
     public Long getId() {
@@ -69,5 +72,13 @@ public class ManagedOfferGoodsVM {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }

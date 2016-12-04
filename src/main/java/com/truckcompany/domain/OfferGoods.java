@@ -28,6 +28,9 @@ public class OfferGoods {
     @Column(name = "type")
     private String type;
 
+    @Column(name = "price")
+    private Double price;
+
     public OfferGoods() {
     }
 
@@ -74,5 +77,13 @@ public class OfferGoods {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }

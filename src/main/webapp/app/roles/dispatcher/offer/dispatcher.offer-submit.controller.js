@@ -8,15 +8,16 @@
         .module('truckCompanyApp')
         .controller('DispatcherOfferSubmitController', DispatcherOfferSubmitController);
 
-    DispatcherOfferSubmitController.$inject = ['$stateParams', 'Offer', 'Driver', 'Truck', 'Waybill', '$scope', '$state'];
+    DispatcherOfferSubmitController.$inject = ['$stateParams', 'Offer', 'Driver', 'Truck', 'Waybill', '$scope', '$state', '$http'];
 
-    function DispatcherOfferSubmitController ($stateParams, Offer, Driver, Truck, Waybill, $scope, $state) {
+    function DispatcherOfferSubmitController ($stateParams, Offer, Driver, Truck, Waybill, $scope, $state, $http) {
         var vm = this;
 
         vm.offer = Offer.get({id : $stateParams.id});
         vm.drivers = Driver.query();
         vm.trucks = Truck.query();
         vm.createWaybill = createWaybill;
+        vm.setTrucks = setTrucks;
 
         vm.driver;
         vm.truck;
@@ -25,6 +26,27 @@
         vm.arrivalDate = {};
         vm.leaveDate = {};
         vm.error = false;
+
+        function setTrucks() {
+            $http({
+                method: 'GET',
+                url: '/api/trucks/bydate',
+                params: {
+                    from: vm.leaveDate.getTime(),
+                    to: vm.arrivalDate.getTime()
+                },
+                isArray: true
+
+            }).then(function successCallback(response) {
+                    console.log(response);
+                    vm.trucks = response.data;
+                    vm.truck = {};
+                },
+                function errorCallback(response) {
+                    vm.trucks = {};
+                    vm.truck = {};
+                });
+        }
 
         function createWaybill() {
             console.log("Create new Waybill");
