@@ -6,55 +6,60 @@
 
 <div ng-if="!vm.error">
     <div id="control-panel">
-        <a href="#/admincompany/templatecreate" class="btn btn-admin" ng-disabled="vm.employee.length===0"><span class="glyphicon glyphicon-plus"></span>Create</a>
+        <a href="#/admincompany/templatecreate" class="btn btn-admin" ng-disabled="vm.employee.length===0"><span
+            class="glyphicon glyphicon-plus"></span>Create</a>
         <a class="btn btn-admin" ng-click="vm.deleteSelectedTemplates()"><span class="glyphicon glyphicon-trash"></span>Delete</a>
     </div>
 
-    <div class="alert alert-warning" ng-if="vm.employee.length!=0"><strong>Attention:</strong> You have not assigned template of birthday cards for {{vm.employee.length}} employee.</div>
-
-    <div id="control-table">
-        <span class="select-show-title">Show:</span>
-        <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage"
-                ng-change="vm.changeItemsPerPage()" class="btn btn-default">
-        </select>
+    <div class="alert alert-warning" ng-if="vm.employee.length!=0"><strong>Attention:</strong> You have not assigned
+        template of birthday cards for {{vm.employee.length}} employee.
     </div>
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th><input type="checkbox" ng-model="vm.checkedAll" ng-change="vm.changeStateCheckbox()"></th>
-            <th>Name template</th>
-            <th>Recipient name</th>
-            <th>Recipient email</th>
-            <th>Recipient role</th>
-            <th>Birthday</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="template in vm.templates" ng-class="{'selected' : vm.selected[$index]}">
-            <td><input type="checkbox" ng-init="vm.selected[$index] = false" ng-model="vm.selected[$index]"></td>
-            <td><a href="#/admincompany/templates/{{template.id}}">{{template.name}}</a></td>
-            <td>{{template.recipient.firstName}} {{template.recipient.lastName}}</td>
-            <td>{{template.recipient.email}}</td>
-            <td><span class="label label-success">{{vm.getRole(template.recipient.authorities[0]).toUpperCase()}}</span>
-            </td>
-            <td>{{template.birthday | date:'dd MMMM'}}</td>
-            <td>
-                <span ng-click="vm.showModalDeleteTemplate(template)" class="glyphicon glyphicon-trash"></span>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <div ng-if="vm.totalItems > vm.itemsPerPage ">
-        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
-        <uib-pagination class="pagination-sm"
-                        total-items="vm.totalItems"
-                        items-per-page="vm.itemsPerPage"
-                        boundary-link-numbers="true"
-                        rotate="true"
-                        ng-model="vm.page"
-                        ng-change="vm.transition()">
-        </uib-pagination>
+    <div ng-if="vm.templates.length !=0">
+        <div id="control-table">
+            <span class="select-show-title">Show:</span>
+            <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage"
+                    ng-change="vm.changeItemsPerPage()" class="btn btn-default">
+            </select>
+        </div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th><input type="checkbox" ng-model="vm.checkedAll" ng-change="vm.changeStateCheckbox()"></th>
+                <th>Name template</th>
+                <th>Recipient name</th>
+                <th>Recipient email</th>
+                <th>Recipient role</th>
+                <th>Birthday</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="template in vm.templates" ng-class="{'selected' : vm.selected[$index]}">
+                <td><input type="checkbox" ng-init="vm.selected[$index] = false" ng-model="vm.selected[$index]"></td>
+                <td><a href="#/admincompany/templates/{{template.id}}">{{template.name}}</a></td>
+                <td>{{template.recipient.firstName}} {{template.recipient.lastName}}</td>
+                <td>{{template.recipient.email}}</td>
+                <td><span
+                    class="label label-success">{{vm.getRole(template.recipient.authorities[0]).toUpperCase()}}</span>
+                </td>
+                <td>{{template.birthday | date:'dd MMMM'}}</td>
+                <td>
+                    <span ng-click="vm.showModalDeleteTemplate(template)" class="glyphicon glyphicon-trash"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div ng-if="vm.totalItems > vm.itemsPerPage ">
+            <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+            <uib-pagination class="pagination-sm"
+                            total-items="vm.totalItems"
+                            items-per-page="vm.itemsPerPage"
+                            boundary-link-numbers="true"
+                            rotate="true"
+                            ng-model="vm.page"
+                            ng-change="vm.transition()">
+            </uib-pagination>
+        </div>
     </div>
 
 </div>

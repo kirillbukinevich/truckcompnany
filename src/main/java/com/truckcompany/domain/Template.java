@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by Vladimir on 08.11.2016.
@@ -28,6 +29,9 @@ public class Template {
 
     @Column(name = "background")
     private String background;
+
+    @OneToMany(mappedBy = "template", cascade = CascadeType.ALL)
+    private Set<MailError> mailErrors;
 
 
 

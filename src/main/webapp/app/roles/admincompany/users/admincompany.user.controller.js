@@ -34,15 +34,15 @@
 
 
         function load (id) {
+            console.log("Load: " + moment("1995-12-25").format("YYYY-mm-dd"));
             $http({
                 method: 'GET',
                 url: '/api/company/employee/' + id,
             }).then(function successCallback(response) {
                 vm.user = response.data;
-                /*vm.user.birthDate = new Date(vm.user.birthDate);*/
-                console.log(vm.user.birthDate.substr(0,10))
-                console.log(new Date(vm.user.birthDate.substr(0,10)))
-                console.log(vm.user)
+                var birthday = moment(vm.user.birthDate);
+                console.log(vm.user.birthDate);
+                vm.user.birthDate =new Date(birthday.year(), birthday.month(), birthday.date());
             }, function errorCallback(response) {
                 console.log("ERROR GET EMPLOYEE")
             });
@@ -51,7 +51,9 @@
 
         function update(){
             console.log("UPDATE")
-            console.log(vm.user)
+            vm.user.birthDate = moment(vm.user.birthDate).format('YYYY-MM-DD').toString();
+            console.log(vm.user);
+
             $http({
                 method: 'PUT',
                 url: '/api/company/employee',

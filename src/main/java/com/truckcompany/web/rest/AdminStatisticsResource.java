@@ -82,7 +82,7 @@ public class AdminStatisticsResource {
 
     private Map<RoleUsers, Long> getStatisticEmployeeRole(List<User> users) {
         Map<RoleUsers, Long> statiscticEmployeeRole = new HashMap<>();
-        Arrays.stream(RoleUsers.values()).forEach(role -> statiscticEmployeeRole.put(role, 0L));
+        Arrays.stream(RoleUsers.values()).forEach(role -> {if (role != RoleUsers.SUPERADMIN) statiscticEmployeeRole.put(role, 0L);});
         users.stream().parallel().forEach(user -> {
             user.getAuthorities().forEach(auth -> {
                 RoleUsers role = RoleUsers.getRoleUserFromString(auth.getName());

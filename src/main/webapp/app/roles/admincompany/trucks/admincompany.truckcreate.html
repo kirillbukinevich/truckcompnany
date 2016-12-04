@@ -8,8 +8,9 @@
 </div>
 
 <form name="form">
+    <div class="alert alert-warning">Fields are marked * is required.</div>
     <div class="form-group" ng-class="{'has-error' : (form.regNumber.$dirty && form.regNumber.$invalid)}">
-        <label for="regNumber" class="control-label">Register number:</label>
+        <label for="regNumber" class="control-label">Register number*</label>
         <input type="text" ng-model="vm.truck.regNumber" name="regNumber" class="form-control" id="regNumber"
                placeholder="Enter register number" required>
         <div ng-show="form.regNumber.$dirty && form.regNumber.$invalid">
@@ -20,7 +21,7 @@
         </div>
     </div>
     <div class="form-group" ng-class="{'has-error' : (form.model.$dirty && form.model.$invalid)}">
-        <label for="model" class="control-label">Model:</label>
+        <label for="model" class="control-label">Model*</label>
         <input type="text" ng-model="vm.truck.model" name="model" class="form-control" id="model"
                placeholder="Model of truck" required>
         <div ng-show="form.model.$dirty && form.model.$invalid">
@@ -31,7 +32,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="truck-body">Type:</label>
+        <label for="truck-body">Type</label>
         <div>
             <div class="wrap-radio-type-truck" id="type-truck-body">
                 <input type="radio" id="truck-body" ng-model="vm.truck.type" value="BODY">
@@ -49,10 +50,14 @@
     </div>
 
     <div class="form-group" ng-class="{'has-error' : (form.consumption.$dirty && form.consumption.$invalid)}">
-        <label for="consumption" class="control-label">Fuel consumption:</label>
+        <label for="consumption" class="control-label">Fuel consumption (l/km)*</label>
         <input type="text" ng-model="vm.truck.consumption" name="consumption" class="form-control" id="consumption"
-               placeholder="Enter fuel consumption" ng-pattern="/^\d+$/">
+               placeholder="Enter fuel consumption" ng-pattern="/^\d+$/" required>
         <div ng-show="form.consumption.$dirty && form.consumption.$invalid">
+            <p class="help-block"
+               ng-show="form.consumption.$error.required">
+                Consumption is required.
+            </p>
             <p class="help-block"
                ng-show="form.consumption.$error.pattern">
                 Fuel consumption must be numeric only.
