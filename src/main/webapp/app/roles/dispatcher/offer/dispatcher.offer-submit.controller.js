@@ -8,19 +8,20 @@
         .module('truckCompanyApp')
         .controller('DispatcherOfferSubmitController', DispatcherOfferSubmitController);
 
-    DispatcherOfferSubmitController.$inject = ['$stateParams', 'Offer', 'Driver', 'Truck', 'Waybill', '$scope', '$state', '$http'];
+    DispatcherOfferSubmitController.$inject = ['$stateParams', 'Offer', 'Waybill', '$scope', '$state', '$http'];
 
-    function DispatcherOfferSubmitController ($stateParams, Offer, Driver, Truck, Waybill, $scope, $state, $http) {
+    function DispatcherOfferSubmitController ($stateParams, Offer, Waybill, $scope, $state, $http) {
         var vm = this;
 
         vm.offer = Offer.get({id : $stateParams.id});
-        vm.drivers = Driver.query();
-        vm.trucks = Truck.query();
+        vm.drivers = {};
+        vm.trucks = {};
         vm.createWaybill = createWaybill;
         vm.setTrucks = setTrucks;
+        vm.setDrivers = setDrivers;
 
-        vm.driver;
-        vm.truck;
+        vm.driver = null;
+        vm.truck = null;
         vm.saveObj = {};
         vm.dt = {};
         vm.arrivalDate = {};
@@ -28,24 +29,54 @@
         vm.error = false;
 
         function setTrucks() {
-            $http({
-                method: 'GET',
-                url: '/api/trucks/bydate',
-                params: {
-                    from: vm.leaveDate.getTime(),
-                    to: vm.arrivalDate.getTime()
-                },
-                isArray: true
+            if (vm.arrivalDate instanceof Date && vm.leaveDate instanceof Date) {
+                $http({
+                    method: 'GET',
+                    url: '/api/trucks/bydate',
+                    params: {
+                        from: vm.leaveDate.getTime(),
+                        to: vm.arrivalDate.getTime()
+                    },
+                    isArray: true
 
-            }).then(function successCallback(response) {
-                    console.log(response);
-                    vm.trucks = response.data;
-                    vm.truck = {};
-                },
-                function errorCallback(response) {
-                    vm.trucks = {};
-                    vm.truck = {};
-                });
+                }).then(function successCallback(response) {
+                        console.log(response);
+                        vm.trucks = response.data;
+
+                        if (vm.trucks.indexOf(vm.truck) == -1) {
+                            vm.truck = null;
+                        }
+                    },
+                    function errorCallback(response) {
+                        vm.trucks = null;
+                        vm.truck = null;
+                    });
+            }
+        }
+
+        function setDrivers() {
+            if (vm.arrivalDate instanceof Date && vm.leaveDate instanceof Date){
+                $http({
+                    method: 'GET',
+                    url: '/api/drivers/bydate',
+                    params: {
+                        from: vm.leaveDate.getTime(),
+                        to: vm.arrivalDate.getTime()
+                    },
+                    isArray: true
+
+                }).then(function successCallback(response) {
+                        console.log(response);
+                        vm.drivers = response.data;
+
+                        if (vm.drivers.indexOf(vm.driver) == -1)
+                            vm.driver = null;
+                    },
+                    function errorCallback(response) {
+                        vm.drivers = null;
+                        vm.driver = null;
+                    });
+            }
         }
 
         function createWaybill() {

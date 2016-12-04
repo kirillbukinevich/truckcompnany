@@ -27,7 +27,7 @@
             <div class="col-sm-10">
                 <p class="input-group">
                     <input type="text"
-                           ng-change="vm.setTrucks()"
+                           ng-change="vm.setTrucks(); vm.setDrivers();"
                            name="leavingDate"
                            class="form-control"
                            datetime-picker="dd MMM yyyy HH:mm"
@@ -59,7 +59,7 @@
                     <input type="text"
                            id="arrivalDate"
                            name="arrivalDate"
-                           ng-change="vm.setTrucks()"
+                           ng-change="vm.setTrucks(); vm.setDrivers();"
                            class="form-control"
                            datetime-picker="dd MMM yyyy HH:mm"
                            ng-model="vm.arrivalDate"

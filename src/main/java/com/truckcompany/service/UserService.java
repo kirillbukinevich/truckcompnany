@@ -4,10 +4,7 @@ import com.truckcompany.domain.Authority;
 import com.truckcompany.domain.Company;
 import com.truckcompany.domain.Template;
 import com.truckcompany.domain.User;
-import com.truckcompany.repository.AuthorityRepository;
-import com.truckcompany.repository.CompanyRepository;
-import com.truckcompany.repository.PersistentTokenRepository;
-import com.truckcompany.repository.UserRepository;
+import com.truckcompany.repository.*;
 import com.truckcompany.security.AuthoritiesConstants;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.util.RandomUtil;
@@ -24,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -65,6 +63,9 @@ public class UserService {
 
     @Inject
     private CompanyService companyService;
+
+    @Inject
+    private RouteListRepository routeListRepository;
 
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
@@ -291,7 +292,7 @@ public class UserService {
         HashSet set = new HashSet();
         set.add(authorityRepository.getOne("ROLE_DRIVER"));
         List<ManagedUserVM> users = userRepository.
-            findByCompanyAndAuthorities(user.get().getCompany(), set)
+            findByCompanyAndAuthoritiesAndActivated(user.get().getCompany(), set, true)
             .stream()
             .map(ManagedUserVM::new)
             .collect(Collectors.toList());
@@ -422,6 +423,27 @@ public class UserService {
             log.debug("Deleting not activated user {}", user.getLogin());
             userRepository.delete(user);
         }
+    }
+
+    public List<ManagedUserVM> getFreeDrivers (Long from, Long to) {
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+
+        ZonedDateTime dateFrom = ZonedDateTime.ofInstant(new Date(from).toInstant(), ZoneId.systemDefault());
+        ZonedDateTime dateTo = ZonedDateTime.ofInstant(new Date(to).toInstant(), ZoneId.systemDefault());
+
+        HashSet set = new HashSet();
+        set.add(authorityRepository.getOne("ROLE_DRIVER"));
+        List<User> drivers = userRepository.findByCompanyAndAuthoritiesAndActivated(user.getCompany(),set, true);
+
+        Set<User> busyDriversSet = routeListRepository.findRouteListsByDate(user.getCompany(),dateFrom,dateTo)
+            .stream()
+            .map(routeList -> {
+                return routeList.getWaybill().getDriver();
+            }).collect(Collectors.toSet());
+
+        drivers.removeAll(busyDriversSet);
+
+        return drivers.stream().map(ManagedUserVM::new).collect(Collectors.toList());
     }
 
 }

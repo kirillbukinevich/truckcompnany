@@ -51,7 +51,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query( value = "select distinct count(user) from User user left join user.authorities auth where user.company.id = ?1 and auth.name <> 'ROLE_ADMIN'")
     Long countUsersBelongsCompanyWithoutAdmin(Long idCompany);
 
-    List<User> findByCompanyAndAuthorities(Company company, Set authorities);
-
-
+    List<User> findByCompanyAndAuthoritiesAndActivated(Company company, Set authorities, Boolean activated);
 }

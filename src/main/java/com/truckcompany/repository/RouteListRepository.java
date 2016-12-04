@@ -43,7 +43,6 @@ public interface RouteListRepository extends JpaRepository <RouteList, Long> {
                                                             Pageable pageable);
 
     @Query(value = "select distinct routeList from RouteList routeList where " +
-        //"routeList.company = ?1 and routeList.leavingDate > ?2 and routeList.leavingDate < ?2 or " +
         "routeList.company = ?1 and routeList.leavingDate between ?2 and ?3 or " +
         "routeList.company = ?1 and routeList.arrivalDate between ?2 and ?3 or " +
         "routeList.company = ?1 and routeList.leavingDate > ?2 and routeList.arrivalDate < ?3")

@@ -123,14 +123,10 @@ public class TruckService {
         ZonedDateTime dateFrom = ZonedDateTime.ofInstant(new Date(from).toInstant(), ZoneId.systemDefault());
         ZonedDateTime dateTo = ZonedDateTime.ofInstant(new Date(to).toInstant(), ZoneId.systemDefault());
 
-        log.debug("\nDate from: " + dateFrom + ";\nDate to: " + dateTo);
-
         Set<Truck> usedTrucks = routeListRepository
             .findRouteListsByDate(user.getCompany(), dateFrom, dateTo)
             .stream()
             .map(routeList -> {
-                log.info("Truck with id:" + routeList.getTruck().getId());
-                log.info("Route list id:" + routeList.getId());
                 return routeList.getTruck();
             }).collect(Collectors.toSet());
 
