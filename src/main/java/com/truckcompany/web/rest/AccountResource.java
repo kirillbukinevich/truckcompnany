@@ -129,6 +129,12 @@ public class AccountResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<UserDTO> getAccount() {
+
+        User userWithAuthorities = userService.getUserWithAuthorities();
+        if (userWithAuthorities != null){
+
+        }
+
         return Optional.ofNullable(userService.getUserWithAuthorities())
             .map(user -> new ResponseEntity<>(new UserDTO(user), HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
