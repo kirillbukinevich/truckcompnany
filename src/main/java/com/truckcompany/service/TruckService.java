@@ -2,9 +2,12 @@ package com.truckcompany.service;
 
 import com.truckcompany.config.JHipsterProperties;
 import com.truckcompany.domain.Company;
+import com.truckcompany.domain.RouteList;
 import com.truckcompany.domain.Truck;
 import com.truckcompany.domain.User;
+import com.truckcompany.domain.enums.TruckStatus;
 import com.truckcompany.repository.CompanyRepository;
+import com.truckcompany.repository.RouteListRepository;
 import com.truckcompany.repository.TruckRepository;
 import com.truckcompany.repository.UserRepository;
 import com.truckcompany.security.SecurityUtils;
@@ -17,8 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.util.List;
-import java.util.Optional;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by Viktor Dobroselsky.
@@ -34,6 +39,8 @@ public class TruckService {
     private UserRepository userRepository;
     @Inject
     private CompanyRepository companyRepository;
+    @Inject
+    private RouteListRepository routeListRepository;
 
     public Truck getTruckById (Long id) {
         Truck truck = truckRepository.getOne(id);
@@ -70,6 +77,19 @@ public class TruckService {
     public Truck getTruckByIdWIthCompany(Long id){
         log.debug("Get truck id={} with company.", id);
         return truckRepository.getOne(id);
+    }
+
+    public boolean isTruckBusy(Truck truck){
+        boolean isBusy = false;
+        ZonedDateTime now = ZonedDateTime.now();
+
+        Optional<List<RouteList>> routeListsByTruck = routeListRepository.findRouteListsByTruck(truck);
+
+        if (routeListsByTruck.isPresent()){
+            isBusy = routeListsByTruck.get().stream().anyMatch(routeList -> (routeList.getLeavingDate().compareTo(now) <= 0) && (routeList.getArrivalDate().compareTo(now) >= 0));
+        }
+
+        return isBusy;
     }
 
     public Truck createTruck (ManagedTruckVM managedTruckVM) {
@@ -109,5 +129,24 @@ public class TruckService {
             truckRepository.delete(truck);
             log.debug("Deleted truck {}", id);
         }
+    }
+
+    public List<ManagedTruckVM> getFreeTrucks(Long from, Long to) {
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+
+        ZonedDateTime dateFrom = ZonedDateTime.ofInstant(new Date(from).toInstant(), ZoneId.systemDefault());
+        ZonedDateTime dateTo = ZonedDateTime.ofInstant(new Date(to).toInstant(), ZoneId.systemDefault());
+
+        Set<Truck> usedTrucks = routeListRepository
+            .findRouteListsByDate(user.getCompany(), dateFrom, dateTo)
+            .stream()
+            .map(routeList -> {
+                return routeList.getTruck();
+            }).collect(Collectors.toSet());
+
+        List<Truck> allTrucks = truckRepository.findByCompanyAndReady(user.getCompany());
+        allTrucks.removeAll(usedTrucks);
+
+        return allTrucks.stream().map(ManagedTruckVM::new).collect(Collectors.toList());
     }
 }
