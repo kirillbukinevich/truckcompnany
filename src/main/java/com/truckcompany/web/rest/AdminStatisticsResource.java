@@ -11,6 +11,7 @@ import com.truckcompany.repository.UserRepository;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.StorageService;
 import com.truckcompany.service.TemplateService;
+import com.truckcompany.service.TruckService;
 import com.truckcompany.service.UserService;
 import com.truckcompany.web.rest.dataforhighcharts.AdminStatisticData;
 import com.truckcompany.web.rest.util.HeaderUtil;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.inject.Inject;
 import java.lang.reflect.Array;
 import java.util.*;
+
+import static com.truckcompany.domain.enums.TruckStatus.*;
 
 /**
  * Created by Vladimir on 22.11.2016.
@@ -41,6 +44,8 @@ public class AdminStatisticsResource {
     private UserRepository userRepository;
     @Inject
     private TruckRepository truckRepository;
+    @Inject
+    private TruckService truckService;
     @Inject
     private StorageService storageService;
     @Inject
@@ -82,7 +87,9 @@ public class AdminStatisticsResource {
 
     private Map<RoleUsers, Long> getStatisticEmployeeRole(List<User> users) {
         Map<RoleUsers, Long> statiscticEmployeeRole = new HashMap<>();
-        Arrays.stream(RoleUsers.values()).forEach(role -> {if (role != RoleUsers.SUPERADMIN) statiscticEmployeeRole.put(role, 0L);});
+        Arrays.stream(RoleUsers.values()).forEach(role -> {
+            if (role != RoleUsers.SUPERADMIN) statiscticEmployeeRole.put(role, 0L);
+        });
         users.stream().parallel().forEach(user -> {
             user.getAuthorities().forEach(auth -> {
                 RoleUsers role = RoleUsers.getRoleUserFromString(auth.getName());
@@ -94,12 +101,17 @@ public class AdminStatisticsResource {
 
     private Map<TruckStatus, Long> getStatisticTruckStatus(List<Truck> trucks) {
         Map<TruckStatus, Long> statisticTruckByStatus = new HashMap();
-        Arrays.stream(TruckStatus.values()).forEach(status -> statisticTruckByStatus.put(status, 0L));
+        Arrays.stream(values()).forEach(status -> statisticTruckByStatus.put(status, 0L));
         trucks.stream().parallel().forEach(truck -> {
-            statisticTruckByStatus.put(truck.getStatus(), statisticTruckByStatus.get(truck.getStatus()) + 1);
+            if (truckService.isTruckBusy(truck)) {
+                statisticTruckByStatus.put(BUSY, statisticTruckByStatus.get(BUSY) + 1);
+            } else {
+                statisticTruckByStatus.put(truck.getStatus(), statisticTruckByStatus.get(truck.getStatus()) + 1);
+            }
         });
         return statisticTruckByStatus;
     }
+
 
     private Map<String, Long> getStatisticTruckModel(List<Truck> trucks) {
         Map<String, Long> statisticTruckByModel = new HashMap<>();

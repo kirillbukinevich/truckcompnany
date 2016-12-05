@@ -52,6 +52,17 @@
     opacity: 1;
 }
 
+#status-busy{
+    display:inline-block;
+    width: 55px;
+    font-weight: bold;
+    padding: 3px 5px;
+    border: 2px solid #d9534f;
+    border-radius: 5px;
+    color:#fff;
+    background: #d9534f;
+}
+
 /*TYPE BODY*/
 #type-truck-body{
     width:55px;

@@ -63,7 +63,7 @@
 
     <div class="form-group">
         <label for="truck-body">Status</label>
-        <div>
+        <div ng-if = "vm.truck.status != 'BUSY'">
             <div class="wrap-radio-type-truck" id="status-truck-ready">
                 <input type="radio" id="truck-ready" ng-model="vm.truck.status" value="READY">
                 <label for="truck-ready"></label>
@@ -76,6 +76,12 @@
                 <input type="radio" id="truck-writtenoff" ng-model="vm.truck.status" value="WRITTENOFF">
                 <label for="truck-writtenoff"></label>
             </div>
+        </div>
+        <div ng-if = "vm.truck.status == 'BUSY'">
+            <div id="status-busy">
+                BUSY
+            </div>
+            <p> You can not change status truck from <strong>{{vm.truck.busyFrom | date:'MM/dd/yyyy HH:mm:ss'}}</strong> to <strong>{{vm.truck.busyTo | date:'MM/dd/yyyy HH:mm:ss'}}</strong>. The truck is carrying out delivery of the goods. </p>
         </div>
     </div>
 
