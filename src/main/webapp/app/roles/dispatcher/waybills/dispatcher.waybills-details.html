@@ -19,42 +19,14 @@
             <dd><span>{{vm.waybill.driver.firstName + " " + vm.waybill.driver.lastName}}</span></dd>
 
             <dt><span>State:</span></dt>
-            <dd><span>{{vm.waybill.state}}</span></dd>
+            <dd>
+                <span ng-if = "vm.waybill.state == 'CREATED'" class="label label-info" >CREATED</span>
+                <span ng-if = "vm.waybill.state == 'DELIVERED'" class="label label-success" >DELIVERED</span>
+                <span ng-if = "vm.waybill.state == 'CHECKED'" class="label label-primary" >CHECKED</span>
+                <span ng-if = "vm.waybill.state == 'REJECTED'" class="label label-warning" >REJECTED</span>
+            </dd>
         </dl>
-
-        <!--<h4>Route list info:</h4>-->
-
-        <!--<dl class="dl-horizontal">-->
-            <!--<dt><span>Truck consumption:</span></dt>-->
-            <!--<dd><span>{{vm.waybill.truck.consumption}}</span></dd>-->
-
-            <!--<dt><span>Truck reg number:</span></dt>-->
-            <!--<dd><span>{{vm.waybill.truck.regNumber}}</span></dd>-->
-
-
-            <!--<dt><span>Leaving storage:</span></dt>-->
-            <!--<dd><span>{{vm.waybill.leavingStorage.name}}</span></dd>-->
-
-            <!--<dt><span>Leaving date:</span></dt>-->
-            <!--<dd><span>{{vm.waybill.routeList.leavingDate | date:'dd/MM/yy HH:mm'}}</span></dd>-->
-
-
-            <!--<dt><span>Arrival storage:</span></dt>-->
-            <!--<dd><span>{{vm.waybill.arrivalStorage.name}}</span></dd>-->
-
-            <!--<dt><span>Arrival date:</span></dt>-->
-            <!--<dd><span>{{vm.waybill.routeList.arrivalDate | date:'dd/MM/yy HH:mm'}}</span></dd>-->
-        <!--</dl>-->
-
-        <!--<h4>Waybill goods</h4>-->
-
-        <!--<dl class="dl-horizontal">-->
-            <!--<div ng-repeat="stuff in vm.waybill.waybillGoods">-->
-                <!--<dt>{{stuff.name}}:</dt>-->
-                <!--<dd>{{stuff.count}} units</dd>-->
-            <!--</div>-->
-        <!--</dl>-->
-    <!--</div>-->
+    </div>
 
     <div class="modal-footer">
         <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="vm.clear()">

@@ -56,6 +56,8 @@
             <column name="count" type="int">
             </column>
 
+            <column name="price" type="DECIMAL(8,2)"/>
+
             <column name="offer_id" type="int">
             </column>
         </createTable>

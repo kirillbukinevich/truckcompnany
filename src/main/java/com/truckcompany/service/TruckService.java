@@ -2,12 +2,9 @@ package com.truckcompany.service;
 
 import com.truckcompany.config.JHipsterProperties;
 import com.truckcompany.domain.Company;
-import com.truckcompany.domain.RouteList;
 import com.truckcompany.domain.Truck;
 import com.truckcompany.domain.User;
-import com.truckcompany.domain.enums.TruckStatus;
 import com.truckcompany.repository.CompanyRepository;
-import com.truckcompany.repository.RouteListRepository;
 import com.truckcompany.repository.TruckRepository;
 import com.truckcompany.repository.UserRepository;
 import com.truckcompany.security.SecurityUtils;
@@ -20,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,8 +34,6 @@ public class TruckService {
     private UserRepository userRepository;
     @Inject
     private CompanyRepository companyRepository;
-    @Inject
-    private RouteListRepository routeListRepository;
 
     public Truck getTruckById (Long id) {
         Truck truck = truckRepository.getOne(id);
@@ -76,19 +70,6 @@ public class TruckService {
     public Truck getTruckByIdWIthCompany(Long id){
         log.debug("Get truck id={} with company.", id);
         return truckRepository.getOne(id);
-    }
-
-    public boolean isTruckBusy(Truck truck){
-        boolean isBusy = false;
-        ZonedDateTime now = ZonedDateTime.now();
-
-        Optional<List<RouteList>> routeListsByTruck = routeListRepository.findRouteListsByTruck(truck);
-
-        if (routeListsByTruck.isPresent()){
-            isBusy = routeListsByTruck.get().stream().anyMatch(routeList -> (routeList.getLeavingDate().compareTo(now) <= 0) && (routeList.getArrivalDate().compareTo(now) >= 0));
-        }
-
-        return isBusy;
     }
 
     public Truck createTruck (ManagedTruckVM managedTruckVM) {

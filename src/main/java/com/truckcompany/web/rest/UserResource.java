@@ -12,6 +12,7 @@ import com.truckcompany.service.UserService;
 import com.truckcompany.service.util.UploadException;
 import com.truckcompany.service.util.UploadUtil;
 import com.truckcompany.web.rest.vm.KeyAndPasswordVM;
+import com.truckcompany.web.rest.vm.ManagedTruckVM;
 import com.truckcompany.web.rest.vm.ManagedUserVM;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import com.truckcompany.web.rest.util.PaginationUtil;
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
 
 import static com.truckcompany.security.SecurityUtils.*;
 import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
@@ -295,4 +297,12 @@ public class UserResource {
         return !present ? new ResponseEntity(OK) : new ResponseEntity(BAD_REQUEST);
     }
 
+    @RequestMapping (value = "/drivers/bydate", method = GET, produces = APPLICATION_JSON_VALUE)
+    @Secured(AuthoritiesConstants.DISPATCHER)
+    public ResponseEntity<List<ManagedUserVM>> getActiveTrucks (@RequestParam("from") Long from, @RequestParam("to") Long to) {
+        log.debug("REST request to find free drivers");
+        List<ManagedUserVM> list = userService.getFreeDrivers(from,to);
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }

@@ -28,7 +28,6 @@ public class Goods implements Serializable {
     @Column(name = "type")
     private String type;
 
-
     @Column(name = "state")
     private String state;
 
