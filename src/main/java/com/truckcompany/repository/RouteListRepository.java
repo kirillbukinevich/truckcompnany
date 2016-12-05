@@ -2,6 +2,7 @@ package com.truckcompany.repository;
 
 import com.truckcompany.domain.Company;
 import com.truckcompany.domain.RouteList;
+import com.truckcompany.domain.Truck;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,8 +30,10 @@ public interface RouteListRepository extends JpaRepository <RouteList, Long> {
         "left join fetch routeList.leavingStorage " +
         "left join fetch routeList.arrivalStorage " +
         "where routeList.id = ?1")
-    @Override
     RouteList findOne (Long id);
+
+    @Query(value = "select distinct routeList from RouteList routeList left join routeList.truck as truck where truck = ?1")
+    Optional<List<RouteList>> findRouteListsByTruck(Truck truck);
 
     Optional<List<RouteList>> findByCompany(Company company);
 

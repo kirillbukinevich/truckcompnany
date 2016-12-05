@@ -7,7 +7,7 @@ id;login;password_hash;first_name;last_name;email;activated;lang_key;created_by;
 6;testadmin01;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;SuperAdmin;Superadmin;testadmin01@localhost.ru;true;en;system;system;1;2016-11-08
 7;testadmin02;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;SuperAdmin;Superadmin;testadmin02@localhost.ru;true;en;system;system;2;2016-11-08
 8;testadmin03;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;SuperAdmin;Superadmin;testadmin03@localhost.ru;true;en;system;system;3;2016-11-08
-9;testadmin04;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;SuperAdmin;Superadmin;testadmin04@localhost.ru;true;en;system;system;4;2016-11-08
+9;testadmin04;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;SuperAdmin;Superadmin;testadmin04@localhost.ru;false;en;system;system;4;2016-11-08
 10;testadmin05;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;SuperAdmin;Superadmin;testadmin05@localhost.ru;true;en;system;system;5;2016-11-08
 11;testadmin06;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;SuperAdmin;Superadmin;testadmin06@localhost.ru;true;en;system;system;6;2016-11-08
 12;testadmin07;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;SuperAdmin;Superadmin;testadmin07@localhost.ru;true;en;system;system;7;2016-11-08

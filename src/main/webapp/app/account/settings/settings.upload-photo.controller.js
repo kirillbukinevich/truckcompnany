@@ -24,6 +24,7 @@
         }
 
         vm.saveLogo = function(){
+            console.log("SAVE LOGO")
             if (vm.croppedImage != ''){
                 Upload.upload({
                     url: 'api/users/uploadlogo',
@@ -34,7 +35,8 @@
                     }
                 }).then(function (resp) {
                     console.log("Image was saved success!");
-                    vm.parent.imageSource = "/content/upload/logouser/" +resp.headers('X-truckCompanyApp-params');
+                    vm.parent.logo = resp.headers('X-truckCompanyApp-params');
+                    vm.parent.imageSource = "/content/upload/logouser/" +vm.parent.logo;
                     $uibModalInstance.close();
                 }, function (resp) {
                     console.log("Uploading image wasn't successful!");
@@ -66,7 +68,7 @@
                 reader.onload = function (evt) {
                     $scope.$apply(function () {
                         vm.uploadImage = evt.target.result;
-                        console.log(vm.uploadImage)
+                       // console.log(vm.uploadImage)
                     });
                 };
                 reader.readAsDataURL(file);

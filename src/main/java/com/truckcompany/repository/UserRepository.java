@@ -27,6 +27,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findOneByEmail(String email);
 
+
+    @Query(value = "select distinct user from User user left join fetch user.authorities left join fetch user.company where user.login=?1")
     Optional<User> findOneByLogin(String login);
 
     Optional<User> findOneById(Long userId);

@@ -12,10 +12,12 @@
 
         vm.error = null;
         vm.save = save;
-        vm.saveLogo = saveLogo;
+        /*vm.saveLogo = saveLogo;*/
         vm.deleteLogo = deleteLogo;
         vm.settingsAccount = null;
         vm.success = null;
+
+
 
 
         vm.openModalForUploadPhoto = function(){
@@ -64,6 +66,8 @@
         });
 
         function save () {
+            vm.settingsAccount.logo = vm.logo;
+            console.log(vm.settingsAccount);
             Auth.updateAccount(vm.settingsAccount).then(function() {
                 vm.error = null;
                 vm.success = 'OK';
@@ -80,7 +84,7 @@
                 vm.error = 'ERROR';
             });
         }
-
+/*
         function saveLogo(file){
             if (file != null){
                 Upload.upload({
@@ -115,11 +119,14 @@
                 });
 
             }
-        }
+        }*/
 
         function deleteLogo(){
             console.log("DElete logo");
-            $http({
+            vm.imageSource = "/content/upload/logouser/";
+            vm.logo = null;
+
+            /*$http({
                 method: 'GET',
                 url: '/api/users/deletelogo/' + vm.settingsAccount.id,
             }).then(function successCallback(response) {
@@ -127,7 +134,7 @@
                 vm.error = false;
             }, function errorCallback(response) {
 
-            });
+            });*/
         }
     }
 })();
