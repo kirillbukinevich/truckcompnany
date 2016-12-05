@@ -181,6 +181,7 @@ public class CompanyResource {
     public ResponseEntity createNewCompanyEmployee(@RequestBody ManagedUserVM managedUserVM, HttpServletRequest request){
         LOG.debug("REST request to create new Employee : '{}'", managedUserVM.getLogin());
 
+
         if (!isUniqueEmail(managedUserVM.getEmail(), managedUserVM.getId())){
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("userManagement", EMAIL_EXISTS, "E-mail already in use")).body(null);
         }

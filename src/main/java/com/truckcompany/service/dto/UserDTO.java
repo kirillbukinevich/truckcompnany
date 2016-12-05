@@ -9,7 +9,13 @@ import com.truckcompany.domain.User;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -148,6 +154,15 @@ public class UserDTO {
 
     public Company getCompany() {
         return company;
+    }
+
+    public void setBirthDate (String birthDate) {
+        DateFormat m_ISO8601Local = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            this.birthDate = ZonedDateTime.ofInstant(m_ISO8601Local.parse(birthDate).toInstant(), ZoneId.systemDefault()) ;
+        } catch (ParseException e) {
+            this.birthDate = ZonedDateTime.now();
+        }
     }
 
     @Override

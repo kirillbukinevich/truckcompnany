@@ -212,11 +212,12 @@ public class UserService {
         }
     }
 
-    public void updateUser(String firstName, String lastName, String email, String langKey) {
+    public void updateUser(String firstName, String lastName, String email, String logo, String langKey) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u -> {
             u.setFirstName(firstName);
             u.setLastName(lastName);
             u.setEmail(email);
+            u.setLogo(logo);
             u.setLangKey(langKey);
             userRepository.save(u);
             log.debug("Changed Information for User: {}", u);
@@ -331,8 +332,8 @@ public class UserService {
             if (user.getLogo() != null) {
                 UploadUtil.deleteFile(rootDirectory + File.separator + user.getLogo());
             }
-            user.setLogo(imageName);
-            userRepository.save(user);
+            /*user.setLogo(imageName);
+            userRepository.save(user);*/
             return imageName;
 
         } else {

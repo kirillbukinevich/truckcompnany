@@ -32,6 +32,7 @@
                 case 'ROLE_ADMIN': return 'Company admin';
                 case 'ROLE_DRIVER': return  'Driver';
                 case 'ROLE_MANAGER': return  'Manager';
+                case 'ROLE_COMPANYOWNER': return  'Company owner';
                 default:  return "Anonymous role";
             }
         }

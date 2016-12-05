@@ -56,7 +56,17 @@
 
                     $state.go(previousState.name, previousState.params);
                 }
-            }).catch(function () {
+            }).catch(function (response) {
+                console.log(response);
+                console.log(response.status)
+                if (response.status == 418){
+                    vm.errorMessage = "<strong>Failed to sign in!</strong> User isn't activated";
+                } else if (response.status == 419){
+                    vm.errorMessage = "<strong>Failed to sign in!</strong> Your company is deactivated. Contact your administrator.";
+                } else{
+                    vm.errorMessage = "<strong>Failed to sign in!</strong> Please check your credentials and try again.";
+                }
+
                 vm.authenticationError = true;
             });
         }
