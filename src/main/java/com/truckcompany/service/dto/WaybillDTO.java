@@ -35,6 +35,8 @@ public class WaybillDTO {
 
     private Set<GoodsDTO> goods;
 
+    private Double transportationPrice;
+
     public WaybillDTO(Long id, ZonedDateTime date, UserDTO driver, WaybillState state, UserDTO dispatcher, UserDTO manager, ZonedDateTime dateChecked, Set<GoodsDTO> goods) {
         this.id = id;
         this.date = date;
@@ -64,10 +66,10 @@ public class WaybillDTO {
     }
 
 
-    public WaybillDTO(Waybill waybill, RouteListDTO routeList) {
+   /* public WaybillDTO(Waybill waybill, RouteListDTO routeList) {
         this(waybill);
         this.routeList = routeList;
-    }
+    } */
 
     public WaybillDTO(Waybill waybill) {
         this(waybill.getId(), waybill.getDate(), waybill.getState());
@@ -79,6 +81,7 @@ public class WaybillDTO {
         this.goods = waybill.getGoods().stream()
             .map(GoodsDTO::new)
             .collect(Collectors.toSet());
+        this.transportationPrice = waybill.getTransportationPrice();
 
         //this.offer = new OfferDTO(waybill.getOffer);
     }
@@ -89,6 +92,7 @@ public class WaybillDTO {
         this.driver = waybill.getDriver();
         this.routeList = waybill.getRouteList();
         this.offer = waybill.getOffer();
+        this.transportationPrice = waybill.getTransportationPrice();
     }
 
     public RouteListDTO getRouteList() {
@@ -169,6 +173,14 @@ public class WaybillDTO {
 
     public void setGoods(Set<GoodsDTO> goods) {
         this.goods = goods;
+    }
+
+    public Double getTransportationPrice() {
+        return transportationPrice;
+    }
+
+    public void setTransportationPrice(Double transportationPrice) {
+        this.transportationPrice = transportationPrice;
     }
 
     @Override

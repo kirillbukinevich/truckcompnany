@@ -1,31 +1,25 @@
 package com.truckcompany.service;
 
 
-import com.truckcompany.domain.Waybill;
+import com.truckcompany.domain.User;
 import com.truckcompany.domain.enums.WaybillState;
-import com.truckcompany.service.dto.GoodsDTO;
-
-
-import com.truckcompany.service.dto.RouteListDTO;
 import com.truckcompany.service.dto.WaybillDTO;
-import com.truckcompany.service.facade.RouteListFacade;
 import com.truckcompany.service.facade.WaybillFacade;
+import com.truckcompany.web.rest.dataforhighcharts.NameAndValueStatisticData;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.function.DoublePredicate;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,13 +33,15 @@ public class CompanyOwnerStatisticsService {
     private final Logger log = LoggerFactory.getLogger(CompanyOwnerStatisticsService.class);
 
     @Inject
-    private RouteListFacade routeListFacade;
+    private WaybillFacade waybillFacade;
 
     @Inject
-    private WaybillFacade waybillFacade;
+    private UserService userService;
 
 
     public List<List<Double>> getConsumptionStatistics(){
+        log.debug("get consumption statistic");
+
         List<WaybillDTO> waybills = waybillFacade.findWaybillsWithState(WaybillState.DELIVERED);
 
         Map<Long, Double> map = getConsumptionDataMap(waybills);
@@ -55,9 +51,11 @@ public class CompanyOwnerStatisticsService {
         return result;
     }
 
-    public List<List<Double>> getConsumptionStatistics(ZonedDateTime fromDate, ZonedDateTime toDate){
+    public List<List<Double>> getConsumptionStatistics(LocalDate fromDate, LocalDate toDate){
         List<WaybillDTO> waybills = waybillFacade
-            .findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED, fromDate, toDate);
+            .findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED,
+                fromDate.atStartOfDay(ZoneOffset.systemDefault()),
+                toDate.plusDays(1).atStartOfDay(ZoneOffset.systemDefault()).minusNanos(1));
 
         Map<Long, Double> map = getConsumptionDataMap(waybills);
 
@@ -68,31 +66,19 @@ public class CompanyOwnerStatisticsService {
 
     public List<List<Double>> getIncomeStatistics(){
         List<WaybillDTO> waybills = waybillFacade.findWaybillsWithState(WaybillState.DELIVERED);
-        double percent = 1.4;
-
-        Map<Long, Double> map = waybills.stream() // @todo add percent of consumption!!
-            .collect(Collectors.toMap(s-> s.getDate().toInstant().toEpochMilli(),
-                s-> s.getRouteList().getTruck().getConsumption()*s.getRouteList().getFuelCost()
-                    *s.getRouteList().getDistance()*percent,
-                (a,b) -> a+ b));
-
+        Map<Long, Double> map = getIncomeDataMap(waybills);
         List<List<Double>> arrayForGraph = convertToConvenientForGraphView(map);
-
-
         Collections.sort(arrayForGraph, (o1, o2) -> o1.get(0).compareTo(o2.get(0)));
         return arrayForGraph;
     }
 
-    public List<List<Double>> getIncomeStatistics(ZonedDateTime fromDate, ZonedDateTime toDate){
+    public List<List<Double>> getIncomeStatistics(LocalDate fromDate, LocalDate toDate){
         List<WaybillDTO> waybills = waybillFacade
-            .findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED, fromDate, toDate);
-        double percent = 1.4;
+            .findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED,
+                fromDate.atStartOfDay(ZoneOffset.systemDefault()),
+                toDate.plusDays(1).atStartOfDay(ZoneOffset.systemDefault()).minusNanos(1));
 
-        Map<Long, Double> map = waybills.stream() // @todo add percent of consumption!!
-            .collect(Collectors.toMap(s-> s.getDate().toInstant().toEpochMilli(),
-                s-> s.getRouteList().getTruck().getConsumption()*s.getRouteList().getFuelCost()
-                    *s.getRouteList().getDistance()*percent,
-                (a,b) -> a+ b));
+        Map<Long, Double> map = getIncomeDataMap(waybills);
 
         List<List<Double>> arrayForGraph = convertToConvenientForGraphView(map);
 
@@ -112,9 +98,11 @@ public class CompanyOwnerStatisticsService {
         return arrayForGraph;
     }
 
-    public List<List<Double>> getProfitStatistics(ZonedDateTime fromDate, ZonedDateTime toDate){
+    public List<List<Double>> getProfitStatistics(LocalDate fromDate, LocalDate toDate){
         List<WaybillDTO> waybills = waybillFacade
-            .findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED, fromDate, toDate);
+            .findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED,
+                fromDate.atStartOfDay(ZoneOffset.systemDefault()),
+                toDate.plusDays(1).atStartOfDay(ZoneOffset.systemDefault()).minusNanos(1));
 
 
         Map<Long, Double> profit = getProfitDataMap(waybills);
@@ -131,20 +119,117 @@ public class CompanyOwnerStatisticsService {
 
     }
 
-    public List<List<Double>> getLossStatistics(ZonedDateTime fromDate, ZonedDateTime toDate){
+
+    public List<List<Double>> getLossStatistics(LocalDate fromDate, LocalDate toDate){
         List<WaybillDTO> waybills = waybillFacade.findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED,
-            fromDate, toDate);
+            fromDate.atStartOfDay(ZoneOffset.systemDefault()),
+            toDate.plusDays(1).atStartOfDay(ZoneOffset.systemDefault()).minusNanos(1));
         return createGraphLossData(waybills);
     }
 
-    public HSSFWorkbook getConsumptionReport(){
-        List<List<Double>> statistics = getConsumptionStatistics();
-        return createConsumptionReport(statistics);
-    }
+    public HSSFWorkbook getCommonReport(LocalDate fromDate, LocalDate toDate){
+        HSSFWorkbook book = new HSSFWorkbook();
+        Sheet sheet = book.createSheet("report");
 
-    public HSSFWorkbook getConsumptionReport(ZonedDateTime fromDate, ZonedDateTime toDate){
-        List<List<Double>> statistics = getConsumptionStatistics(fromDate, toDate);
-        return createConsumptionReport(statistics);
+        DataFormat dataFormat = book.createDataFormat();
+        CellStyle dateStyle = book.createCellStyle();
+        dateStyle.setDataFormat(dataFormat.getFormat("dd.mm.yyyy"));
+
+        CellStyle currencyStyle = book.createCellStyle();
+        currencyStyle.setDataFormat(dataFormat.getFormat("$#,##0.00;-$#,##0.00")) ;  // currency format with dolar sign
+
+        createHeaderForCommonReport(sheet);
+
+        LocalDate startDate = fromDate;
+        LocalDate endDate;
+        int rowIndex = 1;
+
+        double totalConsumption = 0, totalIncome = 0, totalProfit = 0;
+        while (startDate.isBefore(toDate.plusDays(1))){
+
+            if (Period.between(startDate, toDate).getDays() < 7){
+                endDate = toDate;
+            }
+            else{
+                endDate = startDate.plusDays(6);
+            }
+
+            List<WaybillDTO> waybills = waybillFacade
+                .findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED,
+                    startDate.atStartOfDay(ZoneOffset.systemDefault()),
+                    endDate.atStartOfDay(ZoneOffset.systemDefault()).minusNanos(1));
+
+            Map<Long, Double> consumptionDataMap = getConsumptionDataMap(waybills);
+            double weekConsumption = consumptionDataMap.values().stream()
+                .mapToDouble(Double::valueOf)
+                .sum();
+            totalConsumption += weekConsumption;
+
+            double weekIncome = getIncomeDataMap(waybills).values().stream()
+                .mapToDouble(Double::valueOf)
+                .sum();
+            totalIncome += weekIncome;
+
+            double weekProfit = getProfitDataMap(waybills).values().stream()
+                .mapToDouble(Double::valueOf)
+                .sum();
+            totalProfit += weekProfit;
+
+            Row row = sheet.createRow(rowIndex++);
+
+            Cell startDateCell = row.createCell(0);
+            startDateCell.setCellStyle(dateStyle);
+            startDateCell.setCellValue(GregorianCalendar
+                .from(Instant.ofEpochMilli(startDate.atStartOfDay(ZoneOffset.systemDefault()).toInstant().toEpochMilli())
+                    .atZone(ZoneOffset.systemDefault())));
+
+            Cell endDateCell = row.createCell(1);
+            endDateCell.setCellStyle(dateStyle);
+            endDateCell.setCellValue(GregorianCalendar
+                .from(Instant.ofEpochMilli(endDate.atStartOfDay(ZoneOffset.systemDefault()).toInstant().toEpochMilli())
+                    .atZone(ZoneOffset.systemDefault())));
+
+            Cell consumptionCell = row.createCell(2);
+            consumptionCell.setCellStyle(currencyStyle);
+            consumptionCell.setCellValue(weekConsumption);
+
+            Cell incomeCell = row.createCell(3);
+            incomeCell.setCellStyle(currencyStyle);
+            incomeCell.setCellValue(weekIncome);
+
+            Cell profitCell = row.createCell(4);
+            profitCell.setCellStyle(currencyStyle);
+            profitCell.setCellValue(weekProfit);
+
+            startDate = startDate.plusDays(7);
+
+        }
+
+        rowIndex++;
+        Row total  = sheet.createRow(rowIndex);
+
+        Cell totalNameCell = total.createCell(0);
+        totalNameCell.setCellValue("Total");
+        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 1));
+
+        Cell totalConsumptionCell = total.createCell(2);
+        totalConsumptionCell.setCellStyle(currencyStyle);
+        totalConsumptionCell.setCellValue(totalConsumption);
+
+        Cell totalIncomeCell = total.createCell(3);
+        totalIncomeCell.setCellStyle(currencyStyle);
+        totalIncomeCell.setCellValue(totalIncome);
+
+        Cell totalProfitCell = total.createCell(4);
+        totalProfitCell.setCellStyle(currencyStyle);
+        totalProfitCell.setCellValue(totalProfit);
+
+        sheet.autoSizeColumn(0);
+        sheet.autoSizeColumn(1);
+        sheet.autoSizeColumn(2);
+        sheet.autoSizeColumn(3);
+        sheet.autoSizeColumn(4);
+        return book;
     }
 
     public HSSFWorkbook getRouteListsReport(ZonedDateTime fromDate, ZonedDateTime toDate){
@@ -164,7 +249,13 @@ public class CompanyOwnerStatisticsService {
             fillRowForRouteListReport(row, dateStyle, waybills.get(i));
         }
 
-        setAutoSizeForRouteListReport(sheet, new int[]{1,2, 3,4,5,6,7});
+        sheet.autoSizeColumn(1);
+        sheet.autoSizeColumn(2);
+        sheet.autoSizeColumn(3);
+        sheet.autoSizeColumn(4);
+        sheet.autoSizeColumn(5);
+        sheet.autoSizeColumn(6);
+        sheet.autoSizeColumn(7);
 
         return book;
     }
@@ -186,7 +277,14 @@ public class CompanyOwnerStatisticsService {
             fillRowForRouteListReport(row, dateStyle, waybills.get(i));
         }
 
-        setAutoSizeForRouteListReport(sheet, new int[]{1,2, 3,4,5,6,7});
+
+        sheet.autoSizeColumn(1);
+        sheet.autoSizeColumn(2);
+        sheet.autoSizeColumn(3);
+        sheet.autoSizeColumn(4);
+        sheet.autoSizeColumn(5);
+        sheet.autoSizeColumn(6);
+        sheet.autoSizeColumn(7);
 
         return book;
     }
@@ -196,9 +294,124 @@ public class CompanyOwnerStatisticsService {
         return createLossReport(statistics);
     }
 
-    public HSSFWorkbook getLossReport(ZonedDateTime fromDate, ZonedDateTime toDate){
+    public HSSFWorkbook getLossReport(LocalDate fromDate, LocalDate toDate){
         List<List<Double>> statistics = getLossStatistics(fromDate, toDate);
         return createLossReport(statistics);
+    }
+
+    public HSSFWorkbook getLossReportWithResponsiblePersons(LocalDate fromDate, LocalDate toDate){
+        List<WaybillDTO> waybills = waybillFacade.findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED,
+            fromDate.atStartOfDay(ZoneOffset.systemDefault()),
+            toDate.plusDays(1).atStartOfDay(ZoneOffset.systemDefault()).minusNanos(1));
+
+        Map<String, List<WaybillDTO>> driversLoss = getTopWorstDriversDataMap(waybills);
+
+        HSSFWorkbook book = new HSSFWorkbook();
+        Sheet sheet = book.createSheet();
+
+        CellStyle currencyStyle = book.createCellStyle();
+        currencyStyle.setDataFormat((short)8) ;  // currency format with dolar sign
+
+        Row header = sheet.createRow(0);
+
+        Cell nameHeader = header.createCell(0);
+        nameHeader.setCellValue("Name");
+
+        Cell valueHeader = header.createCell(1);
+        valueHeader.setCellValue("Value");
+
+        int rowIndex = 1;
+
+        for(String login: driversLoss.keySet()){
+            double driverLoss = driversLoss.get(login)
+                .stream()
+                .mapToDouble(this::countWaybillLoss)
+                .sum();
+
+            User driver = userService.getUserByLogin(login).get();
+
+            Row row = sheet.createRow(rowIndex++);
+
+            Cell name = row.createCell(0);
+            name.setCellValue(driver.getFirstName() + " " + driver.getLastName());
+
+            Cell value = row.createCell(1);
+            value.setCellStyle(currencyStyle);
+            value.setCellValue(driverLoss);
+
+        }
+
+        sheet.autoSizeColumn(0);
+        sheet.autoSizeColumn(1);
+
+        return book;
+    }
+
+    public List<NameAndValueStatisticData> getTopBestDrivers(int amount){
+        List<WaybillDTO> waybills = waybillFacade.findWaybillsWithState(WaybillState.DELIVERED);
+
+        Map<String, List<WaybillDTO>> loginAndValueMap = getTopBestDriversDataMap(waybills, amount);
+
+        List<NameAndValueStatisticData> statisticData = new ArrayList<>();
+        for(String login: loginAndValueMap.keySet()){
+            double driverProfit = loginAndValueMap.get(login)
+                .stream()
+                .mapToDouble(this::countWaybillProfit)
+                .sum();
+
+
+            NameAndValueStatisticData record = new NameAndValueStatisticData();
+            Optional<User> driver = userService.getUserByLogin(login);
+            record.setName(driver.get().getFirstName() + " " + driver.get().getLastName());
+            record.setY(driverProfit);
+            statisticData.add(record);
+        }
+        return statisticData;
+    }
+
+    public HSSFWorkbook getTopBestDriversReport(int amount){
+        List<WaybillDTO> waybills = waybillFacade.findWaybillsWithState(WaybillState.DELIVERED);
+        Map<String, List<WaybillDTO>> loginAndValueMap = getTopBestDriversDataMap(waybills, amount);
+
+        HSSFWorkbook book = new HSSFWorkbook();
+        Sheet sheet = book.createSheet("top best drivers report");
+
+        DataFormat dataFormat = book.createDataFormat();
+        CellStyle currencyStyle = book.createCellStyle();
+        currencyStyle.setDataFormat(dataFormat.getFormat("$#,##0.00;-$#,##0.00")) ;
+
+        Row header = sheet.createRow(0);
+
+        Cell nameHeader = header.createCell(0);
+        nameHeader.setCellValue("Name");
+
+        Cell valueHeader = header.createCell(1);
+        valueHeader.setCellValue("Value");
+
+        int rowIndex = 1;
+
+        for(String login: loginAndValueMap.keySet()){
+            double driverProfit = loginAndValueMap.get(login)
+                .stream()
+                .mapToDouble(this::countWaybillProfit)
+                .sum();
+
+            User driver = userService.getUserByLogin(login).get();
+
+            Row row = sheet.createRow(rowIndex++);
+
+            Cell name = row.createCell(0);
+            name.setCellValue(driver.getFirstName() + " " + driver.getLastName());
+
+            Cell value = row.createCell(1);
+            value.setCellStyle(currencyStyle);
+            value.setCellValue(driverProfit);
+
+        }
+
+        sheet.autoSizeColumn(0);
+        sheet.autoSizeColumn(1);
+        return book;
     }
 
     private void createHeaderForRouteListReport(Sheet sheet){
@@ -240,6 +453,25 @@ public class CompanyOwnerStatisticsService {
 
     }
 
+    private void createHeaderForCommonReport(Sheet sheet){
+        Row header = sheet.createRow(0);
+
+        Cell startDate = header.createCell(0);
+        startDate.setCellValue("Start date");
+
+        Cell endDate = header.createCell(1);
+        endDate.setCellValue("End date");
+
+        Cell consumption = header.createCell(2);
+        consumption.setCellValue("Consumption");
+
+        Cell income = header.createCell(3);
+        income.setCellValue("Income");
+
+        Cell profit = header.createCell(4);
+        profit.setCellValue("Profit");
+    }
+
     private void fillRowForRouteListReport(Row row, CellStyle dateStyle,WaybillDTO waybill){
         Cell id = row.createCell(0);
         id.setCellValue(waybill.getRouteList().getId());
@@ -278,49 +510,6 @@ public class CompanyOwnerStatisticsService {
         waybillID.setCellValue(waybill.getId());
     }
 
-    private void setAutoSizeForRouteListReport(Sheet sheet, int[] columnNumbers){
-        for (int i=0; i<columnNumbers.length; ++i){
-            sheet.autoSizeColumn(columnNumbers[i]);
-        }
-    }
-
-    private HSSFWorkbook createConsumptionReport(List<List<Double>> statistics){
-        HSSFWorkbook book = new HSSFWorkbook();
-        Sheet sheet = book.createSheet("consumption report");
-
-        DataFormat dataFormat = book.createDataFormat();
-        CellStyle dateStyle = book.createCellStyle();
-        dateStyle.setDataFormat(dataFormat.getFormat("dd.mm.yyyy"));
-
-        Row header = sheet.createRow(0);
-
-        Cell date = header.createCell(0);
-        date.setCellValue("Date");
-
-        Cell value = header.createCell(1);
-        value.setCellValue("Consumption amount");
-
-        int index = 1;
-
-        for (List<Double> record : statistics){
-            Row row = sheet.createRow(index++);
-
-            Cell dateCell = row.createCell(0);
-            dateCell.setCellStyle(dateStyle);
-            dateCell.setCellValue(GregorianCalendar.from(Instant.ofEpochMilli((record.get(0).longValue()))
-                .atZone(ZoneOffset.UTC)));
-
-            Cell valueCell = row.createCell(1);
-            valueCell.setCellValue(record.get(1));
-        }
-
-        sheet.autoSizeColumn(0);
-        sheet.autoSizeColumn(1);
-
-        return book;
-
-    }
-
     private List<List<Double>> createGraphLossData(List<WaybillDTO> waybills){
 
         Map<Long,Double> map = getLossDataMap(waybills);
@@ -345,7 +534,7 @@ public class CompanyOwnerStatisticsService {
         date.setCellValue("Date");
 
         Cell value = header.createCell(1);
-        value.setCellValue("Consumption amount");
+        value.setCellValue("Loss amount");
 
         int index = 1;
 
@@ -354,7 +543,8 @@ public class CompanyOwnerStatisticsService {
 
             Cell dateCell = row.createCell(0);
             dateCell.setCellStyle(dateStyle);
-            dateCell.setCellValue(GregorianCalendar.from(Instant.ofEpochMilli(record.get(0).longValue()).atZone(ZoneOffset.UTC)));
+            dateCell.setCellValue(GregorianCalendar.from(Instant.ofEpochMilli(record.get(0).longValue())
+                .atZone(ZoneOffset.systemDefault())));
 
             Cell valueCell = row.createCell(1);
             valueCell.setCellValue(record.get(1));
@@ -378,20 +568,20 @@ public class CompanyOwnerStatisticsService {
     }
 
     private Map<Long, Double> getLossDataMap(List<WaybillDTO> waybills){
-        Function<WaybillDTO, Double> valueMapper = s -> s.getGoods().stream()
-            .filter(goodsDTO -> goodsDTO.getDeliveredNumber() != null)
-            .mapToDouble(goods -> (goods.getAcceptedNumber() - goods.getDeliveredNumber())*goods.getPrice())
-            .sum();
+        Function<WaybillDTO, Double> valueMapper = this::countWaybillLoss;
 
         Map<Long, Double> map = waybills.stream()
-            .collect(Collectors.toMap(s -> s.getDate().toInstant().toEpochMilli(), valueMapper, (a,b) -> a +b));
+            .collect(Collectors.toMap(s -> s.getDate().truncatedTo(ChronoUnit.DAYS)
+                    .toInstant().toEpochMilli(),
+                valueMapper, (a,b) -> a +b));
 
         return map;
     }
 
     private Map<Long, Double> getConsumptionDataMap(List<WaybillDTO> waybills){
         Map<Long, Double> map = waybills.stream()
-            .collect(Collectors.toMap(s-> s.getDate().toInstant().toEpochMilli(),
+            .collect(Collectors.toMap(s -> s.getDate().truncatedTo(ChronoUnit.DAYS)
+                    .toInstant().toEpochMilli(),
                 s-> s.getRouteList().getTruck().getConsumption()*s.getRouteList().getFuelCost()
                     *s.getRouteList().getDistance(),
                 (a,b) -> a+ b));
@@ -399,13 +589,11 @@ public class CompanyOwnerStatisticsService {
     }
 
     private Map<Long, Double> getProfitDataMap(List<WaybillDTO> waybills){
-        double percent = 0.4;
-
         // profit without loss;
-        Map<Long, Double> profitMap = waybills.stream() // @todo add percent of consumption!!
-            .collect(Collectors.toMap(s-> s.getDate().toInstant().toEpochMilli(),
-                s-> s.getRouteList().getTruck().getConsumption()*s.getRouteList().getFuelCost()
-                    *s.getRouteList().getDistance()*percent ,
+        Map<Long, Double> profitMap = waybills.stream()
+            .collect(Collectors.toMap(s-> s.getDate().truncatedTo(ChronoUnit.DAYS)
+                    .toInstant().toEpochMilli(),
+                s-> s.getTransportationPrice() ,
                 (a,b) -> a+ b));
 
         // loss
@@ -421,5 +609,94 @@ public class CompanyOwnerStatisticsService {
         return profit;
 
     }
+
+    private Map<Long, Double> getIncomeDataMap(List<WaybillDTO> waybills){
+        double percent = 1.4;
+
+        Map<Long, Double> map = waybills.stream() // @todo add percent of consumption!!
+            .collect(Collectors.toMap(s-> s.getDate().truncatedTo(ChronoUnit.DAYS)
+                    .toInstant().toEpochMilli(),
+                s-> s.getRouteList().getTruck().getConsumption()*s.getRouteList().getFuelCost()
+                    *s.getRouteList().getDistance()*percent,
+                (a,b) -> a+ b));
+
+        return map;
+    }
+
+    private Double countWaybillLoss(WaybillDTO waybill){
+        return  waybill.getGoods().stream()
+            .filter(goodsDTO -> goodsDTO.getDeliveredNumber() != null)
+            .mapToDouble(goods -> (goods.getAcceptedNumber() - goods.getDeliveredNumber())*goods.getPrice())
+            .sum();
+    }
+
+    private Map<String, List<WaybillDTO>> getTopBestDriversDataMap(List<WaybillDTO> waybills, int amount){
+        Function<WaybillDTO, String> keyMapper = w -> w.getDriver().getLogin();
+        Function<WaybillDTO, List<WaybillDTO>> valueMapper = this::waybillToList;
+        BinaryOperator<List<WaybillDTO>> mergeFunction = this::mergeLists;
+
+        Map<String, List<WaybillDTO>> loginAndValueMap = waybills.stream()
+            .collect(Collectors.toMap(keyMapper, valueMapper, mergeFunction))
+            .entrySet()
+            .stream()
+            .sorted(Map.Entry.comparingByValue((o1, o2) -> {
+                Double profit1 = o1.stream().mapToDouble(this::countWaybillProfit)
+                    .sum();
+                Double profit2 = o2.stream().mapToDouble(this::countWaybillProfit)
+                    .sum();
+                return profit2.compareTo(profit1);
+            }))
+            .limit(amount)
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                Map.Entry::getValue,
+                (e1, e2) -> e1,
+                LinkedHashMap:: new
+            ));
+
+        return loginAndValueMap;
+    }
+
+    private Map<String, List<WaybillDTO>> getTopWorstDriversDataMap(List<WaybillDTO> waybills ){
+        Function<WaybillDTO, String> keyMapper = w -> w.getDriver().getLogin();
+        Function<WaybillDTO, List<WaybillDTO>> valueMapper = this::waybillToList;
+        BinaryOperator<List<WaybillDTO>> mergeFunction = this::mergeLists;
+
+        Map<String, List<WaybillDTO>> loginAndValueMap = waybills.stream()
+            .collect(Collectors.toMap(keyMapper, valueMapper, mergeFunction))
+            .entrySet()
+            .stream()
+            .sorted(Map.Entry.comparingByValue((o1, o2) -> {
+                Double loss1 = o1.stream().mapToDouble(this::countWaybillLoss)
+                    .sum();
+                Double loss2 = o2.stream().mapToDouble(this::countWaybillLoss)
+                    .sum();
+                return  loss2.compareTo(loss1);
+            }))
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                Map.Entry::getValue,
+                (e1, e2) -> e1,
+                LinkedHashMap:: new
+            ));
+
+        return loginAndValueMap;
+    }
+
+    private List<WaybillDTO> waybillToList(WaybillDTO waybill){
+        List<WaybillDTO> result = new ArrayList<>();
+        result.add(waybill);
+        return result;
+    }
+
+    private List<WaybillDTO> mergeLists(List<WaybillDTO> a, List<WaybillDTO> b){
+        a.addAll(b);
+        return a;
+    }
+
+    private double countWaybillProfit(WaybillDTO waybill){
+        return waybill.getTransportationPrice() - countWaybillLoss(waybill);
+    }
+
 
 }

@@ -1,29 +1,23 @@
 package com.truckcompany.web.rest;
 
 import com.truckcompany.service.CompanyOwnerStatisticsService;
-import com.truckcompany.service.RouteListService;
-import com.truckcompany.service.dto.RouteListDTO;
-import com.truckcompany.service.facade.RouteListFacade;
-import org.apache.commons.io.IOUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import com.truckcompany.web.rest.dataforhighcharts.NameAndValueStatisticData;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.*;
-import org.springframework.util.StreamUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -40,15 +34,12 @@ public class CompanyOwnerStatisticsResource {
     @Inject
     private CompanyOwnerStatisticsService statisticsService;
 
-    @Inject
-    private RouteListFacade routeListFacade;
-
 
     @RequestMapping(value = "/companyowner/statistic/consumption", method = RequestMethod.GET)
-    public ResponseEntity getConsumptionStatistics(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                           ZonedDateTime startDate,
-                                                   @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                           ZonedDateTime endDate){
+    public ResponseEntity getConsumptionStatistics(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                           LocalDate startDate,
+                                                   @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                           LocalDate endDate){
         LOG.debug("REST get statistic from company owner");
 
         List<List<Double>> stat;
@@ -63,10 +54,10 @@ public class CompanyOwnerStatisticsResource {
     }
 
     @RequestMapping(value = "/companyowner/statistic/income", method = RequestMethod.GET)
-    public ResponseEntity getIncomeStatistics(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                ZonedDateTime startDate,
-                                            @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                ZonedDateTime endDate){
+    public ResponseEntity getIncomeStatistics(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                  LocalDate startDate,
+                                            @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                LocalDate endDate){
         LOG.debug("REST get income statistic from company owner");
 
         List<List<Double>> stat;
@@ -81,10 +72,10 @@ public class CompanyOwnerStatisticsResource {
     }
 
     @RequestMapping(value = "/companyowner/statistic/profit", method = RequestMethod.GET)
-    public ResponseEntity getProfitStatistics(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                  ZonedDateTime startDate,
-                                              @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                  ZonedDateTime endDate){
+    public ResponseEntity getProfitStatistics(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                  LocalDate startDate,
+                                              @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                  LocalDate endDate){
         LOG.debug("REST get income statistic from company owner");
 
         List<List<Double>> stat;
@@ -99,10 +90,10 @@ public class CompanyOwnerStatisticsResource {
     }
 
     @RequestMapping(value = "/companyowner/statistic/loss", method = RequestMethod.GET)
-    public ResponseEntity getLossStatistics(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                       ZonedDateTime startDate,
-                                                   @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                       ZonedDateTime endDate){
+    public ResponseEntity getLossStatistics(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                       LocalDate startDate,
+                                                   @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                       LocalDate endDate){
         LOG.debug("REST get loss statistic from company owner");
 
         List<List<Double>> stat;
@@ -116,24 +107,23 @@ public class CompanyOwnerStatisticsResource {
         return new ResponseEntity<>(stat, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/companyowner/statistic/topbestdrivers", method = RequestMethod.GET)
+    public ResponseEntity getTopBestDriversStatistics(@RequestParam int amount){
+        LOG.debug("REST get top best drivers statistic from company owner");
 
-    @RequestMapping(value = "/companyowner/statistic/xls/consumption", method = RequestMethod.GET)
-    public ResponseEntity<ByteArrayResource> getConsumptionReport(@RequestParam(value="startDate", required = false)
-                                                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                                          ZonedDateTime startDate,
-                                                                  @RequestParam(value="endDate", required = false)
-                                                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                                          ZonedDateTime endDate){
-        LOG.debug("REST get consumption xls report from company owner");
+        List<NameAndValueStatisticData> statistics = statisticsService.getTopBestDrivers(amount);
+
+        return new ResponseEntity(statistics, HttpStatus.OK);
+
+    }
+
+
+    @RequestMapping(value = "/companyowner/statistic/xls/topbestdrivers", method = RequestMethod.GET)
+    public ResponseEntity<ByteArrayResource> getTopBestDriversReport(@RequestParam int amount){
+        LOG.debug("REST get top best drivers xls report from company owner");
 
         ByteArrayResource byteResource = null;
-        Workbook workbook;
-        if (startDate== null || endDate == null){
-            workbook = statisticsService.getConsumptionReport();
-        }
-        else{
-            workbook = statisticsService.getConsumptionReport(startDate, endDate);
-        }
+        Workbook workbook = statisticsService.getTopBestDriversReport(amount);
         try{
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             workbook.write(outputStream);
@@ -148,11 +138,40 @@ public class CompanyOwnerStatisticsResource {
         return new ResponseEntity<>(byteResource, HttpStatus.OK);
     }
 
+
+
+    @RequestMapping(value = "/companyowner/statistic/xls/common", method = RequestMethod.GET)
+    public ResponseEntity<ByteArrayResource> getCommonReport(@RequestParam(value="startDate")
+                                                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                          LocalDate startDate,
+                                                                  @RequestParam(value="endDate")
+                                                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                          LocalDate endDate){
+        LOG.debug("REST get common xls report from company owner");
+
+        ByteArrayResource byteResource = null;
+        Workbook workbook = statisticsService.getCommonReport(startDate, endDate);
+        try{
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            outputStream.flush();
+
+            byteResource = new ByteArrayResource(outputStream.toByteArray());
+            outputStream.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(byteResource, HttpStatus.OK);
+    }
+
+
+
     @RequestMapping(value = "/companyowner/statistic/xls/routelists",
         method = RequestMethod.GET )
-    public ResponseEntity<ByteArrayResource> getRouteListsReport(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    public ResponseEntity<ByteArrayResource> getRouteListsReport(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                          ZonedDateTime startDate,
-                                                                 @RequestParam(value="endDate", required = false)   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                 @RequestParam(value="endDate", required = false)   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                          ZonedDateTime endDate)
     {
         LOG.debug("REST get route lists xls report from company owner");
@@ -181,32 +200,49 @@ public class CompanyOwnerStatisticsResource {
 
 
     @RequestMapping(value = "/companyowner/statistic/xls/loss", method = RequestMethod.GET)
-    public ResponseEntity<ByteArrayResource> getLossReport(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                                      ZonedDateTime startDate,
-                                                                  @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                                      ZonedDateTime endDate){
+    public ResponseEntity<ByteArrayResource> getLossReport(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                      LocalDate startDate,
+                                                                  @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                      LocalDate endDate){
         LOG.debug("REST get loss xls report from company owner");
 
-        ByteArrayResource byteResource = null;
-        Workbook workbook = null;
+
+        Workbook workbook;
         if (startDate== null || endDate == null){
             workbook = statisticsService.getLossReport();
         }
         else{
             workbook = statisticsService.getLossReport(startDate, endDate);
         }
-        try{
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        return new ResponseEntity<>(convertWorkbookToByteArrayResource(workbook), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/companyowner/statistic/xls/losswithrp", method = RequestMethod.GET)
+    public ResponseEntity<ByteArrayResource> getLossReportWithResponsiblePersons(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                               LocalDate startDate,
+                                                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                               LocalDate endDate){
+        LOG.debug("REST get loss xls report with responsible persons from company owner");
+
+        Workbook workbook = statisticsService.getLossReportWithResponsiblePersons(startDate, endDate);
+
+        return new ResponseEntity<>(convertWorkbookToByteArrayResource(workbook), HttpStatus.OK);
+    }
+
+    private ByteArrayResource convertWorkbookToByteArrayResource(Workbook workbook){
+        ByteArrayResource byteResource = null;
+        try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream()){
             workbook.write(outputStream);
             outputStream.flush();
 
             byteResource = new ByteArrayResource(outputStream.toByteArray());
-            outputStream.close();
-
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.warn("", e);
         }
-        return new ResponseEntity<>(byteResource, HttpStatus.OK);
+
+        return byteResource;
+
     }
 
 

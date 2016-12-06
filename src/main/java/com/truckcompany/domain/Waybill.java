@@ -52,6 +52,7 @@ public class Waybill implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Goods> goods;
 
+
     public Long getId() {
         return id;
     }
@@ -139,4 +140,6 @@ public class Waybill implements Serializable {
     public void setGoods(Set<Goods> goods) {
         this.goods = goods;
     }
+
+
 }
