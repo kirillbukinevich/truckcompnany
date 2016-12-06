@@ -5,9 +5,9 @@
         .module('truckCompanyApp')
         .controller('CompanyownerWriteOffActsController', CompanyownerWriteOffActsController);
 
-    CompanyownerWriteOffActsController.$inject = ['$stateParams' ,'$http'];
+    CompanyownerWriteOffActsController.$inject = ['$http'];
 
-    function CompanyownerWriteOffActsController ($stateParams, $http) {
+    function CompanyownerWriteOffActsController ($http) {
         var vm = this;
 
         vm.loadData = loadData;

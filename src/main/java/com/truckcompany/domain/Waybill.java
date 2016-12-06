@@ -128,6 +128,7 @@ public class Waybill implements Serializable {
         this.goods = goods;
     }
 
+
     public String getNumber() {
         return number;
     }

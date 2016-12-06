@@ -42,6 +42,7 @@ public class WaybillDTO {
 
     public WaybillDTO(Long id, ZonedDateTime date, UserDTO driver, WaybillState state, UserDTO dispatcher,
                       UserDTO manager, ZonedDateTime dateChecked, Set<GoodsDTO> goods, Double margin) {
+
         this.id = id;
         this.date = date;
         this.driver = driver;
@@ -71,10 +72,6 @@ public class WaybillDTO {
     }
 
 
-    public WaybillDTO(Waybill waybill, RouteListDTO routeList) {
-        this(waybill);
-        this.routeList = routeList;
-    }
 
     public WaybillDTO(Waybill waybill) {
         this(waybill.getId(), waybill.getDate(), waybill.getState());
@@ -88,8 +85,6 @@ public class WaybillDTO {
             .collect(Collectors.toSet());
         this.number = waybill.getNumber();
         this.margin = waybill.getMargin();
-
-        //this.offer = new OfferDTO(waybill.getOffer);
     }
 
     public WaybillDTO(WaybillDTO waybill) {

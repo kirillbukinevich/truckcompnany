@@ -1,17 +1,25 @@
-id;name;unchecked_number;accepted_number;type;state;waybill_id;price
-1;Водка;20;20;л.;UNCHECKED;1;null
-2;Спирт;20;20;л.;UNCHECKED;1;null
-3;Коньяк;20;20;л.;UNCHECKED;1;null
-4;Вино;20;20;л.;UNCHECKED;1;null
-5;Книги;20;20;шт.;UNCHECKED;1;null
-6;Планшеты;20;20;шт.;UNCHECKED;1;null
-7;Телефоны;20;20;шт.;UNCHECKED;1;null
-8;Ноутбуки;20;20;шт.;TRANSPORTATION;2;90.3
-9;Мебель;20;20;шт.;TRANSPORTATION;2;900.3
-10;Мука;20;20;кг;TRANSPORTATION;3;90.3
-11;Холодильники;20;20;шт.;TRANSPORTATION;3;800.3
-12;Телевизоры;20;20;шт.;TRANSPORTATION;3;900.1
-13;Посуда;20;20;шт.;TRANSPORTATION;4;90.3
-14;Стекло;20;20;шт.;TRANSPORTATION;4;90.3
-15;Песок;20;20;кг.;TRANSPORTATION;4;10.3
-16;Автомобили;20;20;шт.;TRANSPORTATION;4;59999.9
+id;name;accepted_number;unchecked_number;type;state;waybill_id;price;delivered_number
+1;Водка;null;20;л.;UNCHECKED;1;null;
+2;Спирт;null;20;л.;UNCHECKED;1;null;
+3;Коньяк;null;20;л.;UNCHECKED;1;null;
+4;Вино;null;20;л.;UNCHECKED;1;null;
+5;Книги;null;20;шт.;UNCHECKED;1;null;
+6;Планшеты;null;20;шт.;UNCHECKED;1;null;
+7;Телефоны;null;20;шт.;UNCHECKED;1;null;
+8;Ноутбуки;20;20;шт.;TRANSPORTATION;2;90.3;
+9;Мебель;20;20;шт.;TRANSPORTATION;2;900.3;
+10;Мука;20;20;кг;DELIVERED;3;90.3;20;
+11;Холодильники;20;20;шт.;TRANSPORTATION;3;800.3;
+12;Телевизоры;20;20;шт.;TRANSPORTATION;3;900.1;
+13;Посуда;20;20;шт.;TRANSPORTATION;4;90.3;
+14;Стекло;20;20;шт.;TRANSPORTATION;4;90.3;
+15;Песок;20;20;кг.;TRANSPORTATION;4;10.3;
+16;Автомобили;20;20;шт.;TRANSPORTATION;4;59999.9;
+17;Собрание сочинений Пушкина;1000;1000;шт.;DELIVERED;7;999999;1000
+18;Картина "Джаконда". Оригинал;5;5;шт.;DELIVERED;8;20;3
+19;Крест Ефросинии Полоцкой;1;1;шт.;DELIVERED;8;100;0
+20;Чай;10;10;кг.;DELIVERED;9;20;10
+21;Малиновое варенье;5;5;банка;DELIVERED;9;50;2
+22;Яблоки из Польшы;20;20;шт.;DELIVERED;10;200;15
+23;Абрикосы и Бананы;500;500;кг.;DELIVERED;11;10;10
+24;Полимеры;90;90;шт.;DELIVERED;11;30;0

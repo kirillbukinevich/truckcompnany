@@ -27,7 +27,9 @@
                 },
                 params:{
                     page: 1,
-                    size: 5
+                    size: 5,
+                    startDate: null,
+                    endDate: null
                 },
                 resolve: {
                     pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {

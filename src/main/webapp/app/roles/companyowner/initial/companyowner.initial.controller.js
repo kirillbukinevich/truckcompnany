@@ -13,13 +13,30 @@
 
         vm.loadData = loadData;
         vm.loadConsumptionData = loadConsumptionData;
-        vm.downloadConsumptionReport = downloadConsumptionReport;
         vm.loadLossData = loadLossData;
         vm.downloadLossReport = downloadLossReport;
+        vm.downloadLossReportWithRP = downloadLossReportWithRP;
+        vm.loadIncomeData = loadIncomeData;
+        vm.loadProfitData = loadProfitData;
+        vm.downloadCommonReport = downloadCommonReport;
+        vm.loadTopBestDriversData = loadTopBestDriversData;
+        vm.downloadTopBestDriversReport = downloadTopBestDriversReport;
+
+        vm.updateDatePickersValue = function () {
+            $('span[name="datepicker"] span').html(vm.datePicker.startDate.format('MMMM D, YYYY') + ' - '
+                + vm.datePicker.endDate.format('MMMM D, YYYY'));
+            $('span[name="lossDatepicker"] span').html(vm.lossDatePicker.startDate.format('MMMM D, YYYY') + ' - '
+                + vm.lossDatePicker.endDate.format('MMMM D, YYYY'));
+        };
+
+        vm.topBestDriversAmount = 5;
+        vm.profitChartData = [];
+        vm.incomeChartData = [];
+        vm.consumptionChartData = [];
 
         vm.datePicker = {
-            startDate: null,
-            endDate: null
+            startDate: moment().subtract(1, "months").startOf('month'),
+            endDate: moment().subtract(1, 'months').endOf('month')
         };
 
         vm.datePickerOpts = {
@@ -35,9 +52,12 @@
             },
             eventHandlers : {
                 'apply.daterangepicker' : function (ev, picker) {
-                    $('div[name="datepicker"] span').html(vm.datePicker.startDate.format('MMMM D, YYYY') + ' - '
+                    $('span[name="datepicker"] span').html(vm.datePicker.startDate.format('MMMM D, YYYY') + ' - '
                         + vm.datePicker.endDate.format('MMMM D, YYYY'));
+                    //  vm.commonChartConfig.series.splice(0, vm.commonChartConfig.series.length);
                     vm.loadConsumptionData();
+                    vm.loadIncomeData();
+                    vm.loadProfitData();
                 }
             },
             maxDate: moment().endOf("day"),
@@ -45,8 +65,8 @@
         };
 
         vm.lossDatePicker = {
-            startDate: null,
-            endDate: null
+            startDate: moment().subtract(1, "months").startOf('month'),
+            endDate: moment().subtract(1, 'months').endOf('month')
         };
 
         vm.lossDatePickerOpts = {
@@ -72,16 +92,21 @@
         };
 
         vm.loadData();
-
-        // graph redrawing
+        vm.updateDatePickersValue();
 
         $scope.render = false;
         $timeout(function () {
             $scope.render = true;
         }, 500);
 
+
         function loadData() {
             vm.loadConsumptionData();
+            vm.loadIncomeData();
+            vm.loadProfitData();
+
+            vm.loadTopBestDriversData();
+
             vm.loadLossData();
         }
 
@@ -90,20 +115,14 @@
                 method: 'GET',
                 url: '/api/companyowner/statistic/consumption',
                 params: {
-                    startDate: !!vm.datePicker.startDate? vm.datePicker.startDate.toISOString() : null,
-                    endDate: !!vm.datePicker.endDate? vm.datePicker.endDate.toISOString() : null
+                    startDate: !!vm.datePicker.startDate? vm.datePicker.startDate.format('YYYY-MM-DD') : null,
+                    endDate: !!vm.datePicker.endDate? vm.datePicker.endDate.format('YYYY-MM-DD') : null
                 }
             }).then(function successCallback(response) {
-                console.log("Data load successfully")
-                vm.consumptionChartData = response.data;
-                vm.commonChartConfig.series.push({
-                    id: 1,
-                    data: vm.consumptionChartData
-                });
-                console.log(vm.consumptionChartData);
+                vm.commonChartConfig.series[0].data = response.data;
+                console.log("Consumption data: " + response.data);
             }, function errorCallback(response) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
+                console.log("Consumption data wasn\'t load: " + response.status);
             });
         }
 
@@ -112,42 +131,81 @@
                 method: 'GET',
                 url: '/api/companyowner/statistic/loss',
                 params: {
-                    startDate: !!vm.lossDatePicker.startDate? vm.lossDatePicker.startDate.toISOString() : null,
-                    endDate: !!vm.lossDatePicker.endDate? vm.lossDatePicker.endDate.toISOString() : null
+                    startDate: !!vm.lossDatePicker.startDate? vm.lossDatePicker.startDate.format('YYYY-MM-DD') : null,
+                    endDate: !!vm.lossDatePicker.endDate? vm.lossDatePicker.endDate.format('YYYY-MM-DD') : null
                 }
             }).then(function successCallback(response) {
                 vm.lossChartData = response.data;
-                vm.lossChartConfig.series.push({
-                    id: 1,
-                    data: vm.lossChartData
-                });
-                console.log('Data load: ' + vm.lossChartData);
+                vm.lossChartConfig.series[0].data = response.data;
+                console.log('Loss data load: ' + response.data);
             }, function errorCallback(response) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
+                console.log('Loss data wasn\'t load: ' + response.statusText);
             });
         }
 
-        function downloadConsumptionReport(){
+        function loadIncomeData() {
             $http({
                 method: 'GET',
-                url: '/api/companyowner/statistic/xls/consumption',
+                url: '/api/companyowner/statistic/income',
+                params: {
+                    startDate: !!vm.datePicker.startDate? vm.datePicker.startDate.format('YYYY-MM-DD') : null,
+                    endDate: !!vm.datePicker.endDate? vm.datePicker.endDate.format('YYYY-MM-DD') : null
+                }
+            }).then(function successCallback(response) {
+                vm.commonChartConfig.series[1].data = response.data;
+                console.log('Income data load: ' + response.data);
+            }, function errorCallback(response) {
+                console.log('Income data wasn\'t load: ' + response.status);
+            });
+        }
+
+        function loadProfitData() {
+            $http({
+                method: 'GET',
+                url: '/api/companyowner/statistic/profit',
+                params: {
+                    startDate: !!vm.datePicker.startDate? vm.datePicker.startDate.format('YYYY-MM-DD')  : null,
+                    endDate: !!vm.datePicker.endDate? vm.datePicker.endDate.format('YYYY-MM-DD')  : null
+                }
+            }).then(function successCallback(response) {
+                vm.profitChartData = response.data;
+                vm.commonChartConfig.series[2].data = response.data;
+                console.log('Profit data load: ' + vm.profitChartData);
+            }, function errorCallback(response) {
+                console.log('Profit data wasn\'t load: ' + response.statusText);
+            });
+        }
+
+        function loadTopBestDriversData() {
+            $http({
+                method: 'GET',
+                url: '/api/companyowner/statistic/topbestdrivers',
+                params: {
+                    amount: vm.topBestDriversAmount
+                }
+            }).then(function successCallback(response) {
+                vm.topBestDriversChartConfig.series = [{data: response.data}];
+                console.log('Top best drivers data load;');
+            }, function errorCallback(response) {
+                console.log('Profit data wasn\'t load: ' + response.statusText);
+            });
+        }
+
+        function downloadCommonReport(){
+            $http({
+                method: 'GET',
+                url: '/api/companyowner/statistic/xls/common',
                 params : {
-                    startDate: !!vm.datePicker.startDate? vm.datePicker.startDate.toISOString() : null,
-                    endDate: !!vm.datePicker.endDate? vm.datePicker.endDate.toISOString() : null
+                    startDate: !!vm.datePicker.startDate? vm.datePicker.startDate.format('YYYY-MM-DD') : null,
+                    endDate: !!vm.datePicker.endDate? vm.datePicker.endDate.format('YYYY-MM-DD') : null
                 },
                 responseType: 'arraybuffer'
             }).
             success(function(data) {
-                var url = URL.createObjectURL(new Blob([data]));
-                var a = document.createElement('a');
-                a.href = url;
-                a.download = 'consumptionReport.xls';
-                a.target = '_blank';
-                a.click();
+                saveReport(data, 'common-report.xls');
             }).
             error(function(data, status, headers, config) {
-                // handle error
+                console.log('Common report wasn\'t load: ' + status);
             });
         }
 
@@ -156,45 +214,156 @@
                 method: 'GET',
                 url: '/api/companyowner/statistic/xls/loss',
                 params : {
-                    startDate: !!vm.lossDatePicker.startDate? vm.lossDatePicker.startDate.toISOString() : null,
-                    endDate: !!vm.lossDatePicker.endDate? vm.lossDatePicker.endDate.toISOString() : null
+                    startDate: !!vm.lossDatePicker.startDate? vm.lossDatePicker.startDate.format('YYYY-MM-DD') : null,
+                    endDate: !!vm.lossDatePicker.endDate? vm.lossDatePicker.endDate.format('YYYY-MM-DD') : null
                 },
                 responseType: 'arraybuffer'
             }).
             success(function(data) {
-                var url = URL.createObjectURL(new Blob([data]));
-                var a = document.createElement('a');
-                a.href = url;
-                a.download = 'loss-report.xls';
-                a.target = '_blank';
-                a.click();
+                saveReport(data, 'loss-report.xls');
             }).
             error(function(data, status, headers, config) {
-                // handle error
+                console.log('Loss report wasn\'t load: ' + status);
             });
         }
+
+        function downloadLossReportWithRP(){
+            $http({
+                method: 'GET',
+                url: '/api/companyowner/statistic/xls/losswithrp',
+                params : {
+                    startDate: !!vm.lossDatePicker.startDate? vm.lossDatePicker.startDate.format('YYYY-MM-DD') : null,
+                    endDate: !!vm.lossDatePicker.endDate? vm.lossDatePicker.endDate.format('YYYY-MM-DD') : null
+                },
+                responseType: 'arraybuffer'
+            }).
+            success(function(data) {
+                saveReport(data, 'loss-with-responsible-persons.xls')
+            }).
+            error(function(data, status, headers, config) {
+                console.log('LossWithRP report wasn\'t load: ' + status);
+            });
+        }
+
+        function downloadTopBestDriversReport(){
+            $http({
+                method: 'GET',
+                url: '/api/companyowner/statistic/xls/topbestdrivers',
+                params : {
+                    amount: vm.topBestDriversAmount
+                },
+                responseType: 'arraybuffer'
+            }).
+            success(function(data) {
+                saveReport(data, 'top-best-drivers-report.xls');
+            }).
+            error(function(data, status, headers, config) {
+                console.log('Top best drivers report wasn\'t load: ' + status);
+            });
+        }
+
+        function saveReport(data, reportName){
+            var url = URL.createObjectURL(new Blob([data]));
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = reportName;
+            a.target = '_blank';
+            a.click();
+        }
+
 
 
         vm.commonChartConfig = {
             options: {
-                chart: {
-                    type: 'areaspline'
-                },
                 xAxis: {
                     type: 'datetime',
                     labels: {
-                        format: '{value:%e of %b}',
+                        format: '{value:%e of %b}'
                     }
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>${point.y:.2f}</b>',
+                    valueDecimals: 2
                 }
             },
             title :{
-                text: "Month statistics"
+                text: 'Common'
             },
-            series:[{
-                id: 1,
-                name: 'Consumption',
-                data: []
-            }]
+
+            series: [
+                {
+                    id: 1,
+                    name: 'Consumption',
+                    type: 'column',
+                    data: []
+                },
+                {
+                    name: 'Income',
+                    type: 'column',
+                    id: 2,
+                    data : []
+                },
+                {
+                    id: 3,
+                    name: 'Profit',
+                    data: []
+                }
+            ]
+        };
+
+        Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
+
+        vm.pie = {
+            chart: {
+                type: 'pie',
+                margin: [15, 15, 15, 15],
+                marginRight: 200,
+                marginTop: 50
+            },
+            tooltip: {
+                pointFormat: '{series.data.name} <b>${point.y:.2f}</b>'
+            },
+            plotOptions: {
+                pie: {
+                    size: '100%',
+                    slicedOffset: 0,
+                    innerSize: '50%',
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+            legend: {
+                enabled: true,
+                verticalAlign: 'middle',
+                layout: 'vertical',
+                align: 'right',
+                labelFormat: '{name} ${y}'
+            }
+        };
+        vm.topBestDriversChartConfig = {
+            options : vm.pie,
+            title: {
+                text: 'Top 5 best drivers'
+            },
+            series: [
+                {
+                    data: [{
+                        name: 'test1',
+                        y: 1
+                    }, {
+                        name: 'test2',
+                        y: 2
+                    }]
+                }
+            ]
         };
 
         vm.lossChartConfig = {
@@ -207,6 +376,10 @@
                     labels: {
                         format: '{value:%e of %b}',
                     }
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>${point.y:.2f}</b>',
+                    valueDecimals: 2
                 }
             },
             title :{
@@ -214,7 +387,7 @@
             },
             series:[{
                 id: 1,
-               // name: 'Consumption',
+                name: 'Loss',
                 data: []
             }]
         };
