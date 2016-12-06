@@ -2,7 +2,6 @@ package com.truckcompany.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.Waybill;
-import com.truckcompany.domain.enums.WaybillState;
 import com.truckcompany.repository.WaybillRepository;
 import com.truckcompany.security.AuthoritiesConstants;
 import com.truckcompany.service.OfferService;
@@ -38,7 +37,7 @@ import static com.truckcompany.web.rest.util.PaginationUtil.generatePaginationHt
  * Created by Viktor Dobroselsky.
  */
 @RestController
-@RequestMapping (value = "/api")
+@RequestMapping(value = "/api")
 public class WaybillResource {
 
     private final Logger log = LoggerFactory.getLogger(WaybillResource.class);
@@ -59,7 +58,7 @@ public class WaybillResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    @Secured({AuthoritiesConstants.DRIVER,AuthoritiesConstants.DISPATCHER})
+    @Secured({AuthoritiesConstants.DRIVER, AuthoritiesConstants.DISPATCHER, AuthoritiesConstants.MANAGER})
     public ResponseEntity<List> getWaybills(Pageable pageable) throws URISyntaxException {
         log.debug("REST request get all Waybills");
         Collection<SimpleGrantedAuthority> authorities =
@@ -69,8 +68,7 @@ public class WaybillResource {
             List<WaybillDTO> waybills = waybillFacade.findWaybills();
             HttpHeaders headers = HeaderUtil.createAlert("waybill.getAll", null);
             return new ResponseEntity<>(waybills, headers, HttpStatus.OK);
-        }
-        else if (authorities.contains(new SimpleGrantedAuthority("ROLE_DISPATCHER"))){
+        } else if (authorities.contains(new SimpleGrantedAuthority("ROLE_DISPATCHER"))) {
             Page<WaybillDTO> page = waybillFacade.findWaybills(pageable);
 
             List<ManagedWaybillVM> managedWaybillVMs = page
@@ -159,7 +157,7 @@ public class WaybillResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    @Secured(AuthoritiesConstants.DRIVER)
+    @Secured({AuthoritiesConstants.DRIVER, AuthoritiesConstants.MANAGER})
     public ResponseEntity updateWaybill(@RequestBody ManagedWaybillVM managedWaybillVM) {
         log.debug("REST request to update Waybill : {}", managedWaybillVM);
         Waybill existingWaybill = waybillRepository.findOne(managedWaybillVM.getId());
@@ -171,7 +169,4 @@ public class WaybillResource {
             .headers(HeaderUtil.createAlert("userManagement.updated", managedWaybillVM.getId().toString()))
             .body(waybillService.getWaybillById(managedWaybillVM.getId()));
     }
-
-
 }
-

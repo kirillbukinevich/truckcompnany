@@ -6,6 +6,7 @@ import com.truckcompany.domain.enums.WaybillState;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.Set;
 
@@ -16,6 +17,9 @@ public class Waybill implements Serializable {
     @GeneratedValue
     @Column(name = "id")
     private Long id;
+
+    @Column(name = "number")
+    private String number;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
@@ -103,19 +107,6 @@ public class Waybill implements Serializable {
         this.company = company;
     }
 
-    @Override
-    public String toString() {
-        return "Waybill{" +
-            "id=" + id +
-            "company" + company +
-            ", date=" + date +
-            ", driver=" + driver +
-            ", state=" + state +
-            ", dispatcher=" + dispatcher +
-            ", routeList=" + routeList +
-            ", writeOff=" +
-            '}';
-    }
     public ZonedDateTime getDateChecked() {
         return dateChecked;
     }
@@ -138,5 +129,28 @@ public class Waybill implements Serializable {
 
     public void setGoods(Set<Goods> goods) {
         this.goods = goods;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    @Override
+    public String toString() {
+        return "Waybill{" +
+            "id=" + id +
+            "number=" + number +
+            "company=" + company +
+            ", date=" + date +
+            ", driver=" + driver +
+            ", state=" + state +
+            ", dispatcher=" + dispatcher +
+            ", routeList=" + routeList +
+            ", writeOff=" +
+            '}';
     }
 }
