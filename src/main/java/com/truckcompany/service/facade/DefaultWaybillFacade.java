@@ -7,6 +7,7 @@ import com.truckcompany.domain.enums.WaybillState;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.UserService;
 import com.truckcompany.service.WaybillService;
+import com.truckcompany.service.dto.RouteListDTO;
 import com.truckcompany.service.dto.WaybillDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,6 +84,26 @@ public class DefaultWaybillFacade implements WaybillFacade {
         }else {
             return emptyList();
         }
+    }
+
+    @Override
+    public Page<WaybillDTO> findWaybillsWithRouteListCreationDateBetween(Pageable pageable, ZonedDateTime fromDate, ZonedDateTime toDate) {
+        Page<Waybill> pageWaybills = new PageImpl<>(emptyList());
+
+        Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            log.debug("Get all waybill for user \'{}\'", user.getLogin());
+
+            if (isCurrentUserInRole("ROLE_COMPANYOWNER")) {
+                pageWaybills = waybillService
+                    .getPageWaybillsByCompanyAndRouteListCreationDateBetween(pageable, user.getCompany(), fromDate, toDate);
+            }
+        }
+        return new PageImpl<>(pageWaybills.getContent().stream()
+            .map(WaybillDTO::new)
+            .collect(Collectors.toList()), pageable, pageWaybills.getTotalElements());
     }
 
     @Override

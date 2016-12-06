@@ -30,7 +30,7 @@ Show:
     <thead>
     <tr>
 
-        <th>Id</th>
+        <th>Number</th>
         <th>Leaving storage</th>
         <th>Arrival storage</th>
         <th>Truck number</th>
@@ -40,13 +40,13 @@ Show:
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="routeList in vm.routeLists">
-        <td>{{routeList.id}}</td>
-        <td>{{routeList.leavingStorage.name}}</td>
-        <td>{{routeList.arrivalStorage.name}}</td>
-        <td>{{routeList.truck.regNumber}}</td>
-        <td>{{routeList.waybill.id}}</td>
-        <td> {{routeList.creationDate | date:'yyyy-MM-dd'}} </td>
+    <tr ng-repeat="waybill in vm.waybills">
+        <td>{{waybill.routeList.number}}</td>
+        <td>{{waybill.routeList.leavingStorage.name}}</td>
+        <td>{{waybill.routeList.arrivalStorage.name}}</td>
+        <td>{{waybill.routeList.truck.regNumber}}</td>
+        <td>{{waybill.number}}</td>
+        <td>{{waybill.routeList.creationDate | date:'yyyy-MM-dd'}}</td>
     </tr>
     </tbody>
 </table>

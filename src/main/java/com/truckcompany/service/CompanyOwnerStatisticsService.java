@@ -231,8 +231,9 @@ public class CompanyOwnerStatisticsService {
         return book;
     }
 
-    public HSSFWorkbook getRouteListsReport(ZonedDateTime fromDate, ZonedDateTime toDate){
-        List<WaybillDTO> waybills = waybillFacade.findWaybillsWithRouteListCreationDateBetween(fromDate, toDate);
+    public HSSFWorkbook getRouteListsReport(LocalDate fromDate, LocalDate toDate){
+        List<WaybillDTO> waybills = waybillFacade.findWaybillsWithRouteListCreationDateBetween(fromDate.atStartOfDay(ZoneId.systemDefault()),
+            toDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).minusNanos(1));
 
         HSSFWorkbook book = new HSSFWorkbook() ;
         Sheet sheet = book.createSheet("report");
@@ -277,6 +278,7 @@ public class CompanyOwnerStatisticsService {
         }
 
 
+        sheet.autoSizeColumn(0);
         sheet.autoSizeColumn(1);
         sheet.autoSizeColumn(2);
         sheet.autoSizeColumn(3);
@@ -284,6 +286,7 @@ public class CompanyOwnerStatisticsService {
         sheet.autoSizeColumn(5);
         sheet.autoSizeColumn(6);
         sheet.autoSizeColumn(7);
+        sheet.autoSizeColumn(8);
 
         return book;
     }
@@ -417,7 +420,7 @@ public class CompanyOwnerStatisticsService {
         Row header = sheet.createRow(0);
 
         Cell id = header.createCell(0);
-        id.setCellValue("ID");
+        id.setCellValue("Number");
 
         Cell creationDate = header.createCell(1);
         creationDate.setCellValue("Creation date");
@@ -448,7 +451,7 @@ public class CompanyOwnerStatisticsService {
         distance.setCellValue("Distance");
 
         Cell waybillID = header.createCell(10);
-        waybillID.setCellValue("Waybill ID");
+        waybillID.setCellValue("Waybill number");
 
     }
 
@@ -473,7 +476,7 @@ public class CompanyOwnerStatisticsService {
 
     private void fillRowForRouteListReport(Row row, CellStyle dateStyle,WaybillDTO waybill){
         Cell id = row.createCell(0);
-        id.setCellValue(waybill.getRouteList().getId());
+        id.setCellValue(waybill.getRouteList().getNumber());
 
         Cell creationDate = row.createCell(1);
         creationDate.setCellStyle(dateStyle);
@@ -506,7 +509,7 @@ public class CompanyOwnerStatisticsService {
         distance.setCellValue(waybill.getRouteList().getDistance());
 
         Cell waybillID = row.createCell(10);
-        waybillID.setCellValue(waybill.getId());
+        waybillID.setCellValue(waybill.getNumber());
     }
 
     private List<List<Double>> createGraphLossData(List<WaybillDTO> waybills){
@@ -591,7 +594,7 @@ public class CompanyOwnerStatisticsService {
         Map<Long, Double> profitMap = waybills.stream()
             .collect(Collectors.toMap(s-> s.getDate().truncatedTo(ChronoUnit.DAYS)
                     .toInstant().toEpochMilli(),
-                s-> countWaybillConsumption(s)*s.getMargin() ,
+                s-> countWaybillConsumption(s)*s.getMargin()/100 ,
                 (a,b) -> a+ b));
 
         // loss
@@ -613,7 +616,7 @@ public class CompanyOwnerStatisticsService {
         Map<Long, Double> map = waybills.stream()
             .collect(Collectors.toMap(s-> s.getDate().truncatedTo(ChronoUnit.DAYS)
                     .toInstant().toEpochMilli(),
-                s-> countWaybillConsumption(s)*(1+s.getMargin()),
+                s-> countWaybillConsumption(s)*(1+(s.getMargin()/100)),
                 (a,b) -> a+ b));
 
         return map;
@@ -691,7 +694,7 @@ public class CompanyOwnerStatisticsService {
     }
 
     private double countWaybillProfitWithLoss(WaybillDTO waybill){
-        return countWaybillConsumption(waybill)*waybill.getMargin() - countWaybillLoss(waybill);
+        return countWaybillConsumption(waybill)*waybill.getMargin()/100 - countWaybillLoss(waybill);
     }
 
     private double countWaybillConsumption(WaybillDTO waybill){

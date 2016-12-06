@@ -11,10 +11,12 @@ import com.truckcompany.service.facade.WaybillFacade;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import com.truckcompany.web.rest.util.PaginationUtil;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,11 +29,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.truckcompany.web.rest.util.PaginationUtil.generatePaginationHttpHeaders;
+import static java.time.temporal.WeekFields.ISO;
 
 /**
  * Created by Viktor Dobroselsky.
@@ -58,8 +62,13 @@ public class WaybillResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    @Secured({AuthoritiesConstants.DRIVER, AuthoritiesConstants.DISPATCHER, AuthoritiesConstants.MANAGER})
-    public ResponseEntity<List> getWaybills(Pageable pageable) throws URISyntaxException {
+    @Secured({AuthoritiesConstants.DRIVER, AuthoritiesConstants.DISPATCHER,
+        AuthoritiesConstants.MANAGER, AuthoritiesConstants.COMPANYOWNER})
+    public ResponseEntity<List> getWaybills(@RequestParam(required = false)
+                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime startDate,
+                                            @RequestParam(required = false)
+                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime endDate,
+                                            Pageable pageable) throws URISyntaxException {
         log.debug("REST request get all Waybills");
         Collection<SimpleGrantedAuthority> authorities =
             (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
@@ -81,7 +90,13 @@ public class WaybillResource {
 
             return new ResponseEntity(managedWaybillVMs, headers, HttpStatus.OK);
         } else {
-            Page<WaybillDTO> page = waybillFacade.findWaybills(pageable);
+            Page<WaybillDTO> page;
+            if (startDate == null || endDate == null) {
+                page = waybillFacade.findWaybills(pageable);
+            }
+            else{
+                page = waybillFacade.findWaybillsWithRouteListCreationDateBetween(pageable, startDate, endDate);
+            }
 
             List<ManagedWaybillVM> managedWaybillVMs = page.getContent().stream()
                 .map(ManagedWaybillVM::new)

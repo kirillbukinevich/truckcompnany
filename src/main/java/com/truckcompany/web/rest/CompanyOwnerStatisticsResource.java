@@ -170,9 +170,9 @@ public class CompanyOwnerStatisticsResource {
     @RequestMapping(value = "/companyowner/statistic/xls/routelists",
         method = RequestMethod.GET )
     public ResponseEntity<ByteArrayResource> getRouteListsReport(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                                         ZonedDateTime startDate,
+                                                                         LocalDate startDate,
                                                                  @RequestParam(value="endDate", required = false)   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                                         ZonedDateTime endDate)
+                                                                         LocalDate endDate)
     {
         LOG.debug("REST get route lists xls report from company owner");
 

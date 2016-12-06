@@ -6,12 +6,13 @@
         .controller('CompanyownerRouteListsController', CompanyownerRouteListsController);
 
 
-    CompanyownerRouteListsController.$inject = ['RouteList', 'pagingParams', '$state', '$http'];
+    CompanyownerRouteListsController.$inject = ['Waybill', 'pagingParams', '$state', '$http', '$stateParams'];
 
-    function CompanyownerRouteListsController (RouteList, pagingParams, $state, $http) {
+    function CompanyownerRouteListsController (Waybill, pagingParams, $state, $http, $stateParams) {
         var vm = this;
 
         vm.loadPage = loadPage;
+        vm.updateDatePicker = updateDatePicker;
         vm.transition = transition;
         vm.changeItemsPerPage = changeItemsPerPage;
         vm.downloadReport = downloadReport;
@@ -21,8 +22,8 @@
         vm.page = 1;
 
         vm.datePicker = {
-            startDate: null,
-            endDate: null,
+            startDate: $stateParams.startDate,
+            endDate: $stateParams.endDate
         };
 
         vm.datePickerOpts = {
@@ -40,6 +41,8 @@
                 'apply.daterangepicker' : function (ev, picker) {
                     $('div[name="datepicker"] span').html(vm.datePicker.startDate.format('MMMM D, YYYY') + ' - '
                         + vm.datePicker.endDate.format('MMMM D, YYYY'));
+                    vm.startDate = vm.datePicker.startDate;
+                    vm.endDate = vm.datePicker.endDate;
                     vm.loadPage();
                 }
             },
@@ -48,10 +51,11 @@
         };
 
         vm.loadPage();
+        vm.updateDatePicker();
 
 
         function loadPage() {
-            RouteList.query({
+            Waybill.query({
                 page: pagingParams.page - 1,
                 size: vm.itemsPerPage,
                 startDate: !!vm.datePicker.startDate? vm.datePicker.startDate.toISOString() : null,
@@ -59,9 +63,16 @@
             }, onSuccess, onError);
         }
 
+        function updateDatePicker(){
+            if (!!$stateParams.startDate && !!$stateParams.endDate) {
+                $('div[name="datepicker"] span').html(vm.datePicker.startDate.format('MMMM D, YYYY') + ' - '
+                    + vm.datePicker.endDate.format('MMMM D, YYYY'));
+            }
+        }
+
         function onSuccess(data, headers){
             vm.error = false;
-            vm.routeLists = data;
+            vm.waybills = data;
             vm.totalItems = headers('X-Total-Count');
             vm.queryCount = vm.totalItems;
             vm.page = pagingParams.page;
@@ -77,6 +88,8 @@
             $state.transitionTo($state.$current, {
                 page: vm.page,
                 size:  vm.itemsPerPage,
+                startDate: vm.datePicker.startDate,
+                endDate: vm.datePicker.endDate
             });
         }
 
@@ -92,8 +105,8 @@
                 method: 'GET',
                 url: '/api/companyowner/statistic/xls/routelists',
                 params : {
-                    startDate: !!vm.datePicker.startDate? vm.datePicker.startDate.toISOString() : null,
-                    endDate: !!vm.datePicker.endDate? vm.datePicker.endDate.toISOString() : null
+                    startDate: !!vm.datePicker.startDate? vm.datePicker.startDate.format('YYYY-MM-DD') : null,
+                    endDate: !!vm.datePicker.endDate? vm.datePicker.endDate.format('YYYY-MM-DD') : null
                 },
                 responseType: 'arraybuffer'
             }).

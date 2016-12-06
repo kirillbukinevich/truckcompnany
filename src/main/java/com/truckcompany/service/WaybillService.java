@@ -204,4 +204,8 @@ public class WaybillService {
 
         return "W" + companyNum + dateStr + waybillNum;
     }
+
+    public Page<Waybill> getPageWaybillsByCompanyAndRouteListCreationDateBetween(Pageable pageable, Company company, ZonedDateTime fromDate, ZonedDateTime toDate) {
+        return waybillRepository.findPageByCompanyAndRouteListCreationDateBetween(company, fromDate, toDate, pageable);
+    }
 }
