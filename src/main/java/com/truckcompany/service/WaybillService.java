@@ -54,7 +54,7 @@ public class WaybillService {
     @Transactional(readOnly = true)
     public List<Waybill> getWaybillByDriver(User driver) {
         log.debug("Get waybills for driver {}", driver.getLogin());
-        return waybillRepository.findByDriver(driver, WaybillState.CHECKED);
+        return waybillRepository.findByDriver(driver);
     }
 
     public List<Waybill> getWaybillByCompany(Company company) {

@@ -24,7 +24,8 @@
             "ngAnimate",
             "highcharts-ng",
             'ngMap',
-            'daterangepicker'
+            'daterangepicker',
+            'jkAngularRatingStars'
         ])
         .run(run);
 
