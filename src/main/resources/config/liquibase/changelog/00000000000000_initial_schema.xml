@@ -96,7 +96,7 @@
             <column name="name" type="varchar(20)"/>
             <column name="birthday" type="date"/>
             <column name="template" type="text"/>
-            <column name="background" type="varchar(8)"/>
+            <column name="background" type="varchar(8)" defaultValue="#ffffff"/>
             <column name="recipient_id" type="int">
                 <constraints nullable="false"/>
             </column>
