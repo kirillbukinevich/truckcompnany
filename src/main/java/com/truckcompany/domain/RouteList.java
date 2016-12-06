@@ -14,6 +14,9 @@ public class RouteList implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "number")
+    private String number;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
@@ -141,5 +144,27 @@ public class RouteList implements Serializable {
 
     public void setDistance(Integer distance) {
         this.distance = distance;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    @Override
+    public String toString() {
+        return "RouteList{" +
+            "id=" + id +
+            ", number='" + number + '\'' +
+            ", creationDate=" + creationDate +
+            ", leavingDate=" + leavingDate +
+            ", arrivalDate=" + arrivalDate +
+            ", fuelCost=" + fuelCost +
+            ", distance=" + distance +
+            ", state='" + state + '\'' +
+            '}';
     }
 }

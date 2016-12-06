@@ -5,6 +5,7 @@ import com.truckcompany.domain.enums.WaybillState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,6 +17,8 @@ import java.util.stream.Collectors;
  */
 public class WaybillDTO {
     private Long id;
+
+    private String number;
 
     private ZonedDateTime date;
 
@@ -79,6 +82,7 @@ public class WaybillDTO {
         this.goods = waybill.getGoods().stream()
             .map(GoodsDTO::new)
             .collect(Collectors.toSet());
+        this.number = waybill.getNumber();
 
         //this.offer = new OfferDTO(waybill.getOffer);
     }
@@ -89,6 +93,7 @@ public class WaybillDTO {
         this.driver = waybill.getDriver();
         this.routeList = waybill.getRouteList();
         this.offer = waybill.getOffer();
+        this.number = waybill.getNumber();
     }
 
     public RouteListDTO getRouteList() {
@@ -171,16 +176,28 @@ public class WaybillDTO {
         this.goods = goods;
     }
 
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
     @Override
     public String toString() {
         return "WaybillDTO{" +
             "id=" + id +
+            ", number='" + number + '\'' +
             ", date=" + date +
             ", routeList=" + routeList +
             ", driver=" + driver +
             ", state=" + state +
             ", dispatcher=" + dispatcher +
+            ", manager=" + manager +
+            ", dateChecked=" + dateChecked +
             ", offer=" + offer +
+            ", goods=" + goods +
             '}';
     }
 }
