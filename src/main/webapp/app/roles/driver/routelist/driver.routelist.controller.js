@@ -12,16 +12,41 @@
         $scope.sortType = 'name'; // set the default sort type
         $scope.sortReverse = false;  // set the default sort order
         var vm = this;
+        var tempRating = 0;
         vm.routeList = {};
         vm.checkpoints = [];
         vm.goods1 = [];
         vm.checkpointNames = [];
         vm.imageWaypoints = [];
+        vm.driverGoods = [];
         vm.markDate = markDate;
+        vm.checkJob = checkJob;
+        function countRating() {
+            var index = 0;
+            vm.currentRate = 0;
+            for (var i = 0; i < vm.driverGoods.length; i++) {
+                for (var j = 0; j < vm.driverGoods[i].length; j++) {
+                    if(vm.driverGoods[i][j].deliveredNumber !=null){
+                        index++;
+                        vm.currentRate += vm.driverGoods[i][j].deliveredNumber/vm.driverGoods[i][j].acceptedNumber;
+                    }
+                }
+            }
+        }
+
+        //for google map
         vm.travelMode = 'DRIVING';
+        //for driver rating
+        vm.currentRate = 0;
+        vm.readOnly = true;
+        //
         vm.waybills = Waybill.query(function () {
+            var indexDriverGood = 0;
             angular.forEach(vm.waybills, function (value) {
-                    console.log("imageWaypoints: " + vm.imageWaypoints);
+                vm.driverGoods[indexDriverGood] = Goods1.query({id: value.id});
+                indexDriverGood++;
+                console.log("imageWaypoints: " + vm.imageWaypoints);
+                if (value.state === "CHECKED") {
                     RouteList.get({id: value.routeList.id}, function (result) {
                         vm.routeList = result;
                         console.log(vm.routeList);
@@ -39,8 +64,10 @@
                     });
                     console.log("WaybillID " + value.id);
                     vm.goods1 = Goods1.query({id: value.id});
+                }
 
             });
+
         });
 
 
@@ -121,6 +148,14 @@
             $location.path('/driver/routelist');
         };
 
-
+        function checkJob() {
+            countRating();
+            for (var j in vm.waybills) {
+                if (vm.waybills[j].state === "CHECKED") {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 })();
