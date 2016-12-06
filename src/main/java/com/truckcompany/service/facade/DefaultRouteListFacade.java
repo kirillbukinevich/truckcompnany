@@ -134,7 +134,7 @@ public class DefaultRouteListFacade implements RouteListFacade {
     private RouteListDTO toCompanyOwnerDTO(RouteList routeList) {
         RouteListDTO baseDTO = new RouteListDTO(routeList.getId(), routeList.getCreationDate(),
             routeList.getLeavingDate(), routeList.getArrivalDate(), routeList.getState(),
-            routeList.getFuelCost(), routeList.getDistance());
+            routeList.getFuelCost(), routeList.getDistance(), routeList.getNumber());
         baseDTO.setLeavingStorage(new StorageDTO(routeList.getLeavingStorage()));
         baseDTO.setArrivalStorage(new StorageDTO(routeList.getArrivalStorage()));
         baseDTO.setTruck(new TruckDTO(routeList.getTruck()));

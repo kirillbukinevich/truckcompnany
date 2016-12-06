@@ -18,7 +18,7 @@
 
                     data: {
                         authorities: ["ROLE_MANAGER"],
-                        pageTitle: 'activate.title'
+                        pageTitle: 'manager.waybills'
                     },
                     views: {
                         'page@roles': {

@@ -117,6 +117,7 @@ public class OfferService {
             goods.setName("Item_" + (i + 1));
             goods.setCount((long)random.nextInt(50));
             goods.setType("unit");
+            goods.setPrice((double)random.nextInt(10000));
 
             goodsSet.add(goods);
         }

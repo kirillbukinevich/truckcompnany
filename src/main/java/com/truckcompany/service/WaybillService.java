@@ -2,9 +2,10 @@ package com.truckcompany.service;
 
 import com.truckcompany.domain.*;
 import com.truckcompany.domain.enums.WaybillState;
-import com.truckcompany.repository.*;
+import com.truckcompany.repository.OfferRepository;
+import com.truckcompany.repository.UserRepository;
+import com.truckcompany.repository.WaybillRepository;
 import com.truckcompany.security.SecurityUtils;
-import com.truckcompany.service.dto.GoodsDTO;
 import com.truckcompany.service.dto.WaybillDTO;
 import com.truckcompany.web.rest.vm.ManagedRouteListVM;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
@@ -19,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -44,12 +44,6 @@ public class WaybillService {
     @Inject
     private OfferRepository offerRepository;
 
-    @Inject
-    private RouteListRepository routeListRepository;
-
-    @Inject
-    private GoodsRepository goodsRepository;
-
     public ManagedWaybillVM getWaybillById(Long id) {
         ManagedWaybillVM waybill = new ManagedWaybillVM(waybillRepository.getOne(id));
         log.debug("Get Information about Waybill with id: {}", id);
@@ -58,17 +52,17 @@ public class WaybillService {
 
 
     @Transactional(readOnly = true)
-    public List<Waybill> getWaybillByDriver (User driver) {
+    public List<Waybill> getWaybillByDriver(User driver) {
         log.debug("Get waybills for driver {}", driver.getLogin());
-        return waybillRepository.findByDriver(driver,WaybillState.CHECKED);
+        return waybillRepository.findByDriver(driver);
     }
 
-    public List<Waybill> getWaybillByCompany (Company company){
+    public List<Waybill> getWaybillByCompany(Company company) {
         log.debug("Get waybills for company with id: {}", company.getId());
         return waybillRepository.findByCompany(company);
     }
 
-    public Page<Waybill> getPageWaybillByCompanyAndWithStolenGoods(Pageable pageable, Company company){
+    public Page<Waybill> getPageWaybillByCompanyAndWithStolenGoods(Pageable pageable, Company company) {
         log.debug("Get waybills with stolen goods and company with id: {}", company.getId());
         List<Waybill> waybills = waybillRepository.findByCompanyAndState(company, WaybillState.DELIVERED);
         int total = waybills.size();
@@ -90,24 +84,24 @@ public class WaybillService {
 
 
     public List<Waybill> getWaybillByCompanyAndRouteListCreationDateBetween(Company company, ZonedDateTime fromDate,
-                                                                            ZonedDateTime toDate){
+                                                                            ZonedDateTime toDate) {
         log.debug("Get waybill for company with id: {}", company.getId());
         return waybillRepository.findByCompanyAndRouteListCreationDateBetween(company, fromDate, toDate);
     }
 
-    public List<Waybill> getWaybillByCompanyAndState(Company company, WaybillState state){
+    public List<Waybill> getWaybillByCompanyAndState(Company company, WaybillState state) {
         log.debug("Get waybill with state {} for company with id: {}", state.toString(), company.getId());
         return waybillRepository.findByCompanyAndState(company, state);
     }
 
     public List<Waybill> getWaybillByCompanyAndStateAndDateBetween(Company company, WaybillState state,
-                                                                   ZonedDateTime fromDate, ZonedDateTime toDate){
+                                                                   ZonedDateTime fromDate, ZonedDateTime toDate) {
         log.debug("Get waybill with state {}, date between {} and {} for company with id: {}", state.toString(),
             fromDate, toDate, company.getId());
         return waybillRepository.findByCompanyAndStateAndDateBetween(company, state, fromDate, toDate);
     }
 
-    public Page<Waybill> getPageWaybillByCompany(Pageable pageable, Company company){
+    public Page<Waybill> getPageWaybillByCompany(Pageable pageable, Company company) {
         log.debug("Get waybills for company with id: {}", company.getId());
         return waybillRepository.findPageByCompany(company, pageable);
     }
@@ -115,10 +109,10 @@ public class WaybillService {
     public Page<Waybill> getPageWaybillByDispatcher(Pageable pageable, User user) {
         log.debug("Get waybills by dispatcher with login: {}", user.getLogin());
 
-        return  waybillRepository.findPageByDispatcher(user, pageable);
+        return waybillRepository.findPageByDispatcher(user, pageable);
     }
 
-    public List<WaybillDTO> getAllWaybills () {
+    public List<WaybillDTO> getAllWaybills() {
         final List<WaybillDTO> waybillDTOList = new ArrayList<>();
         Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
         user.ifPresent(u -> {
@@ -132,7 +126,7 @@ public class WaybillService {
         return waybillDTOList;
     }
 
-    public Waybill createWaybill (ManagedWaybillVM managedWaybillVM) {
+    public Waybill createWaybill(ManagedWaybillVM managedWaybillVM) {
         Waybill waybill = new Waybill();
 
         Optional<User> dispatcher = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
@@ -153,15 +147,19 @@ public class WaybillService {
                 goods.setName(g.getName());
                 goods.setUncheckedNumber(g.getCount());
                 goods.setType(g.getType());
+                goods.setPrice(g.getPrice());
                 goods.setState("UNCHECKED");
 
                 return goods;
             }).collect(Collectors.toSet());
 
         waybill.setGoods(goodsSet);
-        waybillRepository.save(waybill);
+        Waybill createdWaybill = waybillRepository.save(waybill);
 
-        log.debug("Created Information for Waybill");
+        createdWaybill.setNumber(this.generateNumber(dispatcher.get().getCompany().getId(), createdWaybill.getDate(), createdWaybill.getId()));
+        waybillRepository.save(createdWaybill);
+
+        log.debug("Waybill created successfully!");
         return waybill;
     }
 
@@ -173,13 +171,14 @@ public class WaybillService {
         }
     }
 
-    public void updateWaybill (ManagedWaybillVM managedWaybillVM) {
+    public void updateWaybill(ManagedWaybillVM managedWaybillVM) {
         waybillRepository.findOneById(managedWaybillVM.getId()).ifPresent(w -> {
             w.setDispatcher(userRepository.findOneByLogin(managedWaybillVM.getDispatcher().getLogin()).get());
             w.setDriver(userRepository.findOneByLogin(managedWaybillVM.getDriver().getLogin()).get());
             w.setDate(managedWaybillVM.getDate());
             w.setState(managedWaybillVM.getState());
             w.setDateChecked(managedWaybillVM.getDateChecked());
+            w.setMargin(managedWaybillVM.getMargin());
 
             if (managedWaybillVM.getManager() != null) {
                 w.setManager(userRepository.findOneById(managedWaybillVM.getManager().getId()).get());
@@ -196,5 +195,13 @@ public class WaybillService {
             waybillRepository.save(w);
             log.debug("Changed fields for Waybill id={}", w.getId());
         });
+    }
+
+    public String generateNumber(Long companyId, ZonedDateTime date, Long waybillId) {
+        String companyNum = String.format("%02d", companyId);
+        String dateStr = Integer.toString(date.getYear()).substring(2) + String.format("%02d", date.getMonthValue()) + String.format("%02d", date.getDayOfMonth());
+        String waybillNum = String.format("%02d", waybillId);
+
+        return "W" + companyNum + dateStr + waybillNum;
     }
 }

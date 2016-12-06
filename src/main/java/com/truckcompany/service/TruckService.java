@@ -20,9 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by Viktor Dobroselsky.
@@ -128,5 +129,24 @@ public class TruckService {
             truckRepository.delete(truck);
             log.debug("Deleted truck {}", id);
         }
+    }
+
+    public List<ManagedTruckVM> getFreeTrucks(Long from, Long to) {
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+
+        ZonedDateTime dateFrom = ZonedDateTime.ofInstant(new Date(from).toInstant(), ZoneId.systemDefault());
+        ZonedDateTime dateTo = ZonedDateTime.ofInstant(new Date(to).toInstant(), ZoneId.systemDefault());
+
+        Set<Truck> usedTrucks = routeListRepository
+            .findRouteListsByDate(user.getCompany(), dateFrom, dateTo)
+            .stream()
+            .map(routeList -> {
+                return routeList.getTruck();
+            }).collect(Collectors.toSet());
+
+        List<Truck> allTrucks = truckRepository.findByCompanyAndReady(user.getCompany());
+        allTrucks.removeAll(usedTrucks);
+
+        return allTrucks.stream().map(ManagedTruckVM::new).collect(Collectors.toList());
     }
 }

@@ -120,7 +120,7 @@ public class RouteListResource {
     @Timed
     public ResponseEntity<?> createRouteList(@RequestBody ManagedRouteListVM managedRouteListVM)
         throws URISyntaxException {
-        log.debug("REST request to save Waybill");
+        log.debug("REST request to save RouteList");
         RouteList newRouteList = routeListService.createRouteList(managedRouteListVM);
 
         return ResponseEntity.created(new URI("/api/companies/" + newRouteList.getId()))

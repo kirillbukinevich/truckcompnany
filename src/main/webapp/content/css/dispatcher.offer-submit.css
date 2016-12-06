@@ -1,0 +1,3 @@
+.form_row div[class*='col-'] {
+    padding: 0 15px;
+}

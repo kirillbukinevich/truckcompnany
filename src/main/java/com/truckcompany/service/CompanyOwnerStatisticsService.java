@@ -119,7 +119,6 @@ public class CompanyOwnerStatisticsService {
 
     }
 
-
     public List<List<Double>> getLossStatistics(LocalDate fromDate, LocalDate toDate){
         List<WaybillDTO> waybills = waybillFacade.findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED,
             fromDate.atStartOfDay(ZoneOffset.systemDefault()),
@@ -356,7 +355,7 @@ public class CompanyOwnerStatisticsService {
         for(String login: loginAndValueMap.keySet()){
             double driverProfit = loginAndValueMap.get(login)
                 .stream()
-                .mapToDouble(this::countWaybillProfit)
+                .mapToDouble(this::countWaybillProfitWithLoss)
                 .sum();
 
 
@@ -393,7 +392,7 @@ public class CompanyOwnerStatisticsService {
         for(String login: loginAndValueMap.keySet()){
             double driverProfit = loginAndValueMap.get(login)
                 .stream()
-                .mapToDouble(this::countWaybillProfit)
+                .mapToDouble(this::countWaybillProfitWithLoss)
                 .sum();
 
             User driver = userService.getUserByLogin(login).get();
@@ -582,8 +581,7 @@ public class CompanyOwnerStatisticsService {
         Map<Long, Double> map = waybills.stream()
             .collect(Collectors.toMap(s -> s.getDate().truncatedTo(ChronoUnit.DAYS)
                     .toInstant().toEpochMilli(),
-                s-> s.getRouteList().getTruck().getConsumption()*s.getRouteList().getFuelCost()
-                    *s.getRouteList().getDistance(),
+                this::countWaybillConsumption,
                 (a,b) -> a+ b));
         return map;
     }
@@ -593,7 +591,7 @@ public class CompanyOwnerStatisticsService {
         Map<Long, Double> profitMap = waybills.stream()
             .collect(Collectors.toMap(s-> s.getDate().truncatedTo(ChronoUnit.DAYS)
                     .toInstant().toEpochMilli(),
-                s-> s.getTransportationPrice() ,
+                s-> countWaybillConsumption(s)*s.getMargin() ,
                 (a,b) -> a+ b));
 
         // loss
@@ -611,13 +609,11 @@ public class CompanyOwnerStatisticsService {
     }
 
     private Map<Long, Double> getIncomeDataMap(List<WaybillDTO> waybills){
-        double percent = 1.4;
 
-        Map<Long, Double> map = waybills.stream() // @todo add percent of consumption!!
+        Map<Long, Double> map = waybills.stream()
             .collect(Collectors.toMap(s-> s.getDate().truncatedTo(ChronoUnit.DAYS)
                     .toInstant().toEpochMilli(),
-                s-> s.getRouteList().getTruck().getConsumption()*s.getRouteList().getFuelCost()
-                    *s.getRouteList().getDistance()*percent,
+                s-> countWaybillConsumption(s)*(1+s.getMargin()),
                 (a,b) -> a+ b));
 
         return map;
@@ -640,9 +636,9 @@ public class CompanyOwnerStatisticsService {
             .entrySet()
             .stream()
             .sorted(Map.Entry.comparingByValue((o1, o2) -> {
-                Double profit1 = o1.stream().mapToDouble(this::countWaybillProfit)
+                Double profit1 = o1.stream().mapToDouble(this::countWaybillProfitWithLoss)
                     .sum();
-                Double profit2 = o2.stream().mapToDouble(this::countWaybillProfit)
+                Double profit2 = o2.stream().mapToDouble(this::countWaybillProfitWithLoss)
                     .sum();
                 return profit2.compareTo(profit1);
             }))
@@ -694,8 +690,13 @@ public class CompanyOwnerStatisticsService {
         return a;
     }
 
-    private double countWaybillProfit(WaybillDTO waybill){
-        return waybill.getTransportationPrice() - countWaybillLoss(waybill);
+    private double countWaybillProfitWithLoss(WaybillDTO waybill){
+        return countWaybillConsumption(waybill)*waybill.getMargin() - countWaybillLoss(waybill);
+    }
+
+    private double countWaybillConsumption(WaybillDTO waybill){
+        return waybill.getRouteList().getTruck().getConsumption()*waybill.getRouteList().getFuelCost()
+            *waybill.getRouteList().getDistance();
     }
 
 

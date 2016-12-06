@@ -11,6 +11,8 @@ public class RouteListDTO {
 
     private Long id;
 
+    private String number;
+
     private ZonedDateTime creationDate;
 
     private TruckDTO truck;
@@ -32,7 +34,7 @@ public class RouteListDTO {
     private Integer distance;
 
     public RouteListDTO(Long id, ZonedDateTime date,
-                        ZonedDateTime leavingDate, ZonedDateTime arrivalDate, String state, Double fuelCost, Integer distance){
+                        ZonedDateTime leavingDate, ZonedDateTime arrivalDate, String state, Double fuelCost, Integer distance, String number){
         this.id = id;
         this.creationDate = date;
         this.leavingDate = leavingDate;
@@ -40,6 +42,7 @@ public class RouteListDTO {
         this.state = state;
         this.fuelCost = fuelCost;
         this.distance = distance;
+        this.number = number;
     }
 
     public RouteListDTO(RouteList routeList){
@@ -50,7 +53,8 @@ public class RouteListDTO {
             routeList.getArrivalDate(),
             routeList.getState(),
             routeList.getFuelCost(),
-            routeList.getDistance()
+            routeList.getDistance(),
+            routeList.getNumber()
         );
         this.truck = routeList.getTruck() != null ? new TruckDTO(routeList.getTruck()) : null;
         this.leavingStorage = routeList.getLeavingStorage() != null ?
@@ -74,7 +78,8 @@ public class RouteListDTO {
             routeListDTO.getArrivalDate(),
             routeListDTO.getState(),
             routeListDTO.getFuelCost(),
-            routeListDTO.getDistance()
+            routeListDTO.getDistance(),
+            routeListDTO.getNumber()
         );
         this.truck = routeListDTO.getTruck();
         this.leavingStorage = routeListDTO.getLeavingStorage();
@@ -104,13 +109,9 @@ public class RouteListDTO {
         return leavingDate;
     }
 
-
-
     public ZonedDateTime getArrivalDate() {
         return arrivalDate;
     }
-
-
 
     public StorageDTO getLeavingStorage() {
         return leavingStorage;
@@ -182,5 +183,13 @@ public class RouteListDTO {
 
     public void setDistance(Integer distance) {
         this.distance = distance;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 }

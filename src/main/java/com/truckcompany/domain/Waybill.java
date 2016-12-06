@@ -1,6 +1,5 @@
 package com.truckcompany.domain;
 
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.truckcompany.domain.enums.WaybillState;
 
@@ -16,6 +15,9 @@ public class Waybill implements Serializable {
     @GeneratedValue
     @Column(name = "id")
     private Long id;
+
+    @Column(name = "number")
+    private String number;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
@@ -52,6 +54,8 @@ public class Waybill implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Goods> goods;
 
+    @Column(name = "margin")
+    private Double margin;
 
     public Long getId() {
         return id;
@@ -99,16 +103,52 @@ public class Waybill implements Serializable {
     public Company getCompany() {
         return company;
     }
-
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public ZonedDateTime getDateChecked() {
+        return dateChecked;
+    }
+    public void setDateChecked(ZonedDateTime dateChecked) {
+        this.dateChecked = dateChecked;
+    }
+
+    public User getManager() {
+        return manager;
+    }
+    public void setManager(User manager) {
+        this.manager = manager;
+    }
+
+    public Set<Goods> getGoods() {
+        return goods;
+    }
+    public void setGoods(Set<Goods> goods) {
+        this.goods = goods;
+    }
+
+
+    public String getNumber() {
+        return number;
+    }
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public Double getMargin() {
+        return margin;
+    }
+    public void setMargin(Double margin) {
+        this.margin = margin;
     }
 
     @Override
     public String toString() {
         return "Waybill{" +
             "id=" + id +
-            "company" + company +
+            "number=" + number +
+            "company=" + company +
             ", date=" + date +
             ", driver=" + driver +
             ", state=" + state +
@@ -117,29 +157,4 @@ public class Waybill implements Serializable {
             ", writeOff=" +
             '}';
     }
-    public ZonedDateTime getDateChecked() {
-        return dateChecked;
-    }
-
-    public void setDateChecked(ZonedDateTime dateChecked) {
-        this.dateChecked = dateChecked;
-    }
-
-    public User getManager() {
-        return manager;
-    }
-
-    public void setManager(User manager) {
-        this.manager = manager;
-    }
-
-    public Set<Goods> getGoods() {
-        return goods;
-    }
-
-    public void setGoods(Set<Goods> goods) {
-        this.goods = goods;
-    }
-
-
 }

@@ -94,10 +94,22 @@ public class RouteListService {
         routeList.setArrivalStorage(storageRepository.findOne(managedRouteListVM.getArrivalStorage().getId()));
         routeList.setTruck(truckRepository.findOne(managedRouteListVM.getTruck().getId()));
         routeList.setCompany(userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get().getCompany());
-        routeList.setState("TRANSPORTATION");
+        routeList.setState("UNCHECKED");
+        routeList.setCreationDate(ZonedDateTime.now());
 
-        routeListRepository.save(routeList);
-        log.debug("Created Information for RouteList");
+        RouteList createdRouteList = routeListRepository.save(routeList);
+
+        log.debug("CREATED ROUTELIST: {}", createdRouteList);
+        createdRouteList.setNumber(generateNumber(createdRouteList.getCompany().getId(), createdRouteList.getCreationDate(), createdRouteList.getId()));
+        log.debug("RouteList created successfully!");
         return routeList;
+    }
+
+    public String generateNumber(Long companyId, ZonedDateTime date, Long routeListId) {
+        String companyNum = String.format("%02d", companyId);
+        String dateStr = Integer.toString(date.getYear()).substring(2) + String.format("%02d", date.getMonthValue()) + String.format("%02d", date.getDayOfMonth());
+        String routeListNum = String.format("%02d", routeListId);
+
+        return "R" + companyNum + dateStr + routeListNum;
     }
 }

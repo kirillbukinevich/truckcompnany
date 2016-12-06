@@ -110,6 +110,7 @@
             <column name="id" type="int" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="number" type="varchar(15)"/>
             <column name="truck_id" type="int">
                 <constraints nullable="false"/>
             </column>
@@ -177,6 +178,7 @@
             <column name="id" type="int" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="number" type="varchar(15)"/>
             <column name="date" type="timestamp" defaultValueDate="${now}">
                 <constraints nullable="false"/>
             </column>
@@ -194,6 +196,7 @@
             </column>
             <column name="manager" type="int"/>
             <column name="date_checked" type="timestamp"/>
+            <column name="margin" type="decimal(4,2)"/>
             <column name="company_id" type="INT(11)">
                 <constraints nullable="false"/>
             </column>

@@ -15,6 +15,7 @@ import com.truckcompany.service.TruckService;
 import com.truckcompany.service.UserService;
 import com.truckcompany.web.rest.dataforhighcharts.AdminStatisticData;
 import com.truckcompany.web.rest.util.HeaderUtil;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.inject.Inject;
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.truckcompany.domain.enums.TruckStatus.*;
 
@@ -86,44 +89,52 @@ public class AdminStatisticsResource {
     }
 
     private Map<RoleUsers, Long> getStatisticEmployeeRole(List<User> users) {
-        Map<RoleUsers, Long> statiscticEmployeeRole = new HashMap<>();
+        /*Map<RoleUsers, Long> statiscticEmployeeRole = new HashMap<>();
         Arrays.stream(RoleUsers.values()).forEach(role -> {
             if (role != RoleUsers.SUPERADMIN) statiscticEmployeeRole.put(role, 0L);
         });
-        users.stream().parallel().forEach(user -> {
+        users.stream().forEach(user -> {
             user.getAuthorities().forEach(auth -> {
                 RoleUsers role = RoleUsers.getRoleUserFromString(auth.getName());
                 statiscticEmployeeRole.put(role, statiscticEmployeeRole.get(role) + 1);
             });
-        });
-        return statiscticEmployeeRole;
+        });*/
+        return users.stream()
+            .flatMap(user -> user.getAuthorities().stream())
+            .collect(Collectors.groupingBy(authority -> RoleUsers.getRoleUserFromString(authority.getName()), Collectors.counting()));
+        //return statiscticEmployeeRole;
     }
 
     private Map<TruckStatus, Long> getStatisticTruckStatus(List<Truck> trucks) {
-        Map<TruckStatus, Long> statisticTruckByStatus = new HashMap();
+        /*Map<TruckStatus, Long> statisticTruckByStatus = new HashMap();
         Arrays.stream(values()).forEach(status -> statisticTruckByStatus.put(status, 0L));
-        trucks.stream().parallel().forEach(truck -> {
+        trucks.stream().forEach(truck -> {
             if (truckService.isTruckBusy(truck)) {
                 statisticTruckByStatus.put(BUSY, statisticTruckByStatus.get(BUSY) + 1);
             } else {
                 statisticTruckByStatus.put(truck.getStatus(), statisticTruckByStatus.get(truck.getStatus()) + 1);
             }
-        });
-        return statisticTruckByStatus;
+        });*/
+        return trucks.stream().collect(Collectors.groupingBy(byTruckStatus(), Collectors.counting()));
+    }
+
+    @NotNull
+    private Function<Truck, TruckStatus> byTruckStatus() {
+        return truck-> truckService.isTruckBusy(truck) ? BUSY : truck.getStatus();
     }
 
 
     private Map<String, Long> getStatisticTruckModel(List<Truck> trucks) {
-        Map<String, Long> statisticTruckByModel = new HashMap<>();
+       /* Map<String, Long> statisticTruckByModel = new HashMap<>();
 
-        trucks.stream().parallel().forEach(truck -> {
+        trucks.stream().forEach(truck -> {
             String model = truck.getModel();
             if (statisticTruckByModel.containsKey(model)) {
                 statisticTruckByModel.put(model, statisticTruckByModel.get(model) + 1);
             } else {
                 statisticTruckByModel.put(model, 1L);
             }
-        });
-        return statisticTruckByModel;
+        });*/
+        return trucks.stream().collect(Collectors.groupingBy(Truck::getModel, Collectors.counting()));
     }
 }
