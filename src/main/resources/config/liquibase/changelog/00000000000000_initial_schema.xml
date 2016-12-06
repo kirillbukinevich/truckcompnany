@@ -196,6 +196,7 @@
             </column>
             <column name="manager" type="int"/>
             <column name="date_checked" type="timestamp"/>
+            <column name="margin" type="decimal(4,2)"/>
             <column name="company_id" type="INT(11)">
                 <constraints nullable="false"/>
             </column>

@@ -1,12 +1,10 @@
 package com.truckcompany.domain;
 
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.truckcompany.domain.enums.WaybillState;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.Set;
 
@@ -56,6 +54,9 @@ public class Waybill implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Goods> goods;
 
+    @Column(name = "margin")
+    private Double margin;
+
     public Long getId() {
         return id;
     }
@@ -102,7 +103,6 @@ public class Waybill implements Serializable {
     public Company getCompany() {
         return company;
     }
-
     public void setCompany(Company company) {
         this.company = company;
     }
@@ -110,7 +110,6 @@ public class Waybill implements Serializable {
     public ZonedDateTime getDateChecked() {
         return dateChecked;
     }
-
     public void setDateChecked(ZonedDateTime dateChecked) {
         this.dateChecked = dateChecked;
     }
@@ -118,7 +117,6 @@ public class Waybill implements Serializable {
     public User getManager() {
         return manager;
     }
-
     public void setManager(User manager) {
         this.manager = manager;
     }
@@ -126,7 +124,6 @@ public class Waybill implements Serializable {
     public Set<Goods> getGoods() {
         return goods;
     }
-
     public void setGoods(Set<Goods> goods) {
         this.goods = goods;
     }
@@ -134,9 +131,15 @@ public class Waybill implements Serializable {
     public String getNumber() {
         return number;
     }
-
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public Double getMargin() {
+        return margin;
+    }
+    public void setMargin(Double margin) {
+        this.margin = margin;
     }
 
     @Override

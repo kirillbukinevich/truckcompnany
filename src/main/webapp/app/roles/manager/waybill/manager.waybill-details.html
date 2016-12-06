@@ -84,7 +84,6 @@
                                     <input name="goodsNum{{stuff.id}}"
                                            ng-if="vm.waybill.state == 'CREATED'"
                                            ng-model="stuff.acceptedNumber"
-                                           ng-model="stuff.acceptedNumber"
                                            size="5" class="form-control input-sm text-center"
                                            value="{{stuff.uncheckedNumber}}"
                                            required>
@@ -99,16 +98,15 @@
                                 </div>
                             </td>
                         </tr>
-
                         </tbody>
                     </table>
+                    <div ng-if="vm.waybill.margin != null"><strong>Margin:</strong> {{vm.waybill.margin}}%</div>
 
-<!--                    <div class="alert alert-danger help-block"
-                         role="alert"
-                         ng-show="form.$dirty && form.$invalid">
-                        Fill all required fields
-                    </div>-->
-
+                    <!--                    <div class="alert alert-danger help-block"
+                                             role="alert"
+                                             ng-show="form.$dirty && form.$invalid">
+                                            Fill all required fields
+                                        </div>-->
 
                 </div>
             </div>
@@ -120,7 +118,7 @@
     <div ng-if="vm.waybill.state == 'CREATED'" class="modal-footer">
         <div class="row">
             <div class="col-md-1"></div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="manager" class="pull-left">Checked by:</label>
                     <input type="text" id="manager" class="form-control" name="confirmedBy"
@@ -128,7 +126,7 @@
                 </div>
             </div>
             <div class="col-md-1"></div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="checkDate" class="pull-left">At:</label>
                     <div class="input-group" style="clear:both;"
@@ -156,6 +154,30 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="price" class="pull-left">Margin:</label>
+                    <div class="input-group"  style="clear:both"
+                        ng-class="{'has-error' : (form.price.$dirty && form.price.$invalid)}">
+                        <input type="text"
+                               id="price"
+                               name="price"
+                               class="form-control"
+                               ng-model="vm.waybill.margin"
+                               aria-describedby="price-addon"
+                               required/>
+                        <span class="input-group-addon" id="price-addon">%</span>
+                    </div>
+                    <div class="alert alert-danger help-block"
+                         role="alert"
+                         ng-show="form.price.$dirty && form.price.$invalid">
+                        Margin is required
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+
         </div>
 
         <button type="button" class="btn btn-danger" data-dismiss="modal"

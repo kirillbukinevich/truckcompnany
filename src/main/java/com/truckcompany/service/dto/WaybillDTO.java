@@ -38,7 +38,10 @@ public class WaybillDTO {
 
     private Set<GoodsDTO> goods;
 
-    public WaybillDTO(Long id, ZonedDateTime date, UserDTO driver, WaybillState state, UserDTO dispatcher, UserDTO manager, ZonedDateTime dateChecked, Set<GoodsDTO> goods) {
+    private Double margin;
+
+    public WaybillDTO(Long id, ZonedDateTime date, UserDTO driver, WaybillState state, UserDTO dispatcher,
+                      UserDTO manager, ZonedDateTime dateChecked, Set<GoodsDTO> goods, Double margin) {
         this.id = id;
         this.date = date;
         this.driver = driver;
@@ -47,6 +50,7 @@ public class WaybillDTO {
         this.manager = manager;
         this.dateChecked = dateChecked;
         this.goods = goods;
+        this.margin = margin;
     }
 
     public WaybillDTO(Long id, ZonedDateTime date, UserDTO driver, WaybillState state, UserDTO dispatcher) {
@@ -83,6 +87,7 @@ public class WaybillDTO {
             .map(GoodsDTO::new)
             .collect(Collectors.toSet());
         this.number = waybill.getNumber();
+        this.margin = waybill.getMargin();
 
         //this.offer = new OfferDTO(waybill.getOffer);
     }
@@ -94,6 +99,7 @@ public class WaybillDTO {
         this.routeList = waybill.getRouteList();
         this.offer = waybill.getOffer();
         this.number = waybill.getNumber();
+        this.margin = waybill.getMargin();
     }
 
     public RouteListDTO getRouteList() {
@@ -182,6 +188,14 @@ public class WaybillDTO {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public Double getMargin() {
+        return margin;
+    }
+
+    public void setMargin(Double margin) {
+        this.margin = margin;
     }
 
     @Override

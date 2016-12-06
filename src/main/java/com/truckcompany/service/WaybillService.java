@@ -178,6 +178,7 @@ public class WaybillService {
             w.setDate(managedWaybillVM.getDate());
             w.setState(managedWaybillVM.getState());
             w.setDateChecked(managedWaybillVM.getDateChecked());
+            w.setMargin(managedWaybillVM.getMargin());
 
             if (managedWaybillVM.getManager() != null) {
                 w.setManager(userRepository.findOneById(managedWaybillVM.getManager().getId()).get());
