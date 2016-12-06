@@ -5,6 +5,10 @@ import com.truckcompany.domain.Storage;
 import com.truckcompany.domain.Template;
 import com.truckcompany.domain.User;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Set;
@@ -120,5 +124,14 @@ public class TemplateDTO {
             "id=" + id +
             ", name='" + name + '\'' +
             '}';
+    }
+
+    public void setBirthday (String birthDate) {
+        DateFormat m_ISO8601Local = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            this.birthday = ZonedDateTime.ofInstant(m_ISO8601Local.parse(birthDate).toInstant(), ZoneId.systemDefault()) ;
+        } catch (ParseException e) {
+            this.birthday = ZonedDateTime.now();
+        }
     }
 }

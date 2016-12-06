@@ -19,6 +19,15 @@ public class AjaxAuthenticationFailureHandler extends SimpleUrlAuthenticationFai
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
         AuthenticationException exception) throws IOException, ServletException {
 
+
+        Throwable cause = exception.getCause();
+        if (cause instanceof UserNotActivatedException){
+            response.sendError(418, "User isn't activated");
+        }
+        if(cause instanceof UserNotActivateCompanyException){
+            response.sendError(419, "Company for user isn't activated");
+        }
+
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication failed");
     }
 }

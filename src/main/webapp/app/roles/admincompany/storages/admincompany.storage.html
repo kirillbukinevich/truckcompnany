@@ -4,8 +4,9 @@
 </div>
 
 <form name="form">
+    <div class="alert alert-warning">Fields are marked * is required.</div>
     <div class="form-group" ng-class="{'has-error' : (form.name.$dirty && form.name.$invalid) }">
-        <label for="name" class="control-label">Storage name:</label>
+        <label for="name" class="control-label">Storage name*</label>
         <input type="text" ng-model="vm.storage.name" class="form-control" id="name" name="name"
                placeholder="Enter storage name" required ng-maxlength="45">
 
@@ -21,7 +22,7 @@
         </div>
     </div>
     <div class="form-group" ng-class="{'has-error' : (form.address.$dirty && form.address.$invalid) }">
-        <label for="address" class="control-label">Address:</label>
+        <label for="address" class="control-label">Address*</label>
         <input type="text" ng-model="vm.storage.address" class="form-control" id="address" name="address"
                placeholder="Enter address" required ng-maxlength="45">
 

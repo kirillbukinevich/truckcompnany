@@ -51,10 +51,11 @@ public class TruckResource {
     @RequestMapping(value = "/trucks/{id}", method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ManagedTruckVM> getTruck (@PathVariable Long id) {
         LOG.debug("REST request to get Truck : {}", id);
-        Truck truck = truckService.getTruckByIdWIthCompany(id);
+        /*Truck truck = truckService.getTruckByIdWIthCompany(id);*/
+        ManagedTruckVM truck = truckFacade.getTruckById(id);
         HttpStatus status = truck == null ? NOT_FOUND : OK;
-        ManagedTruckVM body = truck == null ? null : new ManagedTruckVM(truck, truck.getCompany());
-        return new ResponseEntity<>(body, status);
+        //ManagedTruckVM body = truck == null ? null : new ManagedTruckVM(truck, truck.getCompany());
+        return new ResponseEntity<>(truck, status);
     }
 
 

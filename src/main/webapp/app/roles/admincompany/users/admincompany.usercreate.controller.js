@@ -30,6 +30,8 @@
         vm.messageError = '';
 
         function create(){
+            console.log("CREATE")
+            vm.user.birthDate = moment(vm.user.birthDate).format('YYYY-MM-DD').toString();
             console.log(vm.user);
             $http({
                 method: 'POST',

@@ -3,6 +3,7 @@ package com.truckcompany.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.RouteList;
 import com.truckcompany.repository.RouteListRepository;
+import com.truckcompany.security.AuthoritiesConstants;
 import com.truckcompany.service.RouteListService;
 import com.truckcompany.service.dto.RouteListDTO;
 import com.truckcompany.service.dto.StorageDTO;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -95,6 +97,7 @@ public class RouteListResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured({AuthoritiesConstants.DRIVER})
     public ResponseEntity<ManagedRouteListVM> getRouteList(@PathVariable Long id) {
         log.debug("REST request to get RouteList : {}", id);
 
@@ -140,6 +143,7 @@ public class RouteListResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured({AuthoritiesConstants.DRIVER})
     public ResponseEntity updateRouteList(@RequestBody ManagedRouteListVM managedRouteListVM) {
         log.debug("REST request to update RouteList : {}", managedRouteListVM);
         RouteList existingRouteList = routeListRepository.findOne(managedRouteListVM.getId());

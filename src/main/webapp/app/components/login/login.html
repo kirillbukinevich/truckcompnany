@@ -11,8 +11,8 @@
     </div>
 
     <div id="login-form-body">
-        <div class="alert alert-danger" ng-show="vm.authenticationError" data-translate="login.messages.error.authentication">
-            <strong>Failed to sign in!</strong> Please check your credentials and try again.
+        <div class="alert alert-danger" ng-show="vm.authenticationError" ng-bind-html="vm.errorMessage">
+           
         </div>
 
         <form class="form" role="form" ng-submit="vm.login($event)">
