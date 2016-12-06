@@ -1,12 +1,16 @@
 package com.truckcompany.service.facade;
 
+import com.truckcompany.domain.RouteList;
 import com.truckcompany.domain.Truck;
 import com.truckcompany.domain.User;
+import com.truckcompany.domain.enums.TruckStatus;
+import com.truckcompany.repository.RouteListRepository;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.TruckService;
 import com.truckcompany.service.UserService;
 import com.truckcompany.service.dto.TruckDTO;
 import com.truckcompany.web.rest.TruckResource;
+import com.truckcompany.web.rest.vm.ManagedTruckVM;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -31,6 +36,8 @@ public class DefaultTruckFacade implements TruckFacade {
     UserService userService;
     @Inject
     TruckService truckService;
+    @Inject
+    RouteListRepository routeListRepository;
 
     @Override
     public Page<TruckDTO> findTrucks(Pageable pageable, HttpServletRequest request) {
@@ -52,6 +59,30 @@ public class DefaultTruckFacade implements TruckFacade {
         }
         return new PageImpl<TruckDTO>(pageTrucks.getContent().stream().map(toDTO).collect(toList()), pageable, pageTrucks.getTotalElements());
 
+    }
+
+    public ManagedTruckVM getTruckById(Long id) {
+        Truck truck = truckService.getTruckByIdWIthCompany(id);
+
+        if (truck != null) {
+            ManagedTruckVM managedTruckVM = new ManagedTruckVM(truck);
+            ZonedDateTime now = ZonedDateTime.now();
+
+            Optional<List<RouteList>> routeListsByTruck = routeListRepository.findRouteListsByTruck(truck);
+            if (routeListsByTruck.isPresent()) {
+                List<RouteList> routeLists = routeListsByTruck.get();
+                for (RouteList routeList : routeLists) {
+                    ZonedDateTime arrivalDate = routeList.getArrivalDate();
+                    ZonedDateTime leavingDate = routeList.getLeavingDate();
+                    if ((leavingDate.compareTo(now) <= 0) && (arrivalDate.compareTo(now) >= 0)) {
+                        managedTruckVM.setBusyFrom(leavingDate);
+                        managedTruckVM.setBusyTo(arrivalDate);
+                        managedTruckVM.setStatus(TruckStatus.BUSY);
+                    }
+                }
+            }
+            return managedTruckVM;
+        } else return null;
     }
 
     private Function<Truck, TruckDTO> convertToTruckDto() {

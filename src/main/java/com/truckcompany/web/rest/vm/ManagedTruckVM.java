@@ -5,29 +5,49 @@ import com.truckcompany.domain.Truck;
 import com.truckcompany.service.dto.StorageDTO;
 import com.truckcompany.service.dto.TruckDTO;
 
+import java.time.ZonedDateTime;
+
 /**
  * Created by Viktor Dobroselsky.
  */
 
-public class ManagedTruckVM extends TruckDTO{
+public class ManagedTruckVM extends TruckDTO {
 
-    public ManagedTruckVM(){}
+    public ManagedTruckVM() {
+    }
 
-    public ManagedTruckVM(TruckDTO truck){
+    public ManagedTruckVM(TruckDTO truck) {
         super(truck);
     }
 
-    public ManagedTruckVM(Truck truck){
+    public ManagedTruckVM(Truck truck) {
         super(truck);
     }
 
-    public ManagedTruckVM(Truck truck, Company company){
-        super(truck,company);
+    public ManagedTruckVM(Truck truck, Company company) {
+        super(truck, company);
     }
 
+    private ZonedDateTime busyFrom;
+    private ZonedDateTime busyTo;
 
+    public ZonedDateTime getBusyFrom() {
+        return busyFrom;
+    }
 
-/*
+    public ZonedDateTime getBusyTo() {
+        return busyTo;
+    }
+
+    public void setBusyFrom(ZonedDateTime busyFrom) {
+        this.busyFrom = busyFrom;
+    }
+
+    public void setBusyTo(ZonedDateTime busyTo) {
+        this.busyTo = busyTo;
+    }
+
+    /*
     private Long id;
 
     private Long consumption;

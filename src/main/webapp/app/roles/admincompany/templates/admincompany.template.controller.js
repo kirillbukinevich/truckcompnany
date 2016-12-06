@@ -113,10 +113,10 @@
         vm.uploadTemplate = function(){
             if (vm.isValidDate) {
                 if (vm.isDefaultBirthday =="true") {
-                    vm.template.birthday = vm.defaultBirthday;
+                    vm.template.birthday = moment(vm.defaultBirthday).format('YYYY-MM-DD').toString();
                 } else{
                     vm.checkDate();
-                    vm.template.birthday = vm.newAssignedBirthday;
+                    vm.template.birthday = moment(vm.newAssignedBirthday).format('YYYY-MM-DD').toString();
                 }
                 Template.update(vm.template, onSuccessUploadTemplate)
             }

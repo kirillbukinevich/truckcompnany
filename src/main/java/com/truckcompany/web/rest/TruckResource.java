@@ -4,11 +4,13 @@ import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.Storage;
 import com.truckcompany.domain.Truck;
 import com.truckcompany.repository.TruckRepository;
+import com.truckcompany.security.AuthoritiesConstants;
 import com.truckcompany.service.TruckService;
 import com.truckcompany.service.dto.TruckDTO;
 import com.truckcompany.service.facade.TruckFacade;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import com.truckcompany.web.rest.util.PaginationUtil;
+import com.truckcompany.web.rest.vm.ManagedRouteListVM;
 import com.truckcompany.web.rest.vm.ManagedStorageVM;
 import com.truckcompany.web.rest.vm.ManagedTruckVM;
 import org.slf4j.Logger;
@@ -18,12 +20,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,10 +55,11 @@ public class TruckResource {
     @RequestMapping(value = "/trucks/{id}", method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ManagedTruckVM> getTruck (@PathVariable Long id) {
         LOG.debug("REST request to get Truck : {}", id);
-        Truck truck = truckService.getTruckByIdWIthCompany(id);
+        /*Truck truck = truckService.getTruckByIdWIthCompany(id);*/
+        ManagedTruckVM truck = truckFacade.getTruckById(id);
         HttpStatus status = truck == null ? NOT_FOUND : OK;
-        ManagedTruckVM body = truck == null ? null : new ManagedTruckVM(truck, truck.getCompany());
-        return new ResponseEntity<>(body, status);
+        //ManagedTruckVM body = truck == null ? null : new ManagedTruckVM(truck, truck.getCompany());
+        return new ResponseEntity<>(truck, status);
     }
 
 
@@ -98,5 +103,13 @@ public class TruckResource {
         return ResponseEntity.created(new URI("/api/trucks/" + newTruck.getId()))
             .headers(HeaderUtil.createAlert("truck.created", newTruck.getId().toString()))
             .body(newTruck);
+    }
+
+    @RequestMapping (value = "/trucks/bydate", method = GET, produces = APPLICATION_JSON_VALUE)
+    @Secured(AuthoritiesConstants.DISPATCHER)
+    public ResponseEntity<List<ManagedTruckVM>> getActiveTrucks (@RequestParam("from") Long from, @RequestParam("to") Long to) {
+        LOG.debug("REST request to find free trucks");
+        List<ManagedTruckVM> list = truckService.getFreeTrucks(from,to);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

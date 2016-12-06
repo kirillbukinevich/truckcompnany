@@ -27,6 +27,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findOneByEmail(String email);
 
+
+    @Query(value = "select distinct user from User user left join fetch user.authorities left join fetch user.company where user.login=?1")
     Optional<User> findOneByLogin(String login);
 
     Optional<User> findOneById(Long userId);
@@ -51,7 +53,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query( value = "select distinct count(user) from User user left join user.authorities auth where user.company.id = ?1 and auth.name <> 'ROLE_ADMIN'")
     Long countUsersBelongsCompanyWithoutAdmin(Long idCompany);
 
-    List<User> findByCompanyAndAuthorities(Company company, Set authorities);
-
-
+    List<User> findByCompanyAndAuthoritiesAndActivated(Company company, Set authorities, Boolean activated);
 }

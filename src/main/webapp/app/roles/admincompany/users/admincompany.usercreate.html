@@ -4,8 +4,9 @@
 </div>
 
 <form name="form">
+    <div class="alert alert-warning">Fields are marked * is required.</div>
     <div class="form-group" ng-class="{'has-error' : (form.firstName.$dirty && form.firstName.$invalid) }">
-        <label for="firstName" class="control-label">First name:</label>
+        <label for="firstName" class="control-label">First name*</label>
         <input type="text" ng-model="vm.user.firstName" name="firstName" class="form-control" id="firstName"
                placeholder="First name" required ng-maxlength="50">
         <div ng-show="form.firstName.$dirty && form.firstName.$invalid">
@@ -20,7 +21,7 @@
         </div>
     </div>
     <div class="form-group" ng-class="{'has-error' : (form.lastName.$dirty && form.lastName.$invalid) }">
-        <label for="lastname" class="control-label">Last name:</label>
+        <label for="lastname" class="control-label">Last name*</label>
         <input type="text" ng-model="vm.user.lastName" name="lastName" class="form-control" id="lastname"
                placeholder="Last name" required ng-maxlength="50">
         <div ng-show="form.lastName.$dirty && form.firstName.$invalid">
@@ -36,7 +37,7 @@
     </div>
 
     <div class="form-group" ng-class="{'has-error' : (form.birthday.$dirty && form.birthday.$invalid) }">
-        <label for="birthday" class="control-label">Birthday:</label>
+        <label for="birthday" class="control-label">Birthday*</label>
         <p class="input-group" id="wrap-birthday">
             <input type="text" class="form-control"
                    uib-datepicker-popup="{{vm.format}}"
@@ -133,7 +134,7 @@
     </div>
 
     <div class="form-group" ng-class="{'has-error' : (form.login.$dirty && form.login.$invalid) }">
-        <label for="login" class="control-label">Login:</label>
+        <label for="login" class="control-label">Login*</label>
         <input type="text" ng-model="vm.user.login" name="login" class="form-control" id="login" placeholder="Login"
                required ng-maxlength="50" check-valid-login>
         <div ng-show="form.login.$dirty && form.login.$invalid">
@@ -152,7 +153,7 @@
         </div>
     </div>
     <div class="form-group" ng-class="{'has-error' : (form.email.$dirty && form.email.$invalid) }">
-        <label for="email" class="control-label">Email:</label>
+        <label for="email" class="control-label">Email*</label>
         <input type="text" ng-model="vm.user.email" name="email" class="form-control" id="email" placeholder="Email"
                required
                check-valid-email

@@ -1,6 +1,7 @@
 package com.truckcompany.security;
 
 import com.truckcompany.domain.User;
+import com.truckcompany.domain.enums.CompanyStatus;
 import com.truckcompany.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,9 @@ public class UserDetailsService implements org.springframework.security.core.use
         return userFromDatabase.map(user -> {
             if (!user.getActivated()) {
                 throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
+            }
+            if ((user.getCompany() != null) && (user.getCompany().getStatus() == CompanyStatus.DEACTIVATE)){
+                throw new UserNotActivateCompanyException("Company for user " + lowercaseLogin + " isn't activated");
             }
             List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
                     .map(authority -> new SimpleGrantedAuthority(authority.getName()))

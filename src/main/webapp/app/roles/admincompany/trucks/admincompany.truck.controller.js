@@ -31,6 +31,7 @@
                 vm.error = false;
                 vm.truck = response.data;
                 console.log(vm.truck);
+                console.log(moment("2010-01-01T05:06:07", ["YYYY", moment.ISO_8601]).format("YYYY").toString());
             }, function errorCallback(response) {
                 vm.error = true;
                 vm.messageError = "Problem with connection."

@@ -94,7 +94,7 @@ public class RouteListService {
         routeList.setArrivalStorage(storageRepository.findOne(managedRouteListVM.getArrivalStorage().getId()));
         routeList.setTruck(truckRepository.findOne(managedRouteListVM.getTruck().getId()));
         routeList.setCompany(userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get().getCompany());
-        routeList.setState("TRANSPORTATION");
+        routeList.setState("UNCHECKED");
 
         routeListRepository.save(routeList);
         log.debug("Created Information for RouteList");
