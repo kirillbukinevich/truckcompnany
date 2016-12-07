@@ -96,7 +96,13 @@ public class MailService {
         message.setTo(template.getRecipient().getEmail());
         message.setFrom(jHipsterProperties.getMail().getFrom());
         message.setSubject(template.getName());
-        message.setText(template.getTemplate(), true);
+
+
+
+        Context context = new Context();
+        context.setVariable("template", template);
+        String content = templateEngine.process("birthdayCard", context);
+        message.setText(content, true);
         return mimeMessage;
     }
 

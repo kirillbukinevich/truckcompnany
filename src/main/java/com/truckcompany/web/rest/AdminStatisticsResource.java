@@ -1,6 +1,5 @@
 package com.truckcompany.web.rest;
 
-import com.truckcompany.domain.Authority;
 import com.truckcompany.domain.Company;
 import com.truckcompany.domain.Truck;
 import com.truckcompany.domain.User;
@@ -25,12 +24,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static com.truckcompany.domain.enums.TruckStatus.*;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
 
 /**
  * Created by Vladimir on 22.11.2016.
@@ -101,7 +101,7 @@ public class AdminStatisticsResource {
         });*/
         return users.stream()
             .flatMap(user -> user.getAuthorities().stream())
-            .collect(Collectors.groupingBy(authority -> RoleUsers.getRoleUserFromString(authority.getName()), Collectors.counting()));
+            .collect(groupingBy(authority -> RoleUsers.getRoleUserFromString(authority.getName()), counting()));
         //return statiscticEmployeeRole;
     }
 
@@ -115,11 +115,23 @@ public class AdminStatisticsResource {
                 statisticTruckByStatus.put(truck.getStatus(), statisticTruckByStatus.get(truck.getStatus()) + 1);
             }
         });*/
-        return trucks.stream().collect(Collectors.groupingBy(byTruckStatus(), Collectors.counting()));
+
+        return trucks.stream().collect(
+            collectingAndThen(
+                groupingBy(truckStatus(), counting()),
+                normalizeStatistic()));
     }
 
     @NotNull
-    private Function<Truck, TruckStatus> byTruckStatus() {
+    private Function<Map<TruckStatus, Long>, Map<TruckStatus, Long>> normalizeStatistic() {
+        return map -> {
+            Arrays.stream(values()).forEach(status -> map.computeIfAbsent(status, count-> 0L));
+            return map;
+        };
+    }
+
+    @NotNull
+    private Function<Truck, TruckStatus> truckStatus() {
         return truck-> truckService.isTruckBusy(truck) ? BUSY : truck.getStatus();
     }
 
@@ -135,6 +147,6 @@ public class AdminStatisticsResource {
                 statisticTruckByModel.put(model, 1L);
             }
         });*/
-        return trucks.stream().collect(Collectors.groupingBy(Truck::getModel, Collectors.counting()));
+        return trucks.stream().collect(groupingBy(Truck::getModel, counting()));
     }
 }
