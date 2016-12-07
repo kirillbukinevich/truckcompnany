@@ -4,7 +4,9 @@
     {{vm.messageError}}
 </div>
 
-<div ng-if="!vm.error">
+<div class="alert alert-warning" role="alert" ng-if="vm.routelists == 0">No route list yet</div>
+
+<div ng-if="vm.routelists != 0">
     <table class="table table-hover">
         <thead>
         <tr>

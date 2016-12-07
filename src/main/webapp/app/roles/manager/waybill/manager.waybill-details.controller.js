@@ -29,7 +29,6 @@
         function changeWaybillState(id) {
             vm.waybill.manager = vm.account;
             vm.waybill.routeList = null;
-            vm.waybill.writeOffAct = null;
             if (id == 1) {
                 vm.waybill.state = 'CHECKED';
             } else {
