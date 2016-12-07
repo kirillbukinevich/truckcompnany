@@ -5,9 +5,9 @@
         .module('truckCompanyApp')
         .controller('CompanyownerWaybillsController', CompanyownerWaybillsController);
 
-    CompanyownerWaybillsController.$inject = ['$state', 'Waybill', 'pagingParams'];
+    CompanyownerWaybillsController.$inject = ['$state', 'Waybill', 'pagingParams', '$uibModal', '$scope'];
 
-    function CompanyownerWaybillsController ($state, Waybill, pagingParams) {
+    function CompanyownerWaybillsController ($state, Waybill, pagingParams, $uibModal, $scope) {
         var vm = this;
 
         vm.loadPage = loadPage;
@@ -18,7 +18,25 @@
         vm.availableItemsPerPage = [5, 10, 15, 20];
         vm.page = 1;
 
+
+
         vm.loadPage();
+
+        vm.showModalWaybillWriteOff = function (id) {
+            vm.modalConfirmWaybill = $uibModal.open({
+                templateUrl: 'app/roles/companyowner/waybills/companyowner.waybill-writeoff.html',
+                controller: 'CompanyOwnerWaybillWriteOffController',
+                controllerAs: 'vm',
+                scope: $scope,
+                backdrop: 'static',
+                size: 'lg',
+                resolve: {
+                    entity: ['Waybill', function (Waybill) {
+                        return Waybill.get({id: id});
+                    }]
+                }
+            });
+        };
 
 
 
