@@ -1,0 +1,36 @@
+<h3>Unconfirmed delivered goods</h3>
+<div class="alert alert-info" ng-if="vm.unconfirmed == 0" role="alert">No unconfirmed delivered goods</div>
+
+<div ng-if="vm.unconfirmed != 0">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th class="text-center">Waybill №</th>
+            <th>Delivered date</th>
+            <th>Driver</th>
+            <th class="text-center">Goods state</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="waybill in vm.unconfirmed track by $index">
+            <td>
+                <div class="text-center">{{waybill.number}}</div>
+            </td>
+            <td>{{waybill.routeList.arrivalDate | date:"dd/MM/yy HH:mm"}}</td>
+            <td>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</td>
+            <td>
+                <span class="label label-warning center-block">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    &nbsp;UNCONFIRMED</span>
+            </td>
+            <td class="text-right">
+                <div class="btn-group flex-btn-group-container">
+                    <button type="button" class="btn btn-primary btn-sm"
+                            ng-click="vm.showModalGoodsDetails(waybill.id)">&nbsp;Check
+                    </button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
