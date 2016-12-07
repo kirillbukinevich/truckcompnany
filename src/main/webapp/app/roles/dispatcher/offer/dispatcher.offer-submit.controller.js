@@ -14,8 +14,8 @@
         var vm = this;
 
         vm.offer = Offer.get({id : $stateParams.id});
-        vm.drivers = {};
-        vm.trucks = {};
+        vm.drivers = [];
+        vm.trucks = [];
         vm.createWaybill = createWaybill;
         vm.setTrucks = setTrucks;
         vm.setDrivers = setDrivers;
@@ -24,8 +24,8 @@
         vm.truck = null;
         vm.saveObj = {};
         vm.dt = {};
-        vm.arrivalDate = {};
-        vm.leaveDate = {};
+        vm.arrivalDate = null;
+        vm.leaveDate = null;
         vm.error = false;
 
         function setTrucks() {
@@ -36,8 +36,7 @@
                     params: {
                         from: vm.leaveDate.getTime(),
                         to: vm.arrivalDate.getTime()
-                    },
-                    isArray: true
+                    }
 
                 }).then(function successCallback(response) {
                         console.log(response);
@@ -62,8 +61,7 @@
                     params: {
                         from: vm.leaveDate.getTime(),
                         to: vm.arrivalDate.getTime()
-                    },
-                    isArray: true
+                    }
 
                 }).then(function successCallback(response) {
                         console.log(response);
