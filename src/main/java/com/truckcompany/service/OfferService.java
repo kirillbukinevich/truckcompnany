@@ -80,9 +80,13 @@ public class OfferService {
     }
 
     public ManagedOfferVM getOfferById (Long id) {
-        ManagedOfferVM offer = new ManagedOfferVM(offerRepository.getOne(id));
+        Offer offer = offerRepository.getOne(id);
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
 
-        return offer;
+        if (offer.getCompany().equals(user.getCompany()))
+            return new ManagedOfferVM(offerRepository.getOne(id));
+
+        return new ManagedOfferVM();
     }
 
     public boolean updateOfferState(OfferDTO managedOfferVM) {

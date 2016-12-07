@@ -45,9 +45,15 @@ public class WaybillService {
     private OfferRepository offerRepository;
 
     public ManagedWaybillVM getWaybillById(Long id) {
-        ManagedWaybillVM waybill = new ManagedWaybillVM(waybillRepository.getOne(id));
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+        Waybill waybill = waybillRepository.getOne(id);
+
         log.debug("Get Information about Waybill with id: {}", id);
-        return waybill;
+
+        if (user.getCompany().equals(waybill.getCompany()))
+            return new ManagedWaybillVM(waybill);
+        else
+            return null;
     }
 
 
