@@ -149,15 +149,19 @@
         function countRating() {
             var index = 0;
             vm.currentRate = 0;
+            console.log(vm.driverGoods);
             for (var i = 0; i < vm.driverGoods.length; i++) {
                 for (var j = 0; j < vm.driverGoods[i].length; j++) {
                     if(vm.driverGoods[i][j].deliveredNumber !=null){
-                        index++;
-                        vm.currentRate += vm.driverGoods[i][j].deliveredNumber/vm.driverGoods[i][j].acceptedNumber;
+                        if(vm.driverGoods[i][j].acceptedNumber!=null) {
+                            vm.currentRate += vm.driverGoods[i][j].deliveredNumber / vm.driverGoods[i][j].acceptedNumber;
+                            index++;
+                        }
                     }
                 }
             }
             vm.currentRate =  vm.currentRate/index*10;
+            console.log("Rating: " + vm.currentRate);
         }
     }
 })();
