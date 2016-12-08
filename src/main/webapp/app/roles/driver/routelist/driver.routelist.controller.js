@@ -93,11 +93,12 @@
                 }
             }
             function checkLastCheckpoint(index) {
+                console.log("!!!!!!!!!!!: " + vm.routeList.state);
                 if ((index + 1) === vm.checkpoints.length) {
                     for (var j in vm.waybills) {
 
 
-                        if (vm.waybills[j] != true) {
+                        if (vm.waybills[j] != true  && vm.waybills[j].state == "CHECKED") {
                             vm.waybills[j].state = "DELIVERED";
                             $http({
                                 method: 'PUT',
@@ -149,7 +150,6 @@
         function countRating() {
             var index = 0;
             vm.currentRate = 0;
-            console.log(vm.driverGoods);
             for (var i = 0; i < vm.driverGoods.length; i++) {
                 for (var j = 0; j < vm.driverGoods[i].length; j++) {
                     if(vm.driverGoods[i][j].deliveredNumber !=null){
@@ -161,7 +161,6 @@
                 }
             }
             vm.currentRate =  vm.currentRate/index*10;
-            console.log("Rating: " + vm.currentRate);
         }
     }
 })();

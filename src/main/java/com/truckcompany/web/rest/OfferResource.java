@@ -79,7 +79,7 @@ public class OfferResource {
 
         HttpHeaders headers = HeaderUtil.createAlert("offers.getById", null);
 
-        return new ResponseEntity(new Offer(), headers, HttpStatus.FORBIDDEN);
+        return new ResponseEntity(offer, headers, HttpStatus.OK);
     }
 
     @RequestMapping (value = "/offers",

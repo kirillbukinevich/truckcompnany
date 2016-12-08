@@ -135,11 +135,11 @@
 }
 #status-truck-writtenoff > label:before{
     content: "WRITTEN OFF";
-    width:110px;
+    width:115px;
 }
 #status-truck-writtenoff > label:after{
     content: "WRITTEN OFF";
-    width:110px;
+    width:115px;
     background: #d9534f;
     border-color: #d9534f;
 }

@@ -17,7 +17,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="waybill in vm.waybills">
+        <tr ng-repeat="waybill in vm.waybills track by $index">
             <td>
                 <div class="text-center">{{waybill.number}}</div>
             </td>
