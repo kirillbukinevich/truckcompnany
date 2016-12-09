@@ -1,9 +1,9 @@
-<h1>Waybills</h1>
+<h2>Waybills</h2>
 
 <div ng-if="vm.error" class="alert alert-danger" role="alert">
     {{vm.messageError}}
 </div>
-<div class="alert alert-warning" role="alert" ng-if="vm.waybills == 0">No waybills yet</div>
+<div class="alert alert-info" role="alert" ng-if="vm.waybills == 0">No waybills yet</div>
 
 <div ng-if="vm.waybills != 0">
     <div id="control-panel">
@@ -42,18 +42,16 @@
                    <span class="glyphicon glyphicon-remove"></span>&nbsp;REJECTED</span>
             </td>
             <td class="text-right">
-                <div class="btn-group flex-btn-group-container">
-                    <button type="button" class="btn btn-info btn-sm"
-                            ng-click="vm.showModalWaybillDetails(waybill.id)"
-                            ng-if="waybill.state == 'CREATED'">
-                        <span class="glyphicon glyphicon glyphicon-list-alt"></span>&nbsp;Handle
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm"
-                            ng-click="vm.showModalWaybillDetails(waybill.id)"
-                            ng-if="waybill.state != 'CREATED'">
-                        <span class="glyphicon glyphicon glyphicon-eye-open"></span>&nbsp;Details
-                    </button>
-                </div>
+                <button type="button" class="btn btn-info btn-sm"
+                        ng-click="vm.showModalWaybillDetails(waybill.id)"
+                        ng-if="waybill.state == 'CREATED'">
+                    <span class="glyphicon glyphicon glyphicon-list-alt"></span>&nbsp;Handle
+                </button>
+                <button type="button" class="btn btn-default btn-sm"
+                        ng-click="vm.showModalWaybillDetails(waybill.id)"
+                        ng-if="waybill.state != 'CREATED'">
+                    <span class="glyphicon glyphicon glyphicon-eye-open"></span>&nbsp;Details
+                </button>
             </td>
         </tr>
         </tbody>

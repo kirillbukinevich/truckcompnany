@@ -8,13 +8,14 @@
         .module('truckCompanyApp')
         .controller('ManagerRoutelistDirectionController', ManagerRoutelistDirectionController);
 
-    ManagerRoutelistDirectionController.$inject = ['$scope', '$stateParams', 'NgMap', '$timeout', 'Checkpoint', 'Waybill', '$http'];
+    ManagerRoutelistDirectionController.$inject = ['NgMap', '$scope', '$stateParams', '$timeout', 'Checkpoint', 'Waybill', '$http'];
 
-    function ManagerRoutelistDirectionController($scope, $stateParams, NgMap, $timeout, Checkpoint, Waybill, $http) {
+    function ManagerRoutelistDirectionController(NgMap, $scope, $stateParams, $timeout, Checkpoint, Waybill, $http) {
         var vm = this;
 
         vm.getDistance = function getDistance() {
             NgMap.getMap().then(function (map) {
+                vm.map = map;
                 vm.dist = 0;
                 $timeout(function () {
                     angular.forEach(map.directionsRenderers[0].directions.routes[0].legs, function (value) {
@@ -22,7 +23,7 @@
                         vm.dist += strDist / 1000;
                     });
                     vm.dist = parseInt(vm.dist);
-                }, 600);
+                }, 1000);
             });
         };
 
@@ -54,9 +55,8 @@
             $scope.wayPoints.push({'location': ''});
         };
 
-        $scope.removeWayPoint = function () {
-            var lastItem = $scope.wayPoints.length - 1;
-            $scope.wayPoints.splice(lastItem);
+        $scope.removeWayPoint = function (item) {
+            $scope.wayPoints.splice(item, 1);
             vm.getDistance();
         };
 
