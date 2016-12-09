@@ -23,7 +23,8 @@
             </div>
         </div>
 
-        <div class="alert alert-warning" ng-if="vm.storages.length === 0">List of storages is empty. You can create new itemes to using buttom Create.</div>
+        <div class="alert alert-warning" ng-if="(vm.storages.length === 0) && (!vm.isModeSearch)">List of storages is empty. You can create new itemes to using buttom "Create".</div>
+        <div class="alert alert-warning" ng-if="(vm.storages.length === 0) && (vm.isModeSearch)">Search has not given results.</div>
 
         <div ng-if="vm.storages.length !=0">
             <div id="show-select">

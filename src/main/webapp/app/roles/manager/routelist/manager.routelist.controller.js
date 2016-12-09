@@ -8,9 +8,9 @@
         .module('truckCompanyApp')
         .controller('ManagerRoutelistController', ManagerRoutelistController);
 
-    ManagerRoutelistController.$inject = ['RouteList'];
+    ManagerRoutelistController.$inject = ['RouteList', '$scope'];
 
-    function ManagerRoutelistController(RouteList) {
+    function ManagerRoutelistController(RouteList, $scope) {
         var vm = this;
         vm.routelists = RouteList.query();
     }

@@ -67,9 +67,9 @@
                         <thead>
                         <tr>
                             <th class="text-center">Name</th>
-                            <th class="text-center">Unchecked</th>
-                            <th ng-if="vm.waybill.state != 'REJECTED'" class="text-center">Confirmed</th>
-                            <th ng-if="vm.waybill.state != 'REJECTED'" class="text-center">$ Price</th>
+                            <th class="text-center">Shipped</th>
+                            <th class="text-center">Confirmed</th>
+                            <th class="text-center">$ Price</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -79,23 +79,19 @@
                                 <div>({{stuff.type}})</div>
                             </td>
                             <td>
-                                <div class="text-center">{{stuff.uncheckedNumber}}</div>
+                                <div class="text-center">{{stuff.acceptedNumber}}</div>
                             </td>
-                            <td ng-if="vm.waybill.state != 'REJECTED'">
+                            <td>
                                 <div
                                     ng-class="{'has-error' : (form.goodsNum{{stuff.id}}.$dirty && form.goodsNum{{stuff.id}}.$invalid)}">
                                     <input name="goodsNum{{stuff.id}}"
-                                           ng-if="vm.waybill.state == 'CREATED'"
-                                           ng-model="stuff.acceptedNumber"
+                                           ng-model="stuff.deliveredNumber"
                                            size="5" class="form-control input-sm text-center"
-                                           value="{{stuff.uncheckedNumber}}"
+                                           value="{{stuff.acceptedNumber}}"
                                            required>
                                 </div>
-                                <div ng-if="vm.waybill.state != 'CREATED'" class="text-center">
-                                    {{stuff.acceptedNumber}}
-                                </div>
                             </td>
-                            <td ng-if="vm.waybill.state != 'REJECTED'">
+                            <td>
                                 <div class="text-center">
                                     <span>{{stuff.price}}</span>
                                 </div>
@@ -103,94 +99,17 @@
                         </tr>
                         </tbody>
                     </table>
-                    <div ng-if="vm.waybill.margin != null"><strong>Margin:</strong> {{vm.waybill.margin}}%</div>
-
-                    <!--                    <div class="alert alert-danger help-block"
-                                             role="alert"
-                                             ng-show="form.$dirty && form.$invalid">
-                                            Fill all required fields
-                                        </div>-->
-
+                    <div><strong>Margin:</strong> {{vm.waybill.margin}}%</div>
                 </div>
             </div>
         </div>
     </div>
 
     <!--------------------- FOOTER -------------------------->
-
-    <div ng-if="vm.waybill.state == 'CREATED'" class="modal-footer">
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="manager" class="pull-left">Checked by:</label>
-                    <input type="text" id="manager" class="form-control" name="confirmedBy"
-                           ng-model="vm.fullName" readonly>
-                </div>
-            </div>
-            <div class="col-md-1"></div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="checkDate" class="pull-left">At:</label>
-                    <div class="input-group" style="clear:both;"
-                         ng-class="{'has-error' : (form.checkDate.$dirty && form.checkDate.$invalid)}">
-                        <input type="text"
-                               id="checkDate"
-                               name="checkDate"
-                               class="form-control"
-                               datetime-picker="dd MMM yyyy HH:mm"
-                               ng-model="vm.waybill.dateChecked"
-                               is-open="vm.dateCheckedPicker.open"
-                               enable-time="true"
-                               datepicker-options="vm.dateCheckedPicker.datepickerOptions"
-                               required/>
-                        <span class="input-group-btn">
-                        <button type="button" class="btn btn-default"
-                                ng-click="vm.openCalendar($event, 'dateCheckedPicker')"><i
-                            class="glyphicon glyphicon-calendar"></i></button>
-                        </span>
-                    </div>
-                    <div class="alert alert-danger help-block"
-                         role="alert"
-                         ng-show="form.checkDate.$dirty && form.checkDate.$invalid">
-                        Checked date is required
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-1"></div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label for="price" class="pull-left">Margin:</label>
-                    <div class="input-group"  style="clear:both"
-                        ng-class="{'has-error' : (form.price.$dirty && form.price.$invalid)}">
-                        <input type="text"
-                               id="price"
-                               name="price"
-                               class="form-control"
-                               ng-model="vm.waybill.margin"
-                               aria-describedby="price-addon"
-                               required/>
-                        <span class="input-group-addon" id="price-addon">%</span>
-                    </div>
-                    <div class="alert alert-danger help-block"
-                         role="alert"
-                         ng-show="form.price.$dirty && form.price.$invalid">
-                        Margin is required
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-1"></div>
-
-        </div>
-
-        <button type="button" class="btn btn-danger" data-dismiss="modal"
-                ng_disabled="form.checkDate.$invalid"
-                ng-click="vm.clear(); vm.changeWaybillState(0)">
-            <span class="glyphicon glyphicon-remove">&nbsp;Reject</span>
-        </button>
+    <div class="modal-footer">
         <button type="button" class="btn btn-success" data-dismiss="modal"
                 ng-disabled="form.$invalid"
-                ng-click="closeModalWaybillDetails(vm.waybill.id); vm.changeWaybillState(1)">
+                ng-click="vm.changeGoodsState(); vm.clear()">
             <span class="glyphicon glyphicon-ok">&nbsp;Confirm</span>
         </button>
     </div>

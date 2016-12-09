@@ -14,6 +14,7 @@
         var vm = this;
 
         vm.template = {};
+        vm.template.background = "#ffffff";
         vm.loadPage = loadPage;
 
         vm.rootUriApp = $location.absUrl().replace(new RegExp("#" + $location.url()), "");

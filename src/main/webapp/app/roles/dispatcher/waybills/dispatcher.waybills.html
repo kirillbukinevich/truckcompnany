@@ -1,48 +1,52 @@
 <h1>Your Waybills</h1>
 
-Show:
-<select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage" ng-change="vm.changeItemsPerPage()">
-</select>
+<div class="alert alert-warning" ng-if="vm.waybills.length === 0">List of your's waybills is empty.</div>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>№</th>
-        <th>Date</th>
-        <th>Dispatcher</th>
-        <th>Driver</th>
-        <th>State</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="waybill in vm.waybills">
-        <td>{{waybill.id}}</td>
-        <td>{{waybill.date | date:'dd/MM/yy HH:mm'}}</td>
-        <td>{{waybill.dispatcher.firstName}} {{waybill.dispatcher.lastName}}</td>
-        <td>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</td>
-        <td>
-            <span ng-if = "waybill.state == 'CREATED'" class="label label-info" >CREATED</span>
-            <span ng-if = "waybill.state == 'DELIVERED'" class="label label-success" >DELIVERED</span>
-            <span ng-if = "waybill.state == 'CHECKED'" class="label label-primary" >CHECKED</span>
-            <span ng-if = "waybill.state == 'REJECTED'" class="label label-warning" >REJECTED</span>
-        </td>
-        <td>
-            <a type="button" class="btn btn-primary btn-xs" href="#/dispatcher/waybills/{{waybill.id}}/details">
-                <span class="glyphicon glyphicon-eye-open">&nbsp;Details</span>
-            </a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<div ng-if="vm.waybills.length != 0">
+    Show:
+    <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage" ng-change="vm.changeItemsPerPage()">
+    </select>
 
-<div class="text-center">
-    <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
-    <uib-pagination class="pagination-sm"
-                    total-items="vm.totalItems"
-                    items-per-page = "vm.itemsPerPage"
-                    boundary-link-numbers = "true"
-                    rotate = "true"
-                    ng-model="vm.page"
-                    ng-change="vm.transition()">
-    </uib-pagination>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>№</th>
+            <th>Date</th>
+            <th>Dispatcher</th>
+            <th>Driver</th>
+            <th>State</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="waybill in vm.waybills">
+            <td>{{waybill.number}}</td>
+            <td>{{waybill.date | date:'dd/MM/yy HH:mm'}}</td>
+            <td>{{waybill.dispatcher.firstName}} {{waybill.dispatcher.lastName}}</td>
+            <td>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</td>
+            <td>
+                <span ng-if = "waybill.state == 'CREATED'" class="label label-info" >CREATED</span>
+                <span ng-if = "waybill.state == 'DELIVERED'" class="label label-success" >DELIVERED</span>
+                <span ng-if = "waybill.state == 'CHECKED'" class="label label-primary" >CHECKED</span>
+                <span ng-if = "waybill.state == 'REJECTED'" class="label label-warning" >REJECTED</span>
+            </td>
+            <td>
+                <a type="button" class="btn btn-primary btn-xs" href="#/dispatcher/waybills/{{waybill.id}}/details">
+                    <span class="glyphicon glyphicon-eye-open">&nbsp;Details</span>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="text-center">
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+        <uib-pagination class="pagination-sm"
+                        total-items="vm.totalItems"
+                        items-per-page = "vm.itemsPerPage"
+                        boundary-link-numbers = "true"
+                        rotate = "true"
+                        ng-model="vm.page"
+                        ng-change="vm.transition()">
+        </uib-pagination>
+    </div>
 </div>

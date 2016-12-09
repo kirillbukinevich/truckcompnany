@@ -39,6 +39,7 @@
 
         function generateOffer() {
             Generator.generate();
+            vm.loadPage();
         }
 
         function onSuccess(data, headers){

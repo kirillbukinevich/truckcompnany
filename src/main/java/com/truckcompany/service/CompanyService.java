@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -102,6 +103,7 @@ public class CompanyService {
         user.setCompany(company);
         user.setLogin(userFromForm.getLogin());
         user.setEmail(userFromForm.getEmail());
+        user.setBirthDate(ZonedDateTime.now());
 
         //user.setActivationKey(passwordEncoder.encode(new Date().toString()).substring(0, 20));
 
