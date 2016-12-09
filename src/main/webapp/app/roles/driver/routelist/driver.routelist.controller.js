@@ -12,7 +12,7 @@
         $scope.sortType = 'name'; // set the default sort type
         $scope.sortReverse = false;  // set the default sort order
         var vm = this;
-        var tempRating = 0;
+        vm.deliveryCompleted = false;
         vm.routeList = {};
         vm.checkpoints = [];
         vm.goods1 = [];
@@ -29,18 +29,20 @@
         vm.currentRate = 0;
         vm.readOnly = true;
         //
-        vm.waybills = Waybill.query(function () {
+        vm.waybills = [];
+        Waybill.query(function (data) {
+            vm.waybills = data;
             var indexDriverGood = 0;
             angular.forEach(vm.waybills, function (value) {
                 vm.driverGoods[indexDriverGood] = Goods1.query({id: value.id});
                 indexDriverGood++;
-                console.log("imageWaypoints: " + vm.imageWaypoints);
                 if (value.state === "CHECKED") {
                     RouteList.get({id: value.routeList.id}, function (result) {
                         vm.routeList = result;
                         console.log(vm.routeList);
                     });
-                    vm.checkpoints = Checkpoint.query({id: value.routeList.id}, function () {
+                    Checkpoint.query({id: value.routeList.id}, function (data) {
+                        vm.checkpoints = data;
                         var i = 0;
                         angular.forEach(vm.checkpoints, function (value) {
                             vm.checkpointNames[i] = {location: value.name, stopover: true};
@@ -51,8 +53,9 @@
                             i++;
                         });
                     });
-                    console.log("WaybillID " + value.id);
-                    vm.goods1 = Goods1.query({id: value.id});
+                    Goods1.query({id: value.id}, function (data) {
+                        vm.goods1 = data;
+                    });
                 }
 
             });
@@ -61,7 +64,8 @@
 
 
         function markDate(id) {
-            for (var i = 0; vm.checkpoints.length; i++) {
+            console.log(vm.routeList.state);
+            for (var i = 0; i < vm.checkpoints.length; i++) {
                 if (vm.checkpoints[i].id == id) {
                     if (i == 0 || vm.checkpoints[i - 1].checkDate) {
                         var index = i;
@@ -92,25 +96,28 @@
 
                 }
             }
-            function checkLastCheckpoint(index) {
-                if ((index + 1) === vm.checkpoints.length) {
-                    for (var j in vm.waybills) {
+        }
+        function checkLastCheckpoint(index) {
+            if ((index + 1) === vm.checkpoints.length) {
+                for (var j in vm.waybills) {
 
 
-                        if (vm.waybills[j] != true) {
-                            vm.waybills[j].state = "DELIVERED";
-                            $http({
-                                method: 'PUT',
-                                url: '/api/waybills',
-                                data: vm.waybills[j]
-                            })
-                        }
+                    if (vm.waybills[j] != true && vm.waybills[j].state == "CHECKED") {
+                        vm.waybills[j].state = "DELIVERED";
+                        vm.deliveryCompleted = true;
+                        $http({
+                            method: 'PUT',
+                            url: '/api/waybills',
+                            data: vm.waybills[j]
+                        })
+
                     }
-
-                    $location.path('/driver/complete'); // path not hash
                 }
+
+                // $location.path('/driver/complete'); // path not hash
             }
         }
+
 
         vm.update = function () {
             for (var i in vm.goods1) {
@@ -138,30 +145,30 @@
         };
 
         function checkJob() {
+            console.log("HERE");
             countRating();
             for (var j in vm.waybills) {
-                if (vm.waybills[j].state === "CHECKED") {
+                if (vm.waybills[j].state === "CHECKED" || vm.routeList.state === "TRANSPORTATION") {
                     return false;
                 }
             }
             return true;
         }
+
         function countRating() {
             var index = 0;
             vm.currentRate = 0;
-            console.log(vm.driverGoods);
             for (var i = 0; i < vm.driverGoods.length; i++) {
                 for (var j = 0; j < vm.driverGoods[i].length; j++) {
-                    if(vm.driverGoods[i][j].deliveredNumber !=null){
-                        if(vm.driverGoods[i][j].acceptedNumber!=null) {
+                    if (vm.driverGoods[i][j].deliveredNumber != null) {
+                        if (vm.driverGoods[i][j].acceptedNumber != null) {
                             vm.currentRate += vm.driverGoods[i][j].deliveredNumber / vm.driverGoods[i][j].acceptedNumber;
                             index++;
                         }
                     }
                 }
             }
-            vm.currentRate =  vm.currentRate/index*10;
-            console.log("Rating: " + vm.currentRate);
+            vm.currentRate = vm.currentRate / index * 10;
         }
     }
 })();
