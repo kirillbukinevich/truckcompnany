@@ -36,3 +36,49 @@
 <div ng-show="vm.checkJob()">
     <h1 style="text-align:center">You don't have task now </h1>
 </div>
+
+<div ng-if="vm.routeList.state == 'TRANSPORTATION'  && vm.deliveryCompleted">
+    <h1 style="text-align:center">Delivery is completed</h1>
+    <form name="myForm">
+        <table class="table table-bordered table-striped">
+
+            <thead>
+            <tr>
+                <td>
+                    <a href="#/driver/complete" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                        <b>name</b>
+                        <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                </td>
+                <td>
+                    <a href="#/driver/complete" ng-click="sortType = 'acceptedNumber'; sortReverse = !sortReverse">
+                        <b>accepted number</b>
+                        <span ng-show="sortType == 'acceptedNumber' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'acceptedNumber' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                </td>
+                <td>
+                    <b>delivered number</b>
+                </td>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr ng-repeat="good in vm.goods1 | orderBy:sortType:sortReverse">
+                <td>{{good.name}}</td>
+                <td>{{good.acceptedNumber}}</td>
+                <td><input type="number" ng-model="good.deliveredNumber" name="deliveredNumber" class="form-control"
+                           id="deliveredNumber"
+                           placeholder="delivered number" required style="width: 50%"></td>
+            </tr>
+            </tbody>
+
+        </table>
+        <div ng-if="myForm.deliveredNumber.$valid">
+            <a href="" class="btn btn-default"  ng-click="vm.update()">Apply</a>
+        </div>
+    </form>
+</div>
+
+
