@@ -9,13 +9,9 @@
         'RouteList', '$http', '$location', '$scope'];
 
     function DriverRoutelistController($stateParams, Goods1, Waybill, Checkpoint, RouteList, $http, $location, $scope) {
-        $scope.sortType = 'name'; // set the default sort type
-        $scope.sortReverse = false;  // set the default sort order
         var vm = this;
-        vm.deliveryCompleted = false;
         vm.routeList = {};
         vm.checkpoints = [];
-        vm.goods1 = [];
         vm.checkpointNames = [];
         vm.imageWaypoints = [];
         vm.driverGoods = [];
@@ -53,18 +49,13 @@
                             i++;
                         });
                     });
-                    Goods1.query({id: value.id}, function (data) {
-                        vm.goods1 = data;
-                    });
                 }
 
             });
 
         });
 
-
         function markDate(id) {
-            console.log(vm.routeList.state);
             for (var i = 0; i < vm.checkpoints.length; i++) {
                 if (vm.checkpoints[i].id == id) {
                     if (i == 0 || vm.checkpoints[i - 1].checkDate) {
@@ -101,51 +92,21 @@
             if ((index + 1) === vm.checkpoints.length) {
                 for (var j in vm.waybills) {
 
-
                     if (vm.waybills[j] != true && vm.waybills[j].state == "CHECKED") {
                         vm.waybills[j].state = "DELIVERED";
-                        vm.deliveryCompleted = true;
+                        vm.routeList.arrivalDate = Date.now();
                         $http({
                             method: 'PUT',
                             url: '/api/waybills',
                             data: vm.waybills[j]
-                        })
-
+                        });
+                        $location.path("/driver/complete");
                     }
                 }
-
-                // $location.path('/driver/complete'); // path not hash
             }
         }
 
-
-        vm.update = function () {
-            for (var i in vm.goods1) {
-
-                if (vm.goods1[i] != true) {
-                    vm.goods1[i].state = "UNCHECKED_DELIVERED";
-                }
-            }
-            $http({
-                method: 'PUT',
-                url: '/api/goods',
-                data: vm.goods1
-            }).then(function successCallback(response) {
-                console.log("date changed");
-
-            });
-            vm.routeList.state = "DELIVERED";
-            vm.routeList.arrivalDate = Date.now();
-            $http({
-                method: 'PUT',
-                url: '/api/routelists',
-                data: vm.routeList
-            });
-            $location.path('/driver/routelist');
-        };
-
         function checkJob() {
-            console.log("HERE");
             countRating();
             for (var j in vm.waybills) {
                 if (vm.waybills[j].state === "CHECKED" || vm.routeList.state === "TRANSPORTATION") {
