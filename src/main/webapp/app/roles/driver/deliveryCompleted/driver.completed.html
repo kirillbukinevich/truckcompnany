@@ -1,4 +1,4 @@
-<div ng-if="vm.routeList.state === 'TRANSPORTATION' && vm.waybill.state === 'DELIVERED'">
+<div ng-if="vm.routeList.state === 'TRANSPORTATION' && (vm.waybill.state === 'DELIVERED' || vm.waybill.state === 'CHECKED')">
     <h1 style="text-align:center">Delivery is completed</h1>
     <form name="myForm">
         <table class="table table-hover">
