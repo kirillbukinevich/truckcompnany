@@ -23,14 +23,24 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import javax.inject.Inject;
 import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import java.io.File;
+import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.truckcompany.domain.enums.MailErrorStatus.*;
+import static java.lang.System.out;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * Service for sending e-mails.
@@ -82,7 +92,7 @@ public class MailService {
     @Inject
     private MailErrorRepository mailErrorRepository;
 
-    private void saveErrorDuringSendingBirthdayCard(Template template){
+    private void saveErrorDuringSendingBirthdayCard(Template template) {
         MailError mailError = new MailError();
         mailError.setLastSending(ZonedDateTime.now());
         mailError.setTemplate(template);
@@ -98,7 +108,6 @@ public class MailService {
         message.setSubject(template.getName());
 
 
-
         Context context = new Context();
         context.setVariable("template", template);
         String content = templateEngine.process("birthdayCard", context);
@@ -112,7 +121,7 @@ public class MailService {
 
         int numberAttemptsToSend = 0;
         try {
-            MimeMessage mimeMessage = createMimeMessage(template);
+            MimeMessage mimeMessage = prepareMimeMessageWithImage(template);
 
             boolean isSuccessSent = false;
 
@@ -128,25 +137,143 @@ public class MailService {
             }
             if (isSuccessSent) {
                 log.debug("Birthday card was sent success to {}.", template.getRecipient().getEmail());
-            } else{
+            } else {
                 log.debug("Message isn't delivered to {}. Number of attempts is more that 5.", template.getRecipient().getEmail());
                 saveErrorDuringSendingBirthdayCard(template);
             }
-        } catch (MessagingException | InterruptedException e) {
+        } catch (MessagingException | InterruptedException | IOException e) {
             log.debug("Message isn't delivered to {}. Cannot create Mime message.", template.getRecipient().getEmail());
             saveErrorDuringSendingBirthdayCard(template);
 
         }
     }
 
-    public boolean sendBirthdayCardOnce(Template template){
+    /*public boolean sendBirthdayCardOnce(Template template) {
         log.debug("Send birthdaycard via email to {}");
         try {
             javaMailSender.send(createMimeMessage(template));
             return true;
-        } catch (Throwable  e){
+        } catch (Throwable e) {
             return false;
         }
+    }*/
+
+
+    private static class WrapMessageWithCIDMap {
+        private String message;
+        private Map<String, String> mapCIDs;
+
+        WrapMessageWithCIDMap(String message) {
+            this.message = message;
+            this.mapCIDs = new HashMap<>();
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public Map<String, String> getMapCIDs() {
+            return mapCIDs;
+        }
+
+        public void setMapCIDs(Map<String, String> mapCIDs) {
+            this.mapCIDs = mapCIDs;
+        }
+    }
+
+    private WrapMessageWithCIDMap turnRealSrcIntoCIDSrcInTemplate(String template, String directoryUploadedImage) {
+        WrapMessageWithCIDMap wrapMessage = new WrapMessageWithCIDMap(template);
+        Map<String, String> mapCID = wrapMessage.getMapCIDs();
+
+        String modifiedMessage = template;
+
+        Pattern patternSrc = Pattern.compile("src\\s*=\\s*['\"]([^'\"]+)['\"]");
+        Pattern patternImage = Pattern.compile("/[^/]+$");
+
+        Matcher matcherSrc = patternSrc.matcher(wrapMessage.getMessage());
+
+        while (matcherSrc.find()) {
+            String src = wrapMessage.getMessage().subSequence(matcherSrc.start(), matcherSrc.end()).toString();
+            log.debug("Current src: {}", src);
+
+            Matcher matcherImage = patternImage.matcher(src);
+            if (matcherImage.find()) {
+                String fileImage = src.subSequence(matcherImage.start() + 1, matcherImage.end() - 1).toString();
+                log.debug("Current fileImage: {}", fileImage);
+                String cid = generateCID();
+
+                String srcCID = src.replaceFirst("['\"].+['\"]", "\"cid:" + cid + "\"");
+                log.debug("src with CID: {}", srcCID);
+                modifiedMessage = modifiedMessage.replaceFirst(src, srcCID);
+
+                log.debug(modifiedMessage);
+
+                mapCID.put(cid, directoryUploadedImage + File.separator + fileImage);
+            }
+
+        }
+
+        wrapMessage.setMessage(modifiedMessage);
+        return wrapMessage;
+    }
+
+    private String generateCID() {
+        return UUID.randomUUID().toString().replaceAll("-", EMPTY);
+    }
+
+    private MimeMessage prepareMimeMessageWithImage(Template template ) throws MessagingException, IOException {
+        String rootUploadImage = new File("src/main/webapp/content/upload/templateimage").getAbsolutePath();
+        WrapMessageWithCIDMap wrapMessage = turnRealSrcIntoCIDSrcInTemplate(template.getTemplate(), rootUploadImage);
+
+
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, CharEncoding.UTF_8);
+
+
+        Context context = new Context();
+        context.setVariable("background", template.getBackground());
+        context.setVariable("content", wrapMessage.getMessage());
+        String content = templateEngine.process("birthdayCard", context);
+
+        message.setText(content, true);
+        message.setTo(template.getRecipient().getEmail());
+        message.setFrom(jHipsterProperties.getMail().getFrom());
+        message.setSubject(template.getName());
+
+        for (Map.Entry<String, String> cid : wrapMessage.getMapCIDs().entrySet()) {
+            MimeBodyPart imagePart = new MimeBodyPart();
+            String urlImage = cid.getValue();
+            try {
+                imagePart.attachFile(urlImage);
+                imagePart.setContentID("<" + cid.getKey() + ">");
+                imagePart.setDisposition(MimeBodyPart.INLINE);
+                message.getMimeMultipart().addBodyPart(imagePart);
+            } catch (IOException e) {
+                log.debug("Image isn't existed {}", urlImage);
+                throw new IOException(e);
+            }
+        }
+
+        return mimeMessage;
+
+    }
+
+
+    public boolean sendBirthdayCardOnce(Template template) {
+        log.debug("Send birthday again to {}", template.getRecipient().getEmail());
+        try {
+            MimeMessage mimeMessage = prepareMimeMessageWithImage(template);
+            javaMailSender.send(mimeMessage);
+            return true;
+        } catch (MessagingException | IOException e) {
+            log.debug("Problem with sending mail", e);
+            return false;
+        }
+
     }
 
 

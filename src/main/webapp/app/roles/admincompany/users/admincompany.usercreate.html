@@ -43,6 +43,8 @@
                    uib-datepicker-popup="{{vm.format}}"
                    ng-model="vm.user.birthDate"
                    is-open="vm.isOpenDatePopup"
+                   maxDate = "new Date()"
+
                    datepicker-options="vm.dateOptions"
                    ng-required="true" name="birthday"
                    close-text="Close"
@@ -52,6 +54,7 @@
                 class="glyphicon glyphicon-calendar"></i></button>
           </span>
         </p>
+        {{form.birthday.$error}}
         <div ng-show="form.birthday.$dirty && form.birthday.$invalid">
             <p class="help-block"
                ng-show="form.birthday.$error.required">

@@ -16,6 +16,7 @@
 
         vm.dateOptions = {
             maxDate: new Date(),
+
         };
         vm.format = 'yyyy/MM/dd';
         vm.altInputFormats = ['M!/d!/yyyy'];

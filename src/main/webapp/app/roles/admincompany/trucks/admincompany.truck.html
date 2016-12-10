@@ -46,7 +46,7 @@
     </div>
 
     <div class="form-group" ng-class="{'has-error' : (form.consumption.$dirty && form.consumption.$invalid)}">
-        <label for="consumption" class="control-label">Fuel consumption (l/km)*</label>
+        <label for="consumption" class="control-label">Fuel consumption (l/100km)*</label>
         <input type="text" ng-model="vm.truck.consumption" name="consumption" class="form-control" id="consumption"
                placeholder="Enter fuel consumption" ng-pattern="/^\d+$/" required>
         <div ng-show="form.consumption.$dirty && form.consumption.$invalid">
