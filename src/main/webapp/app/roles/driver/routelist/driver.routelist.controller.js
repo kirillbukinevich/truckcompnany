@@ -6,9 +6,9 @@
         .controller('DriverRoutelistController', DriverRoutelistController);
 
     DriverRoutelistController.$inject = ['$stateParams', 'Goods1', 'Waybill', 'Checkpoint',
-        'RouteList', '$http', '$location', '$scope'];
+        'RouteList', '$http', '$location', '$scope','$timeout'];
 
-    function DriverRoutelistController($stateParams, Goods1, Waybill, Checkpoint, RouteList, $http, $location, $scope) {
+    function DriverRoutelistController($stateParams, Goods1, Waybill, Checkpoint, RouteList, $http, $location, $scope,$timeout) {
         var vm = this;
         vm.routeList = {};
         vm.checkpoints = [];
