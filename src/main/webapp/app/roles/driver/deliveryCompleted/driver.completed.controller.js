@@ -61,6 +61,12 @@
             $location.path("/driver/routelist");
 
         };
-
+        vm.updateState = function () {
+            if(vm.waybill.state === "CHECKED"){
+                Waybill.get({id: vm.waybill.id}, function (data) {
+                    vm.waybill = data;
+                });
+            }
+        }
     }
 })();
