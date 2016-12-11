@@ -2,6 +2,7 @@ package com.truckcompany.service.facade;
 
 import com.truckcompany.domain.enums.WaybillState;
 import com.truckcompany.service.dto.WaybillDTO;
+import com.truckcompany.web.rest.vm.ManagedWaybillVM;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -23,4 +24,6 @@ public interface WaybillFacade {
     List<WaybillDTO> findWaybillsWithStateAndDateBetween(WaybillState state, ZonedDateTime fromDate, ZonedDateTime toDate);
 
     Page<WaybillDTO> findWaybillWithStolenGoods(Pageable pageable);
+
+    List<ManagedWaybillVM> findWaybillsAccordingQuery(String query);
 }
