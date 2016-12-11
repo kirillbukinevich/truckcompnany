@@ -46,8 +46,8 @@
          * Store the "settings account" in a separate variable, and not in the shared "account" variable.
          */
         var copyAccount = function (account) {
-            return account;
-            /*return {
+           // return account;
+            return {
                 activated: account.activated,
                 email: account.email,
                 firstName: account.firstName,
@@ -56,7 +56,7 @@
                 login: account.login,
                 logo: account.logo,
                 id : account.id,
-            };*/
+            };
         };
 
         Principal.identity().then(function(account) {

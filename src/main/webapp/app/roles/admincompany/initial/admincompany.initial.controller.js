@@ -87,13 +87,15 @@
             },
             title: null,
             xAxis: {
-                categories: ['Africa', 'America', 'Asia', 'Europe', 'Oceania'],
+                /*categories: ['Africa', 'America', 'Asia', 'Europe', 'Oceania'],*/
+                allowDecimals: false,
                 /*title: {
                  text: null
                  }*/
             },
             yAxis: {
                 min: 0,
+                allowDecimals: false,
                 title: {
                     text: 'Trucks (unique)',
                     align: 'high'
@@ -116,9 +118,9 @@
 
         vm.chartConfigTruckModel = {
             options: vm.stackedBar,
-            series: [{
+           /* series: [{
                 data: [107, 31, 635, 203, 2]
-            }]
+            }]*/
         }
 
 
