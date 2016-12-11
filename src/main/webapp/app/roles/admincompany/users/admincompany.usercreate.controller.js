@@ -14,10 +14,15 @@
         var vm = this;
         vm.create = create;
 
-        vm.dateOptions = {
-            maxDate: new Date(),
 
+
+        var maxDate = moment(new Date()).subtract(1, "d").toDate();
+
+        vm.dateOptions = {
+            maxDate: maxDate,
+            initDate: maxDate,
         };
+
         vm.format = 'yyyy/MM/dd';
         vm.altInputFormats = ['M!/d!/yyyy'];
 

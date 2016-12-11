@@ -16,9 +16,13 @@
         vm.load = load;
         vm.update = update;
 
+        var maxDate = moment(new Date()).subtract(1, "d").toDate();
+
         vm.dateOptions = {
-            maxDate: new Date()
+            maxDate: maxDate,
+            initDate: maxDate,
         };
+
         vm.format = 'yyyy/MM/dd';
         vm.altInputFormats = ['M!/d!/yyyy'];
 

@@ -42,11 +42,11 @@
             <input type="text" class="form-control"
                    uib-datepicker-popup="{{vm.format}}"
                    ng-model="vm.user.birthDate"
+                   check-max-date
                    is-open="vm.isOpenDatePopup"
-                   maxDate = "new Date()"
-
                    datepicker-options="vm.dateOptions"
-                   ng-required="true" name="birthday"
+                   ng-required="true"
+                   name="birthday"
                    close-text="Close"
                    alt-input-formats="vm.altInputFormats" id="birthday" placeholder="Birthday"/>
             <span class="input-group-btn">
@@ -54,7 +54,7 @@
                 class="glyphicon glyphicon-calendar"></i></button>
           </span>
         </p>
-        {{form.birthday.$error}}
+
         <div ng-show="form.birthday.$dirty && form.birthday.$invalid">
             <p class="help-block"
                ng-show="form.birthday.$error.required">
@@ -63,6 +63,10 @@
             <p class="help-block"
                ng-show="form.birthday.$error.date">
                 Date is invalid.
+            </p>
+            <p class="help-block"
+               ng-show="form.birthday.$error.maxDate">
+                Birthday have to be less then today date.
             </p>
         </div>
     </div>
@@ -126,7 +130,8 @@
 
     <div class="form-group" ng-class="{'has-error' : (form.passport.$dirty && form.passport.$invalid) }">
         <label for="passport" class="control-label">Passport data:</label>
-        <input type="text" ng-model="vm.user.passport" name="passport" class="form-control" id="passport" placeholder="Passport data"
+        <input type="text" ng-model="vm.user.passport" name="passport" class="form-control" id="passport"
+               placeholder="Passport data"
                ng-maxlength="45">
         <div ng-show="form.passport.$dirty && form.passport.$invalid">
             <p class="help-block"
