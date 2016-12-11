@@ -1,28 +1,24 @@
 package com.truckcompany.service.facade;
 
-import com.truckcompany.config.JHipsterProperties;
 import com.truckcompany.domain.Storage;
 import com.truckcompany.domain.StorageIndex;
 import com.truckcompany.domain.User;
 import com.truckcompany.repository.StorageRepository;
-import com.truckcompany.repository.search.SearchableStorageDefinition;
 import com.truckcompany.repository.search.StorageSearchRepository;
 import com.truckcompany.security.SecurityUtils;
 import com.truckcompany.service.StorageService;
 import com.truckcompany.service.UserService;
 import com.truckcompany.service.dto.StorageDTO;
+import com.truckcompany.service.util.SearchUtil;
 import com.truckcompany.web.rest.vm.ManagedStorageVM;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightEntry;
 import org.springframework.data.solr.core.query.result.HighlightPage;
-
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,12 +28,12 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-import static com.truckcompany.repository.search.SearchableStorageDefinition.*;
+import static com.truckcompany.repository.search.SearchableStorageDefinition.ADDRESS_FIELD_NAME;
+import static com.truckcompany.repository.search.SearchableStorageDefinition.NAME_FIELD_NAME;
 import static com.truckcompany.security.SecurityUtils.isCurrentUserInRole;
-import static java.util.Collections.*;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
-import static org.springframework.data.solr.core.query.result.HighlightEntry.*;
+import static org.springframework.data.solr.core.query.result.HighlightEntry.Highlight;
 
 /**
  * Created by Vladimir on 01.11.2016.
@@ -123,7 +119,7 @@ public class DefaultStorageFacade implements StorageFacade {
     @Override
     public List<StorageDTO> findStoragesAccordingQuery(String query) {
 
-        Collection<String> fragments = splitSearchTermAndRemoveIgnoredCharacters(query);
+        Collection<String> fragments = SearchUtil.splitSearchTermAndRemoveIgnoredCharacters(query, IGNORED_CHARS_PATTERN);
         String res = "";
         for (String fragment : fragments) {
             res = res + "*" + fragment + "* ";
@@ -138,7 +134,6 @@ public class DefaultStorageFacade implements StorageFacade {
         User user = optionalUser.get();
 
         HighlightPage<StorageIndex> hightlightStorages = storageSearchRepository.findByNameLikeOrAddressLikeAndIdCompany(res, user.getCompany().getId(), new PageRequest(0, 100));
-
 
         int i = 0;
         for (HighlightEntry<StorageIndex> storage : hightlightStorages.getHighlighted()) {
@@ -235,18 +230,5 @@ public class DefaultStorageFacade implements StorageFacade {
             }
         }
         return storage;
-    }
-
-    ;
-
-    private Collection<String> splitSearchTermAndRemoveIgnoredCharacters(String searchTerm) {
-        String[] searchTerms = StringUtils.split(searchTerm, " ");
-        List<String> result = new ArrayList<String>(searchTerms.length);
-        for (String term : searchTerms) {
-            if (StringUtils.isNotEmpty(term)) {
-                result.add(IGNORED_CHARS_PATTERN.matcher(term).replaceAll(" "));
-            }
-        }
-        return result;
     }
 }

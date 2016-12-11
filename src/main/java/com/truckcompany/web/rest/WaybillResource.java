@@ -11,7 +11,6 @@ import com.truckcompany.service.facade.WaybillFacade;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import com.truckcompany.web.rest.util.PaginationUtil;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -35,7 +34,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.truckcompany.web.rest.util.PaginationUtil.generatePaginationHttpHeaders;
-import static java.time.temporal.WeekFields.ISO;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+
 
 /**
  * Created by Viktor Dobroselsky.
@@ -59,7 +59,7 @@ public class WaybillResource {
     private WaybillFacade waybillFacade;
 
     @RequestMapping(value = "/waybills",
-        method = RequestMethod.GET,
+        method = GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @Secured({AuthoritiesConstants.DRIVER, AuthoritiesConstants.DISPATCHER,
@@ -109,7 +109,7 @@ public class WaybillResource {
     }
 
     @RequestMapping(value = "/waybills/with_stolen_goods",
-        method = RequestMethod.GET,
+        method = GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<List> getWaybillsWithStolenGoods(Pageable pageable) throws URISyntaxException {
@@ -129,7 +129,7 @@ public class WaybillResource {
 
 
     @RequestMapping(value = "/waybills/{id}",
-        method = RequestMethod.GET,
+        method = GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<ManagedWaybillVM> getWaybill(@PathVariable Long id) {
@@ -144,7 +144,7 @@ public class WaybillResource {
     }
 
     @RequestMapping(value = "/waybills",
-        method = RequestMethod.POST,
+        method = POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<?> createWaybill(@RequestBody ManagedWaybillVM managedWaybillVM)
@@ -159,7 +159,7 @@ public class WaybillResource {
     }
 
     @RequestMapping(value = "/waybills/{id}",
-        method = RequestMethod.DELETE,
+        method = DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity deleteUser(@PathVariable Long id) {
@@ -169,7 +169,7 @@ public class WaybillResource {
     }
 
     @RequestMapping(value = "/waybills",
-        method = RequestMethod.PUT,
+        method = PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @Secured({AuthoritiesConstants.DRIVER, AuthoritiesConstants.MANAGER})
@@ -183,5 +183,13 @@ public class WaybillResource {
         return ResponseEntity.ok()
             .headers(HeaderUtil.createAlert("userManagement.updated", managedWaybillVM.getId().toString()))
             .body(waybillService.getWaybillById(managedWaybillVM.getId()));
+    }
+
+    @RequestMapping(value = "/_search/waybills/{query}", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ManagedWaybillVM>> searchWaybill(@PathVariable String query) {
+        log.debug("REST request to search waybill by query: {}", query);
+
+        List<ManagedWaybillVM> managedWaybillVMS = waybillFacade.findWaybillsAccordingQuery(query);
+        return null;
     }
 }

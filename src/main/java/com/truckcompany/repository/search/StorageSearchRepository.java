@@ -1,16 +1,11 @@
 package com.truckcompany.repository.search;
 
-import com.truckcompany.domain.Storage;
 import com.truckcompany.domain.StorageIndex;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.data.solr.repository.Highlight;
 import org.springframework.data.solr.repository.Query;
 import org.springframework.data.solr.repository.SolrCrudRepository;
-
-import java.util.Collection;
-import java.util.List;
 
 import static com.truckcompany.repository.search.SearchableStorageDefinition.*;
 

@@ -8,9 +8,9 @@
         .module('truckCompanyApp')
         .controller('ManagerWaybillDetailsController', ManagerWaybillDetailsController);
 
-    ManagerWaybillDetailsController.$inject = ['Principal', 'entity', '$uibModalInstance', 'Waybill', '$http', '$scope'];
+    ManagerWaybillDetailsController.$inject = ['Principal', 'entity', '$uibModalInstance', 'Waybill', '$http', '$scope', '$timeout'];
 
-    function ManagerWaybillDetailsController(Principal, entity, $uibModalInstance, Waybill, $http, $scope) {
+    function ManagerWaybillDetailsController(Principal, entity, $uibModalInstance, Waybill, $http, $scope, $timeout) {
         var vm = this;
 
         vm.clear = clear;
@@ -25,6 +25,15 @@
                 vm.fullName = account.firstName + ' ' + account.lastName;
             });
         }
+
+        $timeout(function () {
+            console.log(vm.waybill);
+            angular.forEach(vm.waybill.goods, function (item) {
+                if (item.state == 'UNCHECKED') {
+                    item.acceptedNumber = item.uncheckedNumber;
+                }
+            });
+        }, 400);
 
         function changeWaybillState(id) {
             vm.waybill.manager = vm.account;
@@ -49,13 +58,13 @@
 
         vm.dateCheckedPicker = {
             date: new Date(),
-            datepickerOptions : {
+            datepickerOptions: {
                 maxDate: null,
                 showWeeks: false
             }
         };
 
-        this.openCalendar = function(e, picker) {
+        this.openCalendar = function (e, picker) {
             vm[picker].open = true;
         };
     }

@@ -1,6 +1,7 @@
 package com.truckcompany.service.dto;
 
 import com.truckcompany.domain.Waybill;
+import com.truckcompany.domain.WaybillIndex;
 import com.truckcompany.domain.enums.WaybillState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,13 @@ public class WaybillDTO {
     private Set<GoodsDTO> goods;
 
     private Double margin;
+
+    public WaybillDTO(WaybillIndex waybillIndex) {
+        UserDTO driver = new UserDTO();
+        UserDTO dispatcher = new UserDTO();
+
+
+    }
 
     public WaybillDTO(Long id, ZonedDateTime date, UserDTO driver, WaybillState state, UserDTO dispatcher,
                       UserDTO manager, ZonedDateTime dateChecked, Set<GoodsDTO> goods, Double margin) {
