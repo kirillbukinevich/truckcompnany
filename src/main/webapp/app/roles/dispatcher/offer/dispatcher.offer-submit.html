@@ -34,11 +34,12 @@
                            ng-change="vm.setTrucks(); vm.setDrivers();"
                            name="leavingDate"
                            class="form-control"
-                           datetime-picker="dd MMM yyyy HH:mm"
+                           datetime-picker="MM/dd/yyyy HH:mm"
                            ng-model="vm.leaveDate"
                            required
                            is-open="vm.leavingPicker.open"
                            enable-time="true"
+                           timepicker-options="vm.leavingPicker.timepickerOptions"
                            datepicker-options="vm.leavingPicker.datepickerOptions"/>
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="vm.openCalendar($event, 'leavingPicker')"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -56,6 +57,7 @@
                 </div>
             </div>
         </div>
+
         <div class="form-group" ng-class="{'has-error' : (form.arrivalDate.$dirty && form.arrivalDate.$invalid) }">
             <label class="col-sm-2 control-label" for="arrivalDate">Arrival Date*</label>
             <div class="col-sm-10">
@@ -65,11 +67,12 @@
                            name="arrivalDate"
                            ng-change="vm.setTrucks(); vm.setDrivers();"
                            class="form-control"
-                           datetime-picker="dd MMM yyyy HH:mm"
+                           datetime-picker="MM/dd/yyyy HH:mm"
                            ng-model="vm.arrivalDate"
                            required
                            is-open="vm.arrivalPicker.open"
                            enable-time="true"
+                           timepicker-options="vm.arrivalPicker.timepickerOptions"
                            datepicker-options="vm.arrivalPicker.datepickerOptions"/>
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="vm.openCalendar($event, 'arrivalPicker')"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -117,7 +120,7 @@
 
     <div class="btn-group flex-btn-group-container pull-right">
             <button type="submit" ng-disabled="form.$invalid" class="btn btn-success">Submit offer</button>
-        <a href="#/dispatcher/offer" class="btn btn-warning">Cancel</a>
+        <a href="#/dispatcher/offer" class="btn btn-danger">Cancel</a>
     </div>
 </form>
 

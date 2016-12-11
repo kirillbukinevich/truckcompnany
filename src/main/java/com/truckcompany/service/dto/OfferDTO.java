@@ -18,6 +18,8 @@ public class OfferDTO {
 
     private ManagedStorageVM arrivalStorage;
 
+    private String number;
+
     public OfferDTO(Long id, ZonedDateTime creationDate, String createdBy) {
         this.id = id;
         this.creationDate = creationDate;
@@ -34,6 +36,7 @@ public class OfferDTO {
         this.state = offer.getState().toString();
         this.arrivalStorage = new ManagedStorageVM(offer.getArrivalStorage());
         this.leavingStorage = new ManagedStorageVM(offer.getLeavingStorage());
+        this.number = offer.getNumber();
     }
 
     public Long getId() {
@@ -82,5 +85,13 @@ public class OfferDTO {
 
     public void setArrivalStorage(ManagedStorageVM arrivalStorage) {
         this.arrivalStorage = arrivalStorage;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 }

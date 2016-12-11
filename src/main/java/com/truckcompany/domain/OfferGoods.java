@@ -16,7 +16,7 @@ public class OfferGoods {
     private Long id;
 
     @Column (name = "count")
-    private Long count;
+    private Integer count;
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "offer_id")
@@ -43,11 +43,11 @@ public class OfferGoods {
     }
 
 
-    public Long getCount() {
+    public Integer getCount() {
         return count;
     }
 
-    public void setCount(Long count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 

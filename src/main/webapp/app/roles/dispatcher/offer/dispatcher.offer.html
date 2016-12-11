@@ -6,23 +6,27 @@
     using button "Generate offer"</div>
 
 <div ng-if="vm.offers.length != 0">
-    Show:
-    <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage" ng-change="vm.changeItemsPerPage()">
-    </select>
+    <div id="control-table">
+        <span class="select-show-title">Show:</span>
+        <select ng-model="vm.itemsPerPage" class="btn btn-default"
+                ng-options="number for number in vm.availableItemsPerPage"
+                ng-change="vm.changeItemsPerPage()">
+        </select>
+    </div>
 
     <table class="table table-striped table-condensed">
         <thead>
             <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                <th jh-sort-by="id"><span class="glyphicon glyphicon-sort"></span>№</th>
-                <th jh-sort-by="creationDate"><span class="glyphicon glyphicon-sort"></span>Date</th>
+                <th jh-sort-by="number">Number<span class="fa fa-sort"></span></th>
+                <th jh-sort-by="creationDate">Date<span class="fa fa-sort"></span></th>
                 <th>Leaving storage</th>
                 <th>Arrival storage</th>
-                <th jh-sort-by="state"><span class="glyphicon glyphicon-sort"></span>State</th>
+                <th jh-sort-by="state">State<span class="fa fa-sort"></span></th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="offer in vm.offers">
-                <td>{{offer.id}}</td>
+                <td>{{offer.number}}</td>
                 <td>{{offer.creationDate | date:'dd/MM/yy HH:mm'}}</td>
                 <td>{{offer.leavingStorage.name}}</td>
                 <td>{{offer.arrivalStorage.name}}</td>
@@ -39,8 +43,8 @@
                             <span class="glyphicon glyphicon-ok"></span>&nbsp;Accept</a>
                         <button ng-click="vm.cancelOffer(offer)" type="button" class="btn btn-danger btn-sm" ng-if = "offer.state == 'NEW'">
                             <span class="glyphicon glyphicon-remove-sign"></span>&nbsp;Cancel</button>
-                        <a href="#/dispatcher/offer/{{offer.id}}/details" type="button" class="btn btn-info btn-sm">
-                            <span class="glyphicon glyphicon glyphicon-eye-open"></span>&nbsp;Details</a>
+                        <a href="#/dispatcher/offer/{{offer.id}}/details" type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;Details</a>
                     </div>
                 </td>
 

@@ -27,6 +27,7 @@
         vm.arrivalDate = null;
         vm.leaveDate = null;
         vm.error = false;
+        vm.deliveryTime = 0;
 
         function setTrucks() {
             if (vm.arrivalDate instanceof Date && vm.leaveDate instanceof Date) {
@@ -112,6 +113,9 @@
             datepickerOptions : {
                 maxDate: null,
                 showWeeks: false
+            },
+            timepickerOptions: {
+                showMeridian: false
             }
         };
 
@@ -120,6 +124,9 @@
             datepickerOptions : {
                 minDate: new Date(),
                 showWeeks: false
+            },
+            timepickerOptions: {
+                showMeridian: false
             }
         };
 
@@ -133,6 +140,7 @@
             return [vm.leavingPicker, vm.arrivalPicker];
         }, function() {
             vm.arrivalPicker.datepickerOptions.minDate = vm.leaveDate;
+            vm.leavingPicker.datepickerOptions.maxDate = vm.arrivalDate;
         }, true);
 
 
