@@ -1,4 +1,4 @@
-<h1>Templates</h1>
+<h1 data-translate="admincompany.templates.titleall">Templates</h1>
 
 <div ng-if="vm.error" class="alert alert-danger" role="alert">
     {{vm.messageError}}
@@ -6,17 +6,24 @@
 
 <div ng-if="!vm.error">
     <div id="control-panel">
-        <a href="#/admincompany/templatecreate" class="btn btn-admin" ng-disabled="vm.employee.length===0"><span
-            class="glyphicon glyphicon-plus"></span>Create</a>
-        <a class="btn btn-admin" ng-click="vm.deleteSelectedTemplates()"><span class="glyphicon glyphicon-trash"></span>Delete</a>
+        <a href="#/admincompany/templatecreate" class="btn btn-admin" ng-disabled="vm.employee.length===0">
+            <span class="glyphicon glyphicon-plus"></span>
+            <span data-translate="admincompany.form.create">Create</span>
+        </a>
+        <a class="btn btn-admin" ng-click="vm.deleteSelectedTemplates()">
+            <span class="glyphicon glyphicon-trash"></span>
+            <span data-translate="admincompany.form.delete">Delete</span>
+        </a>
     </div>
 
-    <div class="alert alert-warning" ng-if="vm.employee.length!=0"><strong>Attention:</strong> You have not assigned
+    <div class="alert alert-warning" ng-if="vm.employee.length!=0"
+       data-translate="admincompany.templates.assignemployee"
+         translate-values="{count: '{{vm.employee.length}}'}"><strong>Attention:</strong> You have not assigned
         template of birthday cards for {{vm.employee.length}} employee.
     </div>
     <div ng-if="vm.templates.length !=0">
         <div id="control-table">
-            <span class="select-show-title">Show:</span>
+            <span class="select-show-title" data-translate="admincompany.form.show">Show:</span>
             <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage"
                     ng-change="vm.changeItemsPerPage()" class="btn btn-default">
             </select>
@@ -25,11 +32,11 @@
             <thead>
             <tr>
                 <th><input type="checkbox" ng-model="vm.checkedAll" ng-change="vm.changeStateCheckbox()"></th>
-                <th>Name template</th>
-                <th>Recipient name</th>
-                <th>Recipient email</th>
-                <th>Recipient role</th>
-                <th>Sending date</th>
+                <th data-translate="admincompany.templates.name">Name template</th>
+                <th data-translate="admincompany.templates.recipientname">Recipient name</th>
+                <th data-translate="admincompany.templates.recipientmail">Recipient email</th>
+                <th data-translate="admincompany.templates.recipientrole">Recipient role</th>
+                <th data-translate="admincompany.templates.sendingdate">Sending date</th>
                 <th></th>
             </tr>
             </thead>
