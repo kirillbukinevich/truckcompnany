@@ -130,7 +130,7 @@ public class OfferService {
             goods.setPrice(stuff.getPrice());
             goods.setType(stuff.getType());
             goods.setName(stuff.getName());
-            goods.setCount(random.nextInt(20));
+            goods.setCount(random.nextInt(20) + 3);
             goods.setPrice(((double)random.nextInt(10000)) / 10 + 5);
 
             goodsSet.add(goods);
