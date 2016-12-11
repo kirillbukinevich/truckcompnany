@@ -9,12 +9,12 @@
 
     <table class="table">
         <thead>
-        <tr>
-            <th>№</th>
-            <th>Date</th>
-            <th>Dispatcher</th>
-            <th>Driver</th>
-            <th>State</th>
+        <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+            <th jh-sort-by="number">№<span class="fa fa-sort"></span></th>
+            <th jh-sort-by="date">Date<span class="fa fa-sort"></span></th>
+            <th jh-sort-by="dispatcher">Dispatcher<span class="fa fa-sort"></span></th>
+            <th jh-sort-by="driver">Driver<span class="fa fa-sort"></span></th>
+            <th jh-sort-by="state">State<span class="fa fa-sort"></span></th>
         </tr>
         </thead>
         <tbody>
@@ -30,8 +30,9 @@
                 <span ng-if = "waybill.state == 'REJECTED'" class="label label-warning" >REJECTED</span>
             </td>
             <td>
-                <a type="button" class="btn btn-primary btn-xs" href="#/dispatcher/waybills/{{waybill.id}}/details">
-                    <span class="glyphicon glyphicon-eye-open">&nbsp;Details</span>
+                <a type="button" class="btn btn-default btn-sm" href="#/dispatcher/waybills/{{waybill.id}}/details">
+                    <span class="glyphicon glyphicon-eye-open"></span>
+                    <span>Details</span>
                 </a>
             </td>
         </tr>

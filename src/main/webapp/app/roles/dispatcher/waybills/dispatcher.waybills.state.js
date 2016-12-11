@@ -29,13 +29,20 @@
                 },
                 params: {
                     page: 1,
-                    size: 10
+                    size: 10,
+                    sort: {
+                        value: 'id,asc',
+                        squash: true
+                    }
                 },
                 resolve: {
                     pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
                         return {
                             page: PaginationUtil.parsePage($stateParams.page),
-                            size: PaginationUtil.parsePage($stateParams.size)
+                            size: PaginationUtil.parsePage($stateParams.size),
+                            sort: $stateParams.sort,
+                            predicate: PaginationUtil.parsePredicate($stateParams.sort),
+                            ascending: PaginationUtil.parseAscending($stateParams.sort)
                         };
                     }],
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
@@ -48,7 +55,8 @@
             parent: 'dispatcher.waybills',
             url: '/{id}/details',
             data: {
-                authorities: ['ROLE_DISPATCHER']
+                authorities: ['ROLE_DISPATCHER'],
+                pageTitle: 'dispatcher.waybillDetails'
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({

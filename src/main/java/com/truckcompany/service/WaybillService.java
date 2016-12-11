@@ -151,7 +151,7 @@ public class WaybillService {
             .map(g -> {
                 Goods goods = new Goods();
                 goods.setName(g.getName());
-                goods.setUncheckedNumber(g.getCount());
+                goods.setUncheckedNumber((long)g.getCount());
                 goods.setType(g.getType());
                 goods.setPrice(g.getPrice());
                 goods.setState("UNCHECKED");

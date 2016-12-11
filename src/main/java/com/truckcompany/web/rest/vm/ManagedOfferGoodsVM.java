@@ -7,7 +7,7 @@ public class ManagedOfferGoodsVM {
 
     private String name;
 
-    private Long count;
+    private Integer count;
 
     private Long offerId;
 
@@ -18,7 +18,7 @@ public class ManagedOfferGoodsVM {
     public ManagedOfferGoodsVM() {
     }
 
-    public ManagedOfferGoodsVM(Long id, String name, Long count, Long offerId) {
+    public ManagedOfferGoodsVM(Long id, String name, Integer count, Long offerId) {
         this.id = id;
         this.name = name;
         this.count = count;
@@ -50,11 +50,11 @@ public class ManagedOfferGoodsVM {
         this.name = name;
     }
 
-    public Long getCount() {
+    public Integer getCount() {
         return count;
     }
 
-    public void setCount(Long count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 

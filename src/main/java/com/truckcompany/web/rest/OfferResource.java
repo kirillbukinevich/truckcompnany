@@ -42,6 +42,7 @@ public class OfferResource {
     @RequestMapping(value = "/offers",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
+    @Secured(AuthoritiesConstants.DISPATCHER)
     public ResponseEntity<?> createOffer (@RequestBody ManagedOfferVM managedOfferVM) throws URISyntaxException {
         log.debug("REST request to save Offer;");
 
@@ -72,6 +73,7 @@ public class OfferResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured(AuthoritiesConstants.DISPATCHER)
     public ResponseEntity<ManagedOfferVM> getOffer (@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request get Offer");
 
@@ -86,6 +88,7 @@ public class OfferResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured(AuthoritiesConstants.DISPATCHER)
     public ResponseEntity updateOfferState (@RequestBody ManagedOfferVM managedOfferVM) throws URISyntaxException {
         log.debug("REST request to update offer by id:", managedOfferVM.getId());
 

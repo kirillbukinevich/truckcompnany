@@ -8,9 +8,9 @@
         .module('truckCompanyApp')
         .controller('DispatcherOfferController', DispatcherOfferController);
 
-    DispatcherOfferController.$inject = ['$stateParams', 'Offer', 'pagingParams', '$state', 'Generator'];
+    DispatcherOfferController.$inject = ['$stateParams', 'Offer', 'pagingParams', '$state', '$http'];
 
-    function DispatcherOfferController ($stateParams, Offer, pagingParams, $state, Generator) {
+    function DispatcherOfferController ($stateParams, Offer, pagingParams, $state, $http) {
         var vm = this;
 
         vm.loadPage = loadPage;
@@ -33,13 +33,19 @@
         function loadPage() {
             Offer.query({
                 page: pagingParams.page - 1,
-                size: vm.itemsPerPage
+                size: vm.itemsPerPage,
+                sort: sort()
+
             }, onSuccess, onError);
         }
 
         function generateOffer() {
-            Generator.generate();
-            vm.loadPage();
+            $http({
+                method: 'POST',
+                url: '/api/offers/generate'
+            }).then(function successCallback(response) {
+                    $state.reload();
+                });
         }
 
         function onSuccess(data, headers){
@@ -70,15 +76,6 @@
             Offer.update(offer);
         }
 
-        function transition () {
-            $state.transitionTo($state.$current, {
-                page: vm.page,
-                size:  vm.itemsPerPage,
-                sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
-                search: vm.currentSearch
-            });
-        }
-
         function sort () {
             var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')];
             if (vm.predicate !== 'id') {
@@ -93,6 +90,14 @@
                 size: vm.itemsPerPage,
                 sort: sort()
             }, onSuccess, onError);
+        }
+
+        function transition () {
+            $state.transitionTo($state.$current, {
+                page: vm.page,
+                size:  vm.itemsPerPage,
+                sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
+            });
         }
     }
 })();

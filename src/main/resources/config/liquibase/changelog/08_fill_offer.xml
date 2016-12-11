@@ -22,6 +22,9 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
 
+            <column name="number" type="varchar(50)">
+            </column>
+
             <column name="created_by" type="varchar(50)">
             </column>
 
