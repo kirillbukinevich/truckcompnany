@@ -25,5 +25,7 @@ public interface WaybillFacade {
 
     Page<WaybillDTO> findWaybillWithStolenGoods(Pageable pageable);
 
+    List<WaybillDTO> findWaybillsWithStolenGoods(ZonedDateTime fromDate, ZonedDateTime toDate);
+
     List<ManagedWaybillVM> findWaybillsAccordingQuery(String query);
 }

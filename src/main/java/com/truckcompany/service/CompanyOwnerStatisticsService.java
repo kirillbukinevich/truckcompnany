@@ -2,7 +2,9 @@ package com.truckcompany.service;
 
 
 import com.truckcompany.domain.User;
+import com.truckcompany.domain.Waybill;
 import com.truckcompany.domain.enums.WaybillState;
+import com.truckcompany.service.dto.GoodsDTO;
 import com.truckcompany.service.dto.WaybillDTO;
 import com.truckcompany.service.facade.WaybillFacade;
 import com.truckcompany.web.rest.dataforhighcharts.NameAndValueStatisticData;
@@ -143,7 +145,7 @@ public class CompanyOwnerStatisticsService {
         LocalDate endDate;
         int rowIndex = 1;
 
-        double totalConsumption = 0, totalIncome = 0, totalProfit = 0;
+        double totalConsumption = 0, totalIncome = 0, totalProfit = 0, totalLoss = 0;
         while (startDate.isBefore(toDate.plusDays(1))){
 
             if (Period.between(startDate, toDate).getDays() < 7){
@@ -156,7 +158,7 @@ public class CompanyOwnerStatisticsService {
             List<WaybillDTO> waybills = waybillFacade
                 .findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED,
                     startDate.atStartOfDay(ZoneOffset.systemDefault()),
-                    endDate.atStartOfDay(ZoneOffset.systemDefault()).minusNanos(1));
+                    endDate.plusDays(1).atStartOfDay(ZoneOffset.systemDefault()).minusNanos(1));
 
             Map<Long, Double> consumptionDataMap = getConsumptionDataMap(waybills);
             double weekConsumption = consumptionDataMap.values().stream()
@@ -173,6 +175,11 @@ public class CompanyOwnerStatisticsService {
                 .mapToDouble(Double::valueOf)
                 .sum();
             totalProfit += weekProfit;
+
+            double weekLoss = getLossDataMap(waybills).values().stream()
+                .mapToDouble(Double::valueOf)
+                .sum();
+            totalLoss += weekLoss;
 
             Row row = sheet.createRow(rowIndex++);
 
@@ -196,7 +203,11 @@ public class CompanyOwnerStatisticsService {
             incomeCell.setCellStyle(currencyStyle);
             incomeCell.setCellValue(weekIncome);
 
-            Cell profitCell = row.createCell(4);
+            Cell lossCell = row.createCell(4);
+            lossCell.setCellStyle(currencyStyle);
+            lossCell.setCellValue(weekLoss);
+
+            Cell profitCell = row.createCell(5);
             profitCell.setCellStyle(currencyStyle);
             profitCell.setCellValue(weekProfit);
 
@@ -219,7 +230,11 @@ public class CompanyOwnerStatisticsService {
         totalIncomeCell.setCellStyle(currencyStyle);
         totalIncomeCell.setCellValue(totalIncome);
 
-        Cell totalProfitCell = total.createCell(4);
+        Cell totalLossCell = total.createCell(4);
+        totalLossCell.setCellStyle(currencyStyle);
+        totalLossCell.setCellValue(totalLoss);
+
+        Cell totalProfitCell = total.createCell(5);
         totalProfitCell.setCellStyle(currencyStyle);
         totalProfitCell.setCellValue(totalProfit);
 
@@ -228,6 +243,7 @@ public class CompanyOwnerStatisticsService {
         sheet.autoSizeColumn(2);
         sheet.autoSizeColumn(3);
         sheet.autoSizeColumn(4);
+        sheet.autoSizeColumn(5);
         return book;
     }
 
@@ -242,13 +258,18 @@ public class CompanyOwnerStatisticsService {
         CellStyle dateStyle = book.createCellStyle();
         dateStyle.setDataFormat(dataFormat.getFormat("dd.mm.yyyy"));
 
+        CellStyle currencyStyle = book.createCellStyle();
+        currencyStyle.setDataFormat((short)8) ;  // currency format with dolar sign
+
+
         createHeaderForRouteListReport(sheet);
 
         for (int i=0; i<waybills.size(); ++i) {
             Row row = sheet.createRow(i+1);
-            fillRowForRouteListReport(row, dateStyle, waybills.get(i));
+            fillRowForRouteListReport(row, dateStyle, currencyStyle, waybills.get(i));
         }
 
+        sheet.autoSizeColumn(0);
         sheet.autoSizeColumn(1);
         sheet.autoSizeColumn(2);
         sheet.autoSizeColumn(3);
@@ -270,11 +291,15 @@ public class CompanyOwnerStatisticsService {
         CellStyle dateStyle = book.createCellStyle();
         dateStyle.setDataFormat(dataFormat.getFormat("dd.mm.yyyy"));
 
+        CellStyle currencyStyle = book.createCellStyle();
+        currencyStyle.setDataFormat((short)8) ;  // currency format with dolar sign
+
+
         createHeaderForRouteListReport(sheet);
 
         for (int i=0; i<waybills.size(); ++i) {
             Row row = sheet.createRow(i+1);
-            fillRowForRouteListReport(row, dateStyle, waybills.get(i));
+            fillRowForRouteListReport(row, dateStyle, currencyStyle, waybills.get(i));
         }
 
 
@@ -291,14 +316,11 @@ public class CompanyOwnerStatisticsService {
         return book;
     }
 
-    public HSSFWorkbook getLossReport(){
-        List<List<Double>> statistics = getLossStatistics();
-        return createLossReport(statistics);
-    }
-
     public HSSFWorkbook getLossReport(LocalDate fromDate, LocalDate toDate){
-        List<List<Double>> statistics = getLossStatistics(fromDate, toDate);
-        return createLossReport(statistics);
+        List<WaybillDTO> waybills = waybillFacade
+            .findWaybillsWithStolenGoods(fromDate.atStartOfDay(ZoneId.systemDefault()),
+                toDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).minusNanos(1));
+        return createLossReport(waybills);
     }
 
     public HSSFWorkbook getLossReportWithResponsiblePersons(LocalDate fromDate, LocalDate toDate){
@@ -330,16 +352,19 @@ public class CompanyOwnerStatisticsService {
                 .mapToDouble(this::countWaybillLoss)
                 .sum();
 
-            User driver = userService.getUserByLogin(login).get();
+            if (driverLoss > 0) {
 
-            Row row = sheet.createRow(rowIndex++);
+                User driver = userService.getUserByLogin(login).get();
 
-            Cell name = row.createCell(0);
-            name.setCellValue(driver.getFirstName() + " " + driver.getLastName());
+                Row row = sheet.createRow(rowIndex++);
 
-            Cell value = row.createCell(1);
-            value.setCellStyle(currencyStyle);
-            value.setCellValue(driverLoss);
+                Cell name = row.createCell(0);
+                name.setCellValue(driver.getFirstName() + " " + driver.getLastName());
+
+                Cell value = row.createCell(1);
+                value.setCellStyle(currencyStyle);
+                value.setCellValue(driverLoss);
+            }
 
         }
 
@@ -361,12 +386,15 @@ public class CompanyOwnerStatisticsService {
                 .mapToDouble(this::countWaybillProfitWithLoss)
                 .sum();
 
+            if (driverProfit > 0) {
 
-            NameAndValueStatisticData record = new NameAndValueStatisticData();
-            Optional<User> driver = userService.getUserByLogin(login);
-            record.setName(driver.get().getFirstName() + " " + driver.get().getLastName());
-            record.setY(driverProfit);
-            statisticData.add(record);
+
+                NameAndValueStatisticData record = new NameAndValueStatisticData();
+                Optional<User> driver = userService.getUserByLogin(login);
+                record.setName(driver.get().getFirstName() + " " + driver.get().getLastName());
+                record.setY(driverProfit);
+                statisticData.add(record);
+            }
         }
         return statisticData;
     }
@@ -398,16 +426,19 @@ public class CompanyOwnerStatisticsService {
                 .mapToDouble(this::countWaybillProfitWithLoss)
                 .sum();
 
-            User driver = userService.getUserByLogin(login).get();
+            if (driverProfit > 0) {
 
-            Row row = sheet.createRow(rowIndex++);
+                User driver = userService.getUserByLogin(login).get();
 
-            Cell name = row.createCell(0);
-            name.setCellValue(driver.getFirstName() + " " + driver.getLastName());
+                Row row = sheet.createRow(rowIndex++);
 
-            Cell value = row.createCell(1);
-            value.setCellStyle(currencyStyle);
-            value.setCellValue(driverProfit);
+                Cell name = row.createCell(0);
+                name.setCellValue(driver.getFirstName() + " " + driver.getLastName());
+
+                Cell value = row.createCell(1);
+                value.setCellStyle(currencyStyle);
+                value.setCellValue(driverProfit);
+            }
 
         }
 
@@ -470,11 +501,14 @@ public class CompanyOwnerStatisticsService {
         Cell income = header.createCell(3);
         income.setCellValue("Income");
 
-        Cell profit = header.createCell(4);
+        Cell loss = header.createCell(4);
+        loss.setCellValue("Loss");
+
+        Cell profit = header.createCell(5);
         profit.setCellValue("Profit");
     }
 
-    private void fillRowForRouteListReport(Row row, CellStyle dateStyle,WaybillDTO waybill){
+    private void fillRowForRouteListReport(Row row, CellStyle dateStyle,CellStyle currencyStyle, WaybillDTO waybill){
         Cell id = row.createCell(0);
         id.setCellValue(waybill.getRouteList().getNumber());
 
@@ -503,6 +537,7 @@ public class CompanyOwnerStatisticsService {
         state.setCellValue(waybill.getRouteList().getState());
 
         Cell fuelCost = row.createCell(8);
+        fuelCost.setCellStyle(currencyStyle);
         fuelCost.setCellValue(waybill.getRouteList().getFuelCost());
 
         Cell distance = row.createCell(9);
@@ -522,7 +557,7 @@ public class CompanyOwnerStatisticsService {
         return result;
     }
 
-    private HSSFWorkbook createLossReport(List<List<Double>> statistics){
+    private HSSFWorkbook createLossReport(List<WaybillDTO> waybills){
         HSSFWorkbook book = new HSSFWorkbook();
         Sheet sheet = book.createSheet("loss report");
 
@@ -530,33 +565,123 @@ public class CompanyOwnerStatisticsService {
         CellStyle dateStyle = book.createCellStyle();
         dateStyle.setDataFormat(dataFormat.getFormat("dd.mm.yyyy"));
 
+        CellStyle currencyStyle = book.createCellStyle();
+        currencyStyle.setDataFormat(dataFormat.getFormat("$#,##0.00;-$#,##0.00")) ;
+
+        CellStyle doubleStyle = book.createCellStyle();
+        doubleStyle.setDataFormat(dataFormat.getFormat("0.00"));
+
         Row header = sheet.createRow(0);
 
         Cell date = header.createCell(0);
         date.setCellValue("Date");
 
-        Cell value = header.createCell(1);
-        value.setCellValue("Loss amount");
+        Cell waybillNumber = header.createCell(1);
+        waybillNumber.setCellValue("Waybill №");
+
+        Cell goodsName = header.createCell(2);
+        goodsName.setCellValue("Goods");
+
+        Cell goodsAcceptedAmount = header.createCell(3);
+        goodsAcceptedAmount.setCellValue("Accepted");
+
+        Cell goodsDeliveredAmount = header.createCell(4);
+        goodsDeliveredAmount.setCellValue("Delivered");
+
+        Cell goodsPrice = header.createCell(5);
+        goodsPrice.setCellValue("Price");
+
+        Cell lossAmount = header.createCell(6);
+        lossAmount.setCellValue("Loss amount");
 
         int index = 1;
 
-        for (List<Double> record : statistics){
-            Row row = sheet.createRow(index++);
+        double total = 0;
 
-            Cell dateCell = row.createCell(0);
-            dateCell.setCellStyle(dateStyle);
-            dateCell.setCellValue(GregorianCalendar.from(Instant.ofEpochMilli(record.get(0).longValue())
-                .atZone(ZoneOffset.systemDefault())));
+        for (WaybillDTO waybill : waybills){
+            double totalLoss = 0;
+            for (GoodsDTO good : waybill.getGoods()){
+                double goodLoss = (good.getAcceptedNumber() - good.getDeliveredNumber()) * good.getPrice();
+                if (goodLoss > 0) {
+                    totalLoss += goodLoss;
 
-            Cell valueCell = row.createCell(1);
-            valueCell.setCellValue(record.get(1));
+                    Row row = sheet.createRow(index++);
+
+                    Cell dateCell = row.createCell(0);
+                    dateCell.setCellStyle(dateStyle);
+                    dateCell.setCellValue(GregorianCalendar.from(waybill.getDate()));
+
+                    Cell waybillNumberCell = row.createCell(1);
+                    waybillNumberCell.setCellValue(waybill.getNumber());
+
+                    Cell goodsNameCell = row.createCell(2);
+                    goodsNameCell.setCellValue(good.getName());
+
+                    Cell goodsAcceptedAmountCell = row.createCell(3);
+                    goodsAcceptedAmountCell.setCellStyle(doubleStyle);
+                    goodsAcceptedAmountCell.setCellType(Cell.CELL_TYPE_NUMERIC);
+                    goodsAcceptedAmountCell.setCellValue(good.getAcceptedNumber());
+
+                    Cell goodsDeliveredAmountCell = row.createCell(4);
+                    goodsDeliveredAmountCell.setCellStyle(doubleStyle);
+                    goodsDeliveredAmountCell.setCellValue(good.getDeliveredNumber());
+
+                    Cell goodsPriceCell = row.createCell(5);
+                    goodsPriceCell.setCellStyle(currencyStyle);
+                    goodsPriceCell.setCellValue(good.getPrice());
+
+                    Cell lossAmountCell = row.createCell(6);
+                    lossAmountCell.setCellStyle(currencyStyle);
+                    lossAmountCell.setCellValue(goodLoss);
+                }
+
+            }
+
+            Row row = sheet.createRow(index);
+
+            Cell totalDate = row.createCell(0);
+            totalDate.setCellStyle(dateStyle);
+            totalDate.setCellValue(GregorianCalendar.from(waybill.getDate()));
+
+            Cell totalWaybillNumber = row.createCell(1);
+            totalWaybillNumber.setCellValue(waybill.getNumber());
+
+            Cell totalCell = row.createCell(2);
+            totalCell.setCellValue("Total: ");
+
+            sheet.addMergedRegion(new CellRangeAddress(index, index, 2,5));
+
+            Cell totalLossCell = row.createCell(6);
+            totalLossCell.setCellStyle(currencyStyle);
+            totalLossCell.setCellValue(totalLoss);
+
+            index += 2;
+
+
+            total += totalLoss;
         }
+
+        Row totalRow = sheet.createRow(index);
+
+        Cell totalCell = totalRow.createCell(0);
+        totalCell.setCellValue("Total: ");
+        sheet.addMergedRegion(new CellRangeAddress(index, index, 0, 5));
+
+        Cell totalValue = totalRow.createCell(6);
+        totalValue.setCellStyle(currencyStyle);
+        totalValue.setCellValue(total);
 
         sheet.autoSizeColumn(0);
         sheet.autoSizeColumn(1);
+        sheet.autoSizeColumn(2);
+        sheet.autoSizeColumn(3);
+        sheet.autoSizeColumn(4);
+        sheet.autoSizeColumn(5);
+        sheet.autoSizeColumn(6);
 
         return book;
     }
+
 
     private List<List<Double>> convertToConvenientForGraphView(Map<Long, Double> map){
         List<List<Double>> result = new ArrayList<>();

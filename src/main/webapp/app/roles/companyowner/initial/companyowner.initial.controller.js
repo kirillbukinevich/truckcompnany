@@ -54,10 +54,10 @@
                 'apply.daterangepicker' : function (ev, picker) {
                     $('span[name="datepicker"] span').html(vm.datePicker.startDate.format('MMMM D, YYYY') + ' - '
                         + vm.datePicker.endDate.format('MMMM D, YYYY'));
-                    //  vm.commonChartConfig.series.splice(0, vm.commonChartConfig.series.length);
                     vm.loadConsumptionData();
                     vm.loadIncomeData();
                     vm.loadProfitData();
+                    vm.loadLossData(vm.datePicker.startDate, vm.datePicker.endDate, setLossDataToCommonChart)
                 }
             },
             maxDate: moment().endOf("day"),
@@ -82,32 +82,43 @@
             },
             eventHandlers : {
                 'apply.daterangepicker' : function (ev, picker) {
-                    $('div[name="lossDatepicker"] span').html(vm.lossDatePicker.startDate.format('MMMM D, YYYY') + ' - '
+                    $('span[name="lossDatepicker"] span').html(vm.lossDatePicker.startDate.format('MMMM D, YYYY') + ' - '
                         + vm.lossDatePicker.endDate.format('MMMM D, YYYY'));
-                    vm.loadLossData();
+                    vm.loadLossData(vm.lossDatePicker.startDate, vm.lossDatePicker.endDate, setLossDataToLossChart);
                 }
             },
             maxDate: moment().endOf("day"),
             opens: 'left'
         };
 
-        vm.loadData();
-        vm.updateDatePickersValue();
+
 
         $scope.render = false;
         $timeout(function () {
             $scope.render = true;
         }, 500);
 
+        function setLossDataToCommonChart(data) {
+            vm.commonChartConfig.series[3].data = angular.copy(data);
+            vm.commonChartConfig.series[3].data.forEach(function(item, i, arr){
+                item[1] = - item[1];
+            });
+        }
+
+        function setLossDataToLossChart(data) {
+            vm.lossChartData = angular.copy(data);
+            vm.lossChartConfig.series[0].data = vm.lossChartData;
+        }
 
         function loadData() {
             vm.loadConsumptionData();
             vm.loadIncomeData();
             vm.loadProfitData();
+            vm.loadLossData(vm.datePicker.startDate, vm.datePicker.endDate, setLossDataToCommonChart);
 
             vm.loadTopBestDriversData();
 
-            vm.loadLossData();
+            vm.loadLossData(vm.lossDatePicker.startDate, vm.lossDatePicker.endDate, setLossDataToLossChart);
         }
 
         function loadConsumptionData(){
@@ -126,17 +137,16 @@
             });
         }
 
-        function loadLossData(){
+        function loadLossData(startDate, endDate, callback){
             $http({
                 method: 'GET',
                 url: '/api/companyowner/statistic/loss',
                 params: {
-                    startDate: !!vm.lossDatePicker.startDate? vm.lossDatePicker.startDate.format('YYYY-MM-DD') : null,
-                    endDate: !!vm.lossDatePicker.endDate? vm.lossDatePicker.endDate.format('YYYY-MM-DD') : null
+                    startDate: !!startDate? startDate.format('YYYY-MM-DD') : null,
+                    endDate: !!endDate? endDate.format('YYYY-MM-DD') : null
                 }
             }).then(function successCallback(response) {
-                vm.lossChartData = response.data;
-                vm.lossChartConfig.series[0].data = response.data;
+                callback(response.data);
                 console.log('Loss data load: ' + response.data);
             }, function errorCallback(response) {
                 console.log('Loss data wasn\'t load: ' + response.statusText);
@@ -307,6 +317,12 @@
                     id: 3,
                     name: 'Profit',
                     data: []
+                },
+                {
+                    id: 4,
+                    name: 'Loss',
+                    type: 'column',
+                    data: []
                 }
             ]
         };
@@ -325,7 +341,8 @@
                 marginTop: 50
             },
             tooltip: {
-                pointFormat: '{series.data.name} <b>${point.y:.2f}</b>'
+                pointFormat: '{series.data.name} <b>${point.y:.2f}</b>',
+                valueDecimals: 2
             },
             plotOptions: {
                 pie: {
@@ -345,7 +362,7 @@
                 verticalAlign: 'middle',
                 layout: 'vertical',
                 align: 'right',
-                labelFormat: '{name} ${y}'
+                labelFormat: '{name} ${y:.2f}'
             }
         };
         vm.topBestDriversChartConfig = {
@@ -391,6 +408,9 @@
                 data: []
             }]
         };
+
+        vm.loadData();
+        vm.updateDatePickersValue();
 
         getAccount();
 

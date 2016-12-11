@@ -37,6 +37,9 @@ public class Offer extends AbstractCreationInfoEntity implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private OfferState state;
 
+    @Column (name = "number")
+    private String number;
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -87,5 +90,13 @@ public class Offer extends AbstractCreationInfoEntity implements Serializable {
 
     public void setState(OfferState state) {
         this.state = state;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 }

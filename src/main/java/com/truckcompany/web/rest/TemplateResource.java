@@ -100,11 +100,20 @@ public class TemplateResource {
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("storages.deleted", "null")).build();
     }
 
+
+
+
+
+
     @RequestMapping(value = "/templates/sendagain/{errorId}", method = GET)
-    public ResponseEntity sendEmailAgain(@PathVariable Long errorId) {
-        HttpStatus status = templateService.sendBirthdayCardAgain(errorId) ? OK : BAD_REQUEST;
+    public ResponseEntity sendEmailAgain(@PathVariable Long errorId, HttpServletRequest request) {
+        String rootTemplateUploadDirectory = request.getServletContext().getRealPath("content/upload/templateimage");
+        HttpStatus status = templateService.sendBirthdayCardAgain(errorId, rootTemplateUploadDirectory) ? OK : BAD_REQUEST;
         return new ResponseEntity(status);
     }
+
+
+
 
     @RequestMapping(value = "/templates/{id}", method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ManagedTemplateVM> getTemplate(@PathVariable Long id) {

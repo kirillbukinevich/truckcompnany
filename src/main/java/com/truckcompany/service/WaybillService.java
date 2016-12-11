@@ -88,6 +88,24 @@ public class WaybillService {
         return new PageImpl<>(waybills, pageable, total);
     }
 
+    public List<WaybillDTO> getWaybillsByCompanyAndWithStolenGoods(Company company, ZonedDateTime fromDate,
+                                                                      ZonedDateTime toDate) {
+        log.debug("Get waybills with stolen goods and company with id: {}", company.getId());
+        List<WaybillDTO> waybills = waybillRepository.findByCompanyAndStateAndDateBetween(company, WaybillState.DELIVERED,
+            fromDate, toDate)
+            .stream()
+            .filter(waybill -> waybill.getGoods()
+                .stream()
+                .anyMatch(
+                    goods -> !Objects.equals(goods.getDeliveredNumber(), goods.getAcceptedNumber())
+                )
+            )
+            .map(WaybillDTO::new)
+            .collect(Collectors.toList());
+
+        return waybills;
+    }
+
 
     public List<Waybill> getWaybillByCompanyAndRouteListCreationDateBetween(Company company, ZonedDateTime fromDate,
                                                                             ZonedDateTime toDate) {
@@ -151,7 +169,7 @@ public class WaybillService {
             .map(g -> {
                 Goods goods = new Goods();
                 goods.setName(g.getName());
-                goods.setUncheckedNumber(g.getCount());
+                goods.setUncheckedNumber((long)g.getCount());
                 goods.setType(g.getType());
                 goods.setPrice(g.getPrice());
                 goods.setState("UNCHECKED");
@@ -214,4 +232,6 @@ public class WaybillService {
     public Page<Waybill> getPageWaybillsByCompanyAndRouteListCreationDateBetween(Pageable pageable, Company company, ZonedDateTime fromDate, ZonedDateTime toDate) {
         return waybillRepository.findPageByCompanyAndRouteListCreationDateBetween(company, fromDate, toDate, pageable);
     }
+
+
 }

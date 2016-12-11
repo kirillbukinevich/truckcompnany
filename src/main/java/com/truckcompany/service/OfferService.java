@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,9 @@ public class OfferService {
 
     @Inject
     private OfferRepository offerRepository;
+
+    @Inject
+    private GoodsRepository goodsRepository;
 
     @Transactional
     public Offer createOffer (ManagedOfferVM managedOfferVM){
@@ -112,24 +116,40 @@ public class OfferService {
         offer.setState(OfferState.NEW);
         offer.setCompany(dispatcher.getCompany());
         offer.setArrivalStorage(storages.get(random.nextInt(storages.size())));
+        storages.remove(offer.getArrivalStorage());
         offer.setLeavingStorage(storages.get(random.nextInt(storages.size())));
 
         Set<OfferGoods> goodsSet = new HashSet<>();
+        List<Goods> goodsList = goodsRepository.findAll();
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             OfferGoods goods = new OfferGoods();
-            goods.setName("Item_" + (i + 1));
-            goods.setCount((long)random.nextInt(50));
-            goods.setType("unit");
-            goods.setPrice((double)random.nextInt(10000));
+            Goods stuff = goodsList.get(random.nextInt(goodsList.size()));
+            goodsList.remove(stuff);
+
+            goods.setPrice(stuff.getPrice());
+            goods.setType(stuff.getType());
+            goods.setName(stuff.getName());
+            goods.setCount(random.nextInt(20) + 3);
+            goods.setPrice(((double)random.nextInt(10000)) / 10 + 5);
 
             goodsSet.add(goods);
         }
 
         offer.setOfferGoods(goodsSet);
+        offer = offerRepository.save(offer);
 
+        offer.setNumber(generateNumber(dispatcher.getCompany().getId(),offer.getCreationDate(),offer.getId()));
         offer = offerRepository.save(offer);
 
         return new OfferDTO(offer);
+    }
+
+    public String generateNumber(Long companyId, ZonedDateTime date, Long offerId) {
+        String companyNum = String.format("%02d", companyId);
+        String dateStr = Integer.toString(date.getYear()).substring(2) + String.format("%02d", date.getMonthValue()) + String.format("%02d", date.getDayOfMonth());
+        String waybillNum = String.format("%02d", offerId);
+
+        return "O" + companyNum + dateStr + waybillNum;
     }
 }

@@ -1,7 +1,8 @@
 package com.truckcompany.service;
 
-import com.sun.mail.util.MailConnectException;
-import com.truckcompany.domain.*;
+import com.truckcompany.domain.MailError;
+import com.truckcompany.domain.Template;
+import com.truckcompany.domain.User;
 import com.truckcompany.domain.enums.MailErrorStatus;
 import com.truckcompany.repository.MailErrorRepository;
 import com.truckcompany.repository.TemplateRepository;
@@ -13,9 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.mail.MailException;
-import org.springframework.mail.MailSendException;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +24,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Created by Vladimir on 08.11.2016.
@@ -121,7 +118,7 @@ public class TemplateService {
             .forEach( template -> mailService.sendBirthdayCard(template));
     }
 
-    public boolean sendBirthdayCardAgain(Long errorId){
+    public boolean sendBirthdayCardAgain(Long errorId, String rootUploadImage){
         MailError error = mailErrorRepository.findOneWithTemplateAndRecipients(errorId);
         if (error == null) return false;
         Template template = error.getTemplate();

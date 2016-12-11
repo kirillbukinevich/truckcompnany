@@ -149,20 +149,8 @@ public class CompanyOwnerStatisticsResource {
                                                                           LocalDate endDate){
         LOG.debug("REST get common xls report from company owner");
 
-        ByteArrayResource byteResource = null;
         Workbook workbook = statisticsService.getCommonReport(startDate, endDate);
-        try{
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            workbook.write(outputStream);
-            outputStream.flush();
-
-            byteResource = new ByteArrayResource(outputStream.toByteArray());
-            outputStream.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new ResponseEntity<>(byteResource, HttpStatus.OK);
+        return new ResponseEntity<>(convertWorkbookToByteArrayResource(workbook), HttpStatus.OK);
     }
 
 
@@ -200,20 +188,14 @@ public class CompanyOwnerStatisticsResource {
 
 
     @RequestMapping(value = "/companyowner/statistic/xls/loss", method = RequestMethod.GET)
-    public ResponseEntity<ByteArrayResource> getLossReport(@RequestParam(value="startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    public ResponseEntity<ByteArrayResource> getLossReport(@RequestParam(value="startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                       LocalDate startDate,
-                                                                  @RequestParam(value="endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                  @RequestParam(value="endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                       LocalDate endDate){
         LOG.debug("REST get loss xls report from company owner");
 
 
-        Workbook workbook;
-        if (startDate== null || endDate == null){
-            workbook = statisticsService.getLossReport();
-        }
-        else{
-            workbook = statisticsService.getLossReport(startDate, endDate);
-        }
+        Workbook workbook = statisticsService.getLossReport(startDate, endDate);
 
         return new ResponseEntity<>(convertWorkbookToByteArrayResource(workbook), HttpStatus.OK);
     }
