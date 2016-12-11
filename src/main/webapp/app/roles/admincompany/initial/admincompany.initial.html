@@ -1,43 +1,43 @@
 <div id="admincompany-initial">
 
-
-
-
     <div class="row" id="common-statisctic">
         <div class="col-xs-3">
             <div class="card">
-                <span><span class="fa fa-user-o"></span>Total Employee:</span>
+                <span><span class="fa fa-user-o"></span><span data-translate="admincompany.statistic.totalemployees">Total Employee:</span></span>
                 <h1>{{vm.statistic.totalEmployees}}</h1>
             </div>
         </div>
         <div class="col-xs-3">
             <div class="card">
-                <span><span class="fa fa-user-o"></span>Total Storages:</span>
+                <span><span class="fa fa-user-o"></span><span data-translate="admincompany.statistic.totalstorages">Total Storages:</span></span>
                 <h1>{{vm.statistic.totalStorages}}</h1>
             </div>
         </div>
         <div class="col-xs-3">
             <div class="card">
-                <span><span class="fa fa-truck"></span>Total Trucks:</span>
+                <span><span class="fa fa-truck"></span><span data-translate="admincompany.statistic.totaltrucks">Total Trucks:</span></span>
                 <h1>{{vm.statistic.totalTrucks}}</h1>
             </div>
         </div>
         <div class="col-xs-3">
             <div class="card">
-                <span><span class="fa fa-birthday-cake"></span>Total emails:</span>
+                <span><span class="fa fa-birthday-cake"></span><span data-translate="admincompany.statistic.totalemails">Total emails:</span>
                 <h1>{{vm.statistic.totalBirthdayTemplate}}</h1>
             </div>
 
         </div>
     </div>
 
-    <h2 class="text-align-center">Welcome. You are logged as Admin for company <b>{{vm.account.company.name}}</b></h2>
+    <h2 class="text-align-center">
+        <span data-translate="admincompany.statistic.welcome">Welcome. You are logged as Admin for company</span>
+        <b>{{vm.account.company.name}}</b>
+    </h2>
 
 
     <div class="row">
         <div class="col-md-6">
             <div class="wrap-pie-card">
-                <h2>Roles employee</h2>
+                <h2 data-translate="admincompany.statistic.roles">Roles employee</h2>
                 <div class="wrap-pie">
                     <highchart id="chart1" config="vm.chartConfigUserRole"></highchart>
                 </div>
@@ -58,7 +58,7 @@
 
         <div class="col-md-6">
             <div class="wrap-pie-card">
-                <h2>Status trucks</h2>
+                <h2 data-translate="admincompany.statistic.statustruck">Status trucks</h2>
                 <div class="wrap-pie">
                     <highchart id="chart2" config="vm.chartConfigTruckStatus"></highchart>
                 </div>
@@ -81,7 +81,7 @@
 
     <div class="row">
         <div id="chart-truck">
-            <h2>Trucks</h2>
+            <h2 data-translate="admincompany.statistic.typetrucks">Trucks</h2>
             <highchart id="chart3" config="vm.chartConfigTruckModel"></highchart>
         </div>
     </div>

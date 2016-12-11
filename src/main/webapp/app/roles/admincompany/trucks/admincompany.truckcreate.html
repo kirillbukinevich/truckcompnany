@@ -1,38 +1,36 @@
-
-
-
-
-<h1>Create new truck</h1>
+<h1 data-translate="admincompany.truck.titlecreate">Create new truck</h1>
 <div class="alert alert-danger" ng-if="vm.error">
     {{vm.messageError}}
 </div>
 
 <form name="form">
-    <div class="alert alert-warning">Fields are marked * is required.</div>
+    <div class="alert alert-warning" data-translate="admincompany.error.attentionisrequired">Fields are marked * is required.</div>
     <div class="form-group" ng-class="{'has-error' : (form.regNumber.$dirty && form.regNumber.$invalid)}">
-        <label for="regNumber" class="control-label">Register number*</label>
+        <label for="regNumber" class="control-label" data-translate="admincompany.label.registernumber">Register number*</label>
         <input type="text" ng-model="vm.truck.regNumber" name="regNumber" class="form-control" id="regNumber"
                placeholder="Enter register number" required>
         <div ng-show="form.regNumber.$dirty && form.regNumber.$invalid">
             <p class="help-block"
-               ng-show="form.regNumber.$error.required">
+               ng-show="form.regNumber.$error.required"
+               data-translate="admincompany.error.isrequired">
                 Register number is required.
             </p>
         </div>
     </div>
     <div class="form-group" ng-class="{'has-error' : (form.model.$dirty && form.model.$invalid)}">
-        <label for="model" class="control-label">Model*</label>
+        <label for="model" class="control-label" data-translate="admincompany.label.model">Model*</label>
         <input type="text" ng-model="vm.truck.model" name="model" class="form-control" id="model"
                placeholder="Model of truck" required>
         <div ng-show="form.model.$dirty && form.model.$invalid">
             <p class="help-block"
-               ng-show="form.model.$error.required">
+               ng-show="form.model.$error.required"
+               data-translate="admincompany.error.isrequired">
                 Model is required.
             </p>
         </div>
     </div>
     <div class="form-group">
-        <label for="truck-body">Type</label>
+        <label for="truck-body" data-translate="admincompany.truck.type">Type</label>
         <div>
             <div class="wrap-radio-type-truck" id="type-truck-body">
                 <input type="radio" id="truck-body" ng-model="vm.truck.type" value="BODY">
@@ -50,23 +48,26 @@
     </div>
 
     <div class="form-group" ng-class="{'has-error' : (form.consumption.$dirty && form.consumption.$invalid)}">
-        <label for="consumption" class="control-label">Fuel consumption (l/100km)*</label>
+        <label for="consumption" class="control-label" data-translate="admincompany.label.consumption">Fuel consumption (l/100km)*</label>
         <input type="text" ng-model="vm.truck.consumption" name="consumption" class="form-control" id="consumption"
                placeholder="Enter fuel consumption" ng-pattern="/^\d+$/" required>
         <div ng-show="form.consumption.$dirty && form.consumption.$invalid">
             <p class="help-block"
-               ng-show="form.consumption.$error.required">
+               ng-show="form.consumption.$error.required"
+               data-translate="admincompany.error.isrequired"
+               data-translate="admincompany.error.isrequired">
                 Consumption is required.
             </p>
             <p class="help-block"
-               ng-show="form.consumption.$error.pattern">
+               ng-show="form.consumption.$error.pattern"
+               data-translate="admincompany.error.isnumeric">
                 Fuel consumption must be numeric only.
             </p>
         </div>
     </div>
 
     <div class="form-group">
-        <label for="truck-body">Status:</label>
+        <label for="truck-body" data-translate="admincompany.label.status">Status:</label>
         <div>
             <div class="wrap-radio-type-truck" id="status-truck-ready">
                 <input type="radio" id="truck-ready" ng-model="vm.truck.status" value="READY">
@@ -84,8 +85,8 @@
     </div>
 
 
-    <button class="btn btn-success" ng-click="vm.create()" ng-disabled="form.$invalid">Update</button>
-    <a href="#/admincompany/trucks" class="btn btn-danger">Cancel</a>
+    <button class="btn btn-success" ng-click="vm.create()" ng-disabled="form.$invalid" data-translate="admincompany.form.create">Update</button>
+    <a href="#/admincompany/trucks" class="btn btn-danger" data-translate="admincompany.form.cancel">Cancel</a>
 </form>
 
 
