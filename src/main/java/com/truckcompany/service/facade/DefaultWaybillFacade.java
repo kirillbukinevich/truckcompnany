@@ -129,7 +129,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
     }
 
     @Override
-    public List<WaybillDTO> findWaybillsWithStateAndDateBetween(WaybillState state, ZonedDateTime fromDate, ZonedDateTime toDate) {
+    public List<WaybillDTO> findWaybillsWithStateAndRouteListArrivalDateBetween(WaybillState state, ZonedDateTime fromDate, ZonedDateTime toDate) {
         Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
 
         if (optionalUser.isPresent()){
@@ -139,7 +139,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
                 toDate, user.getLogin());
             List<WaybillDTO> waybills = emptyList();
             if(isCurrentUserInRole("ROLE_COMPANYOWNER")){
-                waybills = waybillService.getWaybillByCompanyAndStateAndDateBetween(user.getCompany(), state,
+                waybills = waybillService.getWaybillByCompanyAndStateAndRouteListArrivalDateBetween(user.getCompany(), state,
                     fromDate, toDate)
                     .stream()
                     .map(WaybillDTO::new)
@@ -174,7 +174,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
     }
 
     @Override
-    public List<WaybillDTO> findWaybillsWithStolenGoods(ZonedDateTime fromDate, ZonedDateTime toDate) {
+    public List<WaybillDTO> findWaybillsWithStolenGoodsAndRouteListArrivalDateBetween(ZonedDateTime fromDate, ZonedDateTime toDate) {
         Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
 
         if (optionalUser.isPresent()) {
@@ -183,7 +183,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
             log.debug("Get all waybills with stolen goods for user \'{}\'", user.getLogin());
             List<WaybillDTO> waybills = emptyList();
             if (isCurrentUserInRole("ROLE_COMPANYOWNER")) {
-                waybills = waybillService.getWaybillsByCompanyAndWithStolenGoods(user.getCompany(), fromDate, toDate);
+                waybills = waybillService.getWaybillsByCompanyAndWithStolenGoodsAndRouteListArrivalDateBetween(user.getCompany(), fromDate, toDate);
             }
             return waybills;
 

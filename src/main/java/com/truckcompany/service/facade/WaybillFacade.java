@@ -20,9 +20,9 @@ public interface WaybillFacade {
 
     List<WaybillDTO> findWaybillsWithState(WaybillState state);
 
-    List<WaybillDTO> findWaybillsWithStateAndDateBetween(WaybillState state, ZonedDateTime fromDate, ZonedDateTime toDate);
+    List<WaybillDTO> findWaybillsWithStateAndRouteListArrivalDateBetween(WaybillState state, ZonedDateTime fromDate, ZonedDateTime toDate);
 
     Page<WaybillDTO> findWaybillWithStolenGoods(Pageable pageable);
 
-    List<WaybillDTO> findWaybillsWithStolenGoods(ZonedDateTime fromDate, ZonedDateTime toDate);
+    List<WaybillDTO> findWaybillsWithStolenGoodsAndRouteListArrivalDateBetween(ZonedDateTime fromDate, ZonedDateTime toDate);
 }

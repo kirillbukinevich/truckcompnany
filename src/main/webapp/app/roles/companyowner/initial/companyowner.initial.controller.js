@@ -60,7 +60,7 @@
                     vm.loadLossData(vm.datePicker.startDate, vm.datePicker.endDate, setLossDataToCommonChart)
                 }
             },
-            maxDate: moment().endOf("day"),
+            //maxDate: moment().endOf("day"),
             opens: 'left'
         };
 
@@ -87,7 +87,7 @@
                     vm.loadLossData(vm.lossDatePicker.startDate, vm.lossDatePicker.endDate, setLossDataToLossChart);
                 }
             },
-            maxDate: moment().endOf("day"),
+            //maxDate: moment().endOf("day"),
             opens: 'left'
         };
 

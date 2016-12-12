@@ -55,7 +55,7 @@ public class CompanyOwnerStatisticsService {
 
     public List<List<Double>> getConsumptionStatistics(LocalDate fromDate, LocalDate toDate){
         List<WaybillDTO> waybills = waybillFacade
-            .findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED,
+            .findWaybillsWithStateAndRouteListArrivalDateBetween(WaybillState.DELIVERED,
                 fromDate.atStartOfDay(ZoneOffset.systemDefault()),
                 toDate.plusDays(1).atStartOfDay(ZoneOffset.systemDefault()).minusNanos(1));
 
@@ -76,7 +76,7 @@ public class CompanyOwnerStatisticsService {
 
     public List<List<Double>> getIncomeStatistics(LocalDate fromDate, LocalDate toDate){
         List<WaybillDTO> waybills = waybillFacade
-            .findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED,
+            .findWaybillsWithStateAndRouteListArrivalDateBetween(WaybillState.DELIVERED,
                 fromDate.atStartOfDay(ZoneOffset.systemDefault()),
                 toDate.plusDays(1).atStartOfDay(ZoneOffset.systemDefault()).minusNanos(1));
 
@@ -102,7 +102,7 @@ public class CompanyOwnerStatisticsService {
 
     public List<List<Double>> getProfitStatistics(LocalDate fromDate, LocalDate toDate){
         List<WaybillDTO> waybills = waybillFacade
-            .findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED,
+            .findWaybillsWithStateAndRouteListArrivalDateBetween(WaybillState.DELIVERED,
                 fromDate.atStartOfDay(ZoneOffset.systemDefault()),
                 toDate.plusDays(1).atStartOfDay(ZoneOffset.systemDefault()).minusNanos(1));
 
@@ -122,7 +122,7 @@ public class CompanyOwnerStatisticsService {
     }
 
     public List<List<Double>> getLossStatistics(LocalDate fromDate, LocalDate toDate){
-        List<WaybillDTO> waybills = waybillFacade.findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED,
+        List<WaybillDTO> waybills = waybillFacade.findWaybillsWithStateAndRouteListArrivalDateBetween(WaybillState.DELIVERED,
             fromDate.atStartOfDay(ZoneOffset.systemDefault()),
             toDate.plusDays(1).atStartOfDay(ZoneOffset.systemDefault()).minusNanos(1));
         return createGraphLossData(waybills);
@@ -156,7 +156,7 @@ public class CompanyOwnerStatisticsService {
             }
 
             List<WaybillDTO> waybills = waybillFacade
-                .findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED,
+                .findWaybillsWithStateAndRouteListArrivalDateBetween(WaybillState.DELIVERED,
                     startDate.atStartOfDay(ZoneOffset.systemDefault()),
                     endDate.plusDays(1).atStartOfDay(ZoneOffset.systemDefault()).minusNanos(1));
 
@@ -318,13 +318,13 @@ public class CompanyOwnerStatisticsService {
 
     public HSSFWorkbook getLossReport(LocalDate fromDate, LocalDate toDate){
         List<WaybillDTO> waybills = waybillFacade
-            .findWaybillsWithStolenGoods(fromDate.atStartOfDay(ZoneId.systemDefault()),
+            .findWaybillsWithStolenGoodsAndRouteListArrivalDateBetween(fromDate.atStartOfDay(ZoneId.systemDefault()),
                 toDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).minusNanos(1));
         return createLossReport(waybills);
     }
 
     public HSSFWorkbook getLossReportWithResponsiblePersons(LocalDate fromDate, LocalDate toDate){
-        List<WaybillDTO> waybills = waybillFacade.findWaybillsWithStateAndDateBetween(WaybillState.DELIVERED,
+        List<WaybillDTO> waybills = waybillFacade.findWaybillsWithStateAndRouteListArrivalDateBetween(WaybillState.DELIVERED,
             fromDate.atStartOfDay(ZoneOffset.systemDefault()),
             toDate.plusDays(1).atStartOfDay(ZoneOffset.systemDefault()).minusNanos(1));
 
@@ -609,7 +609,7 @@ public class CompanyOwnerStatisticsService {
 
                     Cell dateCell = row.createCell(0);
                     dateCell.setCellStyle(dateStyle);
-                    dateCell.setCellValue(GregorianCalendar.from(waybill.getDate()));
+                    dateCell.setCellValue(GregorianCalendar.from(waybill.getRouteList().getArrivalDate()));
 
                     Cell waybillNumberCell = row.createCell(1);
                     waybillNumberCell.setCellValue(waybill.getNumber());
@@ -641,7 +641,7 @@ public class CompanyOwnerStatisticsService {
 
             Cell totalDate = row.createCell(0);
             totalDate.setCellStyle(dateStyle);
-            totalDate.setCellValue(GregorianCalendar.from(waybill.getDate()));
+            totalDate.setCellValue(GregorianCalendar.from(waybill.getRouteList().getArrivalDate()));
 
             Cell totalWaybillNumber = row.createCell(1);
             totalWaybillNumber.setCellValue(waybill.getNumber());
@@ -698,7 +698,7 @@ public class CompanyOwnerStatisticsService {
         Function<WaybillDTO, Double> valueMapper = this::countWaybillLoss;
 
         Map<Long, Double> map = waybills.stream()
-            .collect(Collectors.toMap(s -> s.getDate().truncatedTo(ChronoUnit.DAYS)
+            .collect(Collectors.toMap(s -> s.getRouteList().getArrivalDate().truncatedTo(ChronoUnit.DAYS)
                     .toInstant().toEpochMilli(),
                 valueMapper, (a,b) -> a +b));
 
@@ -707,7 +707,7 @@ public class CompanyOwnerStatisticsService {
 
     private Map<Long, Double> getConsumptionDataMap(List<WaybillDTO> waybills){
         Map<Long, Double> map = waybills.stream()
-            .collect(Collectors.toMap(s -> s.getDate().truncatedTo(ChronoUnit.DAYS)
+            .collect(Collectors.toMap(s -> s.getRouteList().getArrivalDate().truncatedTo(ChronoUnit.DAYS)
                     .toInstant().toEpochMilli(),
                 this::countWaybillConsumption,
                 (a,b) -> a+ b));
@@ -717,7 +717,7 @@ public class CompanyOwnerStatisticsService {
     private Map<Long, Double> getProfitDataMap(List<WaybillDTO> waybills){
         // profit without loss;
         Map<Long, Double> profitMap = waybills.stream()
-            .collect(Collectors.toMap(s-> s.getDate().truncatedTo(ChronoUnit.DAYS)
+            .collect(Collectors.toMap(s-> s.getRouteList().getArrivalDate().truncatedTo(ChronoUnit.DAYS)
                     .toInstant().toEpochMilli(),
                 s-> countWaybillConsumption(s)*s.getMargin()/100 ,
                 (a,b) -> a+ b));
@@ -739,7 +739,7 @@ public class CompanyOwnerStatisticsService {
     private Map<Long, Double> getIncomeDataMap(List<WaybillDTO> waybills){
 
         Map<Long, Double> map = waybills.stream()
-            .collect(Collectors.toMap(s-> s.getDate().truncatedTo(ChronoUnit.DAYS)
+            .collect(Collectors.toMap(s-> s.getRouteList().getArrivalDate().truncatedTo(ChronoUnit.DAYS)
                     .toInstant().toEpochMilli(),
                 s-> countWaybillConsumption(s)*(1+(s.getMargin()/100)),
                 (a,b) -> a+ b));

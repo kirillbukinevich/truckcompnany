@@ -48,7 +48,7 @@ public interface WaybillRepository extends JpaRepository<Waybill, Long> {
 
     List<Waybill> findByCompanyAndState(Company company, WaybillState state);
 
-    List<Waybill> findByCompanyAndStateAndDateBetween(Company company, WaybillState state,
+    List<Waybill> findByCompanyAndStateAndRouteListArrivalDateBetween(Company company, WaybillState state,
                                                       ZonedDateTime fromDate, ZonedDateTime toDate);
 
     Page<Waybill> findPageByCompany(Company company, Pageable pageable);
