@@ -10,17 +10,23 @@ Before run this application you have to install Apche Solr following steps below
 ```
     solr start
 ```
-- Create core for application and stop the server. Issue the following command:
+* Create core for application and stop the server. Issue the following command:
 ```
     solr create -c storages -d basic_configs
+    solr create -c waybills -d basic_configs
     solr stop -all
  ```
-- Go to the folder <'solr_directory'>/server/solr/storages/conf. Insert file  'schema.xml' which is placed in root Github folder.
-- Go to the folder <'solr_directory'>/server/solr/storages/conf. The folder containts file "managed-schema". You have to delete it.
-- Start Apache Solr again
+* Go to the folder `<solr_directory>/server/solr/storages/conf`. Insert file  `storages_schema.xml` which is placed in `/solr` Github folder and rename it to `schema.xml`.
+* Go to the folder `<solr_directory>/server/solr/waybills/conf`. Insert files `waybills_schema.xml`, `db-data-config.xml`, `solrconfig.xml` which are placed in `/solr`. Rename `waybills_schema.xml` to `schema.xml`. 
+* Remove files `managed-schema` from folders `<'solr_directory'>/server/solr/storages/conf` and `<'solr_directory'>/server/solr/waybills/conf`
+* Add JDBC driver for MySQL to folder `<solr_directory>/server/lib`. You can download it from official [web site](https://dev.mysql.com/downloads/connector/j/)
+* Start Apache Solr again
 ```
     solr start
 ```
+* (Optional)
+You can use data import handler to upload data from MySQL database
+
 Apache Solr is ready and you can launch application.
 
 
