@@ -38,7 +38,7 @@ public interface WaybillRepository extends JpaRepository<Waybill, Long> {
 
     @Query(value = "select distinct waybill from Waybill as waybill " +
         "left join fetch waybill.driver " +
-        "where waybill.driver=?1")
+        "where waybill.driver=?1 ORDER BY waybill.routeList.leavingDate")
     List<Waybill> findByDriver(User driver);
 
     List<Waybill> findByCompany(Company company);

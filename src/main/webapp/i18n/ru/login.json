@@ -1,0 +1,20 @@
+{
+    "login": {
+        "title": "Авторизироваться в TruckingCompany",
+        "form": {
+            "password": "Пароль",
+            "password.placeholder": "Введите пароль",
+            "rememberme": "Запомнить меня",
+            "button": "Войти",
+            "close" : "Закрыть"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Авторизация не успешна!</strong> Проверьте свой пароль и логин и повторыте заново."
+            }
+        },
+        "password" : {
+            "forgot": "Забыли пароль?"
+        }
+    }
+}

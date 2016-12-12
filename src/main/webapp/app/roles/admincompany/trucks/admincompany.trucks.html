@@ -1,4 +1,4 @@
-<h1>Trucks</h1>
+<h1 data-translate="admincompany.truck.titleupdate">Trucks</h1>
 
 <div ng-if="vm.error" class="alert alert-danger" role="alert">
     {{vm.messageError}}
@@ -6,13 +6,15 @@
 
 <div ng-if="!vm.error">
     <div id="control-panel">
-        <a href="#/admincompany/truckcreate" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Create</a>
+        <a href="#/admincompany/truckcreate" class="btn btn-admin">
+            <span class="glyphicon glyphicon-plus"></span><span data-translate="admincompany.form.create">Create</span>
+        </a>
     </div>
-    <div class="alert alert-warning" ng-if="vm.trucks.length === 0">List of trucks is empty. You can create new itemes to using buttom "Create".</div>
+    <div class="alert alert-warning" ng-if="vm.trucks.length === 0" data-translate="admincompany.truck.listempty">List of trucks is empty. You can create new itemes to using buttom "Create".</div>
 
     <div ng-if="vm.trucks.length != 0">
         <div id="control-table">
-            <span class="select-show-title">Show:</span>
+            <span class="select-show-title" data-translate="admincompany.form.show">Show:</span>
             <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage"
                     ng-change="vm.changeItemsPerPage()" class="btn btn-default">
             </select>
@@ -23,11 +25,21 @@
             <thead>
 
             <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                <th jh-sort-by="regNumber">Register number<span class="fa fa-sort"></span></th>
-                <th jh-sort-by="model">Model<span class="fa fa-sort"></span></span></th>
-                <th jh-sort-by="consumption">Consumption<span class="fa fa-sort"></span></span></th>
-                <th jh-sort-by="type">Type<span class="fa fa-sort"></span></th>
-                <th jh-sort-by="status">Status<span class="fa fa-sort"></span></th>
+                <th jh-sort-by="regNumber">
+                    <span data-translate="admincompany.truck.registernumber">Register number</span><span class="fa fa-sort"></span>
+                </th>
+                <th jh-sort-by="model">
+                    <span data-translate="admincompany.truck.model">Model</span><span class="fa fa-sort"></span>
+                </th>
+                <th jh-sort-by="consumption">
+                    <span data-translate="admincompany.truck.consumption">Consumption</span><span class="fa fa-sort"></span>
+                </th>
+                <th jh-sort-by="type">
+                    <span data-translate="admincompany.truck.type">Type</span><span class="fa fa-sort"></span>
+                </th>
+                <th jh-sort-by="status">
+                    <span data-translate="admincompany.truck.status">Status</span><span class="fa fa-sort"></span>
+                </th>
             </tr>
             </thead>
             <tbody>
@@ -38,9 +50,9 @@
                 <td class="row-consumption-truck">{{truck.consumption}}</td>
                 <td class="row-type-truck"><span class="label label-default">{{truck.type}}</span></td>
                 <td class="row-status-truck">
-                    <span class="label label-success" ng-if="truck.status == 'READY'"> READY</span>
-                    <span class="label label-warning" ng-if="truck.status == 'REPAIRING'"> REPAIRING</span>
-                    <span class="label label-danger" ng-if="truck.status == 'WRITTENOFF'"> WRITTEN OFF</span>
+                    <span class="label label-success" ng-if="truck.status == 'READY'" data-translate="admincompany.truck.ready" > READY</span>
+                    <span class="label label-warning" ng-if="truck.status == 'REPAIRING'" data-translate="admincompany.truck.repairing"> REPAIRING</span>
+                    <span class="label label-danger" ng-if="truck.status == 'WRITTENOFF'" data-translate="admincompany.truck.writtenoff"> WRITTEN OFF</span>
 
                 </td>
             </tr>

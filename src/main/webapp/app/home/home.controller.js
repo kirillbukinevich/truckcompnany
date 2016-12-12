@@ -34,7 +34,7 @@
                 $state.go('driver.routelist');
             } else if (Principal.hasAnyAuthority(["ROLE_MANAGER"])) {
                 console.log("Route to initial page for manager");
-                $state.go('manager.initial');
+                $state.go('manager.waybills');
             }
         });
 

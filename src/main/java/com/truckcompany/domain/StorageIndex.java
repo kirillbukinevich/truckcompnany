@@ -3,10 +3,7 @@ package com.truckcompany.domain;
 import org.apache.solr.client.solrj.beans.Field;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.lang.annotation.Documented;
 
 /**
  * Created by Vladimir on 16.11.2016.

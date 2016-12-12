@@ -3,9 +3,13 @@
 <div class="alert alert-warning" ng-if="vm.waybills.length === 0">List of your's waybills is empty.</div>
 
 <div ng-if="vm.waybills.length != 0">
-    Show:
-    <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage" ng-change="vm.changeItemsPerPage()">
-    </select>
+    <div id="control-table">
+        <span class="select-show-title">Waybills per page:</span>
+        <select ng-model="vm.itemsPerPage" class="btn btn-default"
+                ng-options="number for number in vm.availableItemsPerPage"
+                ng-change="vm.changeItemsPerPage()">
+        </select>
+    </div>
 
     <table class="table">
         <thead>

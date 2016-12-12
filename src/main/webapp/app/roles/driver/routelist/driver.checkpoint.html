@@ -16,5 +16,12 @@
             <span ng-if = "checkpoint.checkDate" class="label label-success">ok</span>
         </td>
     </tr>
+    <tr>
+        <td>{{vm.routeList.leavingStorage.address}}</td>
+        <td>{{waybill.routeList.arrivalDate | date:'yyyy-MM-dd HH:mm'}}</td>
+        <td class="text-align-center">
+            <span ng-click="vm.completeTrip()" class="label label-warning" >complete</span>
+        </td>
+    </tr>
     </tbody>
 </table>

@@ -42,7 +42,7 @@
                         };
                     }],
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('activate');
+                        $translatePartialLoader.addPart('admincompany');
                         return $translate.refresh();
                     }]
                 }
@@ -64,7 +64,7 @@
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('activate');
+                        $translatePartialLoader.addPart('admincompany');
                         return $translate.refresh();
                     }]
                 }
@@ -86,7 +86,7 @@
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('activate');
+                        $translatePartialLoader.addPart('admincompany');
                         return $translate.refresh();
                     }]
                 }

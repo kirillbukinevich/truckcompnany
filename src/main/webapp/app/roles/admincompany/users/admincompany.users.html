@@ -1,8 +1,11 @@
-<h1>Employees</h1>
+<h1 data-translate="admincompany.users.titleall">Employees</h1>
 
 
 <div id="control-panel">
-    <a href="#/admincompany/usercreate" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Create</a>
+    <a href="#/admincompany/usercreate" class="btn btn-admin">
+        <span class="glyphicon glyphicon-plus"></span>
+        <span data-translate="admincompany.form.create">Create</span>
+    </a>
 </div>
 <div class="alert alert-warning" ng-if="vm.users.length === 0">List of employees is empty. You can create new employee now
     using buttom "Create".
@@ -10,7 +13,7 @@
 
 <div ng-if="vm.users.length != 0">
     <div id="control-table">
-        <span class="select-show-title">Show:</span>
+        <span class="select-show-title"><span data-translate="admincompany.form.show">Show:</span>
         <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage"
                 ng-change="vm.changeItemsPerPage()" class="btn btn-default">
         </select>
@@ -20,11 +23,11 @@
         <thead>
 
         <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-            <th jh-sort-by="login">Login<span class="fa fa-sort"></span></th>
-            <th jh-sort-by="firstName">First name, last name<span class="fa fa-sort"></span></th>
-            <th jh-sort-by="email">Email<span class="fa fa-sort"></span></th>
-            <th jh-sort-by="status" id="row-status">Status<span class="fa fa-sort"></span></th>
-            <th>Role</th>
+            <th jh-sort-by="login" data-translate="admincompany.users.login">Login<span class="fa fa-sort"></span></th>
+            <th jh-sort-by="firstName"><span data-translate="admincompany.users.firstandlastname">First name, last name</span><span class="fa fa-sort"></span></th>
+            <th jh-sort-by="email"><span data-translate="admincompany.users.email">Email</span><span class="fa fa-sort"></span></th>
+            <th jh-sort-by="status" id="row-status"><span data-translate="admincompany.users.status">Status</span><span class="fa fa-sort"></span></th>
+            <th><span data-translate="admincompany.users.role">Role</span></th>
         </tr>
         </thead>
         <tbody>

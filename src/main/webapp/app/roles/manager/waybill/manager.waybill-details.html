@@ -15,7 +15,9 @@
                         <dd><span>{{vm.waybill.number}}</span></dd>
 
                         <dt><span>Route list №:</span></dt>
-                        <dd><span>{{vm.waybill.routeList.number}}</span></dd>
+                        <dd>
+                            <span><a href="#/manager/routelist-for-waybill/{{vm.waybill.routeList.id}}">{{vm.waybill.routeList.number}}</a></span>
+                        </dd>
 
                         <dt><span>Dispatcher:</span></dt>
                         <dd><span>{{vm.waybill.dispatcher.firstName}} {{vm.waybill.dispatcher.lastName}}</span></dd>
@@ -67,8 +69,8 @@
                         <thead>
                         <tr>
                             <th class="text-center">Name</th>
-                            <th class="text-center">Unchecked</th>
-                            <th ng-if="vm.waybill.state != 'REJECTED'" class="text-center">Confirmed</th>
+                            <th class="text-center" ng-if="vm.waybill.state == 'CREATED'">Unchecked</th>
+                            <th ng-if="vm.waybill.state != 'REJECTED'" class="text-center">Shipped</th>
                             <th ng-if="vm.waybill.state != 'REJECTED'" class="text-center">$ Price</th>
                         </tr>
                         </thead>
@@ -78,17 +80,16 @@
                             <td>{{stuff.name}}
                                 <div>({{stuff.type}})</div>
                             </td>
-                            <td>
+                            <td ng-if="vm.waybill.state == 'CREATED'">
                                 <div class="text-center">{{stuff.uncheckedNumber}}</div>
                             </td>
                             <td ng-if="vm.waybill.state != 'REJECTED'">
-                                <div
-                                    ng-class="{'has-error' : (form.goodsNum{{stuff.id}}.$dirty && form.goodsNum{{stuff.id}}.$invalid)}">
+                                <div ng-if="vm.waybill.state == 'CREATED'"
+                                     ng-class="{'has-error' : (form.goodsNum{{stuff.id}}.$dirty && form.goodsNum{{stuff.id}}.$invalid)}">
                                     <input name="goodsNum{{stuff.id}}"
-                                           ng-if="vm.waybill.state == 'CREATED'"
                                            ng-model="stuff.acceptedNumber"
+                                           ng-pattern="/^\d+$/"
                                            size="5" class="form-control input-sm text-center"
-                                           value="{{stuff.uncheckedNumber}}"
                                            required>
                                 </div>
                                 <div ng-if="vm.waybill.state != 'CREATED'" class="text-center">
@@ -161,33 +162,34 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <label for="price" class="pull-left">Margin:</label>
-                    <div class="input-group"  style="clear:both"
-                        ng-class="{'has-error' : (form.price.$dirty && form.price.$invalid)}">
+                    <div class="input-group" style="clear:both"
+                         ng-class="{'has-error' : (form.price.$dirty && form.price.$invalid)}">
                         <input type="text"
                                id="price"
                                name="price"
                                class="form-control"
                                ng-model="vm.waybill.margin"
+                               ng-pattern="/^\d+$/"
                                aria-describedby="price-addon"
                                required/>
                         <span class="input-group-addon" id="price-addon">%</span>
                     </div>
-                    <div class="alert alert-danger help-block"
-                         role="alert"
-                         ng-show="form.price.$dirty && form.price.$invalid">
-                        Margin is required
-                    </div>
+                    <!--<div class="alert alert-danger help-block"-->
+                    <!--role="alert"-->
+                    <!--ng-show="form.price.$dirty && form.price.$invalid">-->
+                    <!--Margin must be numeric-->
+                    <!--</div>-->
                 </div>
             </div>
             <div class="col-md-1"></div>
 
         </div>
 
-        <button type="button" class="btn btn-danger" data-dismiss="modal"
-                ng_disabled="form.checkDate.$invalid"
-                ng-click="vm.clear(); vm.changeWaybillState(0)">
-            <span class="glyphicon glyphicon-remove">&nbsp;Reject</span>
-        </button>
+        <!--      <button type="button" class="btn btn-danger" data-dismiss="modal"
+                      ng_disabled="form.checkDate.$invalid"
+                      ng-click="vm.clear(); vm.changeWaybillState(0)">
+                  <span class="glyphicon glyphicon-remove">&nbsp;Reject</span>
+              </button>-->
         <button type="button" class="btn btn-success" data-dismiss="modal"
                 ng-disabled="form.$invalid"
                 ng-click="closeModalWaybillDetails(vm.waybill.id); vm.changeWaybillState(1)">
