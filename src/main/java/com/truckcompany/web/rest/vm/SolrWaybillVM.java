@@ -1,60 +1,40 @@
-package com.truckcompany.domain;
+package com.truckcompany.web.rest.vm;
 
-import com.truckcompany.repository.search.SearchableWaybillDefinition;
-import com.truckcompany.web.rest.vm.ManagedWaybillVM;
-import org.apache.solr.client.solrj.beans.Field;
-import org.springframework.data.solr.core.mapping.Indexed;
-import org.springframework.data.solr.core.mapping.SolrDocument;
+import com.truckcompany.domain.WaybillIndex;
 
-import javax.persistence.Id;
 import java.util.Date;
 
 /**
- * Created by Dmitry on 11.12.2016.
+ * Created by Dmitry on 12.12.2016.
  */
+public class SolrWaybillVM {
 
-@SolrDocument(solrCoreName = "waybills")
-public class WaybillIndex implements SearchableWaybillDefinition {
-
-    @Id
     private Long id;
-
-    @Field(NUMBER_FIELD_NAME)
     private String number;
-
-    @Field(COMPANY_ID_FIELD_NAME)
     private Long companyId;
-
-    @Field(DATE_FIELD_NAME)
     private Date date;
-
-    @Field(DRIVER_FIRST_NAME_FIELD_NAME)
     private String driverFirstName;
-
-    @Field(DRIVER_LAST_NAME_FIELD_NAME)
     private String driverLastName;
-
-    @Field(DISPATCHER_FIRST_NAME_FIELD_NAME)
     private String dispatcherFirstName;
-
-    @Field(DISPATCHER_LAST_NAME_FIELD_NAME)
     private String dispatcherLastName;
-
-    @Field(STATE_FIELD_NAME)
     private String state;
 
-    public WaybillIndex() {}
+    public SolrWaybillVM(Long id, String number, Long companyId, Date date, String driverFirstName,
+                         String driverLastName, String dispatcherFirstName, String dispatcherLastName, String state) {
+        this.id = id;
+        this.number = number;
+        this.companyId = companyId;
+        this.date = date;
+        this.driverFirstName = driverFirstName;
+        this.driverLastName = driverLastName;
+        this.dispatcherFirstName = dispatcherFirstName;
+        this.dispatcherLastName = dispatcherLastName;
+        this.state = state;
+    }
 
-    public WaybillIndex(ManagedWaybillVM managedWaybillVM) {
-        this.id = managedWaybillVM.getId();
-        this.number = managedWaybillVM.getNumber();
-        this.companyId = managedWaybillVM.getDispatcher().getCompany().getId();
-        this.date = new Date(managedWaybillVM.getDate().toEpochSecond());
-        this.driverFirstName = managedWaybillVM.getDriver().getFirstName();
-        this.driverLastName = managedWaybillVM.getDriver().getLastName();
-        this.dispatcherFirstName = managedWaybillVM.getDispatcher().getFirstName();
-        this.dispatcherLastName = managedWaybillVM.getDispatcher().getLastName();
-        this.state = managedWaybillVM.getState().name();
+    public SolrWaybillVM(WaybillIndex index) {
+        this(index.getId(), index.getNumber(), index.getCompanyId(), index.getDate(), index.getDriverFirstName(),
+            index.getDriverLastName(), index.getDispatcherFirstName(), index.getDispatcherLastName(), index.getState());
     }
 
     public Long getId() {
@@ -131,10 +111,15 @@ public class WaybillIndex implements SearchableWaybillDefinition {
 
     @Override
     public String toString() {
-        return "WaybillIndex{" +
+        return "SolrWaybillVM{" +
             "id=" + id +
             ", number='" + number + '\'' +
             ", companyId=" + companyId +
+            ", date=" + date +
+            ", driverFirstName='" + driverFirstName + '\'' +
+            ", driverLastName='" + driverLastName + '\'' +
+            ", dispatcherFirstName='" + dispatcherFirstName + '\'' +
+            ", dispatcherLastName='" + dispatcherLastName + '\'' +
             ", state='" + state + '\'' +
             '}';
     }

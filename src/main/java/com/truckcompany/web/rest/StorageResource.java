@@ -153,10 +153,7 @@ public class StorageResource {
         HttpHeaders headers = createAlert("storages.searchQuery", null);
         return new ResponseEntity<>(managedStorageVMs, headers, OK);
 
-
-
     }
-
 
 
 

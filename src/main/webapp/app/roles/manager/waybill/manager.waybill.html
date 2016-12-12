@@ -3,57 +3,60 @@
 <div ng-if="vm.error" class="alert alert-danger" role="alert">
     {{vm.messageError}}
 </div>
-<div class="alert alert-info" role="alert" ng-if="vm.waybills == 0">No waybills yet</div>
 
-<div ng-if="vm.waybills != 0">
-    <div id="control-panel">
+<div id="control-panel">
+    <div class="row">
         <div class="col-md-6">
             <div id="wrap-search">
                 <input type="text" ng-keyup="vm.searchWaybill($event)" ng-model="vm.searchQuery">
             </div>
         </div>
     </div>
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th class="text-center">Waybill №</th>
-            <th>Registration date</th>
-            <th>Dispatcher</th>
-            <th>Driver</th>
-            <th>State</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="waybill in vm.waybills track by $index">
-            <td>
-                <div class="text-center">{{waybill.number}}</div>
-            </td>
-            <td>{{waybill.date | date:"dd/MM/yy HH:mm"}}</td>
-            <td>{{waybill.dispatcher.firstName}} {{waybill.dispatcher.lastName}}</td>
-            <td>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</td>
-            <td>
+</div>
+
+<div class="alert alert-info" role="alert" ng-if="vm.waybills == 0 && (!vm.isModeSearch)">No waybills yet</div>
+<div class="alert alert-info" role="alert" ng-if="vm.waybills == 0 && (vm.isModeSearch)">No waybills found!</div>
+
+<table ng-if="vm.waybills != 0" class="table table-hover">
+    <thead>
+    <tr>
+        <th class="text-center">Waybill №</th>
+        <th>Registration date</th>
+        <th>Dispatcher</th>
+        <th>Driver</th>
+        <th>State</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="waybill in vm.waybills track by $index">
+        <td ng-bind-html="waybill.number">
+            <div class="text-center">{{waybill.number}}</div>
+        </td>
+        <td>{{waybill.date | date:"dd/MM/yy HH:mm"}}</td>
+        <td ng-bind-html="waybill.dispatcherFirstName + ' ' + waybill.dispatcherLastName">{{waybill.dispatcherFirstName}} {{waybill.dispatcherLastName}}</td>
+        <td ng-bind-html="waybill.driverFirstName + ' ' + waybill.driverLastName">{{waybill.driverFirstName}} {{waybill.driverLastName}}</td>
+        <td>
                 <span ng-if="waybill.state == 'CREATED'" class="label label-info">
                     <span class="glyphicon glyphicon-plus"></span>&nbsp;CREATED</span>
-                <span ng-if="waybill.state == 'CHECKED'" class="label label-primary">
+            <span ng-if="waybill.state == 'CHECKED'" class="label label-primary">
                     <span class="glyphicon glyphicon-transfer"></span>&nbsp;CHECKED</span>
-                <span ng-if="waybill.state == 'DELIVERED'" class="label label-success">
+            <span ng-if="waybill.state == 'DELIVERED'" class="label label-success">
                     <span class="glyphicon glyphicon-ok"></span>&nbsp;DELIVERED</span>
-                <span ng-if="waybill.state == 'REJECTED'" class="label label-danger">
+            <span ng-if="waybill.state == 'REJECTED'" class="label label-danger">
                    <span class="glyphicon glyphicon-remove"></span>&nbsp;REJECTED</span>
-            </td>
-            <td class="text-right">
-                <button type="button" class="btn btn-info btn-sm"
-                        ng-click="vm.showModalWaybillDetails(waybill.id)"
-                        ng-if="waybill.state == 'CREATED'">
-                    <span class="glyphicon glyphicon glyphicon-list-alt"></span>&nbsp;Handle
-                </button>
-                <button type="button" class="btn btn-default btn-sm"
-                        ng-click="vm.showModalWaybillDetails(waybill.id)"
-                        ng-if="waybill.state != 'CREATED'">
-                    <span class="glyphicon glyphicon glyphicon-eye-open"></span>&nbsp;Details
-                </button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+        </td>
+        <td class="text-right">
+            <button type="button" class="btn btn-info btn-sm"
+                    ng-click="vm.showModalWaybillDetails(waybill.id)"
+                    ng-if="waybill.state == 'CREATED'">
+                <span class="glyphicon glyphicon glyphicon-list-alt"></span>&nbsp;Handle
+            </button>
+            <button type="button" class="btn btn-default btn-sm"
+                    ng-click="vm.showModalWaybillDetails(waybill.id)"
+                    ng-if="waybill.state != 'CREATED'">
+                <span class="glyphicon glyphicon glyphicon-eye-open"></span>&nbsp;Details
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>

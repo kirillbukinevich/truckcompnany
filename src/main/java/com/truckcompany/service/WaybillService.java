@@ -184,7 +184,7 @@ public class WaybillService {
         waybillRepository.save(createdWaybill);
 
         log.debug("Waybill created successfully!");
-        return waybill;
+        return createdWaybill;
     }
 
     public void deleteWaybill(Long id) {

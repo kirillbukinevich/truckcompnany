@@ -11,12 +11,14 @@ import com.truckcompany.service.WaybillService;
 import com.truckcompany.service.dto.WaybillDTO;
 import com.truckcompany.service.util.SearchUtil;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
+import com.truckcompany.web.rest.vm.SolrWaybillVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.solr.core.query.result.HighlightEntry;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +31,8 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.truckcompany.repository.search.SearchableStorageDefinition.ADDRESS_FIELD_NAME;
+import static com.truckcompany.repository.search.SearchableWaybillDefinition.*;
 import static com.truckcompany.security.SecurityUtils.isCurrentUserInRole;
 import static java.util.Collections.emptyList;
 
@@ -52,25 +56,24 @@ public class DefaultWaybillFacade implements WaybillFacade {
     public List<WaybillDTO> findWaybills() {
 
         Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
-        if (optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 
             log.debug("Get all waybills for user \'{}\'", user.getLogin());
             List<WaybillDTO> waybills = emptyList();
-            if (isCurrentUserInRole("ROLE_DRIVER")){
+            if (isCurrentUserInRole("ROLE_DRIVER")) {
                 waybills = waybillService.getWaybillByDriver(user)
                     .stream()
                     .map(WaybillDTO::new)
                     .collect(Collectors.toList());
-            }
-            else if(isCurrentUserInRole("ROLE_COMPANYOWNER") || isCurrentUserInRole("ROLE_MANAGER") || isCurrentUserInRole("ROLE_DISPATCHER")){
+            } else if (isCurrentUserInRole("ROLE_COMPANYOWNER") || isCurrentUserInRole("ROLE_MANAGER") || isCurrentUserInRole("ROLE_DISPATCHER")) {
                 waybills = waybillService.getWaybillByCompany(user.getCompany())
                     .stream()
                     .map(WaybillDTO::new)
                     .collect(Collectors.toList());
             }
             return waybills;
-        }else {
+        } else {
             return emptyList();
         }
     }
@@ -78,12 +81,12 @@ public class DefaultWaybillFacade implements WaybillFacade {
     @Override
     public List<WaybillDTO> findWaybillsWithRouteListCreationDateBetween(ZonedDateTime fromDate, ZonedDateTime toDate) {
         Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
-        if (optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 
             log.debug("Get all waybills for user \'{}\'", user.getLogin());
             List<WaybillDTO> waybills = emptyList();
-            if(isCurrentUserInRole("ROLE_COMPANYOWNER")){
+            if (isCurrentUserInRole("ROLE_COMPANYOWNER")) {
                 waybills = waybillService.getWaybillByCompanyAndRouteListCreationDateBetween(user.getCompany(), fromDate, toDate)
                     .stream()
                     .map(WaybillDTO::new)
@@ -91,7 +94,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
             }
 
             return waybills;
-        }else {
+        } else {
             return emptyList();
         }
     }
@@ -120,12 +123,12 @@ public class DefaultWaybillFacade implements WaybillFacade {
     public List<WaybillDTO> findWaybillsWithState(WaybillState state) {
         Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
 
-        if (optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 
-            log.debug("Get waybills with state " + state.toString() +" for user \'{}\'", user.getLogin());
+            log.debug("Get waybills with state " + state.toString() + " for user \'{}\'", user.getLogin());
             List<WaybillDTO> waybills = emptyList();
-            if(isCurrentUserInRole("ROLE_COMPANYOWNER")){
+            if (isCurrentUserInRole("ROLE_COMPANYOWNER")) {
                 waybills = waybillService.getWaybillByCompanyAndState(user.getCompany(), state)
                     .stream()
                     .map(WaybillDTO::new)
@@ -133,7 +136,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
             }
 
             return waybills;
-        }else {
+        } else {
             return emptyList();
         }
     }
@@ -142,13 +145,13 @@ public class DefaultWaybillFacade implements WaybillFacade {
     public List<WaybillDTO> findWaybillsWithStateAndDateBetween(WaybillState state, ZonedDateTime fromDate, ZonedDateTime toDate) {
         Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
 
-        if (optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 
-            log.debug("Get waybills with state {}, date between {} and {} for user \'{}\'",state.toString(), fromDate,
+            log.debug("Get waybills with state {}, date between {} and {} for user \'{}\'", state.toString(), fromDate,
                 toDate, user.getLogin());
             List<WaybillDTO> waybills = emptyList();
-            if(isCurrentUserInRole("ROLE_COMPANYOWNER")){
+            if (isCurrentUserInRole("ROLE_COMPANYOWNER")) {
                 waybills = waybillService.getWaybillByCompanyAndStateAndDateBetween(user.getCompany(), state,
                     fromDate, toDate)
                     .stream()
@@ -157,7 +160,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
             }
 
             return waybills;
-        }else {
+        } else {
             return emptyList();
         }
     }
@@ -197,7 +200,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
             }
             return waybills;
 
-        }else {
+        } else {
             return emptyList();
         }
     }
@@ -209,13 +212,13 @@ public class DefaultWaybillFacade implements WaybillFacade {
 
         Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
 
-        if (optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 
             log.debug("Get all waybills for user \'{}\'", user.getLogin());
-            if(isCurrentUserInRole("ROLE_COMPANYOWNER")){
+            if (isCurrentUserInRole("ROLE_COMPANYOWNER")) {
                 pageWaybills = waybillService.getPageWaybillByCompany(pageable, user.getCompany());
-            } else if (isCurrentUserInRole("ROLE_DISPATCHER")){
+            } else if (isCurrentUserInRole("ROLE_DISPATCHER")) {
                 pageWaybills = waybillService.getPageWaybillByDispatcher(pageable, user);
             }
         }
@@ -227,7 +230,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
     }
 
     @Override
-    public List<ManagedWaybillVM> findWaybillsAccordingQuery(String query) {
+    public List<SolrWaybillVM> findWaybillsAccordingQuery(String query) {
 
         Collection<String> strings = SearchUtil.splitSearchTermAndRemoveIgnoredCharacters(query, IGNORED_CHARS_PATTERN);
 
@@ -236,7 +239,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
             res = res + "*" + fragment + "* ";
         }
         Optional<User> userOptional = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
-        if(!userOptional.isPresent()) {
+        if (!userOptional.isPresent()) {
             return emptyList();
         }
 
@@ -244,7 +247,29 @@ public class DefaultWaybillFacade implements WaybillFacade {
 
         HighlightPage<WaybillIndex> waybillIndexHighlightPage = waybillSearchRepository.findByAllFieldsAndCompanyId(res, user.getCompany().getId(), new PageRequest(0, 100));
 
-
-        return null /*waybillIndexHighlightPage.getContent().stream().map(waybill -> new WaybillDTO(waybill)).collect(toList())*/;
+        int i = 0;
+        for (HighlightEntry<WaybillIndex> waybill : waybillIndexHighlightPage.getHighlighted()) {
+            for (HighlightEntry.Highlight highlight : waybill.getHighlights()) {
+                for (String snippet : highlight.getSnipplets()) {
+                    if (highlight.getField().getName().equals(NUMBER_FIELD_NAME)) {
+                        waybillIndexHighlightPage.getContent().get(i).setNumber(snippet);
+                    }
+                    if (highlight.getField().getName().equals(DRIVER_FIRST_NAME_FIELD_NAME)) {
+                        waybillIndexHighlightPage.getContent().get(i).setDriverFirstName(snippet);
+                    }
+                    if (highlight.getField().getName().equals(DRIVER_LAST_NAME_FIELD_NAME)) {
+                        waybillIndexHighlightPage.getContent().get(i).setDriverLastName(snippet);
+                    }
+                    if (highlight.getField().getName().equals(DISPATCHER_FIRST_NAME_FIELD_NAME)) {
+                        waybillIndexHighlightPage.getContent().get(i).setDispatcherFirstName(snippet);
+                    }
+                    if (highlight.getField().getName().equals(DISPATCHER_LAST_NAME_FIELD_NAME)) {
+                        waybillIndexHighlightPage.getContent().get(i).setDispatcherLastName(snippet);
+                    }
+                }
+            }
+            i++;
+        }
+        return waybillIndexHighlightPage.getContent().stream().map(SolrWaybillVM::new).collect(Collectors.toList());
     }
 }

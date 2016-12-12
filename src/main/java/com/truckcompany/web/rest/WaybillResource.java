@@ -2,7 +2,9 @@ package com.truckcompany.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.truckcompany.domain.Waybill;
+import com.truckcompany.domain.WaybillIndex;
 import com.truckcompany.repository.WaybillRepository;
+import com.truckcompany.repository.search.WaybillSearchRepository;
 import com.truckcompany.security.AuthoritiesConstants;
 import com.truckcompany.service.OfferService;
 import com.truckcompany.service.WaybillService;
@@ -11,6 +13,7 @@ import com.truckcompany.service.facade.WaybillFacade;
 import com.truckcompany.web.rest.util.HeaderUtil;
 import com.truckcompany.web.rest.util.PaginationUtil;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
+import com.truckcompany.web.rest.vm.SolrWaybillVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -48,6 +51,9 @@ public class WaybillResource {
 
     @Inject
     private WaybillRepository waybillRepository;
+
+    @Inject
+    private WaybillSearchRepository waybillSearchRepository;
 
     @Inject
     private OfferService offerService;
@@ -153,6 +159,8 @@ public class WaybillResource {
         Waybill newWaybill = waybillService.createWaybill(managedWaybillVM);
         offerService.updateOfferState(managedWaybillVM.getOffer());
 
+        waybillSearchRepository.save(new WaybillIndex(new ManagedWaybillVM(newWaybill)));
+
         return ResponseEntity.created(new URI("/api/companies/" + newWaybill.getId()))
             .headers(HeaderUtil.createAlert("waybill.created", newWaybill.getId().toString()))
             .body(newWaybill);
@@ -180,16 +188,19 @@ public class WaybillResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("waybillManagement", "waybilldoesntexist", "Waybill doesn't exist!")).body(null);
 
         waybillService.updateWaybill(managedWaybillVM);
+        waybillSearchRepository.save(new WaybillIndex(managedWaybillVM));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createAlert("userManagement.updated", managedWaybillVM.getId().toString()))
             .body(waybillService.getWaybillById(managedWaybillVM.getId()));
     }
 
     @RequestMapping(value = "/_search/waybills/{query}", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ManagedWaybillVM>> searchWaybill(@PathVariable String query) {
+    public ResponseEntity<List<SolrWaybillVM>> searchWaybill(@PathVariable String query) {
         log.debug("REST request to search waybill by query: {}", query);
 
-        List<ManagedWaybillVM> managedWaybillVMS = waybillFacade.findWaybillsAccordingQuery(query);
-        return null;
+        List<SolrWaybillVM> solrWaybillVMS = waybillFacade.findWaybillsAccordingQuery(query);
+
+        HttpHeaders headers = HeaderUtil.createAlert("waybill.searchQuery", null);
+        return new ResponseEntity<List<SolrWaybillVM>>(solrWaybillVMS, headers, HttpStatus.OK);
     }
 }
