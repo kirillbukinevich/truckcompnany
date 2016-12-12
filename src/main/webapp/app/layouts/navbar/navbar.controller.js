@@ -70,7 +70,7 @@
                 case "ROLE_ADMIN": $state.go('admincompany.initial'); break;
                 case "ROLE_SUPERADMIN":$state.go('superadmin.companies'); break;
                 case "ROLE_DRIVER":$state.go('driver.routelist'); break;
-                case "ROLE_MANAGER":$state.go('manager.initial'); break;
+                case "ROLE_MANAGER":$state.go('manager.waybills'); break;
                 case "ROLE_COMPANYOWNER":$state.go('companyowner.initial'); break;
                 case "ROLE_DISPATCHER":$state.go('dispatcher.initial'); break;
             }

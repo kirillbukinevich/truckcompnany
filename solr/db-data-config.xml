@@ -1,0 +1,23 @@
+<dataConfig>
+  <dataSource driver="com.mysql.jdbc.Driver"
+     url="jdbc:mysql://localhost:3306/TruckCompany?useSSL=false"
+     user="root"
+     password="root" />
+  <document>
+    <entity name="waybill" query="SELECT * from waybill">
+      <field column="id" name="id" />
+      <field column="number" name="number" />
+      <field column="date" name="date" />
+      <field column="state" name="state" />
+      <field column="company_id" name="companyId" />
+      <entity name="driver" query="select first_name, last_name from jhi_user where id='${waybill.driver_id}'">
+        <field column="first_name" name="driverFirstName"/>
+        <field column="last_name" name="driverLastName"/>
+      </entity>
+      <entity name="dispatcher" query="select first_name, last_name from jhi_user where id='${waybill.dispatcher_id}'">
+        <field column="first_name" name="dispatcherFirstName"/>
+        <field column="last_name" name="dispatcherLastName"/>
+      </entity>
+    </entity>
+  </document>
+</dataConfig>

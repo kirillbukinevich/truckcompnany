@@ -16,8 +16,10 @@ public interface WaybillSearchRepository extends SolrCrudRepository<WaybillIndex
 
     @Highlight(prefix = "<b>", postfix = "</b>")
     @Query(
-        value = "(number:?0 OR date:?0 OR dispatcherName:?0 OR driverName:?0 OR state:?0) AND companyId:?1",
-        fields = {ID_FIELD_NAME, COMPANY_ID_FIELD_NAME, NUMBER_FIELD_NAME, DATE_FIELD_NAME, DISPATCHER_FIELD_NAME, DRIVER_FIELD_NAME, STATE_FIELD_NAME},
+        value = "(number:?0 OR dispatcherFirstName:?0 OR dispatcherLastName:?0 " +
+                "OR driverFirstName:?0 OR driverLastName:?0 OR state:?0) AND companyId:?1",
+        fields = {ID_FIELD_NAME, COMPANY_ID_FIELD_NAME, NUMBER_FIELD_NAME, DATE_FIELD_NAME, DISPATCHER_FIRST_NAME_FIELD_NAME,
+            DISPATCHER_LAST_NAME_FIELD_NAME, DRIVER_FIRST_NAME_FIELD_NAME, DRIVER_LAST_NAME_FIELD_NAME, STATE_FIELD_NAME},
         defaultOperator = org.springframework.data.solr.core.query.Query.Operator.OR)
     HighlightPage<WaybillIndex> findByAllFieldsAndCompanyId(String query, Long CompanyId, Pageable page);
 }

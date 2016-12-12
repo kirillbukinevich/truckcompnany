@@ -11,12 +11,14 @@ import com.truckcompany.service.WaybillService;
 import com.truckcompany.service.dto.WaybillDTO;
 import com.truckcompany.service.util.SearchUtil;
 import com.truckcompany.web.rest.vm.ManagedWaybillVM;
+import com.truckcompany.web.rest.vm.SolrWaybillVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.solr.core.query.result.HighlightEntry;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +31,8 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.truckcompany.repository.search.SearchableStorageDefinition.ADDRESS_FIELD_NAME;
+import static com.truckcompany.repository.search.SearchableWaybillDefinition.*;
 import static com.truckcompany.security.SecurityUtils.isCurrentUserInRole;
 import static java.util.Collections.emptyList;
 
@@ -75,7 +79,6 @@ public class DefaultWaybillFacade implements WaybillFacade {
                         }
                     }
                 }
-
             } else if (isCurrentUserInRole("ROLE_COMPANYOWNER") || isCurrentUserInRole("ROLE_MANAGER") || isCurrentUserInRole("ROLE_DISPATCHER")) {
                 waybills = waybillService.getWaybillByCompany(user.getCompany())
                     .stream()
@@ -211,7 +214,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
             }
             return waybills;
 
-        }else {
+        } else {
             return emptyList();
         }
     }
@@ -241,7 +244,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
     }
 
     @Override
-    public List<ManagedWaybillVM> findWaybillsAccordingQuery(String query) {
+    public List<SolrWaybillVM> findWaybillsAccordingQuery(String query) {
 
         Collection<String> strings = SearchUtil.splitSearchTermAndRemoveIgnoredCharacters(query, IGNORED_CHARS_PATTERN);
 
@@ -250,7 +253,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
             res = res + "*" + fragment + "* ";
         }
         Optional<User> userOptional = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
-        if(!userOptional.isPresent()) {
+        if (!userOptional.isPresent()) {
             return emptyList();
         }
 
@@ -258,7 +261,29 @@ public class DefaultWaybillFacade implements WaybillFacade {
 
         HighlightPage<WaybillIndex> waybillIndexHighlightPage = waybillSearchRepository.findByAllFieldsAndCompanyId(res, user.getCompany().getId(), new PageRequest(0, 100));
 
-
-        return null /*waybillIndexHighlightPage.getContent().stream().map(waybill -> new WaybillDTO(waybill)).collect(toList())*/;
+        int i = 0;
+        for (HighlightEntry<WaybillIndex> waybill : waybillIndexHighlightPage.getHighlighted()) {
+            for (HighlightEntry.Highlight highlight : waybill.getHighlights()) {
+                for (String snippet : highlight.getSnipplets()) {
+                    if (highlight.getField().getName().equals(NUMBER_FIELD_NAME)) {
+                        waybillIndexHighlightPage.getContent().get(i).setNumber(snippet);
+                    }
+                    if (highlight.getField().getName().equals(DRIVER_FIRST_NAME_FIELD_NAME)) {
+                        waybillIndexHighlightPage.getContent().get(i).setDriverFirstName(snippet);
+                    }
+                    if (highlight.getField().getName().equals(DRIVER_LAST_NAME_FIELD_NAME)) {
+                        waybillIndexHighlightPage.getContent().get(i).setDriverLastName(snippet);
+                    }
+                    if (highlight.getField().getName().equals(DISPATCHER_FIRST_NAME_FIELD_NAME)) {
+                        waybillIndexHighlightPage.getContent().get(i).setDispatcherFirstName(snippet);
+                    }
+                    if (highlight.getField().getName().equals(DISPATCHER_LAST_NAME_FIELD_NAME)) {
+                        waybillIndexHighlightPage.getContent().get(i).setDispatcherLastName(snippet);
+                    }
+                }
+            }
+            i++;
+        }
+        return waybillIndexHighlightPage.getContent().stream().map(SolrWaybillVM::new).collect(Collectors.toList());
     }
 }

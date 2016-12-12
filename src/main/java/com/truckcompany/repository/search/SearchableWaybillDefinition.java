@@ -9,7 +9,9 @@ public interface SearchableWaybillDefinition {
     String COMPANY_ID_FIELD_NAME = "companyId";
     String NUMBER_FIELD_NAME = "number";
     String DATE_FIELD_NAME = "date";
-    String DISPATCHER_FIELD_NAME = "dispatcherName";
-    String DRIVER_FIELD_NAME = "driverName";
+    String DISPATCHER_FIRST_NAME_FIELD_NAME = "dispatcherFirstName";
+    String DISPATCHER_LAST_NAME_FIELD_NAME = "dispatcherLastName";
+    String DRIVER_FIRST_NAME_FIELD_NAME = "driverFirstName";
+    String DRIVER_LAST_NAME_FIELD_NAME = "driverLastName";
     String STATE_FIELD_NAME = "state";
 }
