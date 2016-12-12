@@ -7,7 +7,7 @@
 
 <div ng-if="vm.offers.length != 0">
     <div id="control-table">
-        <span class="select-show-title">Show:</span>
+        <span class="select-show-title">Offers per page:</span>
         <select ng-model="vm.itemsPerPage" class="btn btn-default"
                 ng-options="number for number in vm.availableItemsPerPage"
                 ng-change="vm.changeItemsPerPage()">
