@@ -38,8 +38,10 @@
             </tbody>
 
         </table>
-        <div ng-if="myForm.deliveredNumber.$valid && vm.waybill.state === 'DELIVERED'">
+        <div ng-if="vm.waybill.state === 'DELIVERED'">
+        <div ng-if="myForm.deliveredNumber.$valid">
             <a href="" class="btn btn-default"  ng-click="vm.update()">Confirm</a>
+        </div>
         </div>
     </form>
 </div>

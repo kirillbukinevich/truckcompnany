@@ -17,10 +17,12 @@
         vm.driverGoods = [];
         vm.markDate = markDate;
         vm.checkJob = checkJob;
+        vm.completeTrip = completeTrip;
 
 
         //for google map
         vm.travelMode = 'DRIVING';
+        var imageCursor = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
         //for driver rating
         vm.currentRate = 0;
         vm.readOnly = true;
@@ -33,22 +35,34 @@
                 vm.driverGoods[indexDriverGood] = Goods1.query({id: value.id});
                 indexDriverGood++;
                 if (value.state === "CHECKED") {
-                    RouteList.get({id: value.routeList.id}, function (result) {
-                        vm.routeList = result;
-                        console.log(vm.routeList);
-                    });
                     Checkpoint.query({id: value.routeList.id}, function (data) {
                         vm.checkpoints = data;
                         var i = 0;
                         angular.forEach(vm.checkpoints, function (value) {
                             vm.checkpointNames[i] = {location: value.name, stopover: true};
+                            if(value.checkDate != null){
+                                imageCursor = 'http://inspire.ecoachmanager.com/images/32x32/accept_item.png';
+                            }else {
+                                imageCursor = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+                            }
                             vm.imageWaypoints[i] = {
                                 position: vm.checkpoints[i].name,
-                                image: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                                image: imageCursor
                             };
                             i++;
                         });
                     });
+                    RouteList.get({id: value.routeList.id}, function (result) {
+                        vm.routeList = result;
+                        vm.checkpointNames[vm.checkpointNames.length] = {location: vm.routeList.arrivalStorage.address, stopover: true};
+                        imageCursor = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+                        vm.imageWaypoints[vm.imageWaypoints.length] = {
+                            position: vm.routeList.arrivalStorage.address,
+                            image: imageCursor
+                        };
+                    });
+
+
                 }
 
             });
@@ -64,7 +78,6 @@
                             method: 'GET',
                             url: '/api/checkpoint_mark_date/' + id,
                         }).then(function successCallback(response) {
-                            console.log("date changed");
                             var today = new Date();
                             var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
                             var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -78,7 +91,6 @@
                                     };
                                 }
                             }
-                            checkLastCheckpoint(index);
 
                         });
                     } else {
@@ -88,10 +100,9 @@
                 }
             }
         }
-        function checkLastCheckpoint(index) {
-            if ((index + 1) === vm.checkpoints.length) {
+        function completeTrip() {
+            if(vm.checkpoints[vm.checkpoints.length-1].checkDate !=null) {
                 for (var j in vm.waybills) {
-
                     if (vm.waybills[j] != true && vm.waybills[j].state == "CHECKED") {
                         vm.waybills[j].state = "DELIVERED";
                         vm.routeList.arrivalDate = Date.now();
@@ -103,6 +114,8 @@
                         $location.path("/driver/complete");
                     }
                 }
+            }else {
+                window.alert("Mark all checkpoints");
             }
         }
 
