@@ -1,5 +1,5 @@
 <form name="form">
-    <h1>Storages</h1>
+    <h1 data-translate="admincompany.storage.titleall">Storages</h1>
 
     <div ng-if="vm.error" class="alert alert-danger" role="alert">
         {{vm.messageError}}
@@ -10,10 +10,10 @@
         <div id="control-panel">
             <div class="row">
                 <div class="col-md-5">
-                    <a href="#/admincompany/storagecreate" class="btn btn-admin"><span
-                        class="glyphicon glyphicon-plus"></span>Create</a>
+                    <a href="#/admincompany/storagecreate" class="btn btn-admin">
+                        <span class="glyphicon glyphicon-plus" ></span><span data-translate="admincompany.form.create">Create</span></a>
                     <a class="btn btn-admin" ng-click="vm.showModalDeleteStorages()"><span
-                        class="glyphicon glyphicon-trash"></span>Delete</a>
+                        class="glyphicon glyphicon-trash"></span><span data-translate="admincompany.form.delete">Delete</span></a>
                 </div>
                 <div class="col-md-7">
                     <div id="wrap-search">
@@ -23,12 +23,16 @@
             </div>
         </div>
 
-        <div class="alert alert-warning" ng-if="(vm.storages.length === 0) && (!vm.isModeSearch)">List of storages is empty. You can create new itemes to using buttom "Create".</div>
-        <div class="alert alert-warning" ng-if="(vm.storages.length === 0) && (vm.isModeSearch)">Search has not given results.</div>
+        <div class="alert alert-warning" ng-if="(vm.storages.length === 0) && (!vm.isModeSearch)" data-translate="admincompany.storage.listempty">
+            List of storages is empty. You can create new itemes to using buttom "Create".
+        </div>
+        <div class="alert alert-warning" ng-if="(vm.storages.length === 0) && (vm.isModeSearch)" data-translate="admincompany.storage.searchempty">
+            Search has not given results.
+        </div>
 
         <div ng-if="vm.storages.length !=0">
             <div id="show-select">
-                <span class="select-show-title">Show:</span>
+                <span class="select-show-title" data-translate="admincompany.form.show">Show:</span>
                 <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage"
                         ng-change="vm.changeItemsPerPage()" class="btn btn-default">
                 </select>
@@ -41,9 +45,12 @@
                 <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
                     <th class="table-checkbox"><input type="checkbox" ng-model="vm.checkedAll"
                                                       ng-change="vm.changeStateCheckbox()"></th>
-                    <th jh-sort-by="name">Name<span class="fa fa-sort"></span></th>
-                    <th jh-sort-by="address">Address<span class="fa fa-sort"></span></th>
-                    <th jh-sort-by="activated" class="status-active-nonactive">Status<span class="fa fa-sort"></span></th>
+                    <th jh-sort-by="name">
+                        <span  data-translate="admincompany.storage.name">Name</span>><span class="fa fa-sort"></span></th>
+                    <th jh-sort-by="address">
+                        <span  data-translate="admincompany.storage.address">Address</span><span class="fa fa-sort"></span></th>
+                    <th jh-sort-by="activated" class="status-active-nonactive">
+                        <span data-translate="admincompany.storage.status">Status</span><span class="fa fa-sort"></span></th>
                     <th class="table-delete"></th>
                 </tr>
                 </thead>

@@ -1,7 +1,8 @@
-<div ng-if="vm.routeList.state === 'TRANSPORTATION' && (vm.waybill.state === 'DELIVERED' || vm.waybill.state === 'CHECKED')">
+<div
+    ng-if="vm.routeList.state === 'TRANSPORTATION' && (vm.waybill.state === 'DELIVERED' || vm.waybill.state === 'CHECKED')">
     <h1 style="text-align:center">
-        <span ng-if = "vm.waybill.state === 'CHECKED'">List of goods</span>
-        <span ng-if = "vm.waybill.state === 'DELIVERED'">Delivery is completed</span></h1>
+        <span ng-if="vm.waybill.state === 'CHECKED'">List of goods</span>
+        <span ng-if="vm.waybill.state === 'DELIVERED'">Delivery is completed</span></h1>
     <form name="myForm">
         <table class="table table-hover">
 
@@ -31,15 +32,24 @@
             <tr ng-repeat="good in vm.goods1 | orderBy:sortType:sortReverse">
                 <td>{{good.name}}</td>
                 <td>{{good.acceptedNumber}}</td>
-                <td><input type="number" ng-model="good.deliveredNumber" name="deliveredNumber" class="form-control"
-                           id="deliveredNumber"
-                           placeholder="delivered number" required style="width: 50%" ng-click="vm.updateState()"></td>
+                <!--<td><input type="number" ng-model="good.deliveredNumber" name="deliveredNumber" class="form-control"-->
+                <!--id="deliveredNumber"-->
+                <!--placeholder="delivered number" required style="width: 50%" ng-click="vm.updateState()"></td>-->
+                <td>
+                    <div
+                        ng-class="{'has-error' : (myForm.goodsNum{{good.id}}.$dirty && myForm.goodsNum{{good.id}}.$invalid)}">
+                        <input name="goodsNum{{good.id}}"
+                               ng-model="good.deliveredNumber"
+                               type="number" ng-click="vm.updateState()" required>
+                    </div>
+                </td>
+
             </tr>
             </tbody>
 
         </table>
-        <div ng-if="myForm.deliveredNumber.$valid && vm.waybill.state === 'DELIVERED'">
-            <a href="" class="btn btn-default"  ng-click="vm.update()">Confirm</a>
+        <div ng-if="vm.waybill.state === 'DELIVERED'">
+        <a href="" class="btn btn-default" ng-disabled="myForm.$invalid" ng-click="vm.update()">Confirm</a>
         </div>
     </form>
 </div>

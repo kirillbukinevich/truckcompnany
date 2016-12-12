@@ -88,10 +88,10 @@ public class WaybillService {
         return new PageImpl<>(waybills, pageable, total);
     }
 
-    public List<WaybillDTO> getWaybillsByCompanyAndWithStolenGoods(Company company, ZonedDateTime fromDate,
+    public List<WaybillDTO> getWaybillsByCompanyAndWithStolenGoodsAndRouteListArrivalDateBetween(Company company, ZonedDateTime fromDate,
                                                                       ZonedDateTime toDate) {
         log.debug("Get waybills with stolen goods and company with id: {}", company.getId());
-        List<WaybillDTO> waybills = waybillRepository.findByCompanyAndStateAndDateBetween(company, WaybillState.DELIVERED,
+        List<WaybillDTO> waybills = waybillRepository.findByCompanyAndStateAndRouteListArrivalDateBetween(company, WaybillState.DELIVERED,
             fromDate, toDate)
             .stream()
             .filter(waybill -> waybill.getGoods()
@@ -118,11 +118,12 @@ public class WaybillService {
         return waybillRepository.findByCompanyAndState(company, state);
     }
 
-    public List<Waybill> getWaybillByCompanyAndStateAndDateBetween(Company company, WaybillState state,
+    public List<Waybill> getWaybillByCompanyAndStateAndRouteListArrivalDateBetween(Company company, WaybillState state,
                                                                    ZonedDateTime fromDate, ZonedDateTime toDate) {
         log.debug("Get waybill with state {}, date between {} and {} for company with id: {}", state.toString(),
             fromDate, toDate, company.getId());
-        return waybillRepository.findByCompanyAndStateAndDateBetween(company, state, fromDate, toDate);
+
+        return waybillRepository.findByCompanyAndStateAndRouteListArrivalDateBetween(company, state, fromDate, toDate);
     }
 
     public Page<Waybill> getPageWaybillByCompany(Pageable pageable, Company company) {
@@ -229,7 +230,8 @@ public class WaybillService {
         return "W" + companyNum + dateStr + waybillNum;
     }
 
-    public Page<Waybill> getPageWaybillsByCompanyAndRouteListCreationDateBetween(Pageable pageable, Company company, ZonedDateTime fromDate, ZonedDateTime toDate) {
+    public Page<Waybill> getPageWaybillsByCompanyAndRouteListCreationDateBetween(Pageable pageable, Company company,
+                                                                                 ZonedDateTime fromDate, ZonedDateTime toDate) {
         return waybillRepository.findPageByCompanyAndRouteListCreationDateBetween(company, fromDate, toDate, pageable);
     }
 

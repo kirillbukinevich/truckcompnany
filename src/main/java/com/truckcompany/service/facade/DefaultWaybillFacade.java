@@ -66,6 +66,19 @@ public class DefaultWaybillFacade implements WaybillFacade {
                     .stream()
                     .map(WaybillDTO::new)
                     .collect(Collectors.toList());
+                for (int index = 0; index < waybills.size(); index++) {
+                    if(waybills.get(index).getState().equals(WaybillState.CHECKED) ||
+                        (waybills.get(index).getState().equals(WaybillState.DELIVERED) &&
+                        waybills.get(index).getRouteList().getState().equals("TRANSPORTATION"))) {
+                        while (index < waybills.size()-1) {
+                            if( waybills.get(index + 1).getState().equals(WaybillState.CHECKED)) {
+                                waybills.remove(index + 1);
+                            }else {
+                                index++;
+                            }
+                        }
+                    }
+                }
             } else if (isCurrentUserInRole("ROLE_COMPANYOWNER") || isCurrentUserInRole("ROLE_MANAGER") || isCurrentUserInRole("ROLE_DISPATCHER")) {
                 waybills = waybillService.getWaybillByCompany(user.getCompany())
                     .stream()
@@ -142,7 +155,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
     }
 
     @Override
-    public List<WaybillDTO> findWaybillsWithStateAndDateBetween(WaybillState state, ZonedDateTime fromDate, ZonedDateTime toDate) {
+    public List<WaybillDTO> findWaybillsWithStateAndRouteListArrivalDateBetween(WaybillState state, ZonedDateTime fromDate, ZonedDateTime toDate) {
         Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
 
         if (optionalUser.isPresent()) {
@@ -151,8 +164,9 @@ public class DefaultWaybillFacade implements WaybillFacade {
             log.debug("Get waybills with state {}, date between {} and {} for user \'{}\'", state.toString(), fromDate,
                 toDate, user.getLogin());
             List<WaybillDTO> waybills = emptyList();
-            if (isCurrentUserInRole("ROLE_COMPANYOWNER")) {
-                waybills = waybillService.getWaybillByCompanyAndStateAndDateBetween(user.getCompany(), state,
+
+            if(isCurrentUserInRole("ROLE_COMPANYOWNER")){
+                waybills = waybillService.getWaybillByCompanyAndStateAndRouteListArrivalDateBetween(user.getCompany(), state,
                     fromDate, toDate)
                     .stream()
                     .map(WaybillDTO::new)
@@ -187,7 +201,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
     }
 
     @Override
-    public List<WaybillDTO> findWaybillsWithStolenGoods(ZonedDateTime fromDate, ZonedDateTime toDate) {
+    public List<WaybillDTO> findWaybillsWithStolenGoodsAndRouteListArrivalDateBetween(ZonedDateTime fromDate, ZonedDateTime toDate) {
         Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
 
         if (optionalUser.isPresent()) {
@@ -196,7 +210,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
             log.debug("Get all waybills with stolen goods for user \'{}\'", user.getLogin());
             List<WaybillDTO> waybills = emptyList();
             if (isCurrentUserInRole("ROLE_COMPANYOWNER")) {
-                waybills = waybillService.getWaybillsByCompanyAndWithStolenGoods(user.getCompany(), fromDate, toDate);
+                waybills = waybillService.getWaybillsByCompanyAndWithStolenGoodsAndRouteListArrivalDateBetween(user.getCompany(), fromDate, toDate);
             }
             return waybills;
 

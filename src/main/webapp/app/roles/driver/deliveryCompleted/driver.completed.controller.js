@@ -63,6 +63,7 @@
         };
         vm.updateState = function () {
             if(vm.waybill.state === "CHECKED"){
+                console.log(vm.waybill.id);
                 Waybill.get({id: vm.waybill.id}, function (data) {
                     vm.waybill = data;
                 });

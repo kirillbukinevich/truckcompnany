@@ -1,0 +1,111 @@
+{
+    "admincompany": {
+        "sidebar": {
+            "statistic": "Statistic",
+            "employees": "Employees",
+            "storages": "Storages",
+            "trucks": "Trucks",
+            "emails": "Emails to employees"
+        },
+        "statistic": {
+            "totalemployees": "Total Employee",
+            "totalstorages": "Total Strorages",
+            "totaltrucks": "Total Trucks",
+            "totalemails": "Total Emails",
+            "welcome": "Welcome. You are logged as Admin for company",
+            "roles": "Roles employee",
+            "statustruck": "Status trucks",
+            "typetrucks": "Type of trucks"
+        },
+        "users":{
+            "titleall":"Employee",
+            "titlecreate":"Create new employee",
+            "titleupdate":"Update employee",
+            "login": "Login",
+            "firstandlastname": "First name, last name",
+            "email": "Email",
+            "status": "Status",
+            "role": "Role"
+        },
+        "storage":{
+            "titleall":"Storages",
+            "titlecreate":"Create new storage",
+            "titleupdate":"Update storage",
+            "name": "Name",
+            "address": "Address",
+            "status": "Status",
+            "searchempty": "Search has not given results.",
+            "listempty": "List of storages is empty. You can create new itemes to using buttom 'Create'."
+        },
+        "truck":{
+            "titleall":"Trucks",
+            "titlecreate":"Create new truck",
+            "titleupdate":"Update truck",
+            "registernumber":"Register number",
+            "model":"Model",
+            "consumption": "Consumption",
+            "type": "Type",
+            "status": "Status",
+            "listempty": "List of trucks is empty. You can create new itemes to using buttom 'Create'.",
+            "ready": "READY",
+            "repairing": "REPAIRING",
+            "writtenoff": "WRITTEN OFF"
+        },
+        "templates":{
+            "titleall":"Templates",
+            "titlecreate":"Create new template",
+            "titleupdate":"Update template",
+            "assignemployee":"Attention:</strong> You have not assigned template of birthday cards for {{count}} employee.",
+            "name": "Name template",
+            "recipientname": "Recipient name",
+            "recipientmail": "Recipient email",
+            "recipientrole": "Recipient role",
+            "sendingdate":"Sending date",
+            "defaultdate": "Default sending date (birthday)",
+            "assigndate": "Assign new sending date"
+        },
+        "form":{
+            "show": "Show",
+            "create": "Create",
+            "cancel": "Cancel",
+            "update": "Update",
+            "delete": "Delete"
+        },
+        "label":{
+            "firstname": "First name*",
+            "lastname":"Last name*",
+            "birthday": "Birthday*",
+            "city":"City",
+            "street":"Street",
+            "house": "House",
+            "flat":"Flat",
+            "passportdate": "Passport date",
+            "role":"Role",
+            "login": "Login*",
+            "email": "Email*",
+            "name": "Name*",
+            "address": "Address*",
+            "registernumber": "Register number*",
+            "model": "Model*",
+            "consumption": "Fuel consumption (l/100km)*",
+            "status": "Status",
+            "subject": "Subject template*",
+            "recipient": "Recipient*",
+            "sendingdate": "Sending date*",
+            "background": "Background color",
+            "template":"Template"
+        },
+        "error":{
+            "isrequired": "This field is required",
+            "maxsymbols": "This field must consist of less than {{count}} symbols.",
+            "isinvaliddate": "Date is invalid.",
+            "isinvalidbirthday": "Birthday have to be less then today date.",
+            "isnumeric": "Field must be numeric only.",
+            "loginexisted": "Login is existed.",
+            "emailexisted": "Email is existed.",
+            "invalidemail": "Email is invalid",
+            "attentionisrequired": "Fields are marked * is required."
+
+        }
+    }
+}

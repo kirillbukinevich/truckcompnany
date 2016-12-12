@@ -21,6 +21,7 @@
             scope.$watch(function() {
                 return $translate.use();
             }, function(selectedLanguage) {
+                console.log(language);
                 if (language === selectedLanguage) {
                     tmhDynamicLocale.set(language);
                     element.addClass('active');
