@@ -10,7 +10,6 @@
 
     function DriverCompletedController($stateParams, Goods1, Waybill, Checkpoint, RouteList, $http, $location, $scope) {
         $scope.sortType = 'name'; // set the default sort type
-        $scope.sortType2 = 'acceptedNumber'; // set the default sort type
         $scope.sortReverse = false;  // set the default sort order
         var vm = this;
         vm.routeList = {};
@@ -63,8 +62,6 @@
 
         };
         vm.updateState = function () {
-            console.log("HERE");
-            console.log(vm.waybill.state);
             if(vm.waybill.state === "CHECKED"){
                 console.log(vm.waybill.id);
                 Waybill.get({id: vm.waybill.id}, function (data) {

@@ -101,7 +101,7 @@
             }
         }
         function completeTrip() {
-            if(vm.checkpoints[vm.checkpoints.length-1].checkDate !=null) {
+            if(vm.checkpoints.length==0 || vm.checkpoints[vm.checkpoints.length-1].checkDate !=null) {
                 for (var j in vm.waybills) {
                     if (vm.waybills[j] != true && vm.waybills[j].state == "CHECKED") {
                         vm.waybills[j].state = "DELIVERED";
