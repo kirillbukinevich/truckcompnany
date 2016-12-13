@@ -36,9 +36,6 @@
         vm.confirmRoutelist = confirmRoutelist;
         vm.wayPoints = [];
 
-        vm.waybill = $rootScope.waybill;
-        console.log($rootScope.waybill);
-
         $timeout(function () {
             Waybill.get({id: $stateParams.id}, function (data) {
                 vm.waybill = data;

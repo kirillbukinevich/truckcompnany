@@ -8,9 +8,9 @@
         .module('truckCompanyApp')
         .controller('ManagerWaybillDetailsController', ManagerWaybillDetailsController);
 
-    ManagerWaybillDetailsController.$inject = ['$filter', 'Principal', 'entity', '$uibModalInstance', 'Waybill', '$http', '$timeout'];
+    ManagerWaybillDetailsController.$inject = ['Principal', 'entity', '$uibModalInstance', 'Waybill', '$http', '$timeout'];
 
-    function ManagerWaybillDetailsController($filter, Principal, entity, $uibModalInstance, Waybill, $http, $timeout) {
+    function ManagerWaybillDetailsController(Principal, entity, $uibModalInstance, Waybill, $http, $timeout) {
         var vm = this;
         vm.clear = clear;
         vm.waybill = entity;
