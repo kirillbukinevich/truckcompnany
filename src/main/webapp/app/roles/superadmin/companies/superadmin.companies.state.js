@@ -39,7 +39,7 @@
                         };
                     }],
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('activate');
+                        $translatePartialLoader.addPart('superadmin');
                         return $translate.refresh();
                     }]
                 }
@@ -62,7 +62,7 @@
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('activate');
+                        $translatePartialLoader.addPart('superadmin');
                         return $translate.refresh();
                     }]
                 }
@@ -85,7 +85,7 @@
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('activate');
+                        $translatePartialLoader.addPart('superadmin');
                         return $translate.refresh();
                     }]
                 }
