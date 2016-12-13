@@ -3,7 +3,11 @@
         "initialTitle": "Hello, Dispatcher!",
         "waybills": "Waybills",
         "confirm": "Confirm offer",
-        "offers": "Offers",
+        "offer": {
+            "title": "Offers",
+            "generateOffer": "Generate offer",
+            "perPage": "Offers per page:"
+        },
         "offerDetails": "Offer Details",
         "waybillDetails": "Waybill Details"
     }

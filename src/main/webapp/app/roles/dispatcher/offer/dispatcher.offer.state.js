@@ -14,11 +14,11 @@
         $stateProvider
             .state('dispatcher.offer', {
                     parent: 'dispatcher',
-                    url: '/dispatcher/offer', /*'/activate?key',*/
+                    url: '/dispatcher/offer',
 
                     data: {
                         authorities: ["ROLE_DISPATCHER"],
-                        pageTitle: 'dispatcher.offers'
+                        pageTitle: 'dispatcher.offer.name'
                     },
                     views: {
                         'page@roles': {
@@ -46,7 +46,7 @@
                             };
                         }],
                         translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                            $translatePartialLoader.addPart('activate');
+                            $translatePartialLoader.addPart('dispatcher');
                             return $translate.refresh();
                         }]
                     }
@@ -57,7 +57,7 @@
                 url: '/{id}/details',
                 data: {
                     authorities: ['ROLE_DISPATCHER'],
-                    pageTitle: 'dispatcher.offerDetails'
+                    pageTitle: 'dispatcher.offer.details.name'
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
@@ -80,11 +80,11 @@
             })
             .state('dispatcher.offer-submit', {
                 parent: 'dispatcher.offer',
-                url: '/{id}/submit', /*'/activate?key',*/
+                url: '/{id}/submit',
 
                 data: {
                     authorities: ["ROLE_DISPATCHER"],
-                    pageTitle: 'dispatcher.confirm'
+                    pageTitle: 'dispatcher.offer.submitOffer'
                 },
                 views: {
                     'page@roles': {

@@ -18,7 +18,7 @@
 
                 data: {
                     authorities: ["ROLE_DISPATCHER"],
-                    pageTitle: 'dispatcher.waybills'
+                    pageTitle: 'dispatcher.waybill.name'
                 },
                 views: {
                     'page@roles': {
@@ -56,7 +56,7 @@
             url: '/{id}/details',
             data: {
                 authorities: ['ROLE_DISPATCHER'],
-                pageTitle: 'dispatcher.waybillDetails'
+                pageTitle: 'dispatcher.waybill.details.name'
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({

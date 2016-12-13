@@ -1,41 +1,47 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()">&times;</button>
-        <h4 class="modal-title">Offer details</h4>
+        <h4 class="modal-title" data-translate="dispatcher.offer.details.name">Offer details</h4>
     </div>
 
     <div class="modal-body">
         <dl class="dl-horizontal">
-            <dt><span>Offer's number:</span></dt>
+            <dt><span data-translate="dispatcher.offer.details.number">Offer's number</span>:</dt>
             <dd><span>{{vm.offer.number}}</span></dd>
 
-            <dt><span>Created by:</span></dt>
+            <dt><span data-translate="dispatcher.offer.details.createdBy">Created by</span>:</dt>
             <dd><span>{{vm.offer.createdBy}}</span></dd>
 
-            <dt><span>Creation date:</span></dt>
+            <dt><span data-translate="dispatcher.offer.details.date">Creation date</span>:</dt>
             <dd><span>{{vm.offer.creationDate | date:'dd/MM/yy HH:mm'}}</span></dd>
 
-            <dt><span>Leaving storage:</span></dt>
+            <dt><span data-translate="dispatcher.offer.leavingStorage">Leaving storage</span>:</dt>
             <dd>
                 <span>{{vm.offer.leavingStorage.name}}</span>
                 <span ng-if="vm.offer.leavingStorage.address != null"> {{vm.offer.leavingStorage.address}}</span>
             </dd>
 
-            <dt><span>Arrival storage:</span></dt>
+            <dt><span data-translate="dispatcher.offer.arrivalStorage">Arrival storage</span>:</dt>
             <dd>
                 <span>{{vm.offer.arrivalStorage.name}}</span>
                 <span ng-if="vm.offer.arrivalStorage.address != null"> {{vm.offer.arrivalStorage.address}}</span>
             </dd>
 
-            <dt><span>State:</span></dt>
+            <dt><span data-translate="dispatcher.offer.state.name">State</span>:</dt>
             <dd>
-                <span ng-if = "vm.offer.state == 'NEW'" class="label label-info" >NEW</span>
-                <span ng-if = "vm.offer.state == 'CANCELED'" class="label label-danger">CANCELED</span>
-                <span ng-if = "vm.offer.state == 'ACCEPTED'" class="label label-success">ACCEPTED</span>
+                <span ng-if = "vm.offer.state == 'NEW'"
+                      class="label label-info"
+                      data-translate="dispatcher.offer.state.new">NEW</span>
+                <span ng-if = "vm.offer.state == 'CANCELED'"
+                      class="label label-danger"
+                      data-translate="dispatcher.offer.state.cancelled">CANCELED</span>
+                <span ng-if = "vm.offer.state == 'ACCEPTED'"
+                      class="label label-success"
+                      data-translate="dispatcher.offer.state.accepted">ACCEPTED</span>
             </dd>
         </dl>
 
-        <h4>Offer goods</h4>
+        <h4 data-translate="dispatcher.offer.details.offerGoods">Offer goods</h4>
 
         <dl class="dl-horizontal">
             <div ng-repeat="stuff in vm.offer.offerGoods">
@@ -48,7 +54,7 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="vm.clear()">
             <span class="glyphicon glyphicon-remove-sign"></span>
-            <span>Close</span>
+            <span data-translate="dispatcher.button.close">Close</span>
         </button>
     </div>
 </div>

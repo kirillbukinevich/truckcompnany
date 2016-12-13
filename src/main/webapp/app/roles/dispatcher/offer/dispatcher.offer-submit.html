@@ -1,4 +1,4 @@
-<h1>Submit offer</h1>
+<h1 data-translate="dispatcher.offer.submitOffer">Submit offer</h1>
 
 <div class="alert alert-danger" ng-if="vm.error">
     {{vm.messageError}}
@@ -12,14 +12,14 @@
     <div class="row form_row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="leavingStorage">Leaving storage</label>
+                <label for="leavingStorage" data-translate="dispatcher.offer.leavingStorage">Leaving storage</label>
                 <input type="text" id="leavingStorage" class="form-control" name="leavingStorage" ng-model="vm.offer.leavingStorage.name" readonly>
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="form-group">
-                <label for="arrivalStorage">Arrival storage</label>
+                <label for="arrivalStorage" data-translate="dispatcher.offer.arrivalStorage">Arrival storage</label>
                 <input type="text" id="arrivalStorage" class="form-control" name="arrivalStorage" ng-model="vm.offer.arrivalStorage.name" readonly>
             </div>
         </div>
@@ -27,7 +27,7 @@
 
     <div>
         <div class="form-group"  ng-class="{'has-error' : (form.leavingDate.$dirty && form.leavingDate.$invalid) }">
-            <label class="col-sm-2 control-label">Leaving Date*</label>
+            <label class="col-sm-2 control-label" data-translate="dispatcher.offer.leavingDate">Leaving Date*</label>
             <div class="col-sm-10">
                 <p class="input-group">
                     <input type="text"
@@ -59,7 +59,7 @@
         </div>
 
         <div class="form-group" ng-class="{'has-error' : (form.arrivalDate.$dirty && form.arrivalDate.$invalid) }">
-            <label class="col-sm-2 control-label" for="arrivalDate">Arrival Date*</label>
+            <label class="col-sm-2 control-label" for="arrivalDate" data-translate="dispatcher.offer.arrivalDate">Arrival Date*</label>
             <div class="col-sm-10">
                 <p class="input-group">
                     <input type="text"
@@ -92,7 +92,7 @@
     </div>
 
     <div class="form-group">
-        <label for="drivers" class="control-label">Driver*</label>
+        <label for="drivers" class="control-label" data-translate="dispatcher.offer.driver">Driver*</label>
         <ui-select ng-disabled="form.arrivalDate.$invalid || form.leavingDate.$invalid" ng-model="vm.driver" title="Choose a driver" id = "drivers" ng-required="true" name="driver">
             <ui-select-match>
                 <span ng-bind="($select.selected.firstName) + ' '+ ($select.selected.lastName)"></span>
@@ -105,7 +105,7 @@
     </div>
 
     <div class="form-group">
-        <label for="trucks" class="control-label">Truck*</label>
+        <label for="trucks" class="control-label" data-translate="dispatcher.offer.truck">Truck*</label>
         <ui-select ng-disabled="form.arrivalDate.$invalid || form.leavingDate.$invalid" ng-model="vm.truck" title="Choose a truck" id = "trucks" ng-required="true" name="truck">
             <ui-select-match>
                 <span ng-bind="($select.selected.model) + ' ' + ($select.selected.regNumber)"></span>
@@ -119,29 +119,7 @@
 
 
     <div class="btn-group flex-btn-group-container pull-right">
-            <button type="submit" ng-disabled="form.$invalid" class="btn btn-success">Submit offer</button>
-        <a href="#/dispatcher/offer" class="btn btn-danger">Cancel</a>
+            <button type="submit" ng-disabled="form.$invalid" class="btn btn-success" data-translate="dispatcher.button.confirmOffer">Submit offer</button>
+        <a href="#/dispatcher/offer" class="btn btn-danger" data-translate="dispatcher.button.cancel">Cancel</a>
     </div>
 </form>
-
-
-<div class="select-box" ng-if="ctrl.appendToBodyDemo.present">
-    <h3>Select2 theme</h3>
-    <p>Selected: {{ctrl.person.selected}}</p>
-    <ui-select ng-model="ctrl.person.selected"
-               theme="select2"
-               ng-disabled="ctrl.disabled"
-               style="min-width: 300px;"
-               title="Choose a person"
-               append-to-body="true">
-        <ui-select-match placeholder="Select a person in the list or search his name/age...">{{$select.selected.name}}</ui-select-match>
-        <ui-select-choices repeat="person in ctrl.people | propsFilter: {name: $select.search, age: $select.search}">
-            <div ng-bind-html="person.name | highlight: $select.search"></div>
-            <small>
-                email: {{person.email}}
-                age: <span ng-bind-html="''+person.age | highlight: $select.search"></span>
-            </small>
-        </ui-select-choices>
-    </ui-select>
-    <p class="alert alert-info positioned">The select dropdown menu should be displayed above this element.</p>
-</div>

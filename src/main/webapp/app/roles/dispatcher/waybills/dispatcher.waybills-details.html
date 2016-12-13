@@ -1,29 +1,29 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()">&times;</button>
-        <h4 class="modal-title">Waybill details</h4>
+        <h4 class="modal-title" data-translate="dispatcher.waybill.details.name">Waybill details</h4>
     </div>
 
     <div class="modal-body">
         <dl class="dl-horizontal">
-            <dt><span>Waybill's number:</span></dt>
+            <dt><span data-translate="dispatcher.waybill.details.number">Waybill's number</span>:</dt>
             <dd><span>{{vm.waybill.number}}</span></dd>
 
-            <dt><span>Dispatcher:</span></dt>
+            <dt><span data-translate="dispatcher.waybill.dispatcher">Dispatcher</span>:</dt>
             <dd><span>{{vm.waybill.dispatcher.firstName + " " + vm.waybill.dispatcher.lastName}}</span></dd>
 
-            <dt><span>Creation date:</span></dt>
+            <dt><span data-translate="dispatcher.waybill.details.date">Creation date</span>:</dt>
             <dd><span>{{vm.waybill.date | date:'dd/MM/yy HH:mm'}}</span></dd>
 
-            <dt><span>Driver:</span></dt>
+            <dt><span data-translate="dispatcher.waybill.driver">Driver</span>:</dt>
             <dd><span>{{vm.waybill.driver.firstName + " " + vm.waybill.driver.lastName}}</span></dd>
 
-            <dt><span>State:</span></dt>
+            <dt><span data-translate="dispatcher.waybill.state.name">State</span>:</dt>
             <dd>
-                <span ng-if = "vm.waybill.state == 'CREATED'" class="label label-info" >CREATED</span>
-                <span ng-if = "vm.waybill.state == 'DELIVERED'" class="label label-success" >DELIVERED</span>
-                <span ng-if = "vm.waybill.state == 'CHECKED'" class="label label-primary" >CHECKED</span>
-                <span ng-if = "vm.waybill.state == 'REJECTED'" class="label label-warning" >REJECTED</span>
+                <span ng-if = "vm.waybill.state == 'CREATED'" class="label label-info" data-translate="dispatcher.waybill.state.created">CREATED</span>
+                <span ng-if = "vm.waybill.state == 'DELIVERED'" class="label label-success" data-translate="dispatcher.waybill.state.delivered">DELIVERED</span>
+                <span ng-if = "vm.waybill.state == 'CHECKED'" class="label label-primary" data-translate="dispatcher.waybill.state.checked">CHECKED</span>
+                <span ng-if = "vm.waybill.state == 'REJECTED'" class="label label-warning" data-translate="dispatcher.waybill.state.rejected">REJECTED</span>
             </dd>
         </dl>
     </div>
@@ -31,7 +31,7 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="vm.clear()">
             <span class="glyphicon glyphicon-remove-sign"></span>
-            <span>Close</span>
+            <span data-translate="dispatcher.button.close">Close</span>
         </button>
     </div>
 </div>
