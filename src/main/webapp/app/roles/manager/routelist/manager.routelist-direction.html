@@ -49,8 +49,8 @@
 
     <div class="row" style="margin-top: 20px">
         <div class="col-md-4 text-center">
-            <label ng-if="wayPoints.length != 0" class="control-label">Waypoints:</label>
-            <fieldset data-ng-repeat="wayPoint in wayPoints">
+            <label ng-if="vm.wayPoints.length != 0" class="control-label">Waypoints:</label>
+            <fieldset ng-repeat="wayPoint in vm.wayPoints">
                 <div class="form-group form-inline">
                     <input ng-if="vm.waybill.routeList.state == 'UNCHECKED'"
                            class="form-control"
@@ -65,7 +65,7 @@
                            value="{{wayPoint.location}}"
                            readonly>
                     <a ng-if="vm.waybill.routeList.state == 'UNCHECKED'"
-                       ng-click="removeWayPoint($index)"
+                       ng-click="vm.removeWayPoint($index)"
                        role="button">
                         <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"
                               style="font-size: 20px; color: #f95761; top:5px;"></span>
@@ -114,7 +114,7 @@
     </div>
 
     <button ng-if="vm.waybill.routeList.state == 'UNCHECKED'" class="btn btn-default"
-            ng-click="addNewWayPoint()">Add waypoints
+            ng-click="vm.addNewWayPoint()">Add waypoints
     </button>
 
     <button ng-if="vm.waybill.routeList.state == 'UNCHECKED'" class="btn btn-success pull-right"
