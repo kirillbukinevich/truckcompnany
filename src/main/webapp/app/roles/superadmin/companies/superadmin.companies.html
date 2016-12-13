@@ -1,4 +1,4 @@
-<h1>Companies</h1>
+<h1 data-translate="superadmin.companies.titleall">Companies</h1>
 
 <div ng-if="vm.error" class="alert alert-danger" role="alert">
     {{vm.messageError}}
@@ -6,12 +6,14 @@
 
 <div ng-if="!vm.error">
     <div id="control-panel">
-        <a href="#/superadmin/company/create" class="btn btn-admin"><span class="glyphicon glyphicon-plus"></span>Create</a>
+        <a href="#/superadmin/company/create" class="btn btn-admin">
+            <span class="glyphicon glyphicon-plus"></span><span data-translate="superadmin.form.create">Create</span>
+        </a>
 
     </div>
 
     <div id="control-table">
-        <span class="select-show-title">Show:</span>
+        <span class="select-show-title" data-translate="superadmin.form.show">Show:</span>
         <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage"
                 ng-change="vm.changeItemsPerPage()" class="btn btn-default">
         </select>
@@ -21,10 +23,10 @@
         <thead>
 
         <tr>
-            <th>Name company</th>
-            <th>Status</th>
-            <th>Login</th>
-            <th>Email</th>
+            <th data-translate="superadmin.companies.name">Name company</th>
+            <th data-translate="superadmin.companies.status">Status</th>
+            <th data-translate="superadmin.companies.login">Login</th>
+            <th data-translate="superadmin.companies.email">Email</th>
         </tr>
         </thead>
         <tbody>

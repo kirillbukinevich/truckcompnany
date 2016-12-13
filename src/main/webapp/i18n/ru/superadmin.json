@@ -1,0 +1,48 @@
+{
+    "superadmin": {
+        "sidebar": {
+            "companies": "Компании",
+            "errors": "Ошибки при рассылке"
+        },
+        "companies": {
+            "titleall":"Список компаний",
+            "titlecreate":"Создать новую компанию",
+            "titleupdate":"Обновить компанию",
+            "name": "Имя компании",
+            "status": "Статус",
+            "login": "Логин",
+            "email": "Эл.адрес"
+        },
+        "errors":{
+            "titleall":"Employee",
+            "titlecreate":"Create new employee",
+            "titleupdate":"Update employee",
+            "login": "Login",
+            "firstandlastname": "First name, last name",
+            "email": "Email",
+            "status": "Status",
+            "role": "Role"
+        },
+        "form":{
+            "show": "Показать",
+            "create": "Создать",
+            "cancel": "Отменить",
+            "update": "Обновить",
+            "delete": "Удалить"
+        },
+        "label":{
+            "namecompany": "Имя компании*",
+            "adminlogin": "Логин администратора компании*",
+            "adminemail": "Эл. адрес администратора компании*"
+        },
+        "error":{
+            "isrequired": "Данное поле обязательно для заполнения",
+            "maxsymbols": "Поле должно состоять менее, чем из {{count}} символово.",
+            "loginexisted": "Логин уже существует.",
+            "emailexisted": "Эл.адрес существует.",
+            "invalidemail": "Некорректный эл.адрес.",
+            "attentionisrequired": "Поля, помеченные *, обязательны для заполнения."
+
+        }
+    }
+}

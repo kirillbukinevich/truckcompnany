@@ -1,0 +1,51 @@
+{
+    "superadmin": {
+        "sidebar": {
+            "companies": "Companies",
+            "errors": "Sending email errors"
+        },
+        "companies": {
+            "titleall":"Companies",
+            "titlecreate":"Create new company",
+            "titleupdate":"Update company",
+            "name": "Company name",
+            "status": "Status",
+            "login": "Login",
+            "email": "Email"
+        },
+        "errors":{
+            "titleall":"Employee",
+            "titlecreate":"Create new employee",
+            "titleupdate":"Update employee",
+            "login": "Login",
+            "firstandlastname": "First name, last name",
+            "email": "Email",
+            "status": "Status",
+            "role": "Role"
+        },
+        "form":{
+            "show": "Show",
+            "create": "Create",
+            "cancel": "Cancel",
+            "update": "Update",
+            "delete": "Delete"
+        },
+        "label":{
+            "namecompany": "Company name*",
+            "adminlogin": "Admin login*",
+            "adminemail": "Admin email*"
+        },
+        "error":{
+            "isrequired": "This field is required",
+            "maxsymbols": "This field must consist of less than {{count}} symbols.",
+            "isinvaliddate": "Date is invalid.",
+            "isinvalidbirthday": "Birthday have to be less then today date.",
+            "isnumeric": "Field must be numeric only.",
+            "loginexisted": "Login is existed.",
+            "emailexisted": "Email is existed.",
+            "invalidemail": "Email is invalid",
+            "attentionisrequired": "Fields are marked * is required."
+
+        }
+    }
+}

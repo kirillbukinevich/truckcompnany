@@ -1,4 +1,4 @@
-<h1>Company</h1>
+<h1 data-translate="superadmin.companies.titleupdate">Company</h1>
 <div class="alert alert-danger" ng-if="vm.error">
     {{vm.messageError}}
 </div>
@@ -17,8 +17,9 @@
         </div>
 
         <div class="col-md-9">
+            <div class="alert alert-warning" data-translate="superadmin.error.attentionisrequired">Fields are marked * is required.</div>
             <div class="form-group" ng-class="{'has-error' : (form.name.$dirty && form.name.$invalid) }">
-                <label for="name" class="control-label">NameCompany*</label>
+                <label for="name" class="control-label" data-translate="superadmin.label.namecompany">NameCompany*</label>
                 <input type="text" name="name"
                        ng-model="vm.company.name"
                        class="form-control"
@@ -27,18 +28,20 @@
                        required ng-maxlength="50">
                 <div ng-show="form.name.$dirty && form.name.$invalid">
                     <p class="help-block"
-                       ng-show="form.name.$error.required">
+                       ng-show="form.name.$error.required"
+                       data-translate="superadmin.error.isrequired">
                         Company name is required.
                     </p>
                     <p class="help-block"
-                       ng-show="form.name.$error.maxlength">
+                       ng-show="form.name.$error.maxlength"
+                       data-translate="superadmin.error.maxsymbols" translate-values="{count: '50'}">
                         Company name must consist of less than 50 symbols.
                     </p>
                 </div>
             </div>
 
             <div class="form-group" ng-class="{'has-error' : (form.login.$dirty && form.login.$invalid) }">
-                <label for="login" class="control-label">Admin login</label>
+                <label for="login" class="control-label" data-translate="superadmin.label.adminlogin">Admin login</label>
                 <input type="text"
                        ng-model="vm.company.users[0].login" name="login"
                        class="form-control"
@@ -47,11 +50,13 @@
                        required check-valid-login disabled>
                 <div ng-show="form.login.$dirty && form.login.$invalid">
                     <p class="help-block"
-                       ng-show="form.login.$error.required">
+                       ng-show="form.login.$error.required"
+                       data-translate="superadmin.error.isrequired">
                         Login is required.
                     </p>
                     <p class="help-block"
-                       ng-show="form.login.$error.maxlength">
+                       ng-show="form.login.$error.maxlength"
+                       data-translate="superadmin.error.maxsymbols" translate-values="{count: '50'}">
                         Login must consist of less than 50 symbols.
                     </p>
                     <p class="help-block"
@@ -62,11 +67,11 @@
 
             </div>
             <div class="form-group">
-                <label for="email">Admin email</label>
+                <label for="email" data-translate="superadmin.label.adminemail">Admin email</label>
                 <input type="text" ng-model="vm.company.users[0].email" class="form-control"  id="email" placeholder="Enter email" disabled>
             </div>
-            <button class="btn btn-success" ng-click="vm.update(vm.company.id)">Update</button>
-            <a href="#/superadmin/companies" class="btn btn-danger">Cancel</a>
+            <button class="btn btn-success" ng-click="vm.update(vm.company.id)" data-translate="superadmin.form.update">Update</button>
+            <a href="#/superadmin/companies" class="btn btn-danger" data-translate="superadmin.form.cancel">Cancel</a>
         </div>
     </div>
 
