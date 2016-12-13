@@ -71,7 +71,7 @@
                             <th class="text-center">Name</th>
                             <th class="text-center" ng-if="vm.waybill.state == 'CREATED'">Unchecked</th>
                             <th ng-if="vm.waybill.state != 'REJECTED'" class="text-center">Shipped</th>
-                            <th ng-if="vm.waybill.state != 'REJECTED'" class="text-center">$ Price</th>
+                            <th ng-if="vm.waybill.state != 'REJECTED'" class="text-center">$ per item</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -133,23 +133,14 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="checkDate" class="pull-left">At:</label>
-                    <div class="input-group" style="clear:both;"
-                         ng-class="{'has-error' : (form.checkDate.$dirty && form.checkDate.$invalid)}">
+                    <div class="input-group" style="clear:both;">
                         <input type="text"
+                               ng-value="vm.now | date:'dd/MM/yy HH:mm'"
                                id="checkDate"
-                               name="checkDate"
+                               name="checkDate1"
                                class="form-control"
-                               datetime-picker="dd MMM yyyy HH:mm"
-                               ng-model="vm.waybill.dateChecked"
-                               is-open="vm.dateCheckedPicker.open"
-                               enable-time="true"
-                               datepicker-options="vm.dateCheckedPicker.datepickerOptions"
-                               required/>
-                        <span class="input-group-btn">
-                        <button type="button" class="btn btn-default"
-                                ng-click="vm.openCalendar($event, 'dateCheckedPicker')"><i
-                            class="glyphicon glyphicon-calendar"></i></button>
-                        </span>
+                               readonly/>
+                        <span class="input-group-addon" id="checkDate1"><span class="glyphicon glyphicon-calendar"></span></span>
                     </div>
                     <div class="alert alert-danger help-block"
                          role="alert"

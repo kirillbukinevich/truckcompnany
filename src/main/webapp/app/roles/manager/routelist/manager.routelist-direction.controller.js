@@ -8,9 +8,9 @@
         .module('truckCompanyApp')
         .controller('ManagerRoutelistDirectionController', ManagerRoutelistDirectionController);
 
-    ManagerRoutelistDirectionController.$inject = ['NgMap', '$scope', '$stateParams', '$timeout', 'Checkpoint', 'Waybill', '$http'];
+    ManagerRoutelistDirectionController.$inject = ['NgMap', '$scope', '$stateParams', '$timeout', 'Checkpoint', 'Waybill', '$http', '$rootScope'];
 
-    function ManagerRoutelistDirectionController(NgMap, $scope, $stateParams, $timeout, Checkpoint, Waybill, $http) {
+    function ManagerRoutelistDirectionController(NgMap, $scope, $stateParams, $timeout, Checkpoint, Waybill, $http, $rootScope) {
         var vm = this;
 
         vm.getDistance = function getDistance() {
@@ -36,27 +36,31 @@
         vm.confirmRoutelist = confirmRoutelist;
         vm.wayPoints = [];
 
-        Waybill.get({id: $stateParams.id}, function (data) {
-            vm.waybill = data;
-            Checkpoint.query({id: vm.waybill.routeList.id}, function (checkpooint) {
-                vm.checkpoints = checkpooint;
-                var i = 0;
-                angular.forEach(vm.checkpoints, function (value) {
-                    vm.wayPoints[i] = {location: value.name};
-                    i++;
-                });
-            });
-            console.log(vm.waybill);
-            vm.getDistance();
-        });
+        vm.waybill = $rootScope.waybill;
+        console.log($rootScope.waybill);
 
-        $scope.wayPoints = vm.wayPoints;
-        $scope.addNewWayPoint = function () {
-            $scope.wayPoints.push({'location': ''});
+        $timeout(function () {
+            Waybill.get({id: $stateParams.id}, function (data) {
+                vm.waybill = data;
+                Checkpoint.query({id: vm.waybill.routeList.id}, function (checkpooint) {
+                    vm.checkpoints = checkpooint;
+                    var i = 0;
+                    angular.forEach(vm.checkpoints, function (value) {
+                        vm.wayPoints[i] = {location: value.name};
+                        i++;
+                    });
+                });
+                console.log(vm.waybill);
+                vm.getDistance();
+            });
+        }, 1000);
+
+        vm.addNewWayPoint = function () {
+            vm.wayPoints.push({'location': ''});
         };
 
-        $scope.removeWayPoint = function (item) {
-            $scope.wayPoints.splice(item, 1);
+        vm.removeWayPoint = function (item) {
+            vm.wayPoints.splice(item, 1);
             vm.getDistance();
         };
 
@@ -65,8 +69,9 @@
             vm.waybill.routeList.state = 'TRANSPORTATION';
             vm.waybill.routeList.distance = vm.dist;
 
-            console.log(vm.wayPoints);
+            console.log(vm.waybill);
             console.log(vm.checkpoints);
+            console.log(vm.wayPoints);
 
             var i = 0;
             vm.checkpoints = [];
@@ -74,7 +79,6 @@
                 vm.checkpoints[i] = {name: value.location};
                 i++;
             });
-
             Waybill.update(vm.waybill);
             $http.post('api/checkpoints/' + vm.waybill.routeList.id, vm.checkpoints);
         }

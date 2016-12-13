@@ -8,17 +8,16 @@
         .module('truckCompanyApp')
         .controller('ManagerWaybillDetailsController', ManagerWaybillDetailsController);
 
-    ManagerWaybillDetailsController.$inject = ['Principal', 'entity', '$uibModalInstance', 'Waybill', '$http', '$timeout'];
+    ManagerWaybillDetailsController.$inject = ['$filter', 'Principal', 'entity', '$uibModalInstance', 'Waybill', '$http', '$timeout'];
 
-    function ManagerWaybillDetailsController(Principal, entity, $uibModalInstance, Waybill, $http, $timeout) {
+    function ManagerWaybillDetailsController($filter, Principal, entity, $uibModalInstance, Waybill, $http, $timeout) {
         var vm = this;
-
         vm.clear = clear;
         vm.waybill = entity;
         vm.changeWaybillState = changeWaybillState;
         getAccount();
+        vm.now = new Date();
 
-        console.log(vm.waybill);
         function getAccount() {
             Principal.identity().then(function (account) {
                 vm.account = account;
@@ -33,39 +32,32 @@
                     item.acceptedNumber = item.uncheckedNumber;
                 }
             });
-        }, 400);
+        }, 500);
 
         function changeWaybillState(id) {
+            console.log(vm.waybill.dateChecked);
+
+            vm.waybill.dateChecked = new Date();
             vm.waybill.manager = vm.account;
             vm.waybill.routeList = null;
+
             // if (id == 1) {
             vm.waybill.state = 'CHECKED';
             // } else {
             //     vm.waybill.state = 'REJECTED';
             // }
+
             angular.forEach(vm.waybill.goods, function (value) {
                 value.state = 'ACCEPTED';
             });
             $http.put('/api/goods', vm.waybill.goods);
             Waybill.update(vm.waybill);
-            console.log(vm.waybill.goods);
-            // $scope.$emit('waybillState', vm.waybill);
+            console.log(vm.waybill);
+
         }
 
         function clear() {
             $uibModalInstance.close();
         }
-
-        vm.dateCheckedPicker = {
-            date: new Date(),
-            datepickerOptions: {
-                maxDate: null,
-                showWeeks: false
-            }
-        };
-
-        this.openCalendar = function (e, picker) {
-            vm[picker].open = true;
-        };
     }
 })();
