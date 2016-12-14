@@ -110,9 +110,11 @@
             if (vm.isValidDate) {
                 console.log(vm.template);
                 if (vm.isDefaultBirthday =="true") {
+                    vm.template.isdefault = true;
                     vm.template.birthday = moment(vm.defaultBirthday).format('YYYY-MM-DD').toString();
                 } else{
                     vm.checkDate();
+                    vm.template.isdefault = false;
                     vm.template.birthday = moment(vm.newAssignedBirthday).format('YYYY-MM-DD').toString();
                 }
                 Template.save(vm.template, onSuccessCreateTemplate, onErrorCreateTemplate);

@@ -25,6 +25,7 @@ public class TemplateDTO {
     private ZonedDateTime birthday;
     private String template;
     private String background;
+    private boolean isdefault;
     private UserDTO recipient;
     private UserDTO admin;
 
@@ -32,27 +33,28 @@ public class TemplateDTO {
     }
 
     public TemplateDTO(Template template) {
-        this(template.getId(), template.getName(), template.getBirthday(), template.getTemplate(), template.getBackground(), null, null);
+        this(template.getId(), template.getName(), template.getBirthday(), template.getTemplate(), template.getBackground(), template.isdefault(), null, null);
     }
 
     public TemplateDTO(Template template, User recipient, User admin) {
-        this(template.getId(), template.getName(), template.getBirthday(), template.getTemplate(), template.getBackground(), recipient, admin);
+        this(template.getId(), template.getName(), template.getBirthday(), template.getTemplate(), template.getBackground(),template.isdefault(), recipient, admin);
     }
 
 
     public TemplateDTO(TemplateDTO template) {
-        this(template.getId(), template.getName(), template.getBirthday(), template.getTemplate(), template.getBackground(), null, null);
+        this(template.getId(), template.getName(), template.getBirthday(), template.getTemplate(), template.getBackground(), template.isdefault(), null, null);
         this.recipient = template.getRecipient();
         this.admin = template.getAdmin();
     }
 
-    public TemplateDTO(Long id, String name, ZonedDateTime birthday, String template, String background, User recipient, User admin) {
+    public TemplateDTO(Long id, String name, ZonedDateTime birthday, String template, String background, boolean isdefault, User recipient, User admin) {
 
         this.id = id;
         this.name = name;
         this.birthday = birthday;
         this.template = template;
         this.background = background;
+        this.isdefault = isdefault;
         if (recipient != null) {
             this.recipient = new UserDTO(recipient);
         }
@@ -116,6 +118,14 @@ public class TemplateDTO {
 
     public void setAdmin(UserDTO admin) {
         this.admin = admin;
+    }
+
+    public boolean isdefault() {
+        return isdefault;
+    }
+
+    public void setIsdefault(boolean isdefault) {
+        this.isdefault = isdefault;
     }
 
     @Override

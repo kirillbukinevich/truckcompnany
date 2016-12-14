@@ -66,7 +66,11 @@
 
             vm.defaultBirthday = new Date(vm.template.recipient.birthDate);
             var assignedDateTemplate = new Date(vm.template.birthday);
-            vm.isDefaultBirthday = (vm.defaultBirthday.getDate() == assignedDateTemplate.getDate() && vm.defaultBirthday.getMonth() == assignedDateTemplate.getMonth())? "true" : "false";
+            //vm.isDefaultBirthday = (vm.defaultBirthday.getDate() == assignedDateTemplate.getDate() && vm.defaultBirthday.getMonth() == assignedDateTemplate.getMonth())? "true" : "false";
+            vm.isDefaultBirthday = vm.template.default.toString();
+            console.log(vm.template.default);
+            console.log(vm.isDefaultBirthday)
+
             if (vm.isDefaultBirthday == "false"){
                 vm.day = assignedDateTemplate.getDate();
                 vm.month = getMonth(assignedDateTemplate.getMonth() + 1);
@@ -113,9 +117,11 @@
         vm.uploadTemplate = function(){
             if (vm.isValidDate) {
                 if (vm.isDefaultBirthday =="true") {
+                    vm.template.isdefault = true;
                     vm.template.birthday = moment(vm.defaultBirthday).format('YYYY-MM-DD').toString();
                 } else{
                     vm.checkDate();
+                    vm.template.isdefault = false;
                     vm.template.birthday = moment(vm.newAssignedBirthday).format('YYYY-MM-DD').toString();
                 }
                 Template.update(vm.template, onSuccessUploadTemplate)

@@ -30,6 +30,9 @@ public class Template {
     @Column(name = "background")
     private String background;
 
+    @Column(name = "isdefault")
+    private boolean isdefault;
+
     @OneToMany(mappedBy = "template", cascade = CascadeType.ALL)
     private Set<MailError> mailErrors;
 
@@ -99,5 +102,13 @@ public class Template {
 
     public void setAdmin(User admin) {
         this.admin = admin;
+    }
+
+    public boolean isdefault() {
+        return isdefault;
+    }
+
+    public void setIsdefault(boolean isdefault) {
+        this.isdefault = isdefault;
     }
 }

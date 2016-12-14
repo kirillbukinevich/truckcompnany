@@ -71,6 +71,7 @@ public class TemplateService {
         newTemplate.setBirthday(template.getBirthday());
         newTemplate.setBackground(template.getBackground());
         newTemplate.setTemplate(template.getTemplate());
+        newTemplate.setIsdefault(template.isdefault());
 
         User recepient = userRepository.getOne(template.getRecipient().getId());
         Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
@@ -91,6 +92,7 @@ public class TemplateService {
         template.setBirthday(templateVM.getBirthday());
         template.setBackground(templateVM.getBackground());
         template.setTemplate(templateVM.getTemplate());
+        template.setIsdefault(templateVM.isdefault());
 
         User recepient = userRepository.getOne(templateVM.getRecipient().getId());
         Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
