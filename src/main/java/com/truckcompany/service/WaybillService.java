@@ -50,7 +50,7 @@ public class WaybillService {
 
         log.debug("Get Information about Waybill with id: {}", id);
 
-        if (user.getCompany().equals(waybill.getCompany()))
+        if (waybill != null && user.getCompany().equals(waybill.getCompany()))
             return new ManagedWaybillVM(waybill);
         else
             return null;
