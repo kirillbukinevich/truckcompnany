@@ -198,6 +198,25 @@
     <div class="form-group">
         <label for="dispatcher" data-translate="admincompany.label.role">Role:</label>
         <div>
+
+            <div class="wrap-radio-test">
+                <input type="radio" id="dispatcher"  ng-model="vm.user.authorities[0]" value="ROLE_DISPATCHER">
+                <label for="dispatcher" data-translate="admincompany.users.dispatcher">DISPATCHER</label>
+            </div>
+            <div class="wrap-radio-test">
+                <input type="radio" id="manager" ng-model="vm.user.authorities[0]" value="ROLE_MANAGER">
+                <label for="manager" data-translate="admincompany.users.manager">MANAGER</label>
+            </div>
+            <div class="wrap-radio-test">
+                <input type="radio" id="driver"  ng-model="vm.user.authorities[0]" value="ROLE_DRIVER">
+                <label for="driver" data-translate="admincompany.users.driver">DRIVER</label>
+            </div>
+            <div class="wrap-radio-test">
+                <input type="radio" id="companyowner" ng-model="vm.user.authorities[0]" value="ROLE_COMPANYOWNER">
+                <label for="companyowner" data-translate="admincompany.users.owner">COMPANY OWNER</label>
+            </div>
+
+            <!--
             <div class="wrap-radio-role" id="role-dispatcher">
                 <input type="radio" id="dispatcher" ng-model="vm.user.authorities[0]" value="ROLE_DISPATCHER">
                 <label for="dispatcher"></label>
@@ -213,7 +232,7 @@
             <div class="wrap-radio-role" id="role-companyowner">
                 <input type="radio" id="companyowner" ng-model="vm.user.authorities[0]" value="ROLE_COMPANYOWNER">
                 <label for="companyowner"></label>
-            </div>
+            </div>-->
 
         </div>
     </div>

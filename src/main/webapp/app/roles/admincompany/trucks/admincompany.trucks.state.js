@@ -29,7 +29,7 @@
                 },
                 params: {
                     page: 1,
-                    size: 5,
+                    size: 10,
                     sort: {
                         value: 'id,asc',
                         squash: true

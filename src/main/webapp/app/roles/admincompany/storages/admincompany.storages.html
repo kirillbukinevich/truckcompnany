@@ -49,8 +49,8 @@
                         <span  data-translate="admincompany.storage.name">Name</span>><span class="fa fa-sort"></span></th>
                     <th jh-sort-by="address">
                         <span  data-translate="admincompany.storage.address">Address</span><span class="fa fa-sort"></span></th>
-                    <th jh-sort-by="activated" class="status-active-nonactive">
-                        <span data-translate="admincompany.storage.status">Status</span><span class="fa fa-sort"></span></th>
+                    <th jh-sort-by="activated" class="status-active-nonactive" id="row-status">
+                        <span  data-translate="admincompany.storage.status">Status</span><span class="fa fa-sort"></span></th>
                     <th class="table-delete"></th>
                 </tr>
                 </thead>
@@ -63,9 +63,9 @@
                     <td ng-bind-html="storage.address">{{storage.address}}</td>
                     <td class="text-align-center">
                 <span ng-if="storage.activated" ng-click="vm.toggleStatus(storage)"
-                      class="label label-success">ACTIVE</span>
+                      class="label label-success" data-translate="admincompany.users.active">ACTIVE</span>
                         <span ng-if="!storage.activated" ng-click="vm.toggleStatus(storage)"
-                              class="label label-warning">NON-ACTIVE</span>
+                              class="label label-warning" data-translate="admincompany.users.nonactive">NON-ACTIVE</span>
                     </td>
                     <td class="text-align-right">
                         <span ng-click="vm.showModalDeleteStorage(storage)" class="glyphicon glyphicon-trash"></span>

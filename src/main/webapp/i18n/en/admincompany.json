@@ -25,7 +25,13 @@
             "firstandlastname": "First name, last name",
             "email": "Email",
             "status": "Status",
-            "role": "Role"
+            "role": "Role",
+            "active": "ACTIVE",
+            "nonactive": "NON-ACTIVE",
+            "dispatcher": "DISPATCHER",
+            "manager": "MANAGER",
+            "driver": "DRIVER",
+            "owner": "COMPANY OWNER"
         },
         "storage":{
             "titleall":"Storages",
@@ -49,7 +55,10 @@
             "listempty": "List of trucks is empty. You can create new itemes to using buttom 'Create'.",
             "ready": "READY",
             "repairing": "REPAIRING",
-            "writtenoff": "WRITTEN OFF"
+            "writtenoff": "WRITTEN OFF",
+            "body": "BODY",
+            "refrigerator": "REFRIGERATOR",
+            "tank": "TANK"
         },
         "templates":{
             "titleall":"Templates",
