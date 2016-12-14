@@ -3,32 +3,39 @@
 <span ng-repeat="waybill in vm.waybills">
 <div ng-if="waybill.state == 'CHECKED' && vm.routeList.state == 'TRANSPORTATION'">
 
-        <h1 style="text-align:center">Route list</h1>
+        <h1 style="text-align:center" data-translate="driver.routelist.routelists">Route list</h1>
     <div class="row">
                 <div class="col-md-10">
                     <dl class="dl-horizontal">
-                        <dt><span><h4><b>Waybill №:</b></h4></span></dt>
+                        <dt><span><h4><b data-translate="driver.routelist.waybills">Waybill №:</b></h4></span></dt>
                         <dd><span><h4>{{waybill.number}}</h4></span></dd>
 
-                        <dt><span><h4><b>Dispatcher:</b></h4></span></dt>
+                        <dt style="width: 170px"><span><h4><b
+                            data-translate="driver.routelist.dispatcher">Dispatcher:</b></h4></span></dt>
                         <dd><span><h4>{{waybill.dispatcher.firstName}} {{waybill.dispatcher.lastName}}</h4></span></dd>
 
-                        <dt><span><h4><b>Creation date:</b></h4></span></dt>
+                        <dt style="width: 170px"><span><h4><b
+                            data-translate="driver.routelist.creation_date">Creation date:</b></h4></span></dt>
                         <dd><span><h4>{{waybill.date | date:'dd/MM/yy HH:mm'}}</h4></span></dd>
 
-                        <dt><span><h4><b>Driver:</b></h4></span></dt>
+                        <dt style="width: 170px"><span><h4><b
+                            data-translate="driver.routelist.driver">Driver:</b></h4></span></dt>
                         <dd><span><h4>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</h4></span></dd>
 
-                        <dt><span><h4><b>Leaving storage:</b></h4></span></dt>
+                        <dt style="width: 170px"><span><h4><b
+                            data-translate="driver.routelist.leaving_storage">Leaving storage:</b></h4></span></dt>
                         <dd><span><h4>{{waybill.routeList.leavingStorage.address}}</h4></span></dd>
 
-                        <dt><span><h4><b>Leaving date:</b></h4></span></dt>
+                        <dt style="width: 170px"><span><h4><b
+                            data-translate="driver.routelist.leaving_date">Leaving date:</b></h4></span></dt>
                         <dd><span><h4>{{waybill.routeList.leavingDate | date:'dd/MM/yy HH:mm'}}</h4></span></dd>
 
-                        <dt><span><h4><b>Arrival storage:</b></h4></span></dt>
+                        <dt style="width: 170px"><span><h4><b
+                            data-translate="driver.routelist.arrival_storage">Arrival storage:</b></h4></span></dt>
                         <dd><span><h4>{{waybill.routeList.arrivalStorage.address}}</h4></span></dd>
 
-                        <dt><span><h4><b>Arrival date:</b></h4></span></dt>
+                        <dt style="width: 170px"><span><h4><b
+                            data-translate="driver.routelist.arrival_date">Arrival date:</b></h4></span></dt>
                         <dd><span><h4>{{waybill.routeList.arrivalDate | date:'dd/MM/yy HH:mm'}}</h4></span></dd>
                 </dl>
                 </div>
@@ -54,6 +61,6 @@
     </div>
 </span>
 <div ng-show="vm.checkJob()">
-    <h1 style="text-align:center">You don't have task now </h1>
+    <h1 style="text-align:center" data-translate="driver.job.status">You don't have task now </h1>
 </div>
 

@@ -1,8 +1,10 @@
 <div
     ng-if="vm.routeList.state === 'TRANSPORTATION' && (vm.waybill.state === 'DELIVERED' || vm.waybill.state === 'CHECKED')">
     <h1 style="text-align:center">
-        <span ng-if="vm.waybill.state === 'CHECKED'">List of goods</span>
-        <span ng-if="vm.waybill.state === 'DELIVERED'">Delivery is completed</span></h1>
+        <span ng-if="vm.waybill.state === 'CHECKED'"
+              data-translate="driver.goods.list">List of goods</span>
+        <span ng-if="vm.waybill.state === 'DELIVERED'"
+              data-translate="driver.goods.complete">Delivery is completed</span></h1>
     <form name="myForm">
         <table class="table table-hover">
 
@@ -10,20 +12,20 @@
             <tr>
                 <td>
                     <a href="#/driver/complete" ng-click="sortType = 'name'; sortReverse = !sortReverse">
-                        <b>name</b>
+                        <b data-translate="driver.goods.name">name</b>
                         <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
                         <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
                     </a>
                 </td>
                 <td>
                     <a href="#/driver/complete" ng-click="sortType = 'acceptedNumber'; sortReverse = !sortReverse">
-                        <b>accepted number</b>
+                        <b data-translate="driver.goods.accepted">accepted number</b>
                         <span ng-show="sortType == 'acceptedNumber' && !sortReverse" class="fa fa-caret-down"></span>
                         <span ng-show="sortType == 'acceptedNumber' && sortReverse" class="fa fa-caret-up"></span>
                     </a>
                 </td>
                 <td>
-                    <b>delivered number</b>
+                    <b data-translate="driver.goods.delivered">delivered number</b>
                 </td>
             </tr>
             </thead>
