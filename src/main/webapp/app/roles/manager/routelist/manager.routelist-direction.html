@@ -1,4 +1,4 @@
-<h3>Route list № {{vm.waybill.routeList.number}} ({{vm.waybill.routeList.creationDate | date:'dd/MM/yy HH:mm'}})</h3>
+<h3><span data-translate="manager.routeList.number">Route list №</span> {{vm.waybill.routeList.number}} ({{vm.waybill.routeList.creationDate | date:'dd/MM/yy HH:mm'}})</h3>
 <div class="panel panel-default">
     <div class="panel-body">
         <ng-map ng-if="render" center="[53, 25]" zoom="5">
@@ -19,9 +19,9 @@
 
     <div class="row">
         <div class="col-md-2 text-align-right">
-            <h5>Departure:&nbsp</h5>
-            <h5>Sender:&nbsp</h5>
-            <h5><strong>Address:&nbsp</strong></h5>
+            <h5 data-translate="manager.routeList.departure">Departure:&nbsp</h5>
+            <h5 data-translate="manager.routeList.sender">Sender:&nbsp</h5>
+            <h5><strong data-translate="manager.routeList.address">Address:&nbsp</strong></h5>
         </div>
         <div class="col-md-3">
             <h5>&nbsp{{vm.waybill.routeList.leavingDate | date:'dd/MM/yy HH:mm'}}</h5>
@@ -34,9 +34,9 @@
         </div>
 
         <div class="col-md-2 text-align-right">
-            <h5>Arrival:&nbsp</h5>
-            <h5>Recipient:&nbsp</h5>
-            <h5><strong>Address:&nbsp</strong></h5>
+            <h5 data-translate="manager.routeList.arrival">Arrival:&nbsp</h5>
+            <h5 data-translate="manager.routeList.recipient">Recipient:&nbsp</h5>
+            <h5><strong data-translate="manager.routeList.address">Address:&nbsp</strong></h5>
         </div>
         <div class="col-md-3">
             <h5>&nbsp{{vm.waybill.routeList.arrivalDate | date:'dd/MM/yy HH:mm'}}</h5>
@@ -49,7 +49,8 @@
 
     <div class="row" style="margin-top: 20px">
         <div class="col-md-4 text-center">
-            <label ng-if="vm.wayPoints.length != 0" class="control-label">Waypoints:</label>
+            <label ng-if="vm.wayPoints.length != 0" class="control-label"
+                   data-translate="manager.routeList.waypoints">Waypoints:</label>
             <fieldset ng-repeat="wayPoint in vm.wayPoints">
                 <div class="form-group form-inline">
                     <input ng-if="vm.waybill.routeList.state == 'UNCHECKED'"
@@ -75,12 +76,12 @@
         </div>
 
         <div class="col-md-4 text-align-right">
-            <h5>Fuel cost:&nbsp</h5>
-            <h5 style="margin-top: 19px">Total distance:&nbsp</h5>
-            <h5>Total fuel consumption:&nbsp</h5>
-            <h5>Total delivery cost:&nbsp</h5>
-
+            <h5 data-translate="manager.routeList.fuelCost">Fuel cost:&nbsp</h5>
+            <h5 style="margin-top: 19px" data-translate="manager.routeList.totalDistance">Total distance:&nbsp</h5>
+            <h5 data-translate="manager.routeList.totalConsumption">Total fuel consumption:&nbsp</h5>
+            <h5 data-translate="manager.routeList.totalDeliveryCost">Total delivery cost:&nbsp</h5>
         </div>
+
         <div class="col-md-3">
             <div class="input-group"
                  ng-class="{'has-error' : (form.fuelCost.$dirty && form.fuelCost.$invalid) }"
@@ -92,7 +93,8 @@
                        class="form-control"
                        aria-describedby="price-addon"
                        required>
-                <span class="input-group-addon" id="price-addon">$/litre</span>
+                <span class="input-group-addon" id="price-addon">$/
+                    <span data-translate="manager.routeList.unit">litre</span></span>
             </div>
 
             <div class="input-group"
@@ -104,20 +106,24 @@
                        class="form-control"
                        aria-describedby="price-addon2"
                        readonly>
-                <span class="input-group-addon" id="price-addon2">$/litre</span>
+                <span class="input-group-addon" id="price-addon2">$/
+                    <span data-translate="manager.routeList.unit">litre</span></span>
             </div>
 
             <h5>&nbsp{{vm.dist}} km</h5>
-            <h5>&nbsp{{vm.waybill.routeList.truck.consumption*vm.dist/100}} litres</h5>
+            <h5>&nbsp{{vm.waybill.routeList.truck.consumption*vm.dist/100}}
+                <span data-translate="manager.routeList.units">litres</span></h5>
             <h5>&nbsp{{vm.dist/vm.waybill.routeList.truck.consumption*vm.waybill.routeList.fuelCost | number:2}} $</h5>
         </div>
     </div>
 
     <button ng-if="vm.waybill.routeList.state == 'UNCHECKED'" class="btn btn-default"
-            ng-click="vm.addNewWayPoint()">Add waypoints
+            ng-click="vm.addNewWayPoint()"
+            data-translate="manager.routeList.addWaypoints">Add waypoints
     </button>
 
     <button ng-if="vm.waybill.routeList.state == 'UNCHECKED'" class="btn btn-success pull-right"
-            ng-disabled="form.$invalid" ng-click="vm.confirmRoutelist()">Confirm
+            ng-disabled="form.$invalid" ng-click="vm.confirmRoutelist()"
+            data-translate="manager.routeList.confirm">Confirm
     </button>
 </form>

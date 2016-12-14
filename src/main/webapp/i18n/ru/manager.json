@@ -1,7 +1,92 @@
 {
     "manager": {
-        "initialTitle": "Truck Company!",
-        "waybills": "Waybills",
-        "routelists": "Routelist"
+        "title": {
+            "waybills": "Список ТТН",
+            "routeList": "Путевой лист",
+            "goods": "Товары"
+        },
+        "sidebar": {
+            "waybills": "Список ТТН",
+            "routeList": "Путевые листы",
+            "deliveredGoods": "Товары"
+        },
+        "waybills": {
+            "noWaybillsYet": "ТТН еще нет",
+            "noWaybillsFound": "ТТН не найдены",
+            "waybills": "Список ТТН",
+            "waybillNumber": "Номер ТТН",
+            "registered": "Дата регистрации",
+            "dispatcher": "Диспетчер",
+            "driver": "Водитель",
+            "state": "Статус",
+            "handle": " Оформить",
+            "details": " Подробнее",
+            "initialTitle": "Truck company"
+        },
+        "waybillDetails": {
+            "waybillDetails": "Товарно транспортная накладная",
+            "waybill": "ТТН:",
+            "waybillNumber": "Номер ТТН:",
+            "routeListNumber": "Путевой лист №:",
+            "dispatcher": "Диспетчер:",
+            "creationDate": "Дата создания",
+            "driver": "Водитель:",
+            "leavingStorage": "Склад отправления:",
+            "leavingDate": "Дата отправления:",
+            "arrivalStorage": "Склад прибытия:",
+            "arrivalDate": "Дата прибытия:",
+            "state": "Статус:",
+            "checkedBy": "Проверил:",
+            "at": "в",
+            "atBig": "Дата проверки:",
+            "goods": "Товары",
+            "name": "Наименование",
+            "shipped": "Отправлено",
+            "cost": "$/ед.",
+            "margin": "Наценка:",
+            "unchecked": "Заявлено",
+            "confirm": " Подтвердить"
+        },
+        "routeList": {
+            "state": "Статус",
+            "noRouteList": "Путевых листов еще нет",
+            "routeList": "Путевой лист",
+            "number": "Номер путевого листа",
+            "leavingDate": "Дата отправления",
+            "arrivalDate": "Дата прибытия",
+            "origin": "Отправление",
+            "destination": "Прибытие",
+            "departure": "Дата отправления: ",
+            "arrival": "Дата прибытия: ",
+            "sender": "Отправитель: ",
+            "recipient": "Получатель: ",
+            "address": "Адрес: ",
+            "waypoints": "Контрольные точки:",
+            "fuelCost": "Стоимость топлива: ",
+            "totalDistance": "Расстояние: ",
+            "totalConsumption": "Общий расход топлива: ",
+            "totalDeliveryCost": "Общая стоимость доставки: ",
+            "unit": "литр",
+            "units": "литров",
+            "addWaypoints": "Добавить контрольную точку",
+            "confirm": "Подтвердить"
+        },
+        "goods": {
+            "title": "Неподтвержденные товары",
+            "delivered": "Доставлено",
+            "deliveredDate": "Дата доставки",
+            "state": "Статус товаров",
+            "check": " Проверить",
+            "goodsDetails": "Данные о товарах"
+        },
+        "states":{
+            "created" : "СОЗДАН",
+            "checked" : "ПРОВЕРЕН",
+            "delivered" : "ДОСТАВЛЕН",
+            "rejected" : "ОТКЛОНЕН",
+            "unchecked": "НЕ СОСТАВЛЕН",
+            "transportation": "В ПУТИ",
+            "unconfirmed": "НЕ ПРОВЕРЕНЫ"
+        }
     }
 }

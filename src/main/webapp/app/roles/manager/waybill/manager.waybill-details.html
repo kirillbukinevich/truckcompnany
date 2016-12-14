@@ -3,58 +3,67 @@
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                     ng-click="vm.clear()">&times;</button>
-            <h4 class="modal-title">Waybill details</h4>
+            <h4 class="modal-title" data-translate="manager.waybillDetails.waybillDetails">Waybill details</h4>
         </div>
 
         <div class="modal-body">
             <div class="row">
                 <div class="col-md-6">
-                    <h4 class="text-center">Waybill</h4>
+                    <h4 class="text-center" data-translate="manager.waybillDetails.waybill">Waybill</h4>
                     <dl class="dl-horizontal">
-                        <dt><span>Waybill №:</span></dt>
+                        <dt><span data-translate="manager.waybillDetails.waybillNumber">Waybill №:</span></dt>
                         <dd><span>{{vm.waybill.number}}</span></dd>
 
-                        <dt><span>Route list №:</span></dt>
+                        <dt><span data-translate="manager.waybillDetails.routeListNumber">Route list №:</span></dt>
                         <dd>
                             <span><a href="#/manager/routelist-for-waybill/{{vm.waybill.routeList.id}}">{{vm.waybill.routeList.number}}</a></span>
                         </dd>
 
-                        <dt><span>Dispatcher:</span></dt>
+                        <dt><span data-translate="manager.waybillDetails.dispatcher">Dispatcher:</span></dt>
                         <dd><span>{{vm.waybill.dispatcher.firstName}} {{vm.waybill.dispatcher.lastName}}</span></dd>
 
-                        <dt><span>Creation date:</span></dt>
+                        <dt><span data-translate="manager.waybillDetails.creationDate">Creation date:</span></dt>
                         <dd><span>{{vm.waybill.date | date:'dd/MM/yy HH:mm'}}</span></dd>
 
-                        <dt><span>Driver:</span></dt>
+                        <dt><span data-translate="manager.waybillDetails.driver">Driver:</span></dt>
                         <dd><span>{{vm.waybill.driver.firstName}} {{vm.waybill.driver.lastName}}</span></dd>
 
-                        <dt><span>Leaving storage:</span></dt>
+                        <dt><span data-translate="manager.waybillDetails.leavingStorage">Leaving storage:</span></dt>
                         <dd><span>{{vm.waybill.routeList.leavingStorage.address}}</span></dd>
 
-                        <dt><span>Leaving date:</span></dt>
+                        <dt><span data-translate="manager.waybillDetails.leavingDate">Leaving date:</span></dt>
                         <dd><span>{{vm.waybill.routeList.leavingDate | date:'dd/MM/yy HH:mm'}}</span></dd>
 
-                        <dt><span>Arrival storage:</span></dt>
+                        <dt><span data-translate="manager.waybillDetails.arrivalStorage">Arrival storage:</span></dt>
                         <dd><span>{{vm.waybill.routeList.arrivalStorage.address}}</span></dd>
 
-                        <dt><span>Arrival date:</span></dt>
+                        <dt><span data-translate="manager.waybillDetails.arrivalDate">Arrival date:</span></dt>
                         <dd><span>{{vm.waybill.routeList.arrivalDate | date:'dd/MM/yy HH:mm'}}</span></dd>
 
-                        <dt><span>State:</span></dt>
+                        <dt><span data-translate="manager.waybillDetails.state">State:</span></dt>
                         <dd>
-                        <span ng-if="vm.waybill.state == 'CREATED'" class="label label-info">
-                            <span class="glyphicon glyphicon-plus"></span>&nbsp;CREATED</span>
+                            <span ng-if="vm.waybill.state == 'CREATED'" class="label label-info">
+                                <span class="glyphicon glyphicon-plus"></span>&nbsp;
+                                <span data-translate="manager.states.created">CREATED</span>
+                            </span>
                             <span ng-if="vm.waybill.state == 'CHECKED'" class="label label-primary">
-                            <span class="glyphicon glyphicon-transfer"></span>&nbsp;CHECKED</span>
+                                <span class="glyphicon glyphicon-transfer"></span>&nbsp;
+                                <span data-translate="manager.states.checked">CHECKED</span>
+                            </span>
                             <span ng-if="vm.waybill.state == 'DELIVERED'" class="label label-success">
-                            <span class="glyphicon glyphicon-ok"></span>&nbsp;DELIVERED</span>
+                                <span class="glyphicon glyphicon-ok"></span>&nbsp;
+                                <span data-translate="manager.states.delivered">DELIVERED</span>
+                            </span>
                             <span ng-if="vm.waybill.state == 'REJECTED'" class="label label-danger">
-                            <span class="glyphicon glyphicon-remove"></span>&nbsp;REJECTED</span>
+                                <span class="glyphicon glyphicon-remove"></span>&nbsp;
+                                <span data-translate="manager.states.rejected">REJECTED</span>
+                            </span>
                         </dd>
-
                         <div ng-if="vm.waybill.state != 'CREATED'">
-                            <dt><span>Checked by:</span></dt>
-                            <dd><span><b>{{vm.waybill.manager.firstName}} {{vm.waybill.manager.lastName}}</b></span> at
+                            <dt><span data-translate="manager.waybillDetails.checkedBy">Checked by:</span></dt>
+                            <dd>
+                                <span><b>{{vm.waybill.manager.firstName}} {{vm.waybill.manager.lastName}}</b></span>
+                                <span data-translate="manager.waybillDetails.at">at</span>
                                 {{vm.waybill.dateChecked | date:'dd/MM/yy HH:mm'}}
                             </dd>
                         </div>
@@ -63,15 +72,21 @@
 
                 <!-------------- GOODS INFO --------------->
                 <div class="col-md-5">
-                    <h4 class="text-center">Goods</h4>
+                    <h4 class="text-center" data-translate="manager.waybillDetails.goods">Goods</h4>
 
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th class="text-center">Name</th>
-                            <th class="text-center" ng-if="vm.waybill.state == 'CREATED'">Unchecked</th>
-                            <th ng-if="vm.waybill.state != 'REJECTED'" class="text-center">Shipped</th>
-                            <th ng-if="vm.waybill.state != 'REJECTED'" class="text-center">$ per item</th>
+                            <th class="text-center" data-translate="manager.waybillDetails.name">Name</th>
+                            <th class="text-center" ng-if="vm.waybill.state == 'CREATED'"
+                                data-translate="manager.waybillDetails.unchecked">Unchecked
+                            </th>
+                            <th ng-if="vm.waybill.state != 'REJECTED'" class="text-center"
+                                data-translate="manager.waybillDetails.shipped">Shipped
+                            </th>
+                            <th ng-if="vm.waybill.state != 'REJECTED'" class="text-center"
+                                data-translate="manager.waybillDetails.cost">$/item
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -104,7 +119,9 @@
                         </tr>
                         </tbody>
                     </table>
-                    <div ng-if="vm.waybill.margin != null"><strong>Margin:</strong> {{vm.waybill.margin}}%</div>
+                    <div ng-if="vm.waybill.margin != null"><strong data-translate="manager.waybillDetails.margin">Margin:</strong>
+                        {{vm.waybill.margin}}%
+                    </div>
 
                     <!--                    <div class="alert alert-danger help-block"
                                              role="alert"
@@ -124,7 +141,8 @@
             <div class="col-md-1"></div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label for="manager" class="pull-left">Checked by:</label>
+                    <label for="manager" class="pull-left" data-translate="manager.waybillDetails.checkedBy">Checked
+                        by:</label>
                     <input type="text" id="manager" class="form-control" name="confirmedBy"
                            ng-model="vm.fullName" readonly>
                 </div>
@@ -132,7 +150,7 @@
             <div class="col-md-1"></div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label for="checkDate" class="pull-left">At:</label>
+                    <label for="checkDate" class="pull-left" data-translate="manager.waybillDetails.atBig">At:</label>
                     <div class="input-group" style="clear:both;">
                         <input type="text"
                                ng-value="vm.now | date:'dd/MM/yy HH:mm'"
@@ -140,19 +158,15 @@
                                name="checkDate1"
                                class="form-control"
                                readonly/>
-                        <span class="input-group-addon" id="checkDate1"><span class="glyphicon glyphicon-calendar"></span></span>
-                    </div>
-                    <div class="alert alert-danger help-block"
-                         role="alert"
-                         ng-show="form.checkDate.$dirty && form.checkDate.$invalid">
-                        Checked date is required
+                        <span class="input-group-addon" id="checkDate1"><span
+                            class="glyphicon glyphicon-calendar"></span></span>
                     </div>
                 </div>
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-2">
                 <div class="form-group">
-                    <label for="price" class="pull-left">Margin:</label>
+                    <label for="price" class="pull-left" data-translate="manager.waybillDetails.margin">Margin:</label>
                     <div class="input-group" style="clear:both"
                          ng-class="{'has-error' : (form.price.$dirty && form.price.$invalid)}">
                         <input type="text"
@@ -173,7 +187,6 @@
                 </div>
             </div>
             <div class="col-md-1"></div>
-
         </div>
 
         <!--      <button type="button" class="btn btn-danger" data-dismiss="modal"
@@ -184,7 +197,7 @@
         <button type="button" class="btn btn-success" data-dismiss="modal"
                 ng-disabled="form.$invalid"
                 ng-click="closeModalWaybillDetails(vm.waybill.id); vm.changeWaybillState(1)">
-            <span class="glyphicon glyphicon-ok">&nbsp;Confirm</span>
+            <span class="glyphicon glyphicon-ok" data-translate="manager.waybillDetails.confirm">&nbsp;Confirm</span>
         </button>
     </div>
 </form>

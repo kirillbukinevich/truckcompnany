@@ -1,7 +1,92 @@
 {
     "manager": {
-        "initialTitle": "Truck company",
-        "waybills": "Waybills",
-        "routelists": "Routelist"
+        "title": {
+            "waybills": "Waybills",
+            "routeList": "Route list",
+            "goods": "Goods"
+        },
+        "sidebar": {
+            "waybills": "Waybills",
+            "routeList": "Route list",
+            "deliveredGoods": "Delivered goods"
+        },
+        "waybills": {
+            "noWaybillsYet": "No waybills yet",
+            "noWaybillsFound": "No waybills found!",
+            "waybills": "Waybills",
+            "waybillNumber": "Waybill №",
+            "registered": "Registration date",
+            "dispatcher": "Dispatcher",
+            "driver": "Driver",
+            "state": "State",
+            "handle": " Handle",
+            "details": " Details",
+            "initialTitle": "Truck company"
+        },
+        "waybillDetails": {
+            "waybillDetails": "Waybill details:",
+            "waybill": "Waybill:",
+            "waybillNumber": "Waybill №:",
+            "routeListNumber": "Route list №:",
+            "dispatcher": "Dispatcher:",
+            "creationDate": "Creation date:",
+            "driver": "Driver:",
+            "leavingStorage": "Leaving storage:",
+            "leavingDate": "Leaving date:",
+            "arrivalStorage": "Arrival storage:",
+            "arrivalDate": "Arrival date",
+            "state": "State:",
+            "checkedBy": "Checked by:",
+            "at": "at",
+            "atBig": "At:",
+            "goods": "Goods",
+            "name": "Name",
+            "shipped": "Shipped",
+            "cost": "$/item",
+            "margin": "Margin",
+            "unchecked": "Unchecked",
+            "confirm": "Confirm"
+        },
+        "routeList": {
+            "state": "State",
+            "noRouteList": "No route list yet",
+            "routeList": "Route list",
+            "number": "Route list №",
+            "leavingDate": "Leaving date",
+            "arrivalDate": "Arrival date",
+            "origin": "Origin",
+            "destination": "Destination",
+            "departure": "Departure: ",
+            "arrival": "Arrival: ",
+            "sender": "Sender: ",
+            "recipient": "Recipient: ",
+            "address": "Address: ",
+            "waypoints": "Waypoints:",
+            "fuelCost": "Fuel cost: ",
+            "totalDistance": "Total distance: ",
+            "totalConsumption": "Total fuel consumption: ",
+            "totalDeliveryCost": "Total delivery cost: ",
+            "unit": "litre",
+            "units": "litres",
+            "addWaypoints": "Add waypoints",
+            "confirm": "Confirm"
+        },
+        "goods": {
+            "title": "Unconfirmed delivered goods",
+            "delivered": "Delivered",
+            "deliveredDate": "Delivered date",
+            "state": "Goods state",
+            "check": " Check",
+            "goodsDetails": "Goods details"
+        },
+        "states":{
+            "created" : "CREATED",
+            "checked" : "CHECKED",
+            "delivered" : "DELIVERED",
+            "rejected" : "REJECTED",
+            "unchecked": "UNCHECKED",
+            "transportation": "TRANSPORTATION",
+            "unconfirmed": "UNCONFIRMED"
+        }
     }
 }

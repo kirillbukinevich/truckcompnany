@@ -18,7 +18,7 @@
 
                     data: {
                         authorities: ["ROLE_MANAGER"],
-                        pageTitle: 'manger.routelists'
+                        pageTitle: 'manger.title.routeList'
                     },
                     views: {
                         'page@roles': {
@@ -29,7 +29,7 @@
                     },
                     resolve: {
                         translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                            $translatePartialLoader.addPart('activate');
+                            $translatePartialLoader.addPart('manager');
                             return $translate.refresh();
                         }]
                     }
@@ -41,7 +41,7 @@
 
                 data: {
                     authorities: ["ROLE_MANAGER"],
-                    pageTitle: 'activate.title'
+                    pageTitle: 'manger.title.routeList'
                 },
                 views: {
                     'page@roles': {
@@ -52,7 +52,7 @@
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('activate');
+                        $translatePartialLoader.addPart('manager');
                         return $translate.refresh();
                     }]
                 }
