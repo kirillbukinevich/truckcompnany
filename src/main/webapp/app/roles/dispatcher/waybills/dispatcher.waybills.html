@@ -1,10 +1,10 @@
-<h1>Your Waybills</h1>
+<h1 data-translate="dispatcher.waybill.name">Your Waybills</h1>
 
 <div class="alert alert-warning" ng-if="vm.waybills.length === 0">List of your's waybills is empty.</div>
 
 <div ng-if="vm.waybills.length != 0">
     <div id="control-table">
-        <span class="select-show-title">Waybills per page:</span>
+        <span class="select-show-title" data-translate="dispatcher.waybill.perPage">Waybills per page:</span>
         <select ng-model="vm.itemsPerPage" class="btn btn-default"
                 ng-options="number for number in vm.availableItemsPerPage"
                 ng-change="vm.changeItemsPerPage()">
@@ -14,11 +14,11 @@
     <table class="table">
         <thead>
         <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-            <th jh-sort-by="number">№<span class="fa fa-sort"></span></th>
-            <th jh-sort-by="date">Date<span class="fa fa-sort"></span></th>
-            <th jh-sort-by="dispatcher">Dispatcher<span class="fa fa-sort"></span></th>
-            <th jh-sort-by="driver">Driver<span class="fa fa-sort"></span></th>
-            <th jh-sort-by="state">State<span class="fa fa-sort"></span></th>
+            <th jh-sort-by="number"><span data-translate="dispatcher.waybill.number">Number</span><span class="fa fa-sort"></span></th>
+            <th jh-sort-by="date"><span data-translate="dispatcher.waybill.date">Date</span><span class="fa fa-sort"></span></th>
+            <th><span data-translate="dispatcher.waybill.dispatcher">Dispatcher</span></th>
+            <th jh-sort-by="driver"><span data-translate="dispatcher.waybill.driver">Driver</span><span class="fa fa-sort"></span></th>
+            <th jh-sort-by="state"><span data-translate="dispatcher.waybill.state.name">State</span><span class="fa fa-sort"></span></th>
         </tr>
         </thead>
         <tbody>
@@ -28,15 +28,15 @@
             <td>{{waybill.dispatcher.firstName}} {{waybill.dispatcher.lastName}}</td>
             <td>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</td>
             <td>
-                <span ng-if = "waybill.state == 'CREATED'" class="label label-info" >CREATED</span>
-                <span ng-if = "waybill.state == 'DELIVERED'" class="label label-success" >DELIVERED</span>
-                <span ng-if = "waybill.state == 'CHECKED'" class="label label-primary" >CHECKED</span>
-                <span ng-if = "waybill.state == 'REJECTED'" class="label label-warning" >REJECTED</span>
+                <span ng-if = "waybill.state == 'CREATED'" class="label label-info" data-translate="dispatcher.waybill.state.created">CREATED</span>
+                <span ng-if = "waybill.state == 'DELIVERED'" class="label label-success" data-translate="dispatcher.waybill.state.delivered">DELIVERED</span>
+                <span ng-if = "waybill.state == 'CHECKED'" class="label label-primary" data-translate="dispatcher.waybill.state.checked">CHECKED</span>
+                <span ng-if = "waybill.state == 'REJECTED'" class="label label-warning" data-translate="dispatcher.waybill.state.rejected">REJECTED</span>
             </td>
             <td>
                 <a type="button" class="btn btn-default btn-sm" href="#/dispatcher/waybills/{{waybill.id}}/details">
                     <span class="glyphicon glyphicon-eye-open"></span>
-                    <span>Details</span>
+                    <span data-translate="dispatcher.button.details">Details</span>
                 </a>
             </td>
         </tr>

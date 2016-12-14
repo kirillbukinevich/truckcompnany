@@ -1,10 +1,69 @@
 {
     "dispatcher": {
-        "initialTitle": "Hello, Dispatcher!",
-        "waybills": "Waybills",
-        "confirm": "Confirm offer",
-        "offers": "Offers",
-        "offerDetails": "Offer Details",
-        "waybillDetails": "Waybill Details"
+        "initialTitle": "Greetings, Dispatcher!",
+        "waybill": {
+            "name": "Waybills",
+            "number": "Number",
+            "dispatcher": "Dispatcher",
+            "driver": "Driver",
+            "date": "Date",
+            "state": {
+                "name": "State",
+                "created": "CREATED",
+                "delivered": "DELIVERED",
+                "checked": "CHECKED",
+                "rejected": "REJECTED"
+            },
+            "details" : {
+                "name": "Waybill details",
+                "number": "Number",
+                "date": "Creation date"
+            },
+            "perPage": "Waybills per page:",
+            "warning": "Your Waybill list is empty."
+        },
+        "offer": {
+            "name": "Offers",
+            "driver": "Driver*",
+            "truck": "Truck*",
+            "title": "Offers",
+            "perPage": "Offers per page:",
+            "number": "Number",
+            "date": "Date",
+            "leavingStorage": "Leaving storage",
+            "arrivalStorage": "Arrival storage",
+            "warning": "Your Offer list is empty. You can create a test offer, using button \"Generate offer\".",
+            "driverWarning": "No drivers available at the given date!",
+            "truckWarning": "No truck available at the given date!",
+            "dataRequiredWarning": "This field is required!",
+            "dataInvalidWarning": "Invalid date format, or leaving date !",
+            "serverWarning": "Error on server side. Please, try later.",
+            "handledWarning" : "Current offer has been treated already.",
+            "state": {
+                "name": "State",
+                "new": "NEW",
+                "cancelled": "CANCELLED",
+                "accepted": "ACCEPTED"
+            },
+            "details" : {
+                "name": "Offer details",
+                "number": "Number",
+                "date": "Date",
+                "offerGoods": "Offer goods",
+                "createdBy": "Created by"
+            },
+            "submitOffer": "Submit offer",
+            "leavingDate": "Leaving date*",
+            "arrivalDate": "Arrival date*"
+        },
+        "button": {
+            "details": "Details",
+            "cancel": "Cancel",
+            "submit": "Submit",
+            "generate": "Generate offer",
+            "close": "Close",
+            "confirmOffer": "Confirm offer",
+            "back": "Back"
+        }
     }
 }

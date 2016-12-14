@@ -27,7 +27,6 @@
         vm.arrivalDate = null;
         vm.leaveDate = null;
         vm.error = false;
-        vm.deliveryTime = 0;
 
         function setTrucks() {
             if (vm.arrivalDate instanceof Date && vm.leaveDate instanceof Date) {
@@ -101,7 +100,6 @@
                 },
                 function (resp) {
                     vm.error = true;
-                    vm.messageError = 'Error on server side. Please, try later.';
                 }
             );
         }
@@ -112,6 +110,7 @@
             date: new Date(),
             datepickerOptions : {
                 maxDate: null,
+                minDate: new Date(),
                 showWeeks: false
             },
             timepickerOptions: {
@@ -139,8 +138,14 @@
         var unwatchMinMaxValues = $scope.$watch(function() {
             return [vm.leavingPicker, vm.arrivalPicker];
         }, function() {
-            vm.arrivalPicker.datepickerOptions.minDate = vm.leaveDate;
-            vm.leavingPicker.datepickerOptions.maxDate = vm.arrivalDate;
+            if (vm.leaveDate >= new Date())
+                vm.arrivalPicker.datepickerOptions.minDate = vm.leaveDate;
+
+            if (vm.arrivalDate > vm.arrivalPicker.datepickerOptions.minDate)
+                vm.leavingPicker.datepickerOptions.maxDate = vm.arrivalDate;
+
+            console.log("Отправка: " + vm.leaveDate);
+            console.log("Прибытие: " + vm.arrivalDate);
         }, true);
 
 
