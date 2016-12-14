@@ -79,12 +79,9 @@
                             url: '/api/checkpoint_mark_date/' + id,
                         }).then(function successCallback(response) {
                             var today = new Date();
-                            var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-                            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                            var dateTime = date + ' ' + time;
                             for (var j in vm.checkpoints) {
                                 if (vm.checkpoints[j].id == id) {
-                                    vm.checkpoints[j].checkDate = dateTime;
+                                    vm.checkpoints[j].checkDate = today;
                                     vm.imageWaypoints[j] = {
                                         position: vm.checkpoints[j].name,
                                         image: 'http://inspire.ecoachmanager.com/images/32x32/accept_item.png'
@@ -105,12 +102,12 @@
                 for (var j in vm.waybills) {
                     if (vm.waybills[j] != true && vm.waybills[j].state == "CHECKED") {
                         vm.waybills[j].state = "DELIVERED";
-                        vm.routeList.arrivalDate = Date.now();
                         $http({
                             method: 'PUT',
                             url: '/api/waybills',
                             data: vm.waybills[j]
                         });
+
                         $location.path("/driver/complete");
                     }
                 }
