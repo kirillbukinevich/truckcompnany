@@ -194,7 +194,7 @@
                     amount: vm.topBestDriversAmount
                 }
             }).then(function successCallback(response) {
-                vm.topBestDriversChartConfig.series = [{data: response.data}];
+                vm.topBestDriversChartConfig.series[0].data = response.data;
                 console.log('Top best drivers data load;');
             }, function errorCallback(response) {
                 console.log('Profit data wasn\'t load: ' + response.statusText);
@@ -335,16 +335,19 @@
 
         vm.pie = {
             chart: {
-                type: 'pie',
-                margin: [15, 15, 15, 15],
+                type: 'column',
+                /*margin: [15, 15, 15, 15],
                 marginRight: 200,
-                marginTop: 50
+                marginTop: 50*/
             },
             tooltip: {
-                pointFormat: '{series.data.name} <b>${point.y:.2f}</b>',
+                pointFormat: '{series.name} <b>${point.y:.2f}</b>',
                 valueDecimals: 2
             },
-            plotOptions: {
+            xAxis: {
+                type: 'category'
+            },
+            /*plotOptions: {
                 pie: {
                     size: '100%',
                     slicedOffset: 0,
@@ -356,13 +359,9 @@
                     },
                     showInLegend: true
                 }
-            },
+            },*/
             legend: {
-                enabled: true,
-                verticalAlign: 'middle',
-                layout: 'vertical',
-                align: 'right',
-                labelFormat: '{name} ${y:.2f}'
+                enabled: false
             }
         };
         vm.topBestDriversChartConfig = {
@@ -372,13 +371,9 @@
             },
             series: [
                 {
-                    data: [{
-                        name: 'test1',
-                        y: 1
-                    }, {
-                        name: 'test2',
-                        y: 2
-                    }]
+                    colorByPoint: true,
+                    name: 'Drivers',
+                    data: []
                 }
             ]
         };

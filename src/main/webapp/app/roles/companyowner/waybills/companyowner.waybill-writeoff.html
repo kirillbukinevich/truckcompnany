@@ -20,14 +20,15 @@
                         <th class="text-center">Accepted</th>
                         <th class="text-center">Delivered</th>
                         <th class="text-center">Writed off</th>
-                        <th class="text-center">$ Price</th>
+                        <th class="text-center">Price per unit</th>
+                        <th class="text-center">Loss</th>
                     </tr>
                     </thead>
                     <tbody>
 
                     <tr ng-repeat="stuff in vm.waybill.goods">
-                        <td>{{stuff.name}}
-                            <div>({{stuff.type}})</div>
+                        <td>
+                            <div class="text-center">{{stuff.name}} ({{stuff.type}})</div>
                         </td>
                         <td>
                             <div class="text-center">{{stuff.acceptedNumber}}</div>
@@ -40,9 +41,15 @@
                         </td>
                         <td>
                             <div class="text-center">
-                                <span>{{stuff.price}}</span>
+                                <span>${{stuff.price}}</span>
                             </div>
                         </td>
+                        <td>
+                            <div class="text-center" ng-if="stuff.acceptedNumber>stuff.deliveredNumber">
+                                ${{(stuff.acceptedNumber-stuff.deliveredNumber)*stuff.price}}
+                            </div>
+                        </td>
+
                     </tr>
                     </tbody>
                 </table>
