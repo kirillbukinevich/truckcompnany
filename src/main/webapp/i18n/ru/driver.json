@@ -1,0 +1,35 @@
+{
+    "driver": {
+        "sidebar": {
+            "route": " Маршрут ",
+            "goods": " Товары "
+        },
+        "routelist": {
+            "routelists": "Путевой лист ",
+            "waybills": "ТТН №:  ",
+            "dispatcher": "Диспетчер: ",
+            "creation_date": "Дата создания: ",
+            "driver": "Водитель: ",
+            "leaving_storage": "Отправление из: ",
+            "leaving_date": "Дата отправления:" ,
+            "arrival_storage": "Прибытие в: ",
+            "arrival_date": "Дата прибытия:",
+            "checkpoint": "Контрольные точки",
+            "name": "название",
+            "time": "время",
+            "status": "статус"
+        },
+        "goods": {
+            "list": "Список товаров",
+            "complete": "Доставка завершена",
+            "name": "название",
+            "accepted": "принятые товары",
+            "delivered": "доставленные товары"
+        },
+        "job":{
+            "status": "У тебя нет работы сейчас"
+        }
+
+
+    }
+}

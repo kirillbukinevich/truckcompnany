@@ -1,0 +1,33 @@
+{
+    "driver": {
+        "sidebar": {
+            "route": " Route ",
+            "goods": " Goods "
+        },
+        "routelist": {
+            "routelists": "Route list ",
+            "waybills": "Waybill №:  ",
+            "dispatcher": "Dispatcher: ",
+            "creation_date": "Creation date: ",
+            "driver": "Driver: ",
+            "leaving_storage": "Leaving storage: ",
+            "leaving_date": "Leaving date:" ,
+            "arrival_storage": "Arrival storage: ",
+            "arrival_date": "Arrival date:",
+            "checkpoint": "Checkpoints",
+            "name": "name",
+            "time": "time",
+            "status": "status"
+        },
+        "goods": {
+            "list": "List of goods",
+            "complete": "Delivery is completed",
+            "name": "name",
+            "accepted": "accepted goods",
+            "delivered": "delivered goods"
+        },
+        "job":{
+            "status": "You don't have task now"
+        }
+    }
+}
