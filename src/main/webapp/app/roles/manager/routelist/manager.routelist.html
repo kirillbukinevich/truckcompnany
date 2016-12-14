@@ -12,9 +12,9 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <th data-translate="manager.routeList.number">Route list №</th>
-            <th data-translate="manager.routeList.leavingDate">Leaving date</th>
-            <th data-translate="manager.routeList.arrivalDate">Arrival date</th>
+            <th data-translate="manager.routeList.number" class="text-center">Route list №</th>
+            <th data-translate="manager.routeList.leavingDate" class="text-center">Leaving date</th>
+            <th data-translate="manager.routeList.arrivalDate" class="text-center">Arrival date</th>
             <th class="text-center" data-translate="manager.routeList.origin">Origin</th>
             <th class="text-center"></th>
             <th class="text-center" data-translate="manager.routeList.destination">Destination</th>
@@ -28,8 +28,8 @@
                     <div class="text-center">{{routeList.number}}</div>
                 </a>
             </td>
-            <td>{{routeList.leavingDate | date:"dd/MM/yy HH:mm"}}</td>
-            <td>{{routeList.arrivalDate | date:"dd/MM/yy HH:mm"}}</td>
+            <td><div class="text-center">{{routeList.leavingDate | date:"dd/MM/yy HH:mm"}}</div></td>
+            <td><div class="text-center">{{routeList.arrivalDate | date:"dd/MM/yy HH:mm"}}</div></td>
             <td>
                 <div class="text-center">{{routeList.leavingStorage.address}}</div>
             </td>

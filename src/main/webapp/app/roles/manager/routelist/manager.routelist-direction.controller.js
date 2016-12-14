@@ -35,19 +35,21 @@
         $scope.calcDistance = vm.getDistance;
         vm.confirmRoutelist = confirmRoutelist;
         vm.wayPoints = [];
+        vm.checkDate = [];
 
         $timeout(function () {
             Waybill.get({id: $stateParams.id}, function (data) {
                 vm.waybill = data;
-                Checkpoint.query({id: vm.waybill.routeList.id}, function (checkpooint) {
-                    vm.checkpoints = checkpooint;
-                    var i = 0;
+                Checkpoint.query({id: vm.waybill.routeList.id}, function (checkpoint) {
+                    vm.checkpoints = checkpoint;
                     angular.forEach(vm.checkpoints, function (value) {
-                        vm.wayPoints[i] = {location: value.name};
-                        i++;
+                        vm.wayPoints.push({location: value.name});
+
+                        if(value.checkDate != null) {
+                            vm.checkDate.push(value.checkDate);
+                        }
                     });
                 });
-                console.log(vm.waybill);
                 vm.getDistance();
             });
         }, 1000);

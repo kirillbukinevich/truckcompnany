@@ -77,7 +77,8 @@
             "deliveredDate": "Delivered date",
             "state": "Goods state",
             "check": " Check",
-            "goodsDetails": "Goods details"
+            "goodsDetails": "Goods details",
+            "noUnconfirmedGoods": "No unconfirmed delivered goods"
         },
         "states":{
             "created" : "CREATED",
