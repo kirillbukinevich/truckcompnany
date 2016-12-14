@@ -15,11 +15,9 @@
 
         vm.clear = clear;
         vm.offer = entity;
-
+        console.log(vm.offer);
         function clear () {
             $uibModalInstance.dismiss('cancel');
         }
-
-        console.log(vm.offer);
     }
 })();

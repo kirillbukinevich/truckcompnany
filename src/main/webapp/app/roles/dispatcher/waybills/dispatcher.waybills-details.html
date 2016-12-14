@@ -1,10 +1,16 @@
 <div>
-    <div class="modal-header">
+    <div class="modal-header" ng-if="vm.waybill.id != null">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()">&times;</button>
         <h4 class="modal-title" data-translate="dispatcher.waybill.details.name">Waybill details</h4>
     </div>
 
-    <div class="modal-body">
+    <div class="modal-header"  ng-if="vm.waybill.id == null">
+        <div class="alert alert-warning">
+            <span  data-translate="dispatcher.waybill.details.warning">Current waybill has been treated already.</span>
+        </div>
+    </div>
+
+    <div class="modal-body" ng-if="vm.waybill.id != null">
         <dl class="dl-horizontal">
             <dt><span data-translate="dispatcher.waybill.details.number">Waybill's number</span>:</dt>
             <dd><span>{{vm.waybill.number}}</span></dd>

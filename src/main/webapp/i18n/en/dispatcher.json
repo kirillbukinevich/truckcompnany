@@ -1,6 +1,6 @@
 {
     "dispatcher": {
-        "initialTitle": "Greetings, Dispatcher!",
+        "greetings": "Greetings, Dispatcher!",
         "waybill": {
             "name": "Waybills",
             "number": "Number",
@@ -17,7 +17,8 @@
             "details" : {
                 "name": "Waybill details",
                 "number": "Number",
-                "date": "Creation date"
+                "date": "Creation date",
+                "warning": "Current waybill not exist or you have no permission for it."
             },
             "perPage": "Waybills per page:",
             "warning": "Your Waybill list is empty."
@@ -36,7 +37,7 @@
             "driverWarning": "No drivers available at the given date!",
             "truckWarning": "No truck available at the given date!",
             "dataRequiredWarning": "This field is required!",
-            "dataInvalidWarning": "Invalid date format, or leaving date !",
+            "dataInvalidWarning": "Invalid date, or leaving date later than arrival date!",
             "serverWarning": "Error on server side. Please, try later.",
             "handledWarning" : "Current offer has been treated already.",
             "state": {
@@ -50,7 +51,8 @@
                 "number": "Number",
                 "date": "Date",
                 "offerGoods": "Offer goods",
-                "createdBy": "Created by"
+                "createdBy": "Created by",
+                "warning": "Current offer not exist or you have no permission for it."
             },
             "submitOffer": "Submit offer",
             "leavingDate": "Leaving date*",

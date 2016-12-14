@@ -1,10 +1,16 @@
 <div>
-    <div class="modal-header"  ng-if="vm.offer != null">
+    <div class="modal-header"  ng-if="vm.offer.id != null">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="vm.clear()">&times;</button>
         <h4 class="modal-title" data-translate="dispatcher.offer.details.name">Offer details</h4>
     </div>
 
-    <div class="modal-body" ng-if="vm.offer != null">
+    <div class="modal-header"  ng-if="vm.offer.id == null">
+        <div class="alert alert-warning">
+            <span  data-translate="dispatcher.offer.details.warning">Current offer has been treated already.</span>
+        </div>
+    </div>
+
+    <div class="modal-body" ng-if="vm.offer.id != null">
         <dl class="dl-horizontal">
             <dt><span data-translate="dispatcher.offer.details.number">Offer's number</span>:</dt>
             <dd><span>{{vm.offer.number}}</span></dd>
@@ -51,7 +57,7 @@
         </dl>
     </div>
 
-    <div class="modal-footer"  ng-if="vm.offer != null">
+    <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="vm.clear()">
             <span class="glyphicon glyphicon-remove-sign"></span>
             <span data-translate="dispatcher.button.close">Close</span>
