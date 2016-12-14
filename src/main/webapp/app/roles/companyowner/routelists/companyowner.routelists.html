@@ -1,11 +1,14 @@
-<h1>Route lists</h1>
+<h1>
+    <span data-translate="companyowner.routelists.routelists"></span>
+</h1>
 
 <div id="control-panel">
     <div class="row">
         <div class="col-md-4">
             <button type="button" class="btn btn-success btn-sm"
                     ng-click="vm.downloadReport()" ng-if="vm.routeLists.size != 0">
-                <span class="glyphicon glyphicon glyphicon-list-alt"></span>&nbsp;Report
+                <span class="glyphicon glyphicon glyphicon-list-alt"></span>
+                <span data-translate="companyowner.routelists.report"></span>
             </button>
         </div>
 
@@ -22,7 +25,7 @@
 </div>
 
 
-Show:
+<span data-translate="companyowner.paginator.show"></span>:
 <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage" ng-change="vm.changeItemsPerPage()">
 </select>
 
@@ -30,12 +33,22 @@ Show:
     <thead>
     <tr>
 
-        <th>Number</th>
-        <th>Leaving storage</th>
-        <th>Arrival storage</th>
-        <th>Truck number</th>
-        <th>Waybill number</th>
-        <th>Date</th>
+        <th>№</th>
+        <th>
+            <span data-translate="companyowner.routelists.leavingstorage"></span>
+        </th>
+        <th>
+            <span data-translate="companyowner.routelists.arrivalstorage"></span>
+        </th>
+        <th>
+            <span data-translate="companyowner.routelists.trucknumber"></span>
+        </th>
+        <th>
+            <span data-translate="companyowner.routelists.waybillnumber"></span>
+        </th>
+        <th>
+            <span data-translate="companyowner.routelists.date"></span>
+        </th>
 
     </tr>
     </thead>

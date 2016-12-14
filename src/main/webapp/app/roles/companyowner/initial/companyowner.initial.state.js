@@ -25,7 +25,7 @@
             },
             resolve: {
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                    $translatePartialLoader.addPart('activate');
+                    $translatePartialLoader.addPart('companyowner');
                     return $translate.refresh();
                 }]
             }

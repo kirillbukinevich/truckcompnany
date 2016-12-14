@@ -1,4 +1,6 @@
-<h1>Waybills</h1>
+<h1>
+    <span data-translate="companyowner.waybills.waybills"></span>
+</h1>
 
 <div class="alert alert-warning" ng-if="(vm.waybills.length === 0)"
      data-translate="companyowner.waybills.listempty">
@@ -6,8 +8,9 @@
 </div>
 
 <div ng-if="vm.waybills.length !=0">
-    Show:
-    <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage" ng-change="vm.changeItemsPerPage()">
+    <span data-translate="companyowner.paginator.show"></span>:
+    <select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage"
+            ng-change="vm.changeItemsPerPage()">
     </select>
 
 
@@ -16,10 +19,18 @@
         <thead>
         <tr>
             <th>№</th>
-            <th>Dispatcher</th>
-            <th>Driver</th>
-            <th>Route list number</th>
-            <th>State</th>
+            <th>
+                <span data-translate="companyowner.waybills.dispatcher"></span>
+            </th>
+            <th>
+                <span data-translate="companyowner.waybills.driver"></span>
+            </th>
+            <th>
+                <span data-translate="companyowner.waybills.routelistnumber"></span>
+            </th>
+            <th>
+                <span data-translate="companyowner.general.state"></span>
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -30,16 +41,21 @@
             <td>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</td>
             <td>{{waybill.routeList.number}}</td>
             <td>
-                <span ng-if = "waybill.state == 'CREATED'" class="label label-info" >CREATED</span>
-                <span ng-if = "waybill.state == 'DELIVERED'" class="label label-success" >DELIVERED</span>
-                <span ng-if = "waybill.state == 'CHECKED'" class="label label-primary" >CHECKED</span>
-                <span ng-if = "waybill.state == 'REJECTED'" class="label label-warning" >REJECTED</span>
+                <span ng-if = "waybill.state == 'CREATED'" class="label label-info"
+                      data-translate="companyowner.general.created">CREATED</span>
+                <span ng-if = "waybill.state == 'DELIVERED'" class="label label-success"
+                      data-translate="companyowner.general.delivered">DELIVERED</span>
+                <span ng-if = "waybill.state == 'CHECKED'" class="label label-primary"
+                      data-translate="companyowner.general.checked">CHECKED</span>
+                <span ng-if = "waybill.state == 'REJECTED'" class="label label-warning"
+                      data-translate="companyowner.general.rejected">REJECTED</span>
             </td>
             <td >
                 <button type="button" class="btn btn-default btn-sm"
                         ng-click="vm.showModalWaybillWriteOff(waybill.id)"
                         ng-if = "waybill.state === 'DELIVERED'">
-                    <span class="glyphicon glyphicon glyphicon-eye-open"></span>&nbsp;Write off
+                    <span class="glyphicon glyphicon glyphicon-eye-open"></span>
+                    <span data-translate="companyowner.waybills.writeoff"></span>
                 </button>
             </td>
         </tr>

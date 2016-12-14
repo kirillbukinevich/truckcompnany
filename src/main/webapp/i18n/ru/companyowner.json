@@ -1,0 +1,63 @@
+{
+    "companyowner": {
+        "sidebar" : {
+            "statistics": "Статистика",
+            "routelists" : "Путевые листы",
+            "waybills" : "ТТН"
+        },
+        "statistics" : {
+            "welcome": "Добро пожаловать. Вы авторизированы как владелец компании "
+        },
+        "waybills":{
+            "dispatcher" : "Диспетчер",
+            "waybills" : "Товарно-транспортные накладные",
+            "listempty" : "Список ТТН пуст.",
+            "driver" : "Водитель",
+            "routelistnumber" : "Номер путевого листа",
+            "writeoff" : "Акт списания",
+            "goods" : "Товары",
+            "name" : "Наименование",
+            "accepted" : "Подтверждено",
+            "delivered" : "Доставлено",
+            "writedoff" : "Списано",
+            "priceperunit" : "Цена за единицу",
+            "loss" : "Убытки"
+        },
+        "routelists" : {
+            "routelists" : "Путевые листы",
+            "report" : "Отчет",
+            "leavingstorage" : "Склад отправления",
+            "arrivalstorage" : "Склад прибытия",
+            "trucknumber" : "Номер грузовика",
+            "waybillnumber" : "Номер ТТН",
+            "date" : "Дата",
+            "routelist" : "Путевой лист",
+            "departure": "Дата отправления",
+            "arrival": "Дата прибытия",
+            "sender": "Отправитель",
+            "recipient": "Получатель",
+            "address": "Адрес",
+            "waypoints": "Контрольные точки:",
+            "fuelCost": "Стоимость топлива: ",
+            "totalDistance": "Расстояние: ",
+            "totalConsumption": "Общий расход топлива: ",
+            "totalDeliveryCost": "Общая стоимость доставки: ",
+            "unit": "литр",
+            "units": "литров"
+        },
+        "paginator": {
+            "show" : "Показать"
+        },
+        "general" : {
+            "state" : "Стутус",
+            "created" : "СОЗДАН",
+            "checked" : "ПРОВЕРЕН",
+            "delivered" : "ДОСТАВЛЕН",
+            "rejected" : "ОТКЛОНЕН",
+            "close" : "Закрыть",
+            "unchecked": "НЕ СОСТАВЛЕН",
+            "transportation": "В ПУТИ",
+            "unconfirmed": "НЕ ПРОВЕРЕНЫ"
+        }
+    }
+}
