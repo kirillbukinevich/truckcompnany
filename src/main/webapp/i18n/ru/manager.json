@@ -51,7 +51,7 @@
             "state": "Статус",
             "noRouteList": "Путевых листов еще нет",
             "routeList": "Путевой лист",
-            "number": "Номер путевого листа",
+            "number": "№ путевого листа",
             "leavingDate": "Дата отправления",
             "arrivalDate": "Дата прибытия",
             "origin": "Отправление",
@@ -77,7 +77,8 @@
             "deliveredDate": "Дата доставки",
             "state": "Статус товаров",
             "check": " Проверить",
-            "goodsDetails": "Данные о товарах"
+            "goodsDetails": "Данные о товарах",
+            "noUnconfirmedGoods": "Неподтвержденных товаров нет"
         },
         "states":{
             "created" : "СОЗДАН",

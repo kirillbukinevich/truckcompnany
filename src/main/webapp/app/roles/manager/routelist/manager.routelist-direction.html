@@ -52,6 +52,10 @@
             <label ng-if="vm.wayPoints.length != 0" class="control-label"
                    data-translate="manager.routeList.waypoints">Waypoints:</label>
             <fieldset ng-repeat="wayPoint in vm.wayPoints">
+                <div class="row" ng-if="vm.waybill.routeList.state != 'UNCHECKED'">
+                    <div class="col-md-6 text-right">{{wayPoint.location}}&nbsp;<span class="glyphicon glyphicon-flag"></span></div>
+                    <div class="col-md-6">{{vm.checkDate[$index] | date:'dd/MM/yy HH:mm'}}</div>
+                </div>
                 <div class="form-group form-inline">
                     <input ng-if="vm.waybill.routeList.state == 'UNCHECKED'"
                            class="form-control"
@@ -60,11 +64,11 @@
                            name="''"
                            ng-change="calcDistance()"
                            placeholder="Enter checkpoint">
-                    <input ng-if="vm.waybill.routeList.state != 'UNCHECKED'"
+                    <!--<input ng-if="vm.waybill.routeList.state != 'UNCHECKED'"
                            class="form-control"
                            type="text"
                            value="{{wayPoint.location}}"
-                           readonly>
+                           readonly>-->
                     <a ng-if="vm.waybill.routeList.state == 'UNCHECKED'"
                        ng-click="vm.removeWayPoint($index)"
                        role="button">
@@ -113,7 +117,7 @@
             <h5>&nbsp{{vm.dist}} km</h5>
             <h5>&nbsp{{vm.waybill.routeList.truck.consumption*vm.dist/100}}
                 <span data-translate="manager.routeList.units">litres</span></h5>
-            <h5>&nbsp{{vm.dist/vm.waybill.routeList.truck.consumption*vm.waybill.routeList.fuelCost | number:2}} $</h5>
+            <h5>&nbsp{{vm.dist*vm.waybill.routeList.truck.consumption*vm.waybill.routeList.fuelCost/100 | number:2}} $</h5>
         </div>
     </div>
 
