@@ -43,7 +43,6 @@
                     authorities: ["ROLE_MANAGER"],
                     pageTitle: 'activate.title'
                 },
-
                 views: {
                     'page@roles': {
                         templateUrl: 'app/roles/manager/routelist/manager.routelist-direction.html',
@@ -57,7 +56,6 @@
                         return $translate.refresh();
                     }]
                 }
-
             })
     }
 })();

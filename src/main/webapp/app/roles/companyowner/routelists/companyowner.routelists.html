@@ -41,7 +41,11 @@ Show:
     </thead>
     <tbody>
     <tr ng-repeat="waybill in vm.waybills">
-        <td>{{waybill.routeList.number}}</td>
+        <td>
+            <a href="#/companyowner/routelistDetails/{{waybill.routeList.id}}">
+            {{waybill.routeList.number}}
+            </a>
+        </td>
         <td>{{waybill.routeList.leavingStorage.name}}</td>
         <td>{{waybill.routeList.arrivalStorage.name}}</td>
         <td>{{waybill.routeList.truck.regNumber}}</td>

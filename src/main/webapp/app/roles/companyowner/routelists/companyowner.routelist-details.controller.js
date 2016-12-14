@@ -1,16 +1,13 @@
-/**
- * Created by Dmitry on 17.11.2016.
- */
 (function () {
     'use strict';
 
     angular
         .module('truckCompanyApp')
-        .controller('ManagerRoutelistDirectionController', ManagerRoutelistDirectionController);
+        .controller('CompanyownerRoutelistDetailsController', CompanyownerRoutelistDetailsController);
 
-    ManagerRoutelistDirectionController.$inject = ['NgMap', '$scope', '$stateParams', '$timeout', 'Checkpoint', 'Waybill', '$http'];
+    CompanyownerRoutelistDetailsController.$inject = ['NgMap', '$scope', '$stateParams', '$timeout', 'Checkpoint', 'Waybill'];
 
-    function ManagerRoutelistDirectionController(NgMap, $scope, $stateParams, $timeout, Checkpoint, Waybill, $http) {
+    function CompanyownerRoutelistDetailsController(NgMap, $scope, $stateParams, $timeout, Checkpoint, Waybill) {
         var vm = this;
 
         vm.getDistance = function getDistance() {
@@ -33,7 +30,6 @@
         }, 500);
 
         $scope.calcDistance = vm.getDistance;
-        vm.confirmRoutelist = confirmRoutelist;
         vm.wayPoints = [];
 
         $timeout(function () {
@@ -51,33 +47,5 @@
                 vm.getDistance();
             });
         }, 1000);
-
-        vm.addNewWayPoint = function () {
-            vm.wayPoints.push({'location': ''});
-        };
-
-        vm.removeWayPoint = function (item) {
-            vm.wayPoints.splice(item, 1);
-            vm.getDistance();
-        };
-
-        function confirmRoutelist() {
-            vm.getDistance();
-            vm.waybill.routeList.state = 'TRANSPORTATION';
-            vm.waybill.routeList.distance = vm.dist;
-
-            console.log(vm.waybill);
-            console.log(vm.checkpoints);
-            console.log(vm.wayPoints);
-
-            var i = 0;
-            vm.checkpoints = [];
-            angular.forEach(vm.wayPoints, function (value) {
-                vm.checkpoints[i] = {name: value.location};
-                i++;
-            });
-            Waybill.update(vm.waybill);
-            $http.post('api/checkpoints/' + vm.waybill.routeList.id, vm.checkpoints);
-        }
     }
 })();
