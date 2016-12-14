@@ -1,36 +1,55 @@
-<jk-rating-stars style="text-align:center" max-rating="10" rating="vm.currentRate" read-only="vm.readOnly" ></jk-rating-stars>
+<jk-rating-stars style="text-align:center" max-rating="10" rating="vm.currentRate"
+                 read-only="vm.readOnly"></jk-rating-stars>
 <span ng-repeat="waybill in vm.waybills">
 <div ng-if="waybill.state == 'CHECKED' && vm.routeList.state == 'TRANSPORTATION'">
 
         <h1 style="text-align:center">Route list</h1>
-    <table class="table table-hover">
-        <tbody>
-        <tr><td><h5><b>Waybill №</b> {{waybill.number}}</h5></td></tr>
-        <tr><td><h5><b>Truck:</b> {{vm.routeList.truck.model}} {{vm.routeList.truck.type}} {{vm.routeList.truck.regNumber}}</h5></td></tr>
-        <tr><td><h5><b>Driver:</b> {{waybill.driver.firstName}} {{waybill.driver.lastName}}</h5></td></tr>
-        <tr><td><h5>Route from <b>{{vm.routeList.leavingStorage.address}}</b> to
-            <b>{{vm.routeList.arrivalStorage.address}}</b></h5></td></tr>
-        <tr><td><h5><b>leaving date:</b> {{waybill.routeList.leavingDate | date:'yyyy-MM-dd HH:mm'}}</h5></td></tr>
-        <tr><td><h5><b>arrival date:</b>  {{waybill.routeList.arrivalDate | date:'yyyy-MM-dd HH:mm'}}</h5></td></tr>
-        </tbody>
-    </table>
-    <ng-map  zoom="14" center="37.7699298, -122.4469157" style="height:90%">
-    <directions
-        draggable="false"
-        panel="directions-panel"
-        travel-mode="{{vm.travelMode}}"
-        waypoints="{{vm.checkpointNames}}"
-        origin="{{vm.routeList.leavingStorage.address}}"
-        destination="{{vm.routeList.arrivalStorage.address}}">
-    </directions>
-        <div ng-repeat="imageWaypoint in vm.imageWaypoints">
-        <custom-marker position="{{imageWaypoint.position}}">
-        <div>
-            <img src="{{imageWaypoint.image}}"/>
+    <div class="row">
+                <div class="col-md-10">
+                    <dl class="dl-horizontal">
+                        <dt><span><h4><b>Waybill №:</b></h4></span></dt>
+                        <dd><span><h4>{{waybill.number}}</h4></span></dd>
+
+                        <dt><span><h4><b>Dispatcher:</b></h4></span></dt>
+                        <dd><span><h4>{{waybill.dispatcher.firstName}} {{waybill.dispatcher.lastName}}</h4></span></dd>
+
+                        <dt><span><h4><b>Creation date:</b></h4></span></dt>
+                        <dd><span><h4>{{waybill.date | date:'dd/MM/yy HH:mm'}}</h4></span></dd>
+
+                        <dt><span><h4><b>Driver:</b></h4></span></dt>
+                        <dd><span><h4>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</h4></span></dd>
+
+                        <dt><span><h4><b>Leaving storage:</b></h4></span></dt>
+                        <dd><span><h4>{{waybill.routeList.leavingStorage.address}}</h4></span></dd>
+
+                        <dt><span><h4><b>Leaving date:</b></h4></span></dt>
+                        <dd><span><h4>{{waybill.routeList.leavingDate | date:'dd/MM/yy HH:mm'}}</h4></span></dd>
+
+                        <dt><span><h4><b>Arrival storage:</b></h4></span></dt>
+                        <dd><span><h4>{{waybill.routeList.arrivalStorage.address}}</h4></span></dd>
+
+                        <dt><span><h4><b>Arrival date:</b></h4></span></dt>
+                        <dd><span><h4>{{waybill.routeList.arrivalDate | date:'dd/MM/yy HH:mm'}}</h4></span></dd>
+                </dl>
+                </div>
         </div>
-    </custom-marker>
-    </div>
-    </ng-map>
+    <!--<ng-map zoom="14" center="37.7699298, -122.4469157" style="height:90%">-->
+    <!--<directions-->
+        <!--draggable="false"-->
+        <!--panel="directions-panel"-->
+        <!--travel-mode="{{vm.travelMode}}"-->
+        <!--waypoints="{{vm.checkpointNames}}"-->
+        <!--origin="{{vm.routeList.leavingStorage.address}}"-->
+        <!--destination="{{vm.routeList.arrivalStorage.address}}">-->
+    <!--</directions>-->
+        <!--<div ng-repeat="imageWaypoint in vm.imageWaypoints">-->
+        <!--<custom-marker position="{{imageWaypoint.position}}">-->
+        <!--<div>-->
+            <!--<img src="{{imageWaypoint.image}}"/>-->
+        <!--</div>-->
+    <!--</custom-marker>-->
+    <!--</div>-->
+    <!--</ng-map>-->
     <div ng-include src="'app/roles/driver/routelist/driver.checkpoint.html'"></div>
     </div>
 </span>

@@ -5,10 +5,10 @@
         .module('truckCompanyApp')
         .controller('DriverCompletedController', DriverCompletedController);
 
-    DriverCompletedController.$inject = ['$stateParams', 'Goods1', 'Waybill', 'Checkpoint',
+    DriverCompletedController.$inject = ['$state','$stateParams', 'Goods1', 'Waybill', 'Checkpoint',
         'RouteList', '$http', '$location', '$scope'];
 
-    function DriverCompletedController($stateParams, Goods1, Waybill, Checkpoint, RouteList, $http, $location, $scope) {
+    function DriverCompletedController($state,$stateParams, Goods1, Waybill, Checkpoint, RouteList, $http, $location, $scope) {
         $scope.sortType = 'name'; // set the default sort type
         $scope.sortReverse = false;  // set the default sort order
         var vm = this;
@@ -53,12 +53,13 @@
 
             });
             vm.routeList.state = "DELIVERED";
+            vm.routeList.arrivalDate = Date.now();
             $http({
                 method: 'PUT',
                 url: '/api/routelists',
                 data: vm.routeList
             });
-            $location.path("/driver/routelist");
+            $state.go('driver.routelist');
 
         };
         vm.updateState = function () {
