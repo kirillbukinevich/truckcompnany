@@ -103,6 +103,8 @@
             <column name="admin_id" type="int">
                 <constraints nullable="false"/>
             </column>
+            <column name="isdefault" type="boolean" defaultValue="true">
+            </column>
         </createTable>
 
 
