@@ -33,23 +33,23 @@
                 </dl>
                 </div>
         </div>
-    <!--<ng-map zoom="14" center="37.7699298, -122.4469157" style="height:90%">-->
-    <!--<directions-->
-        <!--draggable="false"-->
-        <!--panel="directions-panel"-->
-        <!--travel-mode="{{vm.travelMode}}"-->
-        <!--waypoints="{{vm.checkpointNames}}"-->
-        <!--origin="{{vm.routeList.leavingStorage.address}}"-->
-        <!--destination="{{vm.routeList.arrivalStorage.address}}">-->
-    <!--</directions>-->
-        <!--<div ng-repeat="imageWaypoint in vm.imageWaypoints">-->
-        <!--<custom-marker position="{{imageWaypoint.position}}">-->
-        <!--<div>-->
-            <!--<img src="{{imageWaypoint.image}}"/>-->
-        <!--</div>-->
-    <!--</custom-marker>-->
-    <!--</div>-->
-    <!--</ng-map>-->
+    <ng-map zoom="14" center="37.7699298, -122.4469157" style="height:90%">
+    <directions
+        draggable="false"
+        panel="directions-panel"
+        travel-mode="{{vm.travelMode}}"
+        waypoints="{{vm.checkpointNames}}"
+        origin="{{vm.routeList.leavingStorage.address}}"
+        destination="{{vm.routeList.arrivalStorage.address}}">
+    </directions>
+        <div ng-repeat="imageWaypoint in vm.imageWaypoints">
+        <custom-marker position="{{imageWaypoint.position}}">
+        <div>
+            <img src="{{imageWaypoint.image}}"/>
+        </div>
+    </custom-marker>
+    </div>
+    </ng-map>
     <div ng-include src="'app/roles/driver/routelist/driver.checkpoint.html'"></div>
     </div>
 </span>
