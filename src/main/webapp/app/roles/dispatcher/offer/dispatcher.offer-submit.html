@@ -1,14 +1,23 @@
 <h1 data-translate="dispatcher.offer.submitOffer">Submit offer</h1>
 
-<div class="alert alert-danger" ng-if="vm.error">
-    {{vm.messageError}}
+<div  ng-if="vm.offer.state != 'NEW'">
+    <div class="alert alert-warning">
+        <span  data-translate="dispatcher.offer.handledWarning">Current offer has been treated already.</span>
+    </div>
+    <div class="btn-group flex-btn-group-container pull-right">
+        <a href="#/dispatcher/offer" class="btn btn-danger" data-translate="dispatcher.button.back">Back</a>
+    </div>
 </div>
 
-<div class="alert alert-warning" ng-show="vm.trucks.length === 0 && vm.arrivalDate != null && vm.leaveDate != null">No truck available at the given date!</div>
+<div class="alert alert-danger" ng-if="vm.error">
+    <span data-translate="dispatcher.offer.serverWarning">Error on server side. Please, try later.</span>
+</div>
 
-<div class="alert alert-warning" ng-show="vm.drivers.length === 0 && vm.arrivalDate != null && vm.leaveDate != null">No drivers available at the given date!</div>
+<div class="alert alert-warning" ng-show="vm.trucks.length === 0 && vm.arrivalDate != null && vm.leaveDate != null" data-translate="dispatcher.offer.truckWarning">No truck available at the given date!</div>
 
-<form name="form" role="form" ng-submit="vm.createWaybill()">
+<div class="alert alert-warning" ng-show="vm.drivers.length === 0 && vm.arrivalDate != null && vm.leaveDate != null" data-translate="dispatcher.offer.driverWarning">No drivers available at the given date!</div>
+
+<form name="form" role="form" ng-submit="vm.createWaybill()" ng-if="vm.offer.state == 'NEW'">
     <div class="row form_row">
         <div class="col-md-6">
             <div class="form-group">
@@ -47,11 +56,13 @@
                 </p>
                 <div ng-show="form.leavingDate.$dirty && form.leavingDate.$invalid">
                     <p class="help-block"
-                       ng-show="form.leavingDate.$error.required">
+                       ng-show="form.leavingDate.$error.required"
+                       data-translate="dispatcher.offer.dataRequiredWarning">
                         Leaving Date is required.
                     </p>
                     <p class="help-block"
-                       ng-show="form.leavingDate.$error.invalid">
+                       ng-show="form.leavingDate.$invalid && !form.leavingDate.$error.required"
+                       data-translate="dispatcher.offer.dataInvalidWarning">
                         Leaving Date is invalid.
                     </p>
                 </div>
@@ -80,12 +91,15 @@
                 </p>
                 <div ng-show="form.arrivalDate.$dirty && form.arrivalDate.$invalid">
                     <p class="help-block"
-                       ng-show="form.arrivalDate.$error.required">
+                       ng-show="form.arrivalDate.$error.required"
+                       data-translate="dispatcher.offer.dataRequiredWarning">
                         Arrival Date is required.
                     </p>
                     <p class="help-block"
-                       ng-show="form.arrivalDate.$error.invalid">
+                       ng-show="form.arrivalDate.$invalid && !form.arrivalDate.$error.required"
+                       data-translate="dispatcher.offer.dataInvalidWarning">
                         Arrival Date is invalid.
+                    </p>
                 </div>
             </div>
         </div>
@@ -119,7 +133,7 @@
 
 
     <div class="btn-group flex-btn-group-container pull-right">
-            <button type="submit" ng-disabled="form.$invalid" class="btn btn-success" data-translate="dispatcher.button.confirmOffer">Submit offer</button>
+        <button type="submit" ng-disabled="form.$invalid" class="btn btn-success" data-translate="dispatcher.button.confirmOffer">Submit offer</button>
         <a href="#/dispatcher/offer" class="btn btn-danger" data-translate="dispatcher.button.cancel">Cancel</a>
     </div>
 </form>
