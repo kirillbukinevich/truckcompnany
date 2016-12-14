@@ -254,7 +254,18 @@
 
 
 /*Style for radiobox*/
+.wrap-radio-test > input#status-nonactive:checked + label{
+    border:2px solid #f0ad4e;
+    color: #fff;
+    background: #f0ad4e;
+}
+.wrap-radio-test > input#status-active:checked + label{
+    border:2px solid #5cb85c;
+    color: #fff;
+    background:#5cb85c;
+}
 
+/*
 #wrap-status-active{
     width:70px;
     height:30px;
@@ -283,6 +294,7 @@
 }
 
 
+
 #wrap-status-nonactive{
     width:100px;
     height:30px;
@@ -307,7 +319,7 @@
     height: 25px;
     border-radius: 5px;
     background: #f0ad4e;
-}
+}*/
 
 
 .wrap-radio{

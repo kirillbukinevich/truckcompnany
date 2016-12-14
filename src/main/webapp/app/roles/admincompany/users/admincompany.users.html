@@ -36,9 +36,9 @@
             <td>{{user.firstName}} {{user.lastName}}</td>
             <td>{{user.email}}</td>
             <td class="text-align-center">
-                <span ng-if="user.activated" ng-click="vm.toggleStatus(user)" class="label label-success">ACTIVE</span>
+                <span ng-if="user.activated" ng-click="vm.toggleStatus(user)" class="label label-success" data-translate="admincompany.users.active">ACTIVE</span>
                 <span ng-if="!user.activated" ng-click="vm.toggleStatus(user)"
-                      class="label label-warning">NON-ACTIVE</span>
+                      class="label label-warning" data-translate="admincompany.users.nonactive">NON-ACTIVE</span>
             </td>
             <td>{{vm.getRoleForUI(user.authorities[0])| uppercase}}</td>
         </tr>

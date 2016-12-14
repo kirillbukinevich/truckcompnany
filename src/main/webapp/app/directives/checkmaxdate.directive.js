@@ -25,8 +25,8 @@
                 //For DOM -> model validation
                 ngModel.$parsers.unshift(function (value) {
                     console.log(value);
-                    if (moment(value, "YYYY/MM/DD").isValid()) {
-                        var assignDate = moment(value, "YYYY/MM/DD").toDate();
+                    if (moment(value, "DD/MM/YYYY").isValid()) {
+                        var assignDate = moment(value, "DD/MM/YYYY").toDate();
                         if (assignDate >= currentDate) {
                             ngModel.$setValidity('maxDate', false);
                         } else {

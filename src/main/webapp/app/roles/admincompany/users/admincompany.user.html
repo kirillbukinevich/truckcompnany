@@ -5,18 +5,21 @@
 </div>
 
 <form name="form">
-    <div class="alert alert-warning" data-translate="admincompany.error.attentionisrequired">Fields are marked * is required.</div>
+    <div class="alert alert-warning" data-translate="admincompany.error.attentionisrequired">Fields are marked * is
+        required.
+    </div>
     <div class="form-group" ng-class="{'has-error' : (form.firstName.$dirty && form.firstName.$invalid) }">
         <label for="firstName" class="control-label" data-translate="admincompany.label.firstname">First name*</label>
         <input type="text" ng-model="vm.user.firstName" name="firstName" class="form-control" id="firstName"
                placeholder="First name" required ng-maxlength="50">
         <div ng-show="form.firstName.$dirty && form.firstName.$invalid">
             <p class="help-block"
-               ng-show="form.firstName.$error.required"  data-translate="admincompany.error.isrequired">
+               ng-show="form.firstName.$error.required" data-translate="admincompany.error.isrequired">
                 First name is required.
             </p>
             <p class="help-block"
-               ng-show="form.firstName.$error.maxlength" data-translate="admincompany.error.maxsymbols" translate-values="{count: '50'}">
+               ng-show="form.firstName.$error.maxlength" data-translate="admincompany.error.maxsymbols"
+               translate-values="{count: '50'}">
                 First name must consist of less than 50 symbols.
             </p>
         </div>
@@ -31,7 +34,8 @@
                 Last name is required.
             </p>
             <p class="help-block"
-               ng-show="form.lastName.$error.maxlength" data-translate="admincompany.error.maxsymbols" translate-values="{count: '50'}">
+               ng-show="form.lastName.$error.maxlength" data-translate="admincompany.error.maxsymbols"
+               translate-values="{count: '50'}">
                 Last name must consist of less than 50 symbols.
             </p>
         </div>
@@ -60,7 +64,7 @@
                 Birthday is required.
             </p>
             <p class="help-block"
-               ng-show="form.birthday.$error.date"  data-translate="admincompany.error.isinvaliddate" >
+               ng-show="form.birthday.$error.date" data-translate="admincompany.error.isinvaliddate">
                 Date is invalid.
             </p>
             <p class="help-block"
@@ -79,7 +83,8 @@
                            placeholder="City"/>
                     <div ng-show="form.city.$dirty && form.city.$invalid">
                         <p class="help-block"
-                           ng-show="form.city.$error.maxlength" data-translate="admincompany.error.maxsymbols" translate-values="{count: '45'}">
+                           ng-show="form.city.$error.maxlength" data-translate="admincompany.error.maxsymbols"
+                           translate-values="{count: '45'}">
                             Name of city must consist of less than 45 symbols.
                         </p>
                     </div>
@@ -92,7 +97,8 @@
                            placeholder="Street"/>
                     <div ng-show="form.street.$dirty && form.street.$invalid">
                         <p class="help-block"
-                           ng-show="form.street.$error.maxlength" data-translate="admincompany.error.maxsymbols" translate-values="{count: '45'}">
+                           ng-show="form.street.$error.maxlength" data-translate="admincompany.error.maxsymbols"
+                           translate-values="{count: '45'}">
                             Name of street must consist of less than 45 symbols.
                         </p>
                     </div>
@@ -105,7 +111,7 @@
                            placeholder="House"/>
                     <div ng-show="form.house.$dirty && form.house.$invalid">
                         <p class="help-block"
-                           ng-show="form.house.$error.pattern"  data-translate="admincompany.error.isnumeric">
+                           ng-show="form.house.$error.pattern" data-translate="admincompany.error.isnumeric">
                             Number of house must be numeric only.
                         </p>
                     </div>
@@ -127,27 +133,51 @@
         </div>
     </div>
     <div class="form-group" ng-class="{'has-error' : (form.passport.$dirty && form.passport.$invalid) }">
-        <label for="passport" class="control-label" data-translate="admincompany.label.passportdate">Passport data</label>
-        <input type="text" ng-model="vm.user.passport" name="passport" class="form-control" id="passport" placeholder="Passport data"
+        <label for="passport" class="control-label" data-translate="admincompany.label.passportdate">Passport
+            data</label>
+        <input type="text" ng-model="vm.user.passport" name="passport" class="form-control" id="passport"
+               placeholder="Passport data"
                ng-maxlength="45">
         <div ng-show="form.passport.$dirty && form.passport.$invalid">
             <p class="help-block"
-               ng-show="form.passport.$error.maxlength" data-translate="admincompany.error.maxsymbols" translate-values="{count: '45'}">
+               ng-show="form.passport.$error.maxlength" data-translate="admincompany.error.maxsymbols"
+               translate-values="{count: '45'}">
                 Passport data must consist of less than 45 symbols.
             </p>
         </div>
     </div>
     <div class="form-group" ng-class="{'has-error' : (form.login.$dirty && form.login.$invalid) }">
         <label for="login" class="control-label" data-translate="admincompany.label.login">Login</label>
-        <input type="text" ng-model="vm.user.login" name="login" class="form-control" id="login" placeholder="Login" disabled>
+        <input type="text" ng-model="vm.user.login" name="login" class="form-control" id="login" placeholder="Login"
+               disabled>
     </div>
     <div class="form-group" ng-class="{'has-error' : (form.email.$dirty && form.email.$invalid) }">
         <label for="email" class="control-label" data-translate="admincompany.label.email">Email</label>
-        <input type="text" ng-model="vm.user.email" name="email" class="form-control" id="email" placeholder="Email" disabled>
+        <input type="text" ng-model="vm.user.email" name="email" class="form-control" id="email" placeholder="Email"
+               disabled>
     </div>
+
+
     <div class="form-group">
         <label for="dispatcher" data-translate="admincompany.label.role">Role</label>
         <div>
+            <div class="wrap-radio-test">
+                <input type="radio" id="dispatcher"  ng-model="vm.user.authorities[0]" value="ROLE_DISPATCHER">
+                <label for="dispatcher" data-translate="admincompany.users.dispatcher">DISPATCHER</label>
+            </div>
+            <div class="wrap-radio-test">
+                <input type="radio" id="manager"  ng-model="vm.user.authorities[0]" value="ROLE_MANAGER">
+                <label for="manager" data-translate="admincompany.users.manager">MANAGER</label>
+            </div>
+            <div class="wrap-radio-test">
+                <input type="radio" id="driver"  ng-model="vm.user.authorities[0]" value="ROLE_DRIVER">
+                <label for="driver" data-translate="admincompany.users.driver">DRIVER</label>
+            </div>
+            <div class="wrap-radio-test">
+                <input type="radio" id="companyowner"  ng-model="vm.user.authorities[0]" value="ROLE_COMPANYOWNER">
+                <label for="companyowner" data-translate="admincompany.users.owner">COMPANY OWNER</label>
+            </div>
+            <!--
             <div class="wrap-radio-role" id="role-dispatcher">
                 <input type="radio" id="dispatcher" ng-model="vm.user.authorities[0]" value="ROLE_DISPATCHER">
                 <label for="dispatcher"></label>
@@ -163,12 +193,16 @@
             <div class="wrap-radio-role" id="role-companyowner">
                 <input type="radio" id="companyowner" ng-model="vm.user.authorities[0]" value="ROLE_COMPANYOWNER">
                 <label for="companyowner"></label>
-            </div>
+            </div>-->
 
         </div>
     </div>
+
+
     <div class="form-control-button">
-        <button class="btn btn-success" ng-click="vm.update()" ng-disabled="form.$invalid" data-translate="admincompany.form.update">Update</button>
+        <button class="btn btn-success" ng-click="vm.update()" ng-disabled="form.$invalid"
+                data-translate="admincompany.form.update">Update
+        </button>
         <a href="#/admincompany/users" class="btn btn-danger" data-translate="admincompany.form.cancel">Cancel</a>
     </div>
 </form>

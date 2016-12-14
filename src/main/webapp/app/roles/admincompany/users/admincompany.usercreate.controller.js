@@ -23,8 +23,8 @@
             initDate: maxDate,
         };
 
-        vm.format = 'yyyy/MM/dd';
-        vm.altInputFormats = ['M!/d!/yyyy'];
+        vm.format = 'dd/MM/yyyy';
+        vm.altInputFormats = ['d!/M!/yyyy'];
 
 
 

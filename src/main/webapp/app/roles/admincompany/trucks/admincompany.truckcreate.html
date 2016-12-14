@@ -32,6 +32,22 @@
     <div class="form-group">
         <label for="truck-body" data-translate="admincompany.truck.type">Type</label>
         <div>
+
+            <div class="wrap-radio-test">
+                <input type="radio" id="truck-body" ng-model="vm.truck.type" value="BODY">
+                <label for="truck-body" data-translate="admincompany.truck.body">BODY</label>
+            </div>
+            <div class="wrap-radio-test">
+                <input type="radio" id="truck-refrigirator" ng-model="vm.truck.type" value="REFRIGERATOR">
+                <label for="truck-refrigirator" data-translate="admincompany.truck.refrigerator">REFRIGERATOR</label>
+            </div>
+            <div class="wrap-radio-test">
+                <input type="radio" id="truck-tank" ng-model="vm.truck.type" value="TANK">
+                <label for="truck-tank" data-translate="admincompany.truck.tank">TANK</label>
+            </div>
+
+
+<!--
             <div class="wrap-radio-type-truck" id="type-truck-body">
                 <input type="radio" id="truck-body" ng-model="vm.truck.type" value="BODY">
                 <label for="truck-body"></label>
@@ -43,7 +59,7 @@
             <div class="wrap-radio-type-truck" id="type-truck-tank">
                 <input type="radio" id="truck-tank" ng-model="vm.truck.type" value="TANK">
                 <label for="truck-tank"></label>
-            </div>
+            </div>-->
         </div>
     </div>
 
@@ -69,6 +85,7 @@
     <div class="form-group">
         <label for="truck-body" data-translate="admincompany.label.status">Status:</label>
         <div>
+
             <div class="wrap-radio-type-truck" id="status-truck-ready">
                 <input type="radio" id="truck-ready" ng-model="vm.truck.status" value="READY">
                 <label for="truck-ready"></label>

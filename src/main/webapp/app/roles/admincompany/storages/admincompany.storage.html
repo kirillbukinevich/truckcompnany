@@ -44,7 +44,7 @@
     <div class="form-group">
 
         <div>
-
+            <!--
             <div class="wrap-radio" id="wrap-status-active">
                 <input type="radio" ng-model="vm.storage.activated" id="status-active" value="true" class="radio">
                 <label for="status-active"></label>
@@ -52,6 +52,14 @@
             <div class="wrap-radio" id="wrap-status-nonactive">
                 <input type="radio" ng-model="vm.storage.activated" id="status-nonactive" value="false" class="radio">
                 <label for="status-nonactive"></label>
+            </div>-->
+            <div class="wrap-radio-test">
+                <input type="radio" id="status-active" ng-model="vm.storage.activated" value="true">
+                <label for="status-active" data-translate="admincompany.users.active">ACTIVE</label>
+            </div>
+            <div class="wrap-radio-test">
+                <input type="radio" id="status-nonactive" ng-model="vm.storage.activated" value="false">
+                <label for="status-nonactive" data-translate="admincompany.users.nonactive">NON-ACTIVE</label>
             </div>
 
 

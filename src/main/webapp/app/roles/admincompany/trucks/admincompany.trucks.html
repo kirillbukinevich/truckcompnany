@@ -48,7 +48,12 @@
                 </td>
                 <td>{{truck.model}}</td>
                 <td class="row-consumption-truck">{{truck.consumption}}</td>
-                <td class="row-type-truck"><span class="label label-default">{{truck.type}}</span></td>
+                <td class="row-type-truck">
+                    <span class="label label-default" ng-if="truck.type =='BODY'" data-translate="admincompany.truck.body">BODY</span>
+                    <span class="label label-default" ng-if="truck.type =='REFRIGERATOR'" data-translate="admincompany.truck.refrigerator">REFRIGERATOR</span>
+                    <span class="label label-default" ng-if="truck.type =='TANK'" data-translate="admincompany.truck.tank">TANK</span>
+                    <!--<span class="label label-default">{{truck.type}}</span>-->
+                </td>
                 <td class="row-status-truck">
                     <span class="label label-success" ng-if="truck.status == 'READY'" data-translate="admincompany.truck.ready" > READY</span>
                     <span class="label label-warning" ng-if="truck.status == 'REPAIRING'" data-translate="admincompany.truck.repairing"> REPAIRING</span>

@@ -10,7 +10,7 @@
 }
 
 #row-status{
-    min-width:95px;
+    min-width:130px;
 }
 .table > tbody > tr > td.padding-for-first-row{
     padding-left:15px;
@@ -20,7 +20,31 @@
 
 
 
-
+.wrap-radio-test{
+    display: inline-block;
+    position: relative;
+}
+.wrap-radio-test input{
+    opacity: 0;
+    position:absolute;
+}
+.wrap-radio-test  label{
+    padding: 3px 7px ;
+    border-radius: 5px;
+}
+.wrap-radio-test > input + label {
+    cursor: pointer;
+}
+.wrap-radio-test > input:not(checked) + label{
+    background: none;
+    border: 2px solid #CDD1DA;
+    color:#CDD1DA;
+}
+.wrap-radio-test > input:checked + label{
+    border: 2px solid #5cb85c;
+    color:#fff;
+    background: #5cb85c;
+}
 
 
 
