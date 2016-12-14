@@ -43,6 +43,29 @@
                         return $translate.refresh();
                     }]
                 }
-            });
+            })
+            .state('companyowner.routelist-details', {
+                parent: 'companyowner',
+                url: '/companyowner/routelistDetails/{id}',
+
+                data: {
+                    authorities: ["ROLE_COMPANYOWNER"],
+                    pageTitle: 'activate.title'
+                },
+                views: {
+                    'page@roles': {
+                        templateUrl: 'app/roles/companyowner/routelists/companyowner.routelist-details.html',
+                        controller: 'CompanyownerRoutelistDetailsController',
+                        controllerAs: 'vm'
+                    }
+                },
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('activate');
+                        return $translate.refresh();
+                    }]
+                }
+
+            })
     }
 })();

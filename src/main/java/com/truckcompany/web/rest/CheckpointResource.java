@@ -46,7 +46,7 @@ public class CheckpointResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    @Secured({AuthoritiesConstants.DRIVER,AuthoritiesConstants.MANAGER})
+    @Secured({AuthoritiesConstants.DRIVER,AuthoritiesConstants.MANAGER,AuthoritiesConstants.COMPANYOWNER})
     public ResponseEntity<List<Checkpoint>> getAllCheckPoints(@PathVariable Long routeListId) throws URISyntaxException {
         log.debug("REST request get all Checkpoints");
 
