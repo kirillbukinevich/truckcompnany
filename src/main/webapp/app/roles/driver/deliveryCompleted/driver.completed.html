@@ -51,7 +51,8 @@
 
         </table>
         <div ng-if="vm.waybill.state === 'DELIVERED'">
-        <button class="btn btn-success" ng-disabled="myForm.$invalid" ng-click="vm.update()">Confirm</button>
+        <button class="btn btn-success" ng-disabled="myForm.$invalid" ng-click="vm.update()"
+                data-translate="driver.goods.complete_button">Confirm</button>
         </div>
     </form>
 </div>

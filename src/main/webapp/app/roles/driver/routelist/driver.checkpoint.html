@@ -12,16 +12,18 @@
         <td><p>{{checkpoint.name}}</p></td>
         <td><p>{{checkpoint.checkDate | date:'dd/MM/yy HH:mm'}}</p></td>
         <td class="text-align-center">
-            <span ng-if = "!checkpoint.checkDate" ng-click="vm.markDate(checkpoint.id)" class="label label-warning" >mark</span>
-            <span ng-if = "checkpoint.checkDate" class="label label-success">ok</span>
+            <span ng-if = "!checkpoint.checkDate" ng-click="vm.markDate(checkpoint.id)" class="label label-warning"
+                  data-translate="driver.routelist.mark">mark</span>
+            <span ng-if = "checkpoint.checkDate" class="label label-success"
+                  data-translate="driver.routelist.ok">ok</span>
         </td>
     </tr>
     <tr>
-        <td>{{vm.routeList.leavingStorage.address}} <span class="glyphicon glyphicon-flag"></span></td>
+        <td>{{vm.routeList.arrivalStorage.address}} <span class="glyphicon glyphicon-flag"></span></td>
         <td>{{waybill.routeList.arrivalDate | date:'dd/MM/yy HH:mm'}}</td>
 
         <td class="text-align-center">
-            <span ng-click="vm.completeTrip()" class="label label-warning" >complete</span>
+            <span ng-click="vm.completeTrip()" class="label label-warning" data-translate="driver.routelist.complete">complete</span>
         </td>
     </tr>
     </tbody>
