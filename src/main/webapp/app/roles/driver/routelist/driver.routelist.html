@@ -5,36 +5,39 @@
 
         <h1 style="text-align:center" data-translate="driver.routelist.routelists">Route list</h1>
     <div class="row">
-                <div class="col-md-10">
+
+        <div class="col-md-3">
+        </div>
+            <div class="col-md-9">
                     <dl class="dl-horizontal">
                         <dt><span><h4><b data-translate="driver.routelist.waybills">Waybill №:</b></h4></span></dt>
                         <dd><span><h4>{{waybill.number}}</h4></span></dd>
 
-                        <dt style="width: 170px"><span><h4><b
+                        <dt><span><h4><b
                             data-translate="driver.routelist.dispatcher">Dispatcher:</b></h4></span></dt>
                         <dd><span><h4>{{waybill.dispatcher.firstName}} {{waybill.dispatcher.lastName}}</h4></span></dd>
 
-                        <dt style="width: 170px"><span><h4><b
+                        <dt><span><h4><b
                             data-translate="driver.routelist.creation_date">Creation date:</b></h4></span></dt>
                         <dd><span><h4>{{waybill.date | date:'dd/MM/yy HH:mm'}}</h4></span></dd>
 
-                        <dt style="width: 170px"><span><h4><b
+                        <dt><span><h4><b
                             data-translate="driver.routelist.driver">Driver:</b></h4></span></dt>
                         <dd><span><h4>{{waybill.driver.firstName}} {{waybill.driver.lastName}}</h4></span></dd>
 
-                        <dt style="width: 170px"><span><h4><b
+                        <dt><span><h4><b
                             data-translate="driver.routelist.leaving_storage">Leaving storage:</b></h4></span></dt>
                         <dd><span><h4>{{waybill.routeList.leavingStorage.address}}</h4></span></dd>
 
-                        <dt style="width: 170px"><span><h4><b
+                        <dt><span><h4><b
                             data-translate="driver.routelist.leaving_date">Leaving date:</b></h4></span></dt>
                         <dd><span><h4>{{waybill.routeList.leavingDate | date:'dd/MM/yy HH:mm'}}</h4></span></dd>
 
-                        <dt style="width: 170px"><span><h4><b
+                        <dt><span><h4><b
                             data-translate="driver.routelist.arrival_storage">Arrival storage:</b></h4></span></dt>
                         <dd><span><h4>{{waybill.routeList.arrivalStorage.address}}</h4></span></dd>
 
-                        <dt style="width: 170px"><span><h4><b
+                        <dt><span><h4><b
                             data-translate="driver.routelist.arrival_date">Arrival date:</b></h4></span></dt>
                         <dd><span><h4>{{waybill.routeList.arrivalDate | date:'dd/MM/yy HH:mm'}}</h4></span></dd>
                 </dl>

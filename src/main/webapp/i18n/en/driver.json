@@ -17,14 +17,18 @@
             "checkpoint": "Checkpoints",
             "name": "name",
             "time": "time",
-            "status": "status"
+            "status": "status",
+            "complete": "complete",
+            "mark": "mark",
+            "ok": "ok"
         },
         "goods": {
             "list": "List of goods",
             "complete": "Delivery is completed",
             "name": "name",
             "accepted": "accepted goods",
-            "delivered": "delivered goods"
+            "delivered": "delivered goods",
+            "complete_button": "confirm"
         },
         "job":{
             "status": "You don't have task now"
