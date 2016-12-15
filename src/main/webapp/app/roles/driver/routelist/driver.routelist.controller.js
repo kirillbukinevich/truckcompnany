@@ -19,6 +19,10 @@
         vm.checkJob = checkJob;
         vm.completeTrip = completeTrip;
 
+        $scope.render = false;
+        $timeout(function () {
+            $scope.render = true;
+        }, 1000);
 
         //for google map
         vm.travelMode = 'DRIVING';

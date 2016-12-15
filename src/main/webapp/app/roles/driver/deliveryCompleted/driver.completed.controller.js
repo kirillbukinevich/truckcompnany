@@ -5,10 +5,9 @@
         .module('truckCompanyApp')
         .controller('DriverCompletedController', DriverCompletedController);
 
-    DriverCompletedController.$inject = ['$state','$stateParams', 'Goods1', 'Waybill', 'Checkpoint',
-        'RouteList', '$http', '$location', '$scope'];
+    DriverCompletedController.$inject = ['$state', 'Goods1', 'Waybill', 'RouteList', '$http', '$scope', '$timeout'];
 
-    function DriverCompletedController($state,$stateParams, Goods1, Waybill, Checkpoint, RouteList, $http, $location, $scope) {
+    function DriverCompletedController($state, Goods1, Waybill, RouteList, $http, $scope, $timeout) {
         $scope.sortType = 'name'; // set the default sort type
         $scope.sortReverse = false;  // set the default sort order
         var vm = this;
@@ -17,7 +16,7 @@
 
 
         vm.waybills = [];
-        vm.waybill ={};
+        vm.waybill = {};
         Waybill.query(function (data) {
             vm.waybills = data;
             var indexDriverGood = 0;
@@ -58,17 +57,28 @@
                 method: 'PUT',
                 url: '/api/routelists',
                 data: vm.routeList
+            }).then(function successCallback(response) {
+                console.log("date changed");
+                $state.go('driver.routelist');
             });
-            $state.go('driver.routelist');
-
         };
+
         vm.updateState = function () {
-            if(vm.waybill.state === "CHECKED"){
+            if (vm.waybill.state === "CHECKED") {
                 console.log(vm.waybill.id);
                 Waybill.get({id: vm.waybill.id}, function (data) {
                     vm.waybill = data;
                 });
             }
+        };
+
+        vm.checkJob = function checkJob() {
+            for (var j in vm.waybills) {
+                if (vm.waybills[j].state === "CHECKED" || vm.routeList.state === "TRANSPORTATION") {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 })();

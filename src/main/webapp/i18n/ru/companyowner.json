@@ -17,7 +17,7 @@
             "writeoff" : "Акт списания",
             "goods" : "Товары",
             "name" : "Наименование",
-            "accepted" : "Подтверждено",
+            "accepted" : "Отправлено",
             "delivered" : "Доставлено",
             "writedoff" : "Списано",
             "priceperunit" : "Цена за единицу",

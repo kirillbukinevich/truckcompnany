@@ -17,7 +17,7 @@
             "writeoff" : "Write off",
             "goods" : "Goods",
             "name" : "Name",
-            "accepted" : "Accepted",
+            "accepted" : "Shipped",
             "delivered" : "Delivered",
             "writedoff" : "Writed off",
             "priceperunit" : "Price per unit",

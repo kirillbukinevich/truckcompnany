@@ -142,19 +142,4 @@ public class Waybill implements Serializable {
     public void setMargin(Double margin) {
         this.margin = margin;
     }
-
-    @Override
-    public String toString() {
-        return "Waybill{" +
-            "id=" + id +
-            "number=" + number +
-            "company=" + company +
-            ", date=" + date +
-            ", driver=" + driver +
-            ", state=" + state +
-            ", dispatcher=" + dispatcher +
-            ", routeList=" + routeList +
-            ", writeOff=" +
-            '}';
-    }
 }

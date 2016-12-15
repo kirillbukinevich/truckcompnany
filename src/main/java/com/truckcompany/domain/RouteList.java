@@ -153,18 +153,4 @@ public class RouteList implements Serializable {
     public void setNumber(String number) {
         this.number = number;
     }
-
-    @Override
-    public String toString() {
-        return "RouteList{" +
-            "id=" + id +
-            ", number='" + number + '\'' +
-            ", creationDate=" + creationDate +
-            ", leavingDate=" + leavingDate +
-            ", arrivalDate=" + arrivalDate +
-            ", fuelCost=" + fuelCost +
-            ", distance=" + distance +
-            ", state='" + state + '\'' +
-            '}';
-    }
 }
