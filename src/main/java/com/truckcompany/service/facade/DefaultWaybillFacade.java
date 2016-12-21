@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -62,23 +63,9 @@ public class DefaultWaybillFacade implements WaybillFacade {
             log.debug("Get all waybills for user \'{}\'", user.getLogin());
             List<WaybillDTO> waybills = emptyList();
             if (isCurrentUserInRole("ROLE_DRIVER")) {
-                waybills = waybillService.getWaybillByDriver(user)
-                    .stream()
-                    .map(WaybillDTO::new)
-                    .collect(Collectors.toList());
-                for (int index = 0; index < waybills.size(); index++) {
-                    if(waybills.get(index).getState().equals(WaybillState.CHECKED) ||
-                        (waybills.get(index).getState().equals(WaybillState.DELIVERED) &&
-                        waybills.get(index).getRouteList().getState().equals("TRANSPORTATION"))) {
-                        while (index < waybills.size()-1) {
-                            if( waybills.get(index + 1).getState().equals(WaybillState.CHECKED)) {
-                                waybills.remove(index + 1);
-                            }else {
-                                index++;
-                            }
-                        }
-                    }
-                }
+                Waybill waybill = waybillService.getWaybillByDriver(user).get();
+                waybills = new ArrayList<>();
+                waybills.add(new WaybillDTO(waybill));
             } else if (isCurrentUserInRole("ROLE_COMPANYOWNER") || isCurrentUserInRole("ROLE_MANAGER") || isCurrentUserInRole("ROLE_DISPATCHER")) {
                 waybills = waybillService.getWaybillByCompany(user.getCompany())
                     .stream()
