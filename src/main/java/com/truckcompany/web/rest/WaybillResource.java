@@ -142,7 +142,6 @@ public class WaybillResource {
         log.debug("REST request to get Waybill : {}", id);
 
         ManagedWaybillVM waybill = waybillService.getWaybillById(id);
-
         if (waybill == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 

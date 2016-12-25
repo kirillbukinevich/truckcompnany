@@ -63,9 +63,14 @@ public class DefaultWaybillFacade implements WaybillFacade {
             log.debug("Get all waybills for user \'{}\'", user.getLogin());
             List<WaybillDTO> waybills = emptyList();
             if (isCurrentUserInRole("ROLE_DRIVER")) {
-                Waybill waybill = waybillService.getWaybillByDriver(user).get();
-                waybills = new ArrayList<>();
-                waybills.add(new WaybillDTO(waybill));
+                Optional<Waybill> waybillOptional = waybillService.getWaybillByDriver(user);
+                if(waybillOptional.isPresent()) {
+                    Waybill waybill = waybillOptional.get();
+                    waybills = new ArrayList<>();
+                    waybills.add(new WaybillDTO(waybill));
+                }else {
+                    return emptyList();
+                }
             } else if (isCurrentUserInRole("ROLE_COMPANYOWNER") || isCurrentUserInRole("ROLE_MANAGER") || isCurrentUserInRole("ROLE_DISPATCHER")) {
                 waybills = waybillService.getWaybillByCompany(user.getCompany())
                     .stream()

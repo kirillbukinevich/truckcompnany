@@ -1,6 +1,6 @@
 <!--<jk-rating-stars style="text-align:center" max-rating="10" rating="vm.currentRate"-->
-                 <!--read-only="vm.readOnly"></jk-rating-stars>-->
-<!--<div ng-if="vm.waybill.state == 'CHECKED' && vm.routeList.state == 'TRANSPORTATION'">-->
+<!--read-only="vm.readOnly"></jk-rating-stars>-->
+
 <span ng-repeat="waybill in vm.waybills">
         <h1 style="text-align:center" data-translate="driver.routelist.routelists">Route list</h1>
     <div class="row">
@@ -41,28 +41,37 @@
                         <dd><span><h4>{{waybill.routeList.arrivalDate | date:'dd/MM/yy HH:mm'}}</h4></span></dd>
                 </dl>
                 </div>
-        <!--</div>-->
-    <!--<ng-map ng-if="render" zoom="14" center="37.7699298, -122.4469157" style="height:90%">-->
-    <!--<directions-->
-        <!--draggable="false"-->
-        <!--panel="directions-panel"-->
-        <!--travel-mode="{{vm.travelMode}}"-->
-        <!--waypoints="{{vm.checkpointNames}}"-->
-        <!--origin="{{vm.routeList.leavingStorage.address}}"-->
-        <!--destination="{{vm.routeList.arrivalStorage.address}}">-->
-    <!--</directions>-->
-        <!--<div ng-repeat="imageWaypoint in vm.imageWaypoints">-->
-        <!--<custom-marker position="{{imageWaypoint.position}}">-->
-        <!--<div>-->
-            <!--<img src="{{imageWaypoint.image}}"/>-->
-        <!--</div>-->
-    <!--</custom-marker>-->
-    <!--</div>-->
-    <!--</ng-map>-->
-    <div ng-include src="'app/roles/driver/routelist/driver.checkpoint.html'"></div>
+        </div>
+                <button style="margin-bottom: 10px;
+    margin-left: 33%;" type="button" class="btn btn-default btn-sm"
+                        ng-click="vm.showModalGoodsCurrent(waybill.id)"
+                        ng-if="waybill.state != 'CREATED'">
+                <span class="glyphicon glyphicon glyphicon-eye-open"></span>&nbsp;<span
+                    data-translate="manager.waybills.details">Details</span>
+                </button>
+
+        <ng-map ng-if="render" zoom="14" center="37.7699298, -122.4469157" style="height:90%">
+        <directions
+        draggable="false"
+        panel="directions-panel"
+        travel-mode="{{vm.travelMode}}"
+        waypoints="{{vm.checkpointNames}}"
+        origin="{{vm.routeList.leavingStorage.address}}"
+        destination="{{vm.routeList.arrivalStorage.address}}">
+        </directions>
+        <div ng-repeat="imageWaypoint in vm.imageWaypoints">
+        <custom-marker position="{{imageWaypoint.position}}">
+        <div>
+        <img src="{{imageWaypoint.image}}"/>
+        </div>
+        </custom-marker>
+        </div>
+        </ng-map>
+
+        <div ng-include src="'app/roles/driver/routelist/driver.checkpoint.html'"></div>
     </div>
 </span>
-<!--<div ng-show="vm.checkJob()">-->
-    <!--<h1 style="text-align:center" data-translate="driver.job.status">You don't have task now </h1>-->
-<!--</div>-->
+<div ng-if="vm.waybills.length === 0">
+<h1 style="text-align:center" data-translate="driver.job.status">You don't have task now </h1>
+</div>
 
