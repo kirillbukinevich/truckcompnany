@@ -10,7 +10,6 @@ import com.truckcompany.service.UserService;
 import com.truckcompany.service.WaybillService;
 import com.truckcompany.service.dto.WaybillDTO;
 import com.truckcompany.service.util.SearchUtil;
-import com.truckcompany.web.rest.vm.ManagedWaybillVM;
 import com.truckcompany.web.rest.vm.SolrWaybillVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +31,6 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.truckcompany.repository.search.SearchableStorageDefinition.ADDRESS_FIELD_NAME;
 import static com.truckcompany.repository.search.SearchableWaybillDefinition.*;
 import static com.truckcompany.security.SecurityUtils.isCurrentUserInRole;
 import static java.util.Collections.emptyList;
@@ -40,10 +38,8 @@ import static java.util.Collections.emptyList;
 @Component
 @Transactional
 public class DefaultWaybillFacade implements WaybillFacade {
-    private final Logger log = LoggerFactory.getLogger(DefaultWaybillFacade.class);
-
     private static final Pattern IGNORED_CHARS_PATTERN = Pattern.compile("\\p{Punct}");
-
+    private final Logger log = LoggerFactory.getLogger(DefaultWaybillFacade.class);
     @Inject
     private UserService userService;
 
@@ -64,11 +60,11 @@ public class DefaultWaybillFacade implements WaybillFacade {
             List<WaybillDTO> waybills = emptyList();
             if (isCurrentUserInRole("ROLE_DRIVER")) {
                 Optional<Waybill> waybillOptional = waybillService.getWaybillByDriver(user);
-                if(waybillOptional.isPresent()) {
+                if (waybillOptional.isPresent()) {
                     Waybill waybill = waybillOptional.get();
                     waybills = new ArrayList<>();
                     waybills.add(new WaybillDTO(waybill));
-                }else {
+                } else {
                     return emptyList();
                 }
             } else if (isCurrentUserInRole("ROLE_COMPANYOWNER") || isCurrentUserInRole("ROLE_MANAGER") || isCurrentUserInRole("ROLE_DISPATCHER")) {
@@ -157,7 +153,7 @@ public class DefaultWaybillFacade implements WaybillFacade {
                 toDate, user.getLogin());
             List<WaybillDTO> waybills = emptyList();
 
-            if(isCurrentUserInRole("ROLE_COMPANYOWNER")){
+            if (isCurrentUserInRole("ROLE_COMPANYOWNER")) {
                 waybills = waybillService.getWaybillByCompanyAndStateAndRouteListArrivalDateBetween(user.getCompany(), state,
                     fromDate, toDate)
                     .stream()
@@ -226,7 +222,28 @@ public class DefaultWaybillFacade implements WaybillFacade {
                 pageWaybills = waybillService.getPageWaybillByCompany(pageable, user.getCompany());
             } else if (isCurrentUserInRole("ROLE_DISPATCHER")) {
                 pageWaybills = waybillService.getPageWaybillByDispatcher(pageable, user);
+            } else if (isCurrentUserInRole("ROLE_DRIVER")) {
+                pageWaybills = waybillService.getPageHistoryWaybillByDriver(pageable, user);
             }
+        }
+
+        return new PageImpl<>(pageWaybills.getContent()
+            .stream()
+            .map(WaybillDTO::new)
+            .collect(Collectors.toList()), pageable, pageWaybills.getTotalElements());
+    }
+
+    @Override
+    public Page<WaybillDTO> findWaybillsForDriverTimetable(Pageable pageable) {
+        Page<Waybill> pageWaybills = new PageImpl<>(emptyList());
+
+        Optional<User> optionalUser = userService.getUserByLogin(SecurityUtils.getCurrentUserLogin());
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            log.debug("Get all waybills for user \'{}\'", user.getLogin());
+            pageWaybills = waybillService.getPageTimetableWaybillByDriver(pageable, user);
         }
 
         return new PageImpl<>(pageWaybills.getContent()

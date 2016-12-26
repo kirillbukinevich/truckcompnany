@@ -35,8 +35,6 @@
         $timeout(function () {
             Waybill.query(function (data) {
                 vm.waybills = data;
-                console.log("!!!!!!!!!!!!!!!!");
-                console.log(vm.waybills);
                 angular.forEach(vm.waybills, function (value) {
                     Checkpoint.query({id: value.routeList.id}, function (data) {
                         vm.checkpoints = data;

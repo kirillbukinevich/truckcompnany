@@ -1,0 +1,61 @@
+<h1>
+    <span data-translate="companyowner.routelists.routelists"></span>
+</h1>
+
+
+
+<span data-translate="companyowner.paginator.show"></span>:
+<select ng-model="vm.itemsPerPage" ng-options="number for number in vm.availableItemsPerPage"
+        ng-change="vm.changeItemsPerPage()">
+</select>
+
+<table class="table">
+    <thead>
+    <tr>
+
+        <th>№</th>
+        <th>
+            <span data-translate="companyowner.routelists.leavingstorage"></span>
+        </th>
+        <th>
+            <span data-translate="companyowner.routelists.arrivalstorage"></span>
+        </th>
+        <th>
+            <span data-translate="companyowner.routelists.trucknumber"></span>
+        </th>
+        <th>
+            <span data-translate="companyowner.routelists.waybillnumber"></span>
+        </th>
+        <th>
+            <span data-translate="companyowner.routelists.date"></span>
+        </th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="waybill in vm.waybills">
+        <td>
+            <a href="#/driver/timetable/routelistDetails/{{waybill.routeList.id}}">
+                {{waybill.routeList.number}}
+            </a>
+        </td>
+        <td>{{waybill.routeList.leavingStorage.name}}</td>
+        <td>{{waybill.routeList.arrivalStorage.name}}</td>
+        <td>{{waybill.routeList.truck.regNumber}}</td>
+        <td>{{waybill.number}}</td>
+        <td>{{waybill.routeList.creationDate | date:'yyyy-MM-dd'}}</td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="text-center">
+    <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+    <uib-pagination class="pagination-sm"
+                    total-items="vm.totalItems"
+                    items-per-page = "vm.itemsPerPage"
+                    boundary-link-numbers = "true"
+                    rotate = "true"
+                    ng-model="vm.page"
+                    ng-change="vm.transition()">
+    </uib-pagination>
+</div>

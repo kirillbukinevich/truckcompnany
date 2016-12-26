@@ -137,6 +137,18 @@ public class WaybillService {
         return waybillRepository.findPageByDispatcher(user, pageable);
     }
 
+    public Page<Waybill> getPageHistoryWaybillByDriver(Pageable pageable, User user) {
+        log.debug("Get waybills by dispatcher with login: {}", user.getLogin());
+
+        return waybillRepository.findPageHistoryByDriver(user, pageable);
+    }
+
+   public Page<Waybill> getPageTimetableWaybillByDriver(Pageable pageable, User user) {
+        log.debug("Get waybills by dispatcher with login: {}", user.getLogin());
+
+        return waybillRepository.findPageTimetableByDriver(user, pageable);
+    }
+
     public List<WaybillDTO> getAllWaybills() {
         final List<WaybillDTO> waybillDTOList = new ArrayList<>();
         Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());

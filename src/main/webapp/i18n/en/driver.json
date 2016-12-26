@@ -2,7 +2,8 @@
     "driver": {
         "sidebar": {
             "route": " Route ",
-            "goods": " Goods "
+            "history": " History ",
+            "timetable": " Timetable "
         },
         "routelist": {
             "routelists": "Route list ",

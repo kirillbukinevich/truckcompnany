@@ -109,9 +109,34 @@ public class WaybillResource {
                 .collect(Collectors.toList());
 
             HttpHeaders headers = generatePaginationHttpHeaders(page, "/api/waybills");
-
             return new ResponseEntity(managedWaybillVMs, headers, HttpStatus.OK);
         }
+    }
+    @RequestMapping(value = "/waybills/driver_history", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List> getDriverHistory(Pageable pageable) throws URISyntaxException {
+        log.debug("REST request get all Waybills with stolen goods");
+
+        Page<WaybillDTO> page = waybillFacade.findWaybills(pageable);
+
+        List<ManagedWaybillVM> managedWaybillVMs = page.getContent().stream()
+            .map(ManagedWaybillVM::new)
+            .collect(Collectors.toList());
+
+        HttpHeaders headers = generatePaginationHttpHeaders(page, "/api/waybills/driver_history");
+        return new ResponseEntity(managedWaybillVMs, headers, HttpStatus.OK);
+    }
+    @RequestMapping(value = "/waybills/driver_timetable", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List> getDriverTimetable(Pageable pageable) throws URISyntaxException {
+        log.debug("REST request get all Waybills with stolen goods");
+
+        Page<WaybillDTO> page = waybillFacade.findWaybillsForDriverTimetable(pageable);
+
+        List<ManagedWaybillVM> managedWaybillVMs = page.getContent().stream()
+            .map(ManagedWaybillVM::new)
+            .collect(Collectors.toList());
+
+        HttpHeaders headers = generatePaginationHttpHeaders(page, "/api/waybills/driver_history");
+        return new ResponseEntity(managedWaybillVMs, headers, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/waybills/with_stolen_goods",
@@ -120,7 +145,6 @@ public class WaybillResource {
     @Timed
     public ResponseEntity<List> getWaybillsWithStolenGoods(Pageable pageable) throws URISyntaxException {
         log.debug("REST request get all Waybills with stolen goods");
-
         Page<WaybillDTO> page = waybillFacade.findWaybillWithStolenGoods(pageable);
 
         List<ManagedWaybillVM> managedWaybillVMs = page.getContent().stream()
@@ -132,6 +156,7 @@ public class WaybillResource {
         return new ResponseEntity(managedWaybillVMs, headers, HttpStatus.OK);
 
     }
+
 
 
     @RequestMapping(value = "/waybills/{id}",
@@ -202,4 +227,7 @@ public class WaybillResource {
         HttpHeaders headers = HeaderUtil.createAlert("waybill.searchQuery", null);
         return new ResponseEntity<List<SolrWaybillVM>>(solrWaybillVMS, headers, HttpStatus.OK);
     }
+
+
+
 }
