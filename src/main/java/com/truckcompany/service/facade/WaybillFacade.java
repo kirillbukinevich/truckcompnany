@@ -15,6 +15,8 @@ public interface WaybillFacade {
 
     List<WaybillDTO> findWaybills();
 
+    Page<WaybillDTO> findWaybillsForDriverTimetable(Pageable pageable);
+
     List<WaybillDTO> findWaybillsWithRouteListCreationDateBetween(ZonedDateTime fromDate, ZonedDateTime toDate);
 
     Page<WaybillDTO> findWaybillsWithRouteListCreationDateBetween(Pageable pageable, ZonedDateTime fromDate, ZonedDateTime toDate);

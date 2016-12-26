@@ -14,6 +14,7 @@
         var vm = this;
         vm.clear = clear;
         vm.waybill = entity;
+
         vm.changeWaybillState = changeWaybillState;
         getAccount();
         vm.now = new Date();
@@ -26,7 +27,7 @@
         }
 
         $timeout(function () {
-            console.log(vm.waybill);
+            console.log(vm.waybill.id);
             angular.forEach(vm.waybill.goods, function (item) {
                 if (item.state == 'UNCHECKED') {
                     item.acceptedNumber = item.uncheckedNumber;

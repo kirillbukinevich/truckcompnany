@@ -1,0 +1,159 @@
+<h4>
+    <div class="row">
+        <div class="col-md-7">&nbsp;
+            <span data-translate="companyowner.routelists.routelist"></span> № {{vm.waybill.routeList.number}} ({{vm.waybill.routeList.creationDate | date:'dd/MM/yy HH:mm'}})
+        </div>
+        <div class="col-md-1">
+            <span data-translate="companyowner.general.state"></span>:
+        </div>
+        <div class="col-md-4">
+                <span ng-if="vm.waybill.routeList.state == 'UNCHECKED'" class="label label-info"
+                      data-translate="companyowner.general.unchecked">
+                    {{vm.waybill.routeList.state}}</span>
+            <span ng-if="vm.waybill.routeList.state == 'TRANSPORTATION'" class="label label-primary"
+                  data-translate="companyowner.general.transportation">
+                    {{vm.waybill.routeList.state}}</span>
+            <span ng-if="vm.waybill.routeList.state == 'DELIVERED'" class="label label-success"
+                  data-translate="companyowner.general.delivered">
+                    {{vm.waybill.routeList.state}}</span>
+        </div>
+    </div>
+</h4>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <ng-map ng-if="render" center="[53, 25]" zoom="5">
+            <directions
+                draggable="false"
+                travel-mode="DRIVING"
+                waypoints={{vm.wayPoints}}
+                origin="{{vm.waybill.routeList.leavingStorage.address}}"
+                destination="{{vm.waybill.routeList.arrivalStorage.address}}">
+            </directions>
+        </ng-map>
+    </div>
+</div>
+
+<form role="form" name="form">
+
+    <!-- FIRST SECTION -->
+
+    <div class="row">
+        <div class="col-md-2 text-align-right">
+            <h5>
+                <span data-translate="companyowner.routelists.departure"></span>:&nbsp
+            </h5>
+            <h5>
+                <span data-translate="companyowner.routelists.sender"></span>:&nbsp
+            </h5>
+            <h5><strong>
+                <span data-translate="companyowner.routelists.address"></span>:&nbsp
+            </strong></h5>
+        </div>
+        <div class="col-md-3">
+            <h5>&nbsp{{vm.waybill.routeList.leavingDate | date:'dd/MM/yy HH:mm'}}</h5>
+            <h5>&nbsp"{{vm.waybill.routeList.leavingStorage.name}}"</h5>
+            <h5><strong>&nbsp{{vm.waybill.routeList.leavingStorage.address}}</strong></h5>
+        </div>
+
+        <div class="col-md-1 text-center">
+            <br><br><span class="glyphicon glyphicon-arrow-right" aria-hidden="true" style="font-size: 20px;"></span>
+        </div>
+
+        <div class="col-md-2 text-align-right">
+            <h5>
+                <span data-translate="companyowner.routelists.arrival"></span>:&nbsp
+            </h5>
+            <h5>
+                <span data-translate="companyowner.routelists.recipient"></span>:&nbsp</h5>
+            <h5><strong>
+                <span data-translate="companyowner.routelists.address"></span>:&nbsp</strong></h5>
+        </div>
+        <div class="col-md-3">
+            <h5>&nbsp{{vm.waybill.routeList.arrivalDate | date:'dd/MM/yy HH:mm'}}</h5>
+            <h5>&nbsp"{{vm.waybill.routeList.arrivalStorage.name}}"</h5>
+            <h5><strong>&nbsp{{vm.waybill.routeList.arrivalStorage.address}}</strong></h5>
+        </div>
+    </div>
+
+    <!-- SECOND SECTION -->
+
+    <div class="row" style="margin-top: 20px">
+        <div class="col-md-4 text-center">
+            <label ng-if="vm.wayPoints.length != 0" class="control-label">
+                <span data-translate="companyowner.routelists.waypoints"></span>
+            </label>
+            <fieldset ng-repeat="wayPoint in vm.wayPoints">
+                <div class="form-group form-inline">
+                    <input ng-if="vm.waybill.routeList.state == 'UNCHECKED'"
+                           class="form-control"
+                           type="text"
+                           ng-model="wayPoint.location"
+                           name="''"
+                           ng-change="calcDistance()"
+                           placeholder="Enter checkpoint">
+                    <input ng-if="vm.waybill.routeList.state != 'UNCHECKED'"
+                           class="form-control"
+                           type="text"
+                           value="{{wayPoint.location}}"
+                           readonly>
+                    <a ng-if="vm.waybill.routeList.state == 'UNCHECKED'"
+                       ng-click="vm.removeWayPoint($index)"
+                       role="button">
+                        <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"
+                              style="font-size: 20px; color: #f95761; top:5px;"></span>
+                    </a>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="col-md-4 text-align-right">
+            <h5>
+                <span data-translate="companyowner.routelists.fuelCost"></span>
+            </h5>
+            <h5 style="margin-top: 19px">
+                <span data-translate="companyowner.routelists.totalDistance"></span>
+            </h5>
+            <h5>
+                <span data-translate="companyowner.routelists.totalConsumption"></span>
+            </h5>
+            <h5 ng-if="vm.waybill.routeList.state != 'UNCHECKED'">
+                <span data-translate="companyowner.routelists.totalDeliveryCost"></span>
+            </h5>
+
+        </div>
+        <div class="col-md-3">
+            <div class="input-group"
+                 ng-class="{'has-error' : (form.fuelCost.$dirty && form.fuelCost.$invalid) }"
+                 ng-if="vm.waybill.routeList.state == 'UNCHECKED'">
+                <input type="text"
+                       name="fuelCost"
+                       class="form-control"
+                       aria-describedby="price-addon"
+                       value="not set"
+                       readonly>
+                <span class="input-group-addon" id="price-addon">$/litre</span>
+            </div>
+
+            <div class="input-group"
+                 ng-if="vm.waybill.routeList.state != 'UNCHECKED'">
+                <input ng-pattern="/^\d+(\.\d{0,9})?$/"
+                       ng-model="vm.waybill.routeList.fuelCost"
+                       type="text"
+                       name="fuelCost"
+                       class="form-control"
+                       aria-describedby="price-addon2"
+                       readonly>
+                <span class="input-group-addon" id="price-addon2">
+                    $/<span data-translate="companyowner.routelists.unit"></span>
+                </span>
+            </div>
+
+            <h5>&nbsp{{vm.dist}} km</h5>
+            <h5>&nbsp{{vm.waybill.routeList.truck.consumption*vm.dist/100}}
+                <span data-translate="companyowner.routelists.units"></span>
+            </h5>
+            <h5 ng-if="vm.waybill.routeList.state != 'UNCHECKED'">
+                &nbsp;{{vm.dist/vm.waybill.routeList.truck.consumption*vm.waybill.routeList.fuelCost | number:2}} $</h5>
+        </div>
+    </div>
+</form>

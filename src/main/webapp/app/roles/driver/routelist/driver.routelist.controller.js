@@ -5,10 +5,11 @@
         .module('truckCompanyApp')
         .controller('DriverRoutelistController', DriverRoutelistController);
 
-    DriverRoutelistController.$inject = ['Goods1', 'Waybill', 'Checkpoint',
-        'RouteList', '$http', '$location', '$scope','$timeout'];
+    DriverRoutelistController.$inject = ['Waybill', 'Checkpoint',
+        'RouteList', '$http', '$location', '$scope','$timeout','$uibModal'];
 
-    function DriverRoutelistController(Goods1, Waybill, Checkpoint, RouteList, $http, $location, $scope,$timeout) {
+    function DriverRoutelistController(Waybill, Checkpoint, RouteList, $http, $location,
+                                       $scope,$timeout,$uibModal) {
         var vm = this;
         vm.routeList = {};
         vm.checkpoints = [];
@@ -117,6 +118,27 @@
                 window.alert("Mark all checkpoints");
             }
         }
+
+        vm.showModalGoodsCurrent = function (id) {
+            vm.modalConfirmWaybill = $uibModal.open({
+                templateUrl: 'app/roles/driver/goods/driver.goods.html',
+                controller: 'DriverGoodsController',
+                controllerAs: 'vm',
+                scope: $scope,
+                backdrop: 'static',
+                size: 'md',
+                resolve: {
+                    entity: ['Waybill', function (Waybill) {
+                        return Waybill.get({id: id});
+                    }]
+                }
+            });
+        };
+
+        $scope.closeModalWaybillDetails = function () {
+            vm.modalConfirmWaybill.close();
+            $location.path('/driver/routelist');
+        };
 
 
 

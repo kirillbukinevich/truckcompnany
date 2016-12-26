@@ -2,7 +2,9 @@
     "driver": {
         "sidebar": {
             "route": " Маршрут ",
-            "goods": " Товары "
+            "history": " История ",
+            "timetable": " Расписание "
+
         },
         "routelist": {
             "routelists": "Путевой лист ",

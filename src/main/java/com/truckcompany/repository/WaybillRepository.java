@@ -44,6 +44,26 @@ public interface WaybillRepository extends JpaRepository<Waybill, Long> {
         "where routeList.state='TRANSPORTATION')")
     Optional<Waybill> findOneByDriver(User driver);
 
+    @Query(value = "select waybill from Waybill as waybill " +
+        "left join fetch waybill.driver " +
+        "left join fetch waybill.routeList " +
+        "where waybill.driver=?1 AND waybill.state ='DELIVERED'",
+        countQuery = "select count(waybill) from Waybill waybill " +
+            "left join waybill.driver  " +
+            "where waybill.driver=?1 AND waybill.state ='DELIVERED'")
+    Page<Waybill> findPageHistoryByDriver(User driver,Pageable pageable);
+
+    @Query(value = "select waybill from Waybill as waybill " +
+        "left join fetch waybill.driver " +
+        "left join fetch waybill.routeList " +
+        "where waybill.driver=?1 AND waybill.state ='CHECKED'",
+        countQuery = "select count(waybill) from Waybill waybill " +
+            "left join waybill.driver  " +
+            "where waybill.driver=?1 AND waybill.state ='CHECKED'")
+    Page<Waybill> findPageTimetableByDriver(User driver,Pageable pageable);
+
+
+
     List<Waybill> findByCompany(Company company);
 
     List<Waybill> findByCompanyAndRouteListCreationDateBetween(Company company,
