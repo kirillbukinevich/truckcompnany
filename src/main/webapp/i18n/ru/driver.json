@@ -22,8 +22,9 @@
             "status": "статус",
             "complete": "приехал",
             "mark": "отметиться",
-            "ok": "ok"
-
+            "ok": "ok",
+            "goods": "Товары",
+            "show": "Показать"
         },
         "goods": {
             "list": "Список товаров",
@@ -35,6 +36,39 @@
         },
         "job":{
             "status": "У тебя нет работы сейчас"
+        },
+        "routelists" : {
+            "routelists" : "Путевые листы",
+            "report" : "Отчет",
+            "leavingstorage" : "Склад отправления",
+            "arrivalstorage" : "Склад прибытия",
+            "trucknumber" : "Номер грузовика",
+            "waybillnumber" : "Номер ТТН",
+            "date" : "Дата",
+            "routelist" : "Путевой лист",
+            "departure": "Дата отправления",
+            "arrival": "Дата прибытия",
+            "sender": "Отправитель",
+            "recipient": "Получатель",
+            "address": "Адрес",
+            "waypoints": "Контрольные точки:",
+            "fuelCost": "Стоимость топлива: ",
+            "totalDistance": "Расстояние: ",
+            "totalConsumption": "Общий расход топлива: ",
+            "totalDeliveryCost": "Общая стоимость доставки: ",
+            "unit": "литр",
+            "units": "литров"
+        },
+        "general" : {
+            "state" : "Стутус",
+            "created" : "СОЗДАН",
+            "checked" : "ПРОВЕРЕН",
+            "delivered" : "ДОСТАВЛЕН",
+            "rejected" : "ОТКЛОНЕН",
+            "close" : "Закрыть",
+            "unchecked": "НЕ СОСТАВЛЕН",
+            "transportation": "В ПУТИ",
+            "unconfirmed": "НЕ ПРОВЕРЕНЫ"
         }
 
 

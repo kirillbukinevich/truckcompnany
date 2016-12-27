@@ -38,7 +38,7 @@
                         };
                     }],
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('companyowner');
+                        $translatePartialLoader.addPart('driver');
                         return $translate.refresh();
                     }]
                 }
@@ -59,7 +59,7 @@
             },
             resolve: {
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                    $translatePartialLoader.addPart('companyowner');
+                    $translatePartialLoader.addPart('driver');
                     return $translate.refresh();
                 }]
             }

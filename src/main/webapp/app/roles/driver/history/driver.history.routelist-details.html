@@ -1,20 +1,20 @@
 <h4>
     <div class="row">
         <div class="col-md-7">&nbsp;
-            <span data-translate="companyowner.routelists.routelist"></span> № {{vm.waybill.routeList.number}} ({{vm.waybill.routeList.creationDate | date:'dd/MM/yy HH:mm'}})
+            <span data-translate="driver.routelists.routelist"></span> № {{vm.waybill.routeList.number}} ({{vm.waybill.routeList.creationDate | date:'dd/MM/yy HH:mm'}})
         </div>
         <div class="col-md-1">
-            <span data-translate="companyowner.general.state"></span>:
+            <span data-translate="driver.general.state"></span>:
         </div>
         <div class="col-md-4">
                 <span ng-if="vm.waybill.routeList.state == 'UNCHECKED'" class="label label-info"
-                      data-translate="companyowner.general.unchecked">
+                      data-translate="driver.general.unchecked">
                     {{vm.waybill.routeList.state}}</span>
             <span ng-if="vm.waybill.routeList.state == 'TRANSPORTATION'" class="label label-primary"
-                  data-translate="companyowner.general.transportation">
+                  data-translate="driver.general.transportation">
                     {{vm.waybill.routeList.state}}</span>
             <span ng-if="vm.waybill.routeList.state == 'DELIVERED'" class="label label-success"
-                  data-translate="companyowner.general.delivered">
+                  data-translate="driver.general.delivered">
                     {{vm.waybill.routeList.state}}</span>
         </div>
     </div>
@@ -40,13 +40,13 @@
     <div class="row">
         <div class="col-md-2 text-align-right">
             <h5>
-                <span data-translate="companyowner.routelists.departure"></span>:&nbsp
+                <span data-translate="driver.routelists.departure"></span>:&nbsp
             </h5>
             <h5>
-                <span data-translate="companyowner.routelists.sender"></span>:&nbsp
+                <span data-translate="driver.routelists.sender"></span>:&nbsp
             </h5>
             <h5><strong>
-                <span data-translate="companyowner.routelists.address"></span>:&nbsp
+                <span data-translate="driver.routelists.address"></span>:&nbsp
             </strong></h5>
         </div>
         <div class="col-md-3">
@@ -61,12 +61,12 @@
 
         <div class="col-md-2 text-align-right">
             <h5>
-                <span data-translate="companyowner.routelists.arrival"></span>:&nbsp
+                <span data-translate="driver.routelists.arrival"></span>:&nbsp
             </h5>
             <h5>
-                <span data-translate="companyowner.routelists.recipient"></span>:&nbsp</h5>
+                <span data-translate="driver.routelists.recipient"></span>:&nbsp</h5>
             <h5><strong>
-                <span data-translate="companyowner.routelists.address"></span>:&nbsp</strong></h5>
+                <span data-translate="driver.routelists.address"></span>:&nbsp</strong></h5>
         </div>
         <div class="col-md-3">
             <h5>&nbsp{{vm.waybill.routeList.arrivalDate | date:'dd/MM/yy HH:mm'}}</h5>
@@ -80,7 +80,7 @@
     <div class="row" style="margin-top: 20px">
         <div class="col-md-4 text-center">
             <label ng-if="vm.wayPoints.length != 0" class="control-label">
-                <span data-translate="companyowner.routelists.waypoints"></span>
+                <span data-translate="driver.routelists.waypoints"></span>
             </label>
             <fieldset ng-repeat="wayPoint in vm.wayPoints">
                 <div class="form-group form-inline">
@@ -108,16 +108,16 @@
 
         <div class="col-md-4 text-align-right">
             <h5>
-                <span data-translate="companyowner.routelists.fuelCost"></span>
+                <span data-translate="driver.routelists.fuelCost"></span>
             </h5>
             <h5 style="margin-top: 19px">
-                <span data-translate="companyowner.routelists.totalDistance"></span>
+                <span data-translate="driver.routelists.totalDistance"></span>
             </h5>
             <h5>
-                <span data-translate="companyowner.routelists.totalConsumption"></span>
+                <span data-translate="driver.routelists.totalConsumption"></span>
             </h5>
             <h5 ng-if="vm.waybill.routeList.state != 'UNCHECKED'">
-                <span data-translate="companyowner.routelists.totalDeliveryCost"></span>
+                <span data-translate="driver.routelists.totalDeliveryCost"></span>
             </h5>
 
         </div>
@@ -144,13 +144,13 @@
                        aria-describedby="price-addon2"
                        readonly>
                 <span class="input-group-addon" id="price-addon2">
-                    $/<span data-translate="companyowner.routelists.unit"></span>
+                    $/<span data-translate="driver.routelists.unit"></span>
                 </span>
             </div>
 
             <h5>&nbsp{{vm.dist}} km</h5>
             <h5>&nbsp{{vm.waybill.routeList.truck.consumption*vm.dist/100}}
-                <span data-translate="companyowner.routelists.units"></span>
+                <span data-translate="driver.routelists.units"></span>
             </h5>
             <h5 ng-if="vm.waybill.routeList.state != 'UNCHECKED'">
                 &nbsp;{{vm.dist/vm.waybill.routeList.truck.consumption*vm.waybill.routeList.fuelCost | number:2}} $</h5>

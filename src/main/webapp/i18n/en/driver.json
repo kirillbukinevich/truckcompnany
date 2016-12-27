@@ -21,7 +21,9 @@
             "status": "status",
             "complete": "complete",
             "mark": "mark",
-            "ok": "ok"
+            "ok": "ok",
+            "goods": "Goods",
+            "show": "Show"
         },
         "goods": {
             "list": "List of goods",
@@ -33,6 +35,39 @@
         },
         "job":{
             "status": "You don't have task now"
+        },
+        "routelists" : {
+            "routelists" : "Route lists",
+            "report" : "Report",
+            "leavingstorage" : "Leaving storage",
+            "arrivalstorage" : "Arrival storage",
+            "trucknumber" : "Truck number",
+            "waybillnumber" : "Waybill number",
+            "date" : "Date",
+            "routelist" : "Route list",
+            "departure": "Departure",
+            "arrival": "Arrival",
+            "sender": "Sender",
+            "recipient": "Recipient",
+            "address": "Address",
+            "waypoints": "Waypoints:",
+            "fuelCost": "Fuel cost: ",
+            "totalDistance": "Total distance: ",
+            "totalConsumption": "Total fuel consumption: ",
+            "totalDeliveryCost": "Total delivery cost: ",
+            "unit": "litre",
+            "units": "litres"
+        },
+        "general" : {
+            "state" : "State",
+            "created" : "CREATED",
+            "checked" : "CHECKED",
+            "delivered" : "DELIVERED",
+            "rejected" : "REJECTED",
+            "close" : "Close",
+            "unchecked": "UNCHECKED",
+            "transportation": "TRANSPORTATION",
+            "unconfirmed": "UNCONFIRMED"
         }
     }
 }
